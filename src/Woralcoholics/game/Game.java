@@ -25,10 +25,13 @@ public class Game extends Canvas implements Runnable {
         camera = new Camera(0,0);
         // when finished implement the Mouse and Key input
 
-        BufferedImageLoader loader = new BufferedImageLoader();
-        level = loader.loadImage("/test.png");
+       /* BufferedImageLoader loader = new BufferedImageLoader();
+        level = loader.loadImage("/test.png");*/
 
 
+        System.out.println("hier");
+        handler.addObject(new Box(100,100,ID.Block));
+        handler.addObject(new Box(100,150,ID.Block));
         //loadLevel(level);
 
     }
@@ -93,7 +96,7 @@ public class Game extends Canvas implements Runnable {
             }
         }
 
-        handler.tick();
+        handler.update();
     }
 
     public void render(){
@@ -114,13 +117,9 @@ public class Game extends Canvas implements Runnable {
 
         g2d.translate(-camera.getX(), -camera.getY());
 
-
         handler.render(g);
 
         g2d.translate(camera.getX(), camera.getY());
-
-
-
 
         // end of drawing place
         g.dispose();

@@ -12,7 +12,7 @@ public class GameManger {
     //In this script we define the 4 ways somebody can walk and set and get them
     private boolean up = false, down = false, right = false, left = false;
 
-    public void tick(){
+    public void update(){
         for(int i = 0; i < object.size(); i++){
             GameObject tempObject = object.get(i);
 
