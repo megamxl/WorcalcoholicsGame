@@ -24,6 +24,8 @@ public class Game extends Canvas implements Runnable {
         handler = new GameManger();
         camera = new Camera(0,0);
         // when finished implement the Mouse and Key input
+        MouseInput mouse = new MouseInput(handler, camera, this);
+        this.addMouseListener(mouse);
 
         BufferedImageLoader loader = new BufferedImageLoader();
         level = loader.loadImage("/test.png");
