@@ -1,9 +1,12 @@
 package Woralcoholics.game;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.security.Key;
 
 public class Game extends Canvas implements Runnable {
 
@@ -27,12 +30,13 @@ public class Game extends Canvas implements Runnable {
         MouseInput mouse = new MouseInput(handler, camera, this);
         this.addMouseListener(mouse);
 
+        KeyInput keys = new KeyInput(handler);
+        this.addKeyListener(keys);
+
         BufferedImageLoader loader = new BufferedImageLoader();
         level = loader.loadImage("/test.png");
 
-
         //loadLevel(level);
-
     }
 
     // these tow function are responsible to not make more than one window during runtime
@@ -40,7 +44,6 @@ public class Game extends Canvas implements Runnable {
         isRunning = true;
         thread = new Thread(this);
         thread.start();
-
     }
 
     private  void stop(){
@@ -86,6 +89,7 @@ public class Game extends Canvas implements Runnable {
         }
         stop();
     }
+
     // in every frame check where player is and update camera position
     public void update(){
 
@@ -120,14 +124,10 @@ public class Game extends Canvas implements Runnable {
 
         g2d.translate(camera.getX(), camera.getY());
 
-
-
-
         // end of drawing place
         g.dispose();
         bs.show();
     }
-
 
     // the main function that runs everything
     public static void main(String[] args) {
@@ -137,8 +137,4 @@ public class Game extends Canvas implements Runnable {
             e.printStackTrace();
         }
     }
-
-
-
-
 }
