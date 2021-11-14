@@ -3,13 +3,11 @@ package Woralcoholics.game;
 import java.awt.*;
 import java.util.Random;
 
-//Part 9
-//Handler -> not implemented yet
 
 public class Enemy extends GameObject {
 
     //Handler is for collision detection
-    //private Handler handler;
+    private GameManger manager;
     Random r = new Random();
     int choose = 0;
     int hp = 100;
@@ -18,7 +16,7 @@ public class Enemy extends GameObject {
 
     public Enemy(int x, int y, ID id) {
         super(x, y, id);
-        //this.handler = handler;
+        this.manager = manager;
     }
 
     public void update() {
@@ -34,7 +32,7 @@ public class Enemy extends GameObject {
             //if it's coliding with a block
             if (tmpObject.getId() == ID.Block) {
                 if (getBoundsAround().intersects(tmpObject.getBounds())) {
-                   // if it coliding with wall it goes in the opposite direction
+                    // if it coliding with wall it goes in the opposite direction
                     x += (velX * 5) * -1;                                       // maybe improve these values(velx*5,velxy*= -1)
                     y += (velX * 5) * -1;
                     velX *= -1;
