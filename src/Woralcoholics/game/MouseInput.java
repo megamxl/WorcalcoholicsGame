@@ -20,16 +20,25 @@ public class MouseInput extends MouseAdapter {
 
     public void mousePressed(MouseEvent e) {
         Point currentPos = e.getPoint();    //grab current Pos
-        currentPos.translate(-500, -282);
+        //currentPos.translate(-500, -282);
         int button = e.getButton(); //grab pressed button
+        /* 1 = LEFT MOUSE BUTTON
+         * 2 = MOUSE WHEEL
+         * 3 = RIGHT MOUSE BUTTON */
         switch (button) {
-            case 1 -> System.out.println("BUTTON 1");
+            case 1 -> {
+                //System.out.println("BUTTON 1");
+                Bullet temp = new Bullet(500, 282, ID.Bullet);
+                temp.handler = this.handler;
+                temp.direction(currentPos.x-500, currentPos.y-282);
+                handler.addObject(temp);
+            }
             case 2 -> System.out.println("BUTTON 2");
             case 3 -> System.out.println("BUTTON 3");
             default -> {
             }
         }
-        System.out.println(currentPos.x + " " + currentPos.y);
+        //System.out.println(currentPos.x + " " + currentPos.y);
     }
 
     public void mouseEntered(MouseEvent e) {
