@@ -14,7 +14,7 @@ public class Game extends Canvas implements Runnable {
 
     private  boolean isRunning;
     private Thread thread;
-    private GameManger handler;
+    private GameManager handler;
 
     private BufferedImage level = null;
     private Camera camera;
@@ -24,7 +24,7 @@ public class Game extends Canvas implements Runnable {
         new Window(1000,563, "Workalcholics Work In Progress",this);
         start();
 
-        handler = new GameManger();
+        handler = new GameManager();
         camera = new Camera(0,0);
         // when finished implement the Mouse and Key input
         MouseInput mouse = new MouseInput(handler, camera, this);

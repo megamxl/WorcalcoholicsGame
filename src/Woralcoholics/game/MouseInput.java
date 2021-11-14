@@ -8,11 +8,11 @@ import java.awt.event.MouseEvent;
 
 public class MouseInput extends MouseAdapter {
 
-    private GameManger handler;
+    private GameManager handler;
     private Camera camera;
     private Game game;
 
-    public MouseInput(GameManger handler, Camera camera, Game game) {
+    public MouseInput(GameManager handler, Camera camera, Game game) {
         this.handler = handler;
         this.camera = camera;
         this.game = game;

@@ -5,9 +5,9 @@ import java.awt.event.KeyEvent;
 // in this class the input management will happen through KeyAdapter
 
 public class KeyInput extends KeyAdapter {
-    GameManger gameManger;
+    GameManager gameManger;
 
-    public KeyInput(GameManger gameManger)
+    public KeyInput(GameManager gameManger)
     {
         this.gameManger = gameManger;
     }

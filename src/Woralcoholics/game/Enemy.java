@@ -7,7 +7,7 @@ import java.util.Random;
 public class Enemy extends GameObject {
 
     //Handler is for collision detection
-    private GameManger manager;
+    private GameManager manager;
     Random r = new Random();
     int choose = 0;
     int hp = 100;

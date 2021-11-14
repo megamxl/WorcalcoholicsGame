@@ -10,7 +10,7 @@ public abstract class GameObject {
     // speed of object
     protected float velX =0, velY = 0;
     protected ID id;
-    protected GameManger handler;
+    protected GameManager handler;
 
     public GameObject(int x, int y, ID id) {
         this.x = x;

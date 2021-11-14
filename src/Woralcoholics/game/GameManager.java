@@ -3,7 +3,7 @@ package Woralcoholics.game;
 import java.awt.*;
 import java.util.LinkedList;
 
-public class GameManger {
+public class GameManager {
 
     // making a linked list for storing all our GameObjects, so we can iterate threw ist every frame when we want to compare
     // or render
