@@ -1,36 +1,30 @@
 package Woralcoholics.game;
 
 import java.awt.*;
+import java.util.Vector;
 
 public class Bullet extends GameObject{
 
-    private float bulletSpeed = 1;
+    private float bulletSpeed = 5;
 
     public Bullet(int x, int y, ID id) {
         super(x, y, id);
     }
 
-    public void direction(double dx, double dy) {
-        double d = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
-        velX = (float) ((float) dx / d);
-        velY = (float) ((float) dy / d);
 
-        System.out.println(velX + " " + velY);
-        if(dx == 500) {velX = 0;}
-        if(dy == 282) {velY = 0;}
-        /*if(dx < 500 && dy < 282) {
-            velX *= -1;
-            velY *= -1;
-        }
-        if(dx > 500 && dy < 282) {
-            velY *= -1;
-        }
-        if(dx < 500 && dy > 282) {
-            velY *= -1;
-        }*/
+    public void direction(double mx, double my, double px, double py) {
+        //double c = Math.sqrt(Math.pow(mx,2) + Math.pow(my,2));
+        double dx = mx-px;
+        double dy = my-py;
+        double alpha = Math.atan2(dy, dx);
+        //System.out.println(alpha);
+        velX = (float) (Math.cos(alpha) * bulletSpeed);
+        velY = (float) (Math.sin(alpha) * bulletSpeed);
+        /*
+        velX = (float) (bulletSpeed * mx/c);
+        velY = (float) (bulletSpeed * my/c);*/
 
-        /*if(dx < 0) {velX *= -1;}
-        if(dy < 0) {velY *= -1;}*/
+        //System.out.println(velX + " " + velY);
     }
 
     @Override
@@ -46,16 +40,16 @@ public class Bullet extends GameObject{
         for(int i = 0; i < handler.object.size(); i++ ) {
             GameObject tmpObject = handler.object.get(i);
 
-            /*if (tmpObject.getId() == ID.Block || tmpObject.getId() == ID.Enemy) {
+            if (tmpObject.getId() == ID.Block || tmpObject.getId() == ID.Enemy) {
                 handler.removeObject(this);
-            }*/
+            }
         }
     }
 
     @Override
     public void render(Graphics g) {
         g.setColor(Color.WHITE);
-        g.fillOval(x, y, 8, 8);
+        g.fillOval((int)x, (int)y, 8, 8);
     }
 
     @Override

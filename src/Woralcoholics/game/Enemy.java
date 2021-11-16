@@ -64,7 +64,7 @@ public class Enemy extends GameObject {
     //Enemy is displaying in this Color for now
     public void render(Graphics g) {
         g.setColor(Color.YELLOW);
-        g.fillRect(x, y, 32, 32);
+        g.fillRect((int)x, (int)y, 32, 32);
 
         /* -> Just for testing Bounding Boxes around the Enemys
         Graphics2D g2d = (Graphics2D) g;
@@ -75,10 +75,10 @@ public class Enemy extends GameObject {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, 32, 32);
+        return new Rectangle((int)x, (int)y, 32, 32);
     }
 
     public Rectangle getBoundsAround() {
-        return new Rectangle(x - 16, y - 16, 64, 64);
+        return new Rectangle((int)x - 16, (int)y - 16, 64, 64);
     }
 }

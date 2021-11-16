@@ -6,7 +6,7 @@ import java.awt.*;
 public abstract class GameObject {
 
     // location of object
-    protected int x,y;
+    protected /*int*/float x,y;
     // speed of object
     protected float velX =0, velY = 0;
     protected ID id;
@@ -28,13 +28,13 @@ public abstract class GameObject {
 
 
     // getter and setters
-    public int getX() {return x;}
+    public /*int*/ float getX() {return x;}
 
     public void setX(int x) {
         this.x = x;
     }
 
-    public int getY() {return y;}
+    public /*int*/float getY() {return y;}
 
     public void setY(int y) {
         this.y = y;

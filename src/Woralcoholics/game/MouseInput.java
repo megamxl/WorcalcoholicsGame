@@ -30,7 +30,7 @@ public class MouseInput extends MouseAdapter {
                 //System.out.println("BUTTON 1");
                 Bullet temp = new Bullet(500, 282, ID.Bullet);
                 temp.handler = this.handler;
-                temp.direction(currentPos.x-500, currentPos.y-282);
+                temp.direction(currentPos.x, currentPos.y, 500, 282);
                 handler.addObject(temp);
             }
             case 2 -> System.out.println("BUTTON 2");
