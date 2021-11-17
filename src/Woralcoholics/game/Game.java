@@ -32,9 +32,11 @@ public class Game extends Canvas implements Runnable {
 
         KeyInput keys = new KeyInput(handler);
         this.addKeyListener(keys);
-
+/*
         BufferedImageLoader loader = new BufferedImageLoader();
-        level = loader.loadImage("/test.png");
+        level = loader.loadImage("/test.png");*/
+        handler.addObject(new Player(100,100,ID.Player,handler,this));
+
 
         //loadLevel(level);
     }
