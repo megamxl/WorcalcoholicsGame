@@ -21,13 +21,22 @@ public class Game extends Canvas implements Runnable {
 
     public Game() throws IOException {
         // make the window threw out own window class
+        int playerIndex= 0;
         new Window(1000,563, "Workalcholics Work In Progress",this);
         start();
 
         handler = new GameManager();
         camera = new Camera(0,0);
         // when finished implement the Mouse and Key input
-        MouseInput mouse = new MouseInput(handler, camera, this);
+        handler.addObject(new Player(100,100,ID.Player,handler,this));
+        for(int i =0; i <handler.object.size(); i++){
+            if (handler.object.get(i).getId() == ID.Player){
+                playerIndex= i;
+                break;
+            }
+        }
+
+        MouseInput mouse = new MouseInput(handler, camera, this, handler.object.get(playerIndex) );
         this.addMouseListener(mouse);
 
         KeyInput keys = new KeyInput(handler);
@@ -35,7 +44,7 @@ public class Game extends Canvas implements Runnable {
 /*
         BufferedImageLoader loader = new BufferedImageLoader();
         level = loader.loadImage("/test.png");*/
-        handler.addObject(new Player(100,100,ID.Player,handler,this));
+
 
 
         //loadLevel(level);

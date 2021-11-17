@@ -9,13 +9,15 @@ import java.awt.event.MouseEvent;
 public class MouseInput extends MouseAdapter {
 
     private GameManager handler;
+    private GameObject player;
     private Camera camera;
     private Game game;
 
-    public MouseInput(GameManager handler, Camera camera, Game game) {
+    public MouseInput(GameManager handler, Camera camera, Game game, GameObject player) {
         this.handler = handler;
         this.camera = camera;
         this.game = game;
+        this.player = player;
     }
 
     public void mousePressed(MouseEvent e) {
@@ -28,9 +30,9 @@ public class MouseInput extends MouseAdapter {
         switch (button) {
             case 1 -> {
                 //System.out.println("BUTTON 1");
-                Bullet temp = new Bullet(500, 282, ID.Bullet);
+                Bullet temp = new Bullet((int)player.getX(), (int)player.getY(), ID.Bullet);
                 temp.handler = this.handler;
-                temp.direction(currentPos.x, currentPos.y, 500, 282);
+                temp.direction(currentPos.x, currentPos.y, (int)player.getX(), (int)player.getY());
                 handler.addObject(temp);
             }
             case 2 -> System.out.println("BUTTON 2");
