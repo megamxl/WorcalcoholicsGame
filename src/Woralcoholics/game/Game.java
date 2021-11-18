@@ -110,7 +110,7 @@ public class Game extends Canvas implements Runnable {
             }
         }
 
-        handler.tick();
+        handler.update();
     }
 
     public void render(){
