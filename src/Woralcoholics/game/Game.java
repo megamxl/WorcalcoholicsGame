@@ -1,12 +1,11 @@
 package Woralcoholics.game;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.security.Key;
+import java.io.InputStream;
 
 public class Game extends Canvas implements Runnable {
 
@@ -28,7 +27,12 @@ public class Game extends Canvas implements Runnable {
         handler = new GameManager();
         camera = new Camera(0,0);
         // when finished implement the Mouse and Key input
-        handler.addObject(new Player(100,100,ID.Player,handler,this));
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("test.png");
+        System.out.println(path);
+        level = ImageIO.read(path);
+
+        loadLevel(level);
+
         for(int i =0; i <handler.object.size(); i++){
             if (handler.object.get(i).getId() == ID.Player){
                 playerIndex= i;
@@ -41,13 +45,10 @@ public class Game extends Canvas implements Runnable {
 
         KeyInput keys = new KeyInput(handler);
         this.addKeyListener(keys);
-/*
+
         BufferedImageLoader loader = new BufferedImageLoader();
-        level = loader.loadImage("/test.png");*/
 
 
-
-        //loadLevel(level);
     }
 
     // these tow function are responsible to not make more than one window during runtime
@@ -126,7 +127,7 @@ public class Game extends Canvas implements Runnable {
 
         // rendering gets executed in the way it is written top down
 
-        g.setColor(Color.RED);
+        g.setColor(Color.blue);
         g.fillRect(0,0,1000, 563);
 
         g2d.translate(-camera.getX(), -camera.getY());
@@ -138,6 +139,36 @@ public class Game extends Canvas implements Runnable {
         // end of drawing place
         g.dispose();
         bs.show();
+    }
+
+
+    private void loadLevel(BufferedImage image) {
+        int h = image.getHeight();
+        int w = image.getWidth();
+
+        for (int xx = 0; xx < w; xx++) {
+            for (int yy = 0; yy < h; yy++) {
+                int pixel = image.getRGB(xx, yy);
+                int red = (pixel >> 16) & 0xff;
+                int green = (pixel >> 8) & 0xff;
+                int blue = (pixel) & 0xff;
+
+                if (red == 255) {
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block));
+                }
+                if (blue == 255 && green == 0) {
+                    handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this));
+                }
+
+    /*            if(green == 255 && blue == 0){
+                    handler.addObject(new Enemy(xx *32, yy*32, ID.Enemy, handler));
+                }
+                if(green == 255 && blue == 255)
+                    handler.addObject(new Create(xx*32, yy*32, ID.Create));
+
+            }*/
+            }
+        }
     }
 
     // the main function that runs everything
