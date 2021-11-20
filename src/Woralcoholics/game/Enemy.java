@@ -35,7 +35,7 @@ public class Enemy extends GameObject {
                 if (getBoundsAround().intersects(tmpObject.getBounds())) {
                     // if it coliding with wall it goes in the opposite direction
                     x += (velX * 5) * -1;                                       // maybe improve these values(velx*5,velxy*= -1)
-                    y += (velX * 5) * -1;
+                    y += (velY * 5) * -1;
                     velX *= -1;
                     velY *= -1;
                 } else if (choose == 0) {
