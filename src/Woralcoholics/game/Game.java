@@ -14,9 +14,13 @@ public class Game extends Canvas implements Runnable {
     private  boolean isRunning;
     private Thread thread;
     private GameManager handler;
+    private Animations an;
 
     private BufferedImage level = null;
     private Camera camera;
+
+    private BufferedImage spritesheet = null;
+    private BufferedImage floor = null;
 
     public Game() throws IOException {
         // make the window threw out own window class
@@ -39,14 +43,17 @@ public class Game extends Canvas implements Runnable {
                 break;
             }
         }
-
-        MouseInput mouse = new MouseInput(handler, camera, this, handler.object.get(playerIndex) );
+        MouseInput mouse = new MouseInput(handler, camera, this, handler.object.get(playerIndex), an );
         this.addMouseListener(mouse);
 
         KeyInput keys = new KeyInput(handler);
         this.addKeyListener(keys);
 
         BufferedImageLoader loader = new BufferedImageLoader();
+        spritesheet =loader.loadImage("/floo2_32px.jpg");
+        an = new Animations(spritesheet);
+
+        floor = an.getImage(1,1,32,32);
 
 
     }
@@ -127,8 +134,13 @@ public class Game extends Canvas implements Runnable {
 
         // rendering gets executed in the way it is written top down
 
-        g.setColor(Color.blue);
-        g.fillRect(0,0,1000, 563);
+        //g.setColor(Color.blue);
+        //g.drawImage(floor,13,13,null);
+        //g.fillRect(0,0,1000, 563);
+
+        for (int i = 0; i < 30*72; i+=32) {
+            for (int j = 0; j < 30*72; j+=32) {
+                g.drawImage(floor,i,j,null);}}
 
         g2d.translate(-camera.getX(), -camera.getY());
 
@@ -154,15 +166,15 @@ public class Game extends Canvas implements Runnable {
                 int blue = (pixel) & 0xff;
 
                 if (red == 255) {
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block));
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block,an));
                 }
                 if (blue == 255 && green == 0) {
-                    handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this));
+                    handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this,an));
                 }
-
-    /*            if(green == 255 && blue == 0){
-                    handler.addObject(new Enemy(xx *32, yy*32, ID.Enemy, handler));
+                if(green == 255){
+                    handler.addObject(new Enemy(xx *32, yy*32, ID.Enemy, handler,an));
                 }
+                /*
                 if(green == 255 && blue == 255)
                     handler.addObject(new Create(xx*32, yy*32, ID.Create));
 

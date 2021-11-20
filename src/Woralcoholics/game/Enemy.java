@@ -14,10 +14,11 @@ public class Enemy extends GameObject {
     int low = -4;
     int high = 4;
 
-    public Enemy(int x, int y, ID id) {
-        super(x, y, id);
+    public Enemy(int x, int y, ID id,GameManager manager, Animations an) {
+        super(x, y, id, an);
         this.manager = manager;
     }
+
 
     public void update() {
         x += velX;
@@ -25,9 +26,9 @@ public class Enemy extends GameObject {
 
         choose = r.nextInt(10);
 
-        for (int i = 0; i < handler.object.size(); i++) {
+        for (int i = 0; i < manager.object.size(); i++) {
 
-            GameObject tmpObject = handler.object.get(i);
+            GameObject tmpObject = manager.object.get(i);
 
             //if it's coliding with a block
             if (tmpObject.getId() == ID.Block) {
@@ -49,15 +50,15 @@ public class Enemy extends GameObject {
             //if our bullet is coliding with the enemy hp get's -50
             if (tmpObject.getId() == ID.Bullet) {
                 if (getBounds().intersects(tmpObject.getBounds())) {
-                    hp -= 50;
-                    handler.removeObject(tmpObject);
+                    hp -= 100;
+                    manager.removeObject(tmpObject);
                 }
             }
 
         }
 
         if (hp <= 0) {
-            handler.removeObject(this);
+            manager.removeObject(this);
         }
     }
 
@@ -66,11 +67,14 @@ public class Enemy extends GameObject {
         g.setColor(Color.YELLOW);
         g.fillRect((int)x, (int)y, 32, 32);
 
-        /* -> Just for testing Bounding Boxes around the Enemys
+         //-> Just for testing Bounding Boxes around the Enemys
+        /*
         Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
-        g2d.draw(getBoundsBig());
+        g2d.draw(getBoundsAround());
+
          */
+
 
     }
 

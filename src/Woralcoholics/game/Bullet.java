@@ -9,8 +9,8 @@ public class Bullet extends GameObject{
     GameManager handler;
     Game game;
 
-    public Bullet(int x, int y, ID id, GameManager handler, Game game) {
-        super(x, y, id);
+    public Bullet(int x, int y, ID id, GameManager handler, Game game, Animations an) {
+        super(x, y, id, an);
         this.handler = handler;
         this.game = game;
     }

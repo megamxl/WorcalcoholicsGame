@@ -7,8 +7,8 @@ import java.awt.*;
 
 public class Block extends GameObject {
 
-    public Block(int x, int y, ID id) {
-        super(x, y, id);
+    public Block(int x, int y, ID id, Animations an) {
+        super(x, y, id, an);
     }
 
     @Override

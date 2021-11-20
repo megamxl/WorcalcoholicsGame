@@ -7,8 +7,8 @@ public class Player extends GameObject {
     GameManager handler;
     Game game;
 
-    public Player(int x, int y, ID id, GameManager GameManager, Game game) {
-        super(x, y, id);
+    public Player(int x, int y, ID id, GameManager GameManager, Game game, Animations an) {
+        super(x, y, id, an);
         this.handler = GameManager;
         this.game = game;
     }
