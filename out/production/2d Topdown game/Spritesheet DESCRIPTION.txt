@@ -1,0 +1,5 @@
+spritesheet from left to right
+
+01 Tile Wall
+02 Tile Floor
+03 Enemy
