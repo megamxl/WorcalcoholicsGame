@@ -7,12 +7,10 @@ public class Bullet extends GameObject{
     private float bulletSpeed = 5;
 
     GameManager handler;
-    Game game;
 
-    public Bullet(int x, int y, ID id, GameManager handler, Game game, Animations an) {
+    public Bullet(int x, int y, ID id, GameManager handler, Animations an) {
         super(x, y, id, an);
         this.handler = handler;
-        this.game = game;
     }
 
 
@@ -39,7 +37,7 @@ public class Bullet extends GameObject{
             if (tmpObject.getId() == ID.Block || tmpObject.getId() == ID.Enemy) {
                 if(this.getBounds().intersects(tmpObject.getBounds())) {
                     handler.removeObject(this);
-                    System.out.println("Collision");
+                    //System.out.println("Collision");
                 }
             }
         }

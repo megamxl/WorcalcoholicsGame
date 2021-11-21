@@ -15,7 +15,7 @@ public class MouseInput extends MouseAdapter {
     private Animations an;
 
     private double wait;
-    private final double del = 500;
+    private final double del = 200;
 
     public MouseInput(GameManager handler, Camera camera, Game game, GameObject player, Animations an) {
         this.handler = handler;
@@ -41,8 +41,8 @@ public class MouseInput extends MouseAdapter {
                     double my = currentPos.y + camera.getY();
                     double px = player.getX()+16;
                     double py = player.getY()+24;
-                    Bullet temp = new Bullet((int)px-4, (int)py-4, ID.Bullet, handler, game, an);
-                    temp.handler = this.handler;
+                    Bullet temp = new Bullet((int)px-4, (int)py-4, ID.Bullet, handler, an);
+                    //temp.handler = this.handler;
                     temp.direction(mx, my, px, py);
                     handler.addObject(temp);
                     wait = now + del;

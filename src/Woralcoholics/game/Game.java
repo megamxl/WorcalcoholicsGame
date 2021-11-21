@@ -172,6 +172,7 @@ public class Game extends Canvas implements Runnable {
             }*/
             }
         }
+        handler.addObject(new GunnerEnemy(250, 250, ID.GunnerEnemy, handler, an)); //Test Gunner
     }
     // the main function that runs everything
     public static void main(String[] args) throws IOException {
