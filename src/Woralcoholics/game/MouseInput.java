@@ -1,6 +1,6 @@
 package Woralcoholics.game;
 
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -8,14 +8,21 @@ import java.awt.event.MouseEvent;
 
 public class MouseInput extends MouseAdapter {
 
-    private GameManger handler;
+    private GameManager handler;
+    private GameObject player;
     private Camera camera;
     private Game game;
+    private Animations an;
 
-    public MouseInput(GameManger handler, Camera camera, Game game) {
+    private double wait;
+    private final double del = 500;
+
+    public MouseInput(GameManager handler, Camera camera, Game game, GameObject player, Animations an) {
         this.handler = handler;
         this.camera = camera;
         this.game = game;
+        this.player = player;
+        this.an = an;
     }
 
     public void mousePressed(MouseEvent e) {
@@ -28,17 +35,32 @@ public class MouseInput extends MouseAdapter {
         switch (button) {
             case 1 -> {
                 //System.out.println("BUTTON 1");
-                Bullet temp = new Bullet(500, 282, ID.Bullet);
-                temp.handler = this.handler;
-                temp.direction(currentPos.x-500, currentPos.y-282);
-                handler.addObject(temp);
+                double now = System.currentTimeMillis();
+                if(now > wait) {
+                    double mx = currentPos.x + camera.getX();   //add camera pos, as bullets don't aim correctly otherwise
+                    double my = currentPos.y + camera.getY();
+                    double px = player.getX()+16;
+                    double py = player.getY()+24;
+                    Bullet temp = new Bullet((int)px-4, (int)py-4, ID.Bullet, handler, game, an);
+                    temp.handler = this.handler;
+                    temp.direction(mx, my, px, py);
+                    handler.addObject(temp);
+                    wait = now + del;
+                }
             }
             case 2 -> System.out.println("BUTTON 2");
-            case 3 -> System.out.println("BUTTON 3");
+            case 3 -> {
+                //System.out.println("BUTTON 3");
+                float mx = currentPos.x + camera.getX();
+                float my = currentPos.y + camera.getY();
+                ID m = getIDAt(mx, my);
+                System.out.println(m);
+            }
             default -> {
             }
         }
         //System.out.println(currentPos.x + " " + currentPos.y);
+        //System.out.println(player.getX()+16 + " " + player.getY()+24);
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -49,90 +71,13 @@ public class MouseInput extends MouseAdapter {
         System.out.println("MOUSE EXITED");
     }
 
-    /*
-    private static final int BUTTON_COUNT = 3;
-    //Positions of Cursor
-    private Point mousePos = null;
-    private Point currentPos = null;
-    //Current State of Mouse Buttons
-    private boolean[] state = null;
-    //Polled mouse buttons
-    private MouseState[] poll = null;
-
-    private enum MouseState {
-        RELEASED,
-        PRESSED,
-        ONCE
-    }
-
-    public MouseInput() {
-        //Default mouse Pos
-        mousePos = new Point(0,0);
-        currentPos = new Point(0,0);
-        //Initial button states
-        state = new boolean[BUTTON_COUNT];
-        poll = new MouseState[BUTTON_COUNT];
-        for(int i = 0; i < BUTTON_COUNT; i++) {
-            poll[i] = MouseState.RELEASED;
-        }
-    }
-
-    public synchronized void poll() {
-        //Save current Pos
-        mousePos = new Point(currentPos);
-        //Check mouse buttons
-        for(int i = 0; i < BUTTON_COUNT; i++) {
-            if(state[i]) {
-                //button down after release (click)
-                if(poll[i] == MouseState.RELEASED) {
-                    poll[i] = MouseState.ONCE;
-                }
-                else    //button is kept down
-                    poll[i] = MouseState.PRESSED;
+    public ID getIDAt(float x, float y) {
+        for(int i = 0; i < handler.object.size(); i++) {
+            GameObject temp = handler.object.get(i);
+            if(temp.getBounds().contains(x, y)) {
+                return temp.getId();
             }
-            else    //button is not down
-                poll[i] = MouseState.RELEASED;
         }
+        return null;
     }
-
-    public Point getMousePos() {
-        return mousePos;
-    }
-
-    public boolean buttonDownOnce(int button) {
-        return poll[button-1] == MouseState.ONCE;
-    }
-
-    public boolean buttonDown(int button) {
-        return poll[button-1] == MouseState.ONCE ||
-                poll[button-1] == MouseState.PRESSED;
-    }
-
-    public synchronized void mousePressed(MouseEvent e) {
-        state[e.getButton()-1] = true;
-    }
-
-    public synchronized void mouseReleased(MouseEvent e) {
-        state[e.getButton()-1] = false;
-    }
-
-    public synchronized void mouseEntered(MouseEvent e) {
-        mouseMoved(e);
-    }
-
-    public synchronized void mouseExited(MouseEvent e) {
-        mouseMoved(e);
-    }
-
-    public synchronized void mouseDragged(MouseEvent e) {
-        mouseMoved(e);
-    }
-
-    public synchronized void mouseMoved(MouseEvent e) {
-        currentPos = e.getPoint();
-    }
-
-    public synchronized void mouseClicked(MouseEvent e) {
-        //
-    }*/
 }

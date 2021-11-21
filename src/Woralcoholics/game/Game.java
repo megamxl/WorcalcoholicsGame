@@ -1,12 +1,11 @@
 package Woralcoholics.game;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.security.Key;
+import java.io.InputStream;
 
 public class Game extends Canvas implements Runnable {
 
@@ -14,29 +13,49 @@ public class Game extends Canvas implements Runnable {
 
     private  boolean isRunning;
     private Thread thread;
-    private GameManger handler;
+    private GameManager handler;
+    private Animations an;
 
     private BufferedImage level = null;
     private Camera camera;
 
+    private BufferedImage spritesheet = null;
+    private BufferedImage floor = null;
+
     public Game() throws IOException {
         // make the window threw out own window class
+        int playerIndex= 0;
         new Window(1000,563, "Workalcholics Work In Progress",this);
         start();
 
-        handler = new GameManger();
+        handler = new GameManager();
         camera = new Camera(0,0);
         // when finished implement the Mouse and Key input
-        MouseInput mouse = new MouseInput(handler, camera, this);
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("test.png");
+        System.out.println(path);
+        level = ImageIO.read(path);
+
+        loadLevel(level);
+
+        for(int i =0; i <handler.object.size(); i++){
+            if (handler.object.get(i).getId() == ID.Player){
+                playerIndex= i;
+                break;
+            }
+        }
+        MouseInput mouse = new MouseInput(handler, camera, this, handler.object.get(playerIndex), an );
         this.addMouseListener(mouse);
 
         KeyInput keys = new KeyInput(handler);
         this.addKeyListener(keys);
 
         BufferedImageLoader loader = new BufferedImageLoader();
-        level = loader.loadImage("/test.png");
+        spritesheet =loader.loadImage("/floo2_32px.jpg");
+        an = new Animations(spritesheet);
 
-        //loadLevel(level);
+        floor = an.getImage(1,1,32,32);
+
+
     }
 
     // these tow function are responsible to not make more than one window during runtime
@@ -99,7 +118,7 @@ public class Game extends Canvas implements Runnable {
             }
         }
 
-        handler.tick();
+        handler.update();
     }
 
     public void render(){
@@ -115,8 +134,13 @@ public class Game extends Canvas implements Runnable {
 
         // rendering gets executed in the way it is written top down
 
-        g.setColor(Color.RED);
-        g.fillRect(0,0,1000, 563);
+        //g.setColor(Color.blue);
+        //g.drawImage(floor,13,13,null);
+        //g.fillRect(0,0,1000, 563);
+
+        for (int i = 0; i < 30*72; i+=32) {
+            for (int j = 0; j < 30*72; j+=32) {
+                g.drawImage(floor,i,j,null);}}
 
         g2d.translate(-camera.getX(), -camera.getY());
 
@@ -127,6 +151,36 @@ public class Game extends Canvas implements Runnable {
         // end of drawing place
         g.dispose();
         bs.show();
+    }
+
+
+    private void loadLevel(BufferedImage image) {
+        int h = image.getHeight();
+        int w = image.getWidth();
+
+        for (int xx = 0; xx < w; xx++) {
+            for (int yy = 0; yy < h; yy++) {
+                int pixel = image.getRGB(xx, yy);
+                int red = (pixel >> 16) & 0xff;
+                int green = (pixel >> 8) & 0xff;
+                int blue = (pixel) & 0xff;
+
+                if (red == 255) {
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block,an));
+                }
+                if (blue == 255 && green == 0) {
+                    handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this,an));
+                }
+                if(green == 255){
+                    handler.addObject(new Enemy(xx *32, yy*32, ID.Enemy, handler,an));
+                }
+                /*
+                if(green == 255 && blue == 255)
+                    handler.addObject(new Create(xx*32, yy*32, ID.Create));
+
+            }*/
+            }
+        }
     }
 
     // the main function that runs everything
