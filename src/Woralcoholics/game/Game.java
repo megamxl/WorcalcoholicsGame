@@ -32,8 +32,11 @@ public class Game extends Canvas implements Runnable {
         camera = new Camera(0,0);
         // when finished implement the Mouse and Key input
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("test.png");
-        System.out.println(path);
         level = ImageIO.read(path);
+
+        BufferedImageLoader loader = new BufferedImageLoader();
+        spritesheet =loader.loadImage("/Spritesheet.png");
+        an = new Animations(spritesheet);
 
         loadLevel(level);
 
@@ -49,12 +52,7 @@ public class Game extends Canvas implements Runnable {
         KeyInput keys = new KeyInput(handler);
         this.addKeyListener(keys);
 
-        BufferedImageLoader loader = new BufferedImageLoader();
-        spritesheet =loader.loadImage("/floo2_32px.jpg");
-        an = new Animations(spritesheet);
-
-        floor = an.getImage(1,1,32,32);
-
+        floor = an.getImage(2,1,32,32);
 
     }
 
@@ -111,7 +109,6 @@ public class Game extends Canvas implements Runnable {
 
     // in every frame check where player is and update camera position
     public void update(){
-
         for(int i =0; i <handler.object.size(); i++){
             if (handler.object.get(i).getId() == ID.Player){
                 camera.update(handler.object.get(i));
@@ -127,17 +124,11 @@ public class Game extends Canvas implements Runnable {
             this.createBufferStrategy(3);
             return;
         }
-
         Graphics g = bs.getDrawGraphics();
         Graphics2D g2d = (Graphics2D) g;
         // between this it can be drawn to the screen
 
         // rendering gets executed in the way it is written top down
-
-        //g.setColor(Color.blue);
-        //g.drawImage(floor,13,13,null);
-        //g.fillRect(0,0,1000, 563);
-
         for (int i = 0; i < 30*72; i+=32) {
             for (int j = 0; j < 30*72; j+=32) {
                 g.drawImage(floor,i,j,null);}}
@@ -182,13 +173,13 @@ public class Game extends Canvas implements Runnable {
             }
         }
     }
-
     // the main function that runs everything
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         try {
             new Game();
         } catch (IOException e) {
             e.printStackTrace();
+            new Game();
         }
     }
 }

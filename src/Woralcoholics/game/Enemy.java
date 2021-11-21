@@ -1,10 +1,13 @@
 package Woralcoholics.game;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 
 public class Enemy extends GameObject {
+
+    private final BufferedImage enemy_img;
 
     //Handler is for collision detection
     private GameManager manager;
@@ -17,6 +20,8 @@ public class Enemy extends GameObject {
     public Enemy(int x, int y, ID id,GameManager manager, Animations an) {
         super(x, y, id, an);
         this.manager = manager;
+
+        enemy_img = an.getImage(1,2,32,32);
     }
 
 
@@ -64,9 +69,12 @@ public class Enemy extends GameObject {
 
     //Enemy is displaying in this Color for now
     public void render(Graphics g) {
-        g.setColor(Color.YELLOW);
-        g.fillRect((int)x, (int)y, 32, 32);
 
+        g.drawImage(enemy_img, (int)x, (int)y, null);
+
+        /*g.setColor(Color.YELLOW);
+        g.fillRect((int)x, (int)y, 32, 32);
+*/
          //-> Just for testing Bounding Boxes around the Enemys
         /*
         Graphics2D g2d = (Graphics2D) g;
