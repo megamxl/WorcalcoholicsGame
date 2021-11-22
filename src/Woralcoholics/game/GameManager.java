@@ -12,17 +12,21 @@ public class GameManager {
     //In this script we define the 4 ways somebody can walk and set and get them
     private boolean up = false, down = false, right = false, left = false;
 
-    public void update(){
-        for(int i = 0; i < object.size(); i++){
-            GameObject tempObject = object.get(i);
+    public void update() {
+        for (int i = 0; i < object.size(); i++) {
+            try {
+                GameObject tempObject = object.get(i);
 
-            tempObject.update();
+                tempObject.update();
+            } catch (Exception ex) {
+                System.out.println("crash");
+            }
         }
 
     }
 
-    public void render(Graphics g){
-        for(int i = 0; i < object.size(); i++){
+    public void render(Graphics g) {
+        for (int i = 0; i < object.size(); i++) {
             GameObject tempObject = object.get(i);
 
             tempObject.render(g);
@@ -31,11 +35,11 @@ public class GameManager {
     }
 
     // these function enable us to add and remove objects from our Handler to
-    public void addObject(GameObject tempObject){
+    public void addObject(GameObject tempObject) {
         object.add(tempObject);
     }
 
-    public void removeObject(GameObject tempObject){
+    public void removeObject(GameObject tempObject) {
         object.remove(tempObject);
     }
 

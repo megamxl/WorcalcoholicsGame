@@ -16,12 +16,14 @@ public class Enemy extends GameObject {
     int hp = 100;
     int low = -4;
     int high = 4;
+    int booleanvalue = 0;
+    boolean hittedwall = false;
 
-    public Enemy(int x, int y, ID id,GameManager manager, Animations an) {
+    public Enemy(int x, int y, ID id, GameManager manager, Animations an) {
         super(x, y, id, an);
         this.manager = manager;
 
-        enemy_img = an.getImage(1,2,32,32);
+        enemy_img = an.getImage(1, 2, 32, 32);
     }
 
     public void move() {
@@ -42,6 +44,9 @@ public class Enemy extends GameObject {
                     y += (velY * 5) * -1;
                     velX *= -1;
                     velY *= -1;
+                    //enemy cant aim player anymore -> prevents stucking at the wall
+                    hittedwall = true;
+
                 } else if (choose == 0) {
                     //moving between 4 and -4 per iterate
                     velX = r.nextInt(high - low) + low;
@@ -57,6 +62,36 @@ public class Enemy extends GameObject {
                 }
             }
 
+            if (tmpObject.getId() == ID.Player) {
+                if (getBoundsAround().intersects(tmpObject.getBounds())) {
+
+                    System.out.println("DEAD");
+                }
+                if (hittedwall == false) {
+                    if (tmpObject.getX() > x) {
+                        velX = r.nextInt(4 - 0) + 0;
+
+                    } else if (tmpObject.getX() < x) {
+
+                        velX = r.nextInt(0 - (-4)) + (-4);
+
+                    }
+                    if (tmpObject.getY() > y) {
+                        velY = r.nextInt(4 - 0) + 0;
+
+                    } else if (tmpObject.getY() < y) {
+                        velY = r.nextInt(0 - (-4)) + (-4);
+                    }
+                } else {
+                    // if hitted the wall enemy runs different like before
+                    booleanvalue = r.nextInt(100 - 1) + 1; //maybe change
+
+                    if (booleanvalue == 10) {
+                        // now enemy aims to player
+                        hittedwall = false;
+                    }
+                }
+            }
         }
     }
 
@@ -79,12 +114,12 @@ public class Enemy extends GameObject {
     //Enemy is displaying in this Color for now
     public void render(Graphics g) {
 
-        g.drawImage(enemy_img, (int)x, (int)y, null);
+        g.drawImage(enemy_img, (int) x, (int) y, null);
 
         /*g.setColor(Color.YELLOW);
         g.fillRect((int)x, (int)y, 32, 32);
 */
-         //-> Just for testing Bounding Boxes around the Enemys
+        //-> Just for testing Bounding Boxes around the Enemys
         /*
         Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
@@ -96,10 +131,10 @@ public class Enemy extends GameObject {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)x, (int)y, 32, 32);
+        return new Rectangle((int) x, (int) y, 32, 32);
     }
 
     public Rectangle getBoundsAround() {
-        return new Rectangle((int)x - 16, (int)y - 16, 64, 64);
+        return new Rectangle((int) x - 16, (int) y - 16, 64, 64);
     }
 }
