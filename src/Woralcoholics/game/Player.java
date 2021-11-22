@@ -1,16 +1,22 @@
 package Woralcoholics.game;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
 
     GameManager handler;
     Game game;
 
+    private final BufferedImage player_img;
+
     public Player(int x, int y, ID id, GameManager GameManager, Game game, Animations an) {
         super(x, y, id, an);
         this.handler = GameManager;
         this.game = game;
+
+        player_img = an.getImage(2,2,41,64);
+
     }
 
     @Override
@@ -37,8 +43,9 @@ public class Player extends GameObject {
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.gray);
-        g.fillRect((int)x,(int)y, 32, 48);
+        g.drawImage(player_img,(int)x, (int)y, null);
+       /* g.setColor(Color.gray);
+        g.fillRect((int)x,(int)y, 32, 48);*/
 
     }
 
