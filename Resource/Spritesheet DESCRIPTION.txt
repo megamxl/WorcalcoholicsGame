@@ -1,6 +1,9 @@
-spritesheet from left to right
+default res 32x32 (except when stated different)
+pos(spalte,zeile)
 
-01 Tile Wall   pos(1,1)
-02 Tile Floor  pos(2,1)
-03 Enemy       pos(1,2)
-04 Player
+01 Tile Wall   			pos(1,1)
+01 Tile Wall		64x64 	pos (2,1)
+02 Tile Floor  			pos(1,3)
+02 Tile Floor 		64x64	pos(2,3)
+03 Enemy       			pos(1,7)
+04 Player 		64x64	pos(1,5)

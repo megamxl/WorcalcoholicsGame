@@ -3,3 +3,4 @@ spritesheet from left to right
 01 Tile Wall   pos(1,1)
 02 Tile Floor  pos(2,1)
 03 Enemy       pos(1,2)
+04 Player
