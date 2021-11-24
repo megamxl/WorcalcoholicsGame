@@ -1,9 +1,20 @@
 default res 32x32 (except when stated different)
 pos(spalte,zeile)
 
-01 Tile Wall   			pos(1,1)
-01 Tile Wall		64x64 	pos (2,1)
-02 Tile Floor  			pos(1,3)
-02 Tile Floor 		64x64	pos(2,3)
-03 Enemy       			pos(1,7)
-04 Player 		64x64	pos(1,5)
+01 Tile Wall		64x64 	pos(1,1)
+01 Dirt1 Wall		64x64	pos(3,1)
+01 Dirt2 Wall		64x64	pos(5,1)
+01 Dirt3 Wall		64x64	pos(7,1)
+01 Highlight1 Wall	64x64	pos(9,1)
+01 Highlight2 Wall	64x64	pos(11,1)
+01 Highlight3 Wall	64x64	pos(13,1)
+01 Highlight4 Wall	64x64	pos(15,1)
+
+02 Tile Floor 		64x64	pos(1,3)
+02 Dirt1 Floor		64x64	pos(3,3)
+02 Dirt2 Floor		64x64	pos(5,3)
+02 Dirt3 Floor		64x64	pos(7,3)
+
+03 Player 		64x64	pos(1,5)
+
+04 Enemy       			pos(1,7)
