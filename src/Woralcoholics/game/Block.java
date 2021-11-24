@@ -14,7 +14,7 @@ public class Block extends GameObject {
 
         super(x, y, id, an);
 
-        block_img = an.getImage(1,1,32,32);
+        block_img = an.getImage(1,1,64,64);
     }
 
     @Override

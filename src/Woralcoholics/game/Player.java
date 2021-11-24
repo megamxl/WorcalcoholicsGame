@@ -15,7 +15,7 @@ public class Player extends GameObject {
         this.handler = GameManager;
         this.game = game;
 
-        player_img = an.getImage(2,2,41,64);
+        player_img = an.getImage(1,3,64,64);
 
     }
 
@@ -51,7 +51,7 @@ public class Player extends GameObject {
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int)x,(int)y, 32, 48);
+        return new Rectangle((int)x,(int)y, 40, 64);
     }
 
     private void collision() {

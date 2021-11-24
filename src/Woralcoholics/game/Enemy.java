@@ -23,7 +23,7 @@ public class Enemy extends GameObject {
         super(x, y, id, an);
         this.manager = manager;
 
-        enemy_img = an.getImage(1, 2, 32, 32);
+        enemy_img = an.getImage(1, 4, 32, 32);
     }
 
     public void move() {

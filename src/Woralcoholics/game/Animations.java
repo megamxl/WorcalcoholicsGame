@@ -15,7 +15,7 @@ public class Animations {
     //32px x 32px
     public BufferedImage getImage(int col,int row,int width, int height)
     {
-        return img.getSubimage((col*32)-32, (row*32)-32,width,height);
+        return img.getSubimage((col*64)-64, (row*64)-64,width,height);
     }
 
 }

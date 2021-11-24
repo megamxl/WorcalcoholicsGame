@@ -35,7 +35,7 @@ public class Game extends Canvas implements Runnable {
         level = ImageIO.read(path);
 
         BufferedImageLoader loader = new BufferedImageLoader();
-        spritesheet =loader.loadImage("/Spritesheet.png");
+        spritesheet =loader.loadImage("/Spritesheet TEMP.png");
         an = new Animations(spritesheet);
 
         loadLevel(level);
@@ -52,7 +52,7 @@ public class Game extends Canvas implements Runnable {
         KeyInput keys = new KeyInput(handler);
         this.addKeyListener(keys);
 
-        floor = an.getImage(2,1,32,32);
+        floor = an.getImage(1,2,64,64);
 
     }
 
