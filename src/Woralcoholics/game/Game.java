@@ -22,6 +22,9 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage spritesheet = null;
     private BufferedImage floor = null;
 
+    public int ammo = 50;
+    public int hp = 100;
+
     public Game() throws IOException {
         // make the window threw out own window class
         int playerIndex= 0;
@@ -138,6 +141,15 @@ public class Game extends Canvas implements Runnable {
         handler.render(g);
 
         g2d.translate(camera.getX(), camera.getY());
+
+        g.setColor(Color.gray);
+        g.fillRect(5,5,200,16);
+
+        g.setColor(Color.red);
+        g.fillRect(5,5,hp*2,16);
+
+        g.setColor(Color.black);
+        g.drawRect(5,5,200,16);
 
         // end of drawing place
         g.dispose();

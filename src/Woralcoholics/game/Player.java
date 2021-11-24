@@ -65,13 +65,26 @@ public class Player extends GameObject {
                     y += velY * -1;
                 }
             }
-          /*  if(tempobject.getId() == ID.Create){
-                if(getBounds().intersects(tempobject.getBounds())) {
-                    game.ammo += 10;
+            if(tempobject.getId() == ID.Create) {
+                if (getBounds().intersects(tempobject.getBounds())) {
+                    game.ammo += 20;
                     handler.removeObject(tempobject);
                 }
-            }*/
+            }
 
+            if(tempobject.getId() == ID.Enemy) {
+                if (getBounds().intersects(tempobject.getBounds())) {
+                    if (game.hp > 1) {
+                        game.hp = game.hp - 1;
+                    }
+                    if (game.hp <= 1) {
+                        game.hp = game.hp - 1;
+                        System.out.println("Game Over");
+
+                    }
+                }
+
+            }
         }
     }
 }

@@ -19,6 +19,9 @@ public class Enemy extends GameObject {
     int booleanvalue = 0;
     boolean hittedwall = false;
 
+
+
+
     public Enemy(int x, int y, ID id, GameManager manager, Animations an) {
         super(x, y, id, an);
         this.manager = manager;
@@ -63,10 +66,10 @@ public class Enemy extends GameObject {
             }
 
             if (tmpObject.getId() == ID.Player) {
-                if (getBoundsAround().intersects(tmpObject.getBounds())) {
+                /*if (getBoundsAround().intersects(tmpObject.getBounds())) {
 
                     System.out.println("DEAD");
-                }
+                }*/
                 if (hittedwall == false) {
                     if (tmpObject.getX() > x) {
                         velX = r.nextInt(4 - 0) + 0;

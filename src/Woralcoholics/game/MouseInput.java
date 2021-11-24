@@ -36,7 +36,7 @@ public class MouseInput extends MouseAdapter {
             case 1 -> {
                 //System.out.println("BUTTON 1");
                 double now = System.currentTimeMillis();
-                if(now > wait) {
+                if(now > wait && game.ammo >= 1) {
                     double mx = currentPos.x + camera.getX();   //add camera pos, as bullets don't aim correctly otherwise
                     double my = currentPos.y + camera.getY();
                     double px = player.getX()+16;
@@ -45,6 +45,8 @@ public class MouseInput extends MouseAdapter {
                     //temp.handler = this.handler;
                     temp.direction(mx, my, px, py);
                     handler.addObject(temp);
+                    game.ammo--; //shot
+                    System.out.println(game.ammo);
                     wait = now + del;
                 }
             }
