@@ -1,6 +1,7 @@
 package Woralcoholics.game;
 
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
@@ -77,10 +78,12 @@ public class Player extends GameObject {
                     if (game.hp > 1) {
                         game.hp = game.hp - 1;
                     }
-                    if (game.hp <= 1) {
+                    if (game.hp == 1) {
                         game.hp = game.hp - 1;
-                        System.out.println("Game Over");
-
+                        System.out.println("Game Over!");
+                    }
+                    if(game.hp == 0){
+                        game.hp = 0;
                     }
                 }
 

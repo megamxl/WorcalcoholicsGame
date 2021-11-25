@@ -4,6 +4,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -11,7 +13,7 @@ public class Game extends Canvas implements Runnable {
 
     private static final long serialVersionUID = 1L;
 
-    private  boolean isRunning;
+    private boolean isRunning;
     private Thread thread;
     private GameManager handler;
     private Animations an;
@@ -27,50 +29,50 @@ public class Game extends Canvas implements Runnable {
 
     public Game() throws IOException {
         // make the window threw out own window class
-        int playerIndex= 0;
-        new Window(1000,563, "Workalcholics Work In Progress",this);
+        int playerIndex = 0;
+        new Window(1000, 563, "Workalcholics Work In Progress", this);
         start();
 
         handler = new GameManager();
-        camera = new Camera(0,0);
+        camera = new Camera(0, 0);
         // when finished implement the Mouse and Key input
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("test.png");
         level = ImageIO.read(path);
 
         BufferedImageLoader loader = new BufferedImageLoader();
-        spritesheet =loader.loadImage("/Spritesheet TEMP.png");
+        spritesheet = loader.loadImage("/Spritesheet TEMP.png");
         an = new Animations(spritesheet);
 
         loadLevel(level);
 
-        for(int i =0; i <handler.object.size(); i++){
-            if (handler.object.get(i).getId() == ID.Player){
-                playerIndex= i;
+        for (int i = 0; i < handler.object.size(); i++) {
+            if (handler.object.get(i).getId() == ID.Player) {
+                playerIndex = i;
                 break;
             }
         }
-        MouseInput mouse = new MouseInput(handler, camera, this, handler.object.get(playerIndex), an );
+        MouseInput mouse = new MouseInput(handler, camera, this, handler.object.get(playerIndex), an);
         this.addMouseListener(mouse);
 
         KeyInput keys = new KeyInput(handler);
         this.addKeyListener(keys);
 
-        floor = an.getImage(1,2,64,64);
+        floor = an.getImage(1, 2, 64, 64);
 
     }
 
     // these tow function are responsible to not make more than one window during runtime
-    private  void start(){
+    private void start() {
         isRunning = true;
         thread = new Thread(this);
         thread.start();
     }
 
-    private  void stop(){
+    private void stop() {
         isRunning = false;
         try {
             thread.join();
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -78,7 +80,7 @@ public class Game extends Canvas implements Runnable {
     @Override
     // this is a well-known game loop also used in minecraft for making no differnece how fast or slow you computer performce
     // so that the calculation are made at equal tzimes no matter the computer
-    public void run(){
+    public void run() {
         long lastTime = System.nanoTime();
         final double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
@@ -87,11 +89,11 @@ public class Game extends Canvas implements Runnable {
         int frames = 0;
         long timer = System.currentTimeMillis();
 
-        while(isRunning){
+        while (isRunning) {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
-            if(delta >= 1){
+            if (delta >= 1) {
                 update();
                 updates++;
                 delta--;
@@ -99,7 +101,7 @@ public class Game extends Canvas implements Runnable {
             render();
             frames++;
 
-            if(System.currentTimeMillis() - timer > 1000){
+            if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
                 System.out.println(updates + " Ticks, Fps " + frames);
                 updates = 0;
@@ -111,9 +113,9 @@ public class Game extends Canvas implements Runnable {
     }
 
     // in every frame check where player is and update camera position
-    public void update(){
-        for(int i =0; i <handler.object.size(); i++){
-            if (handler.object.get(i).getId() == ID.Player){
+    public void update() {
+        for (int i = 0; i < handler.object.size(); i++) {
+            if (handler.object.get(i).getId() == ID.Player) {
                 camera.update(handler.object.get(i));
             }
         }
@@ -121,9 +123,9 @@ public class Game extends Canvas implements Runnable {
         handler.update();
     }
 
-    public void render(){
+    public void render() {
         BufferStrategy bs = this.getBufferStrategy();
-        if(bs == null){
+        if (bs == null) {
             this.createBufferStrategy(3);
             return;
         }
@@ -132,9 +134,11 @@ public class Game extends Canvas implements Runnable {
         // between this it can be drawn to the screen
 
         // rendering gets executed in the way it is written top down
-        for (int i = 0; i < 30*72; i+=32) {
-            for (int j = 0; j < 30*72; j+=32) {
-                g.drawImage(floor,i,j,null);}}
+        for (int i = 0; i < 30 * 72; i += 32) {
+            for (int j = 0; j < 30 * 72; j += 32) {
+                g.drawImage(floor, i, j, null);
+            }
+        }
 
         g2d.translate(-camera.getX(), -camera.getY());
 
@@ -143,13 +147,26 @@ public class Game extends Canvas implements Runnable {
         g2d.translate(camera.getX(), camera.getY());
 
         g.setColor(Color.gray);
-        g.fillRect(5,5,200,16);
+        g.fillRect(5, 5, 200, 16); //hp
 
-        g.setColor(Color.red);
-        g.fillRect(5,5,hp*2,16);
+        g.fillRect(5, 30, 200, 16); //ammo
+
+        g.setColor(Color.blue);
+        g.drawString("AMMO: " + ammo + "/50", 210, 42);
+        g.fillRect(5, 30, ammo * 4, 16);
+
+        if (hp >= 70)
+            g.setColor(Color.green);
+        else if (hp >= 40)
+            g.setColor(Color.orange);
+        else
+            g.setColor(Color.red);
+        g.drawString("HP: " + hp + "/100", 210, 17);
+        g.fillRect(5, 5, hp * 2, 16);
 
         g.setColor(Color.black);
-        g.drawRect(5,5,200,16);
+        g.drawRect(5, 5, 200, 16); //hp
+        g.drawRect(5, 30, 200, 16); //ammo
 
         // end of drawing place
         g.dispose();
@@ -169,13 +186,13 @@ public class Game extends Canvas implements Runnable {
                 int blue = (pixel) & 0xff;
 
                 if (red == 255) {
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block,an));
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an));
                 }
                 if (blue == 255 && green == 0) {
-                    handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this,an));
+                    handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, an));
                 }
-                if(green == 255){
-                    handler.addObject(new Enemy(xx *32, yy*32, ID.Enemy, handler,an));
+                if (green == 255) {
+                    handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an));
                 }
                 /*
                 if(green == 255 && blue == 255)
@@ -186,6 +203,7 @@ public class Game extends Canvas implements Runnable {
         }
         handler.addObject(new GunnerEnemy(250, 250, ID.GunnerEnemy, handler, an)); //Test Gunner
     }
+
     // the main function that runs everything
     public static void main(String[] args) throws IOException {
         try {
