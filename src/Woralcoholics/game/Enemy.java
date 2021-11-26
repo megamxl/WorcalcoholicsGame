@@ -63,9 +63,9 @@ public class Enemy extends GameObject {
             //if our bullet is colliding with the enemy hp get's -50
             if (tmpObject.getId() == ID.Bullet) {
                 if (getBounds().intersects(tmpObject.getBounds())) {
-                    hp -= 100;
-                    manager.removeObject(tmpObject);
-                    enemysAlive--;
+                    System.out.println("hit");
+                    hp -= 110;
+                    removeWithObject(tmpObject);
                     //System.out.println("es sind " + enemysAlive +" enemys am leben");
                 }
                 if(enemysAlive <= 0){
@@ -106,9 +106,17 @@ public class Enemy extends GameObject {
         }
     }
 
+    private void remove(){
+        manager.removeObject(this);
+    }
+    private void removeWithObject(GameObject tempobject){
+        manager.removeObject(tempobject);
+        enemysAlive--;
+    }
+
     public void isDead() {
         if (hp <= 0) {
-            manager.removeObject(this);
+            remove();
         }
     }
 
@@ -126,8 +134,6 @@ public class Enemy extends GameObject {
 
     //Enemy is displaying in this Color for now
     public void render(Graphics g) {
-
-
         //-> Just for testing Bounding Boxes around the Enemys
         Graphics2D g2d = (Graphics2D) g;
         /*g.setColor(Color.GREEN);
@@ -150,17 +156,18 @@ public class Enemy extends GameObject {
             y = r.nextInt(((55*32)-1)-1);
 
             for (int[] c: Game.wallCords) {
-                if (c[0]== x || c[1]==y) {System.out.println("wall, this is i " + i);}
+                if (c[0]== x || c[1]==y) {
+                    //System.out.println("wall, this is i " + i);
+                }
             }
-            System.out.println("spawning");
+            //System.out.println("spawning");
             Game.SpawnEnemy((int)x,(int)y);
         }
     }
 
     private void checkIfGone(){
         if((y > 1054 || y < 64) ||( x >1900 || x< 0)){
-            manager.removeObject(this);
-            enemysAlive--;
+            removeWithObject(this);
         }
     }
 

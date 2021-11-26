@@ -34,7 +34,7 @@ public class Bullet extends GameObject {
         for (int i = 0; i < handler.object.size(); i++) {
             GameObject tmpObject = handler.object.get(i);
 
-            if (tmpObject.getId() == ID.Block || tmpObject.getId() == ID.Enemy) {
+            if (tmpObject.getId() == ID.Block ) {
                 if (this.getBounds().intersects(tmpObject.getBounds())) {
                     handler.removeObject(this);
                     //System.out.println("Collision");
@@ -74,7 +74,7 @@ public class Bullet extends GameObject {
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int) x, (int) y, 8, 8);
+        return new Rectangle((int) x, (int) y, 12, 12);
     }
 
     public float getBulletSpeed() {
