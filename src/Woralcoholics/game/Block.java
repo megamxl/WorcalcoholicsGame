@@ -25,12 +25,13 @@ public class Block extends GameObject {
     @Override
     public void render(Graphics g) {
         g.drawImage(block_img, (int)x, (int)y,null);
-         /* g.setColor(Color.black);
-        g.fillRect((int)x,(int)y,32,32);*/
+       /* Graphics2D g2d = (Graphics2D) g;
+        g.setColor(Color.GREEN);
+        g2d.draw(getBounds());*/
     }
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int)x,(int)y, 32,32);
+        return new Rectangle((int)x,(int)y, 64,64);
     }
 }

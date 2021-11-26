@@ -19,14 +19,14 @@ public class Enemy extends GameObject {
     int booleanvalue = 0;
     boolean hittedwall = false;
 
-
-
+    private int enemysAlive = 0;
 
     public Enemy(int x, int y, ID id, GameManager manager, Animations an) {
         super(x, y, id, an);
         this.manager = manager;
 
         enemy_img = an.getImage(1, 4, 32, 32);
+        enemysAlive++;
     }
 
     public void move() {
@@ -62,6 +62,11 @@ public class Enemy extends GameObject {
                 if (getBounds().intersects(tmpObject.getBounds())) {
                     hp -= 100;
                     manager.removeObject(tmpObject);
+                    enemysAlive--;
+                }
+                if(enemysAlive <= 0){
+                    EnemySpawner sp = new EnemySpawner(handler,an);
+                    sp.Spawner(25);
                 }
             }
 
@@ -117,18 +122,13 @@ public class Enemy extends GameObject {
     //Enemy is displaying in this Color for now
     public void render(Graphics g) {
 
-        g.drawImage(enemy_img, (int) x, (int) y, null);
 
-        /*g.setColor(Color.YELLOW);
-        g.fillRect((int)x, (int)y, 32, 32);
-*/
         //-> Just for testing Bounding Boxes around the Enemys
-        /*
         Graphics2D g2d = (Graphics2D) g;
-        g.setColor(Color.GREEN);
-        g2d.draw(getBoundsAround());
+        /*g.setColor(Color.GREEN);
+        g2d.draw(getBoundsAround());*/
 
-         */
+        g.drawImage(enemy_img, (int) x, (int) y, null);
 
 
     }
@@ -138,6 +138,7 @@ public class Enemy extends GameObject {
     }
 
     public Rectangle getBoundsAround() {
-        return new Rectangle((int) x - 16, (int) y - 16, 64, 64);
+        return new Rectangle((int) x , (int) y , 32, 32);
     }
+
 }

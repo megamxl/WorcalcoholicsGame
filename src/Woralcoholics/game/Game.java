@@ -117,7 +117,6 @@ public class Game extends Canvas implements Runnable {
                 camera.update(handler.object.get(i));
             }
         }
-
         handler.update();
     }
 
@@ -132,8 +131,8 @@ public class Game extends Canvas implements Runnable {
         // between this it can be drawn to the screen
 
         // rendering gets executed in the way it is written top down
-        for (int i = 0; i < 30 * 72; i += 32) {
-            for (int j = 0; j < 30 * 72; j += 32) {
+        for (int i = 0; i < 30 * 72; i += 64) {
+            for (int j = 0; j < 30 * 72; j += 64) {
                 g.drawImage(floor, i, j, null);
             }
         }

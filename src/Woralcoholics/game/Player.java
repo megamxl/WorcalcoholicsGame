@@ -45,14 +45,15 @@ public class Player extends GameObject {
     @Override
     public void render(Graphics g) {
         g.drawImage(player_img,(int)x, (int)y, null);
-       /* g.setColor(Color.gray);
-        g.fillRect((int)x,(int)y, 32, 48);*/
+        /*Graphics2D g2d = (Graphics2D) g;
+        g.setColor(Color.GREEN);
+        g2d.draw(getBounds());*/
 
     }
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int)x,(int)y, 40, 64);
+        return new Rectangle((int)x+12,(int)y, 40, 62);
     }
 
     private void collision() {
