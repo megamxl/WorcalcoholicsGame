@@ -2,6 +2,7 @@ package Woralcoholics.game;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.Random;
 
 
@@ -19,7 +20,8 @@ public class Enemy extends GameObject {
     int booleanvalue = 0;
     boolean hittedwall = false;
 
-     static int enemysAlive = 0;
+    static int enemysAlive = 0;
+    static int waves=1;
 
     public Enemy(int x, int y, ID id, GameManager manager, Animations an) {
         super(x, y, id, an);
@@ -27,7 +29,7 @@ public class Enemy extends GameObject {
 
         enemy_img = an.getImage(1, 4, 32, 32);
         enemysAlive++;
-        System.out.println("enemy created "+ enemysAlive );
+        //System.out.println("enemy created "+ enemysAlive );
     }
 
     public void move() {
@@ -64,10 +66,10 @@ public class Enemy extends GameObject {
                     hp -= 100;
                     manager.removeObject(tmpObject);
                     enemysAlive--;
-                    System.out.println("es sind " + enemysAlive +" enemys am leben");
+                    //System.out.println("es sind " + enemysAlive +" enemys am leben");
                 }
                 if(enemysAlive <= 0){
-                    Spawner(25);
+                    Spawner(waves++);
                 }
             }
 
@@ -115,6 +117,8 @@ public class Enemy extends GameObject {
 
         choose = r.nextInt(10);
 
+        checkIfGone();
+
         collision();
 
         isDead();
@@ -141,12 +145,24 @@ public class Enemy extends GameObject {
     }
 
     private void Spawner(int Wavesize){
-        for(int i = 0; i < Wavesize+1; i++){
-            x = r.nextInt((63*32-1)-1);
-            y = r.nextInt((63*32-1)-1);
+        for(int i = 0; i < (Wavesize* 5)+1; i++){
+            x = r.nextInt(((55*32)-1)-1);
+            y = r.nextInt(((55*32)-1)-1);
 
+            for (int[] c: Game.wallCords) {
+                if (c[0]== x || c[1]==y) {System.out.println("wall, this is i " + i);}
+            }
+            System.out.println("spawning");
             Game.SpawnEnemy((int)x,(int)y);
         }
     }
+
+    private void checkIfGone(){
+        if((y > 1054 || y < 64) ||( x >1900 || x< 0)){
+            manager.removeObject(this);
+            enemysAlive--;
+        }
+    }
+
 
 }

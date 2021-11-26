@@ -6,6 +6,9 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Game extends Canvas implements Runnable {
 
@@ -15,6 +18,7 @@ public class Game extends Canvas implements Runnable {
     private Thread thread;
     public static GameManager handler;
     private static Animations an;
+    static List<int[]> wallCords = new ArrayList();
 
     private BufferedImage level = null;
     private Camera camera;
@@ -101,7 +105,7 @@ public class Game extends Canvas implements Runnable {
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                System.out.println(updates + " Ticks, Fps " + frames);
+                //System.out.println(updates + " Ticks, Fps " + frames);
                 updates = 0;
                 frames = 0;
             }
@@ -165,6 +169,10 @@ public class Game extends Canvas implements Runnable {
         g.drawRect(5, 5, 200, 16); //hp
         g.drawRect(5, 30, 200, 16); //ammo
 
+        g.setColor(Color.MAGENTA);
+        g.drawString("Waves "+ Enemy.waves,930,17);
+        g.drawString("Enemeys "+ Enemy.enemysAlive,910,40);
+
         // end of drawing place
         g.dispose();
         bs.show();
@@ -174,6 +182,9 @@ public class Game extends Canvas implements Runnable {
     private void loadLevel(BufferedImage image) {
         int h = image.getHeight();
         int w = image.getWidth();
+        int i= 0;
+
+
 
         for (int xx = 0; xx < w; xx++) {
             for (int yy = 0; yy < h; yy++) {
@@ -184,6 +195,7 @@ public class Game extends Canvas implements Runnable {
 
                 if (red == 255) {
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an));
+                    wallCords.add(new int[]{xx,yy});
                 }
                 if (blue == 255 && green == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, an));
@@ -202,6 +214,7 @@ public class Game extends Canvas implements Runnable {
     }
 
     public static void SpawnEnemy(int x, int y){
+
         handler.addObject(new Enemy(x, y, ID.Enemy, handler, an));
     }
 

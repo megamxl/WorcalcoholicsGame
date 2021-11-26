@@ -46,7 +46,7 @@ public class MouseInput extends MouseAdapter {
                     temp.direction(mx, my, px, py);
                     handler.addObject(temp);
                     game.ammo--; //shot
-                    System.out.println(game.ammo);
+                    //aSystem.out.println(game.ammo);
                     wait = now + del;
                 }
             }
@@ -56,7 +56,7 @@ public class MouseInput extends MouseAdapter {
                 float mx = currentPos.x + camera.getX();
                 float my = currentPos.y + camera.getY();
                 ID m = getIDAt(mx, my);
-                System.out.println(m);
+                //System.out.println(m);
             }
             default -> {
             }
@@ -66,11 +66,11 @@ public class MouseInput extends MouseAdapter {
     }
 
     public void mouseEntered(MouseEvent e) {
-        System.out.println("MOUSE ENTERED");
+        //System.out.println("MOUSE ENTERED");
     }
 
     public void mouseExited(MouseEvent e) {
-        System.out.println("MOUSE EXITED");
+        //System.out.println("MOUSE EXITED");
     }
 
     public ID getIDAt(float x, float y) {

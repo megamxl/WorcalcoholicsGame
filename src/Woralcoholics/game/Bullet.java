@@ -19,7 +19,7 @@ public class Bullet extends GameObject {
         double dx = mx - px;
         double dy = my - py;
         double alpha = Math.atan2(dy, dx);
-        System.out.println(dx + " " + dy);
+        //System.out.println(dx + " " + dy);
         //System.out.println(alpha);
         velX = (float) (Math.cos(alpha) * bulletSpeed);
         velY = (float) (Math.sin(alpha) * bulletSpeed);
@@ -50,7 +50,7 @@ public class Bullet extends GameObject {
             if (tmp.getId() == ID.Bullet) {
                 if (x - 4 > 2000 || y - 4 > 1000 || x < 0 || y < 0) {   //Out of Bounds
                     handler.removeObject(this);
-                    System.out.println("OoB");
+                    //System.out.println("OoB");
                 }
             }
         }
