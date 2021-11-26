@@ -13,8 +13,8 @@ public class Game extends Canvas implements Runnable {
 
     private boolean isRunning;
     private Thread thread;
-    private GameManager handler;
-    private Animations an;
+    public static GameManager handler;
+    private static Animations an;
 
     private BufferedImage level = null;
     private Camera camera;
@@ -199,6 +199,10 @@ public class Game extends Canvas implements Runnable {
             }
         }
         handler.addObject(new GunnerEnemy(250, 250, ID.GunnerEnemy, handler, an)); //Test Gunner
+    }
+
+    public static void SpawnEnemy(int x, int y){
+        handler.addObject(new Enemy(x, y, ID.Enemy, handler, an));
     }
 
     // the main function that runs everything

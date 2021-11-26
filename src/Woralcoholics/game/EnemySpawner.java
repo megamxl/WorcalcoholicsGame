@@ -8,7 +8,8 @@ public class EnemySpawner {
     private final BufferedImage img;
 
     GameManager handler;
-    Animations spritesheet;
+    Animations an;
+
 
     int x;
     int y;
@@ -16,23 +17,13 @@ public class EnemySpawner {
 
     static Random r = new Random();
 
-    public EnemySpawner(GameManager handler, Animations spritesheet) {
+    public EnemySpawner(GameManager handler, BufferedImage img, Animations an) {
         this.handler = handler;
 
-        img = spritesheet.getImage(1, 4, 32, 32);
-    }
-
-    public void Spawner(int Wavesize){
-        for(int i = 0; i < Wavesize+1; i++){
-            System.out.println("hier");
-             x = r.nextInt((63*32-1)-1);
-             y = r.nextInt((63*32-1)-1);
-
-             handler.addObject(new Enemy(32,32,ID.Enemy,handler,spritesheet));
-
-        }
+        this.img =img;
 
     }
+
 
 
 }

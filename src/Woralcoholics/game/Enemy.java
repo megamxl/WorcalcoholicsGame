@@ -19,7 +19,7 @@ public class Enemy extends GameObject {
     int booleanvalue = 0;
     boolean hittedwall = false;
 
-    private int enemysAlive = 0;
+     static int enemysAlive = 0;
 
     public Enemy(int x, int y, ID id, GameManager manager, Animations an) {
         super(x, y, id, an);
@@ -27,6 +27,7 @@ public class Enemy extends GameObject {
 
         enemy_img = an.getImage(1, 4, 32, 32);
         enemysAlive++;
+        System.out.println("enemy created "+ enemysAlive );
     }
 
     public void move() {
@@ -63,10 +64,10 @@ public class Enemy extends GameObject {
                     hp -= 100;
                     manager.removeObject(tmpObject);
                     enemysAlive--;
+                    System.out.println("es sind " + enemysAlive +" enemys am leben");
                 }
                 if(enemysAlive <= 0){
-                    EnemySpawner sp = new EnemySpawner(handler,an);
-                    sp.Spawner(25);
+                    Spawner(25);
                 }
             }
 
@@ -129,8 +130,6 @@ public class Enemy extends GameObject {
         g2d.draw(getBoundsAround());*/
 
         g.drawImage(enemy_img, (int) x, (int) y, null);
-
-
     }
 
     public Rectangle getBounds() {
@@ -139,6 +138,15 @@ public class Enemy extends GameObject {
 
     public Rectangle getBoundsAround() {
         return new Rectangle((int) x , (int) y , 32, 32);
+    }
+
+    private void Spawner(int Wavesize){
+        for(int i = 0; i < Wavesize+1; i++){
+            x = r.nextInt((63*32-1)-1);
+            y = r.nextInt((63*32-1)-1);
+
+            Game.SpawnEnemy((int)x,(int)y);
+        }
     }
 
 }

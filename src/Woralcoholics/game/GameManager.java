@@ -20,6 +20,7 @@ public class GameManager {
                 tempObject.update();
             } catch (Exception ex) {
                 System.out.println("crash");
+                ex.printStackTrace();
             }
         }
 
