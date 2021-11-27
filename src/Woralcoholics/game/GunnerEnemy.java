@@ -6,64 +6,97 @@ public class GunnerEnemy extends Enemy {
 
     GameManager handler;
 
-    private float minDistanceToPlayer = 100;
-    private float maxDistanceToPlayer = 200;
+    private float minDistanceToPlayer = 250;
+    private float maxDistanceToPlayer = 500;
+    private double distanceToPlayer;
+    private double alpha;
+
     private float movementSpeed = 5;
 
     protected double px = 0, py = 0;
-    protected double shootDel = 0;
+
+    private double wait = 0;
+    private final double shootDel = 1500;
+
+    private enum state {
+        TOO_CLOSE,
+        TOO_FAR,
+        STAY
+    }
+
+    private state gunnerState;
 
 
     public GunnerEnemy(int x, int y, ID id, GameManager manager, Animations an) {
         super(x, y, id, manager, an);
-        //velX = velY = 0;
         handler = manager;
+
+        enemysAlive++;
     }
 
-    public void behaviour() {
+    private void calcDistanceToPlayer() {
         double gx = this.getX();
         double gy = this.getY();
         for(int i = 0; i < handler.object.size(); i++) {
             GameObject temp = handler.object.get(i);
 
             if(temp.getId() == ID.Player) {
-                px = temp.getX()+16;
-                py = temp.getY()+24;
+                px = temp.getX()+32;
+                py = temp.getY()+32;
                 break;
             }
         }
-        /*double distanceToPlayer = Math.sqrt(Math.pow(px-gx, 2) + Math.pow(py-gy, 2));
-        double alpha = Math.atan2(py-gy, px-gx);
+        distanceToPlayer = Math.sqrt(Math.pow(px-gx, 2) + Math.pow(py-gy, 2));
+        alpha = Math.atan2(py-gy, px-gx);
+
         if(distanceToPlayer > maxDistanceToPlayer) {
-            velX = (float) (Math.cos(alpha) * movementSpeed);
-            velY = (float) (Math.sin(alpha) * movementSpeed);
+            gunnerState = state.TOO_FAR;
         }
-        if(distanceToPlayer < minDistanceToPlayer) {
-            alpha += Math.PI;
-            velX = (float) (Math.cos(alpha) * movementSpeed);
-            velY = (float) (Math.sin(alpha) * movementSpeed);
+        else if(distanceToPlayer < minDistanceToPlayer) {
+            gunnerState = state.TOO_CLOSE;
         }
         else
-            velX = velY = 0;*/
+            gunnerState = state.STAY;
+    }
+
+    public void behaviour() {
+        switch(gunnerState) {
+            case TOO_FAR -> {
+                velX = (float) (Math.cos(alpha) * movementSpeed);
+                velY = (float) (Math.sin(alpha) * movementSpeed);
+            }
+            case TOO_CLOSE -> {
+                alpha += Math.PI;
+                velX = (float) (Math.cos(alpha) * movementSpeed);
+                velY = (float) (Math.sin(alpha) * movementSpeed);
+            }
+            case STAY -> velX = velY = 0;
+        }
+        //System.out.println(gunnerState);
     }
 
     public void shoot() {
-        double now = System.currentTimeMillis();
-        if(now > shootDel) {
-            double gx = this.getX()+16;
-            double gy = this.getY()+16;
-            Bullet temp = new Bullet((int) gx-4, (int) gy-4, ID.Bullet, handler, an);
-            temp.direction(px, py, gx, gy);
-            handler.addObject(temp);
-            shootDel += 500;
-        }
+        double gx = this.getX()+16;
+        double gy = this.getY()+16;
+        EnemyBullet temp = new EnemyBullet((int) gx-4, (int) gy-4, ID.EnemyBullet, handler, an);
+        temp.direction(px, py, gx, gy);
+        handler.addObject(temp);
+    }
+
+    public boolean los(GameObject o) {
+        return true;
     }
 
     public void update() {
+        calcDistanceToPlayer();
         behaviour();
         move();
         collision();
-        shoot();
+        double now = System.currentTimeMillis();
+        if(now > wait) {
+            shoot();
+            wait = now + shootDel;
+        }
         isDead();
     }
 
