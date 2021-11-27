@@ -44,11 +44,10 @@ public class Player extends GameObject {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(player_img,(int)x, (int)y, null);
         /*Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
         g2d.draw(getBounds());*/
-
+        g.drawImage(player_img,(int)x, (int)y, null);
     }
 
     @Override
@@ -74,7 +73,7 @@ public class Player extends GameObject {
                 }
             }
 
-            if(tempobject.getId() == ID.Enemy) {
+            if(tempobject.getId() == ID.Enemy || tempobject.getId() == ID.EnemyBullet) {    //If Player is hit by Enemy of EnemyBullet
                 if (getBounds().intersects(tempobject.getBounds())) {
                     if (game.hp > 1) {
                         game.hp = game.hp - 1;
@@ -86,6 +85,7 @@ public class Player extends GameObject {
                     if(game.hp == 0){
                         game.hp = 0;
                     }
+                    if(tempobject.getId() == ID.EnemyBullet) handler.removeObject(tempobject);  //Remove Enemy Bullet if Player is hit
                 }
 
             }

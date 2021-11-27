@@ -26,9 +26,9 @@ public class MouseInput extends MouseAdapter {
     }
 
     public void mousePressed(MouseEvent e) {
-        Point currentPos = e.getPoint();    //grab current Pos
+        Point currentPos = e.getPoint();    //Grab current cursor position
         //currentPos.translate(-500, -282);
-        int button = e.getButton(); //grab pressed button
+        int button = e.getButton(); //Grab pressed button
         /* 1 = LEFT MOUSE BUTTON
          * 2 = MOUSE WHEEL
          * 3 = RIGHT MOUSE BUTTON */
@@ -36,26 +36,30 @@ public class MouseInput extends MouseAdapter {
             case 1 -> {
                 //System.out.println("BUTTON 1");
                 double now = System.currentTimeMillis();
+                //IF waiting time is over AND player has ammo -> shoot a bullet
                 if(now > wait && game.ammo >= 1) {
-                    double mx = currentPos.x + camera.getX();   //add camera pos, as bullets don't aim correctly otherwise
+                    //Add camera pos, as bullets don't aim correctly otherwise
+                    double mx = currentPos.x + camera.getX();
                     double my = currentPos.y + camera.getY();
-                    double px = player.getX()+16;
-                    double py = player.getY()+24;
+                    //Middle of player coordinates
+                    double px = player.getX()+32;
+                    double py = player.getY()+32;
+                    //Create a new bullet in the middle of player sprite (minus the bullet radius)
                     Bullet temp = new Bullet((int)px-4, (int)py-4, ID.Bullet, handler, an);
-                    //temp.handler = this.handler;
-                    temp.direction(mx, my, px, py);
-                    handler.addObject(temp);
-                    game.ammo--; //shot
+                    temp.direction(mx, my, px, py); //Calculate the direction of this bullet
+                    handler.addObject(temp);    //Add the Bullet to the ObjectList
+                    game.ammo--;    //Subtract 1 from ammo (bullet was shot)
                     //aSystem.out.println(game.ammo);
-                    wait = now + del;
+                    wait = now + del;   //Waiting time for next viable Input
                 }
             }
             case 2 -> System.out.println("BUTTON 2");
             case 3 -> {
                 //System.out.println("BUTTON 3");
+                //Grab current cursor position
                 float mx = currentPos.x + camera.getX();
                 float my = currentPos.y + camera.getY();
-                ID m = getIDAt(mx, my);
+                ID m = getIDAt(mx, my); //Get ID of object at cursor
                 //System.out.println(m);
             }
             default -> {
@@ -73,7 +77,7 @@ public class MouseInput extends MouseAdapter {
         //System.out.println("MOUSE EXITED");
     }
 
-    public ID getIDAt(float x, float y) {
+    public ID getIDAt(float x, float y) {   //Method for identifying objects
         for(int i = 0; i < handler.object.size(); i++) {
             GameObject temp = handler.object.get(i);
             if(temp.getBounds().contains(x, y)) {

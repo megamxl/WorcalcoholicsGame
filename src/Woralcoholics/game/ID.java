@@ -8,6 +8,7 @@ public enum ID {
     Create(),
     Enemy(),
     GunnerEnemy(),
-    Bullet();
+    Bullet(),
+    EnemyBullet()
 
 }

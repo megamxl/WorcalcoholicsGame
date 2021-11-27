@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class Bullet extends GameObject {
 
-    private float bulletSpeed = 5;
+    private float bulletSpeed = 8;
 
     GameManager handler;
 
@@ -23,10 +23,6 @@ public class Bullet extends GameObject {
         //System.out.println(alpha);
         velX = (float) (Math.cos(alpha) * bulletSpeed);
         velY = (float) (Math.sin(alpha) * bulletSpeed);
-        /*
-        velX = (float) (bulletSpeed * mx/c);
-        velY = (float) (bulletSpeed * my/c);*/
-
         //System.out.println(velX + " " + velY);
     }
 
@@ -48,7 +44,7 @@ public class Bullet extends GameObject {
             GameObject tmp = handler.object.get(i);
 
             if (tmp.getId() == ID.Bullet) {
-                if (x - 4 > 2000 || y - 4 > 1000 || x < 0 || y < 0) {   //Out of Bounds
+                if (x - 4 > 2500 || y - 4 > 1500 || x < 0 || y < 0) {   //Out of Bounds
                     handler.removeObject(this);
                     //System.out.println("OoB");
                 }
