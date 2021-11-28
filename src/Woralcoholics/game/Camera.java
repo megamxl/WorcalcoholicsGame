@@ -16,7 +16,7 @@ public class Camera {
         if (x <= 0) x = 0;
         if (x >= 1000) x = 1000;
         if (y <= 0) y = 0;
-        if (y >= 563) y = 563;
+        if (y >= 650) y = 650;
     }
 
     public float getX() {
