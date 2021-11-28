@@ -1,7 +1,6 @@
 package Woralcoholics.game;
 
 import java.awt.*;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
@@ -10,6 +9,9 @@ public class Player extends GameObject {
     Game game;
 
     private final BufferedImage player_img;
+
+    private final double invincibleTime = 1000;
+    private double wait;
 
     public Player(int x, int y, ID id, GameManager GameManager, Game game, Animations an) {
         super(x, y, id, an);
@@ -74,9 +76,18 @@ public class Player extends GameObject {
             }
 
             if(tempobject.getId() == ID.Enemy || tempobject.getId() == ID.EnemyBullet) {    //If Player is hit by Enemy of EnemyBullet
+                ID temp = tempobject.getId();
                 if (getBounds().intersects(tempobject.getBounds())) {
-                    if (game.hp > 1) {
-                        game.hp = game.hp - 1;
+                    double now = System.currentTimeMillis();
+                    if (game.hp > 1 && now > wait) {
+                        switch (temp) {
+                            case EnemyBullet -> {
+                                handler.removeObject(tempobject);   //Remove Enemy Bullet if Player is hit
+                                game.hp -= 20;
+                            }
+                            case Enemy -> game.hp -= 10;
+                        }
+                        wait = now + invincibleTime;
                     }
                     if (game.hp == 1) {
                         game.hp = game.hp - 1;
@@ -85,7 +96,7 @@ public class Player extends GameObject {
                     if(game.hp == 0){
                         game.hp = 0;
                     }
-                    if(tempobject.getId() == ID.EnemyBullet) handler.removeObject(tempobject);  //Remove Enemy Bullet if Player is hit
+
                 }
 
             }
