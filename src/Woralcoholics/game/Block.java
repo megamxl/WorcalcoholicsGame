@@ -10,11 +10,23 @@ public class Block extends GameObject {
 
     private final BufferedImage block_img;
 
-    public Block(int x, int y, ID id, Animations an) {
+    public Block(int x, int y, ID id, Animations an, Integer col, Integer row) {
 
         super(x, y, id, an);
 
-        block_img = an.getImage(1,1,64,64);
+        /*
+        If the column and row have no values/equal null, the first image
+        of the sprite sheet (default wall texture) is getting used as image for the newly created block
+         */
+        if(col == null && row == null)
+        {
+            block_img = an.getImage(1,1,64,64);
+        }
+        else
+        {
+            block_img = an.getImage(col, row,64,64);
+        }
+
     }
 
     @Override

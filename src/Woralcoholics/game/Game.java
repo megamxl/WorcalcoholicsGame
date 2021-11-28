@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
 
@@ -25,6 +26,9 @@ public class Game extends Canvas implements Runnable {
 
     private BufferedImage spritesheet = null;
     private BufferedImage floor = null;
+    private BufferedImage floorDirt1 = null;
+    private BufferedImage floorDirt2 = null;
+    private BufferedImage floorDirt3 = null;
 
     public int ammo = 50;
     public int hp = 100;
@@ -42,7 +46,7 @@ public class Game extends Canvas implements Runnable {
         level = ImageIO.read(path);
 
         BufferedImageLoader loader = new BufferedImageLoader();
-        spritesheet = loader.loadImage("/Spritesheet TEMP.png");
+        spritesheet = loader.loadImage("/Spritesheet.png");
         an = new Animations(spritesheet);
 
         loadLevel(level);
@@ -60,7 +64,9 @@ public class Game extends Canvas implements Runnable {
         this.addKeyListener(keys);
 
         floor = an.getImage(1, 2, 64, 64);
-
+        floorDirt1 = an.getImage(2, 2, 64, 64);
+        floorDirt2 = an.getImage(3, 2, 64, 64);
+        floorDirt3 = an.getImage(4, 2, 64, 64);
     }
 
     // these tow function are responsible to not make more than one window during runtime
@@ -138,6 +144,22 @@ public class Game extends Canvas implements Runnable {
         for (int i = 0; i < 30 * 72; i += 64) {
             for (int j = 0; j < 30 * 72; j += 64) {
                 g.drawImage(floor, i, j, null);
+
+                // draws a random floor dirt texture on top of the current floor tile
+                switch (randomNumber(1, 4)) {
+                    case 1:
+                        g.drawImage(floorDirt1, i, j, null);
+                        break;
+                    case 2:
+                        g.drawImage(floorDirt2, i, j, null);
+                        break;
+                    case 3:
+                        g.drawImage(floorDirt3, i, j, null);
+                        break;
+                    default:
+                        // no action
+                        break;
+                }
             }
         }
 
@@ -194,7 +216,19 @@ public class Game extends Canvas implements Runnable {
                 int blue = (pixel) & 0xff;
 
                 if (red == 255) {
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an));
+                    // Creates the new blocks which function as the walls
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, 1, 1));
+                    wallCords.add(new int[]{xx,yy});
+
+                    /*
+                    Randomly selects dirt and highlight textures, which then get added on top of the walls
+                    */
+                    //Dirt
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, randomNumber(2, 5), 1));
+                    wallCords.add(new int[]{xx,yy});
+                    //Highlights (the end of randomNumber is 10, so that there is a possibility that no highlight
+                    //gets added --> more visual diversity
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, randomNumber(5, 10), 1));
                     wallCords.add(new int[]{xx,yy});
                 }
                 if (blue == 255 && green == 0) {
@@ -211,6 +245,14 @@ public class Game extends Canvas implements Runnable {
             }
         }
         handler.addObject(new GunnerEnemy(250, 250, ID.GunnerEnemy, handler, an)); //Test Gunner
+    }
+
+    /*
+    Returns a random number between inclusive start and exclusive end.
+     */
+    public Integer randomNumber(int start, int end)
+    {
+        return new Random().ints(start, end).findFirst().getAsInt();
     }
 
     public static void SpawnEnemy(int x, int y){
