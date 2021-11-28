@@ -16,5 +16,6 @@ pos(spalte,zeile)
 02 Dirt3 Floor		64x64	pos(7,3)
 
 03 Player 		64x64	pos(1,5)
+03 Bullet			pos(3,5)
 
 04 Enemy       			pos(1,7)
