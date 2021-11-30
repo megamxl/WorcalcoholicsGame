@@ -46,7 +46,7 @@ public class Player extends GameObject {
 
     @Override
     public void render(Graphics g) {
-        /*Graphics2D g2d = (Graphics2D) g;
+      /*  Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
         g2d.draw(getBounds());*/
         g.drawImage(player_img,(int)x, (int)y, null);

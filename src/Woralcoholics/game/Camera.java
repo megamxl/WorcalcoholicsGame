@@ -14,9 +14,9 @@ public class Camera {
         x += ((object.getX() - x) - 1000 / 2) * 0.05f; //*0.05f should make it more smooth
         y += ((object.getY() - y) - 563 / 2) * 0.05f;
         if (x <= 0) x = 0;
-        if (x >= 1000) x = 1000;
+        if (x >= 1070) x = 1070;
         if (y <= 0) y = 0;
-        if (y >= 650) y = 650;
+        if (y >= 500) y = 500;
     }
 
     public float getX() {

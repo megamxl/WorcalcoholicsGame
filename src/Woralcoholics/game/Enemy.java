@@ -53,7 +53,6 @@ public class Enemy extends GameObject {
                     //enemy cant aim player anymore -> prevents stucking at the wall
                     hittedwall = true;
 
-                } else if (choose == 0) {
                     //moving between 4 and -4 per iterate
                     velX = r.nextInt(high - low) + low;
                     velY = r.nextInt(high - low) + low;
@@ -63,14 +62,15 @@ public class Enemy extends GameObject {
             //if our bullet is colliding with the enemy hp get's -50
             if (tmpObject.getId() == ID.Bullet) {
                 if (getBounds().intersects(tmpObject.getBounds())) {
-                    System.out.println("hit");
+                    //System.out.println("hit");
                     hp -= 110;
                     removeWithObject(tmpObject);
+                    if(enemysAlive <= 0){
+                        Spawner(waves++,false);
+                    }
                     //System.out.println("es sind " + enemysAlive +" enemys am leben");
                 }
-                if(enemysAlive <= 0){
-                    Spawner(waves++);
-                }
+
             }
 
             if (tmpObject.getId() == ID.Player) {
@@ -135,8 +135,8 @@ public class Enemy extends GameObject {
     //Enemy is displaying in this Color for now
     public void render(Graphics g) {
         //-> Just for testing Bounding Boxes around the Enemys
-        Graphics2D g2d = (Graphics2D) g;
-        /*g.setColor(Color.GREEN);
+        /*Graphics2D g2d = (Graphics2D) g;
+        g.setColor(Color.GREEN);
         g2d.draw(getBoundsAround());*/
 
         g.drawImage(enemy_img, (int) x, (int) y, null);
@@ -150,8 +150,14 @@ public class Enemy extends GameObject {
         return new Rectangle((int) x , (int) y , 32, 32);
     }
 
-    private void Spawner(int Wavesize){
-        for(int i = 0; i < (Wavesize* 5)+1; i++){
+    private void Spawner(int Wavesize, boolean solo){
+        if(solo){
+            Wavesize = 1;
+        }else {
+            Wavesize = (Wavesize * 5) + 1;
+        }
+
+        for(int i = 0; i < Wavesize; i++){
             x = r.nextInt(((55*32)-1)-1);
             y = r.nextInt(((55*32)-1)-1);
 
@@ -168,6 +174,7 @@ public class Enemy extends GameObject {
     private void checkIfGone(){
         if((y > 1054 || y < 64) ||( x >1900 || x< 0)){
             removeWithObject(this);
+            Spawner(1,true);
         }
     }
 

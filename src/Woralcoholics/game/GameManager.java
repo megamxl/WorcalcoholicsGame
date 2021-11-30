@@ -32,10 +32,10 @@ public class GameManager {
 
             tempObject.render(g);
         }
-
     }
 
     // these function enable us to add and remove objects from our Handler to
+
     public void addObject(GameObject tempObject) {
         object.add(tempObject);
     }
