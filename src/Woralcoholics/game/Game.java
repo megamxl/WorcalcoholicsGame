@@ -14,6 +14,17 @@ public class Game extends Canvas implements Runnable {
 
     private static final long serialVersionUID = 1L;
 
+    final int screenWidth = 1000;
+    final int screenHeight = 563;
+    private enum game_state {
+        TITLE,
+        MAIN_MENU,
+        OPTIONS,
+        PAUSE_MENU,
+        LEVEL
+    }
+    game_state state;
+
     private boolean isRunning;
     private Thread thread;
     public static GameManager handler;
@@ -35,9 +46,10 @@ public class Game extends Canvas implements Runnable {
     public int hp = 100;
 
     public Game() throws IOException {
+        state = game_state.TITLE;
         // make the window threw out own window class
         int playerIndex = 0;
-        new Window(1000, 563, "Workalcholics Work In Progress", this);
+        new Window(screenWidth, screenHeight, "Workalcholics Work In Progress", this);
         start();
 
         handler = new GameManager();
@@ -125,12 +137,21 @@ public class Game extends Canvas implements Runnable {
 
     // in every frame check where player is and update camera position
     public void update() {
-        for (int i = 0; i < handler.object.size(); i++) {
-            if (handler.object.get(i).getId() == ID.Player) {
-                camera.update(handler.object.get(i));
+        switch(state) {
+            case TITLE -> System.out.println("TITLE");
+            case MAIN_MENU -> System.out.println("MAIN MENU");
+            case OPTIONS -> System.out.println("OPTIONS");
+            case PAUSE_MENU -> System.out.println("PAUSE MENU");
+            case LEVEL -> {
+                for (int i = 0; i < handler.object.size(); i++) {
+                    if (handler.object.get(i).getId() == ID.Player) {
+                        camera.update(handler.object.get(i));
+                    }
+                }
+                handler.update();
             }
+
         }
-        handler.update();
     }
 
     public void render() {
@@ -141,41 +162,47 @@ public class Game extends Canvas implements Runnable {
         }
         Graphics g = bs.getDrawGraphics();
         Graphics2D g2d = (Graphics2D) g;
-
-        if(renderOnlyOneTime)
-            for (int i = 0; i < 30 * 72; i += 64) {
-                for (int j = 0; j < 30 * 72; j += 64) {
-                    g.drawImage(floor, i, j, null);
-                // draws a random floor dirt texture on top of the current floor tile
-                switch (randomNumber(1, 4)) {
-                    case 1:
-                        g.drawImage(floorDirt1, i, j, null);
-                        break;
-                    case 2:
-                        g.drawImage(floorDirt2, i, j, null);
-                        break;
-                    case 3:
-                        g.drawImage(floorDirt3, i, j, null);
-                        break;
-                    default:
-                        // no action
-                        break;
+        switch (state) {
+            case TITLE -> {
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, screenWidth, screenHeight);
+            }
+            case LEVEL -> {
+                if(renderOnlyOneTime) {
+                    for (int i = 0; i < 30 * 72; i += 64) {
+                        for (int j = 0; j < 30 * 72; j += 64) {
+                            g.drawImage(floor, i, j, null);
+                            // draws a random floor dirt texture on top of the current floor tile
+                            switch (randomNumber(1, 4)) {
+                                case 1:
+                                    g.drawImage(floorDirt1, i, j, null);
+                                    break;
+                                case 2:
+                                    g.drawImage(floorDirt2, i, j, null);
+                                    break;
+                                case 3:
+                                    g.drawImage(floorDirt3, i, j, null);
+                                    break;
+                                default:
+                                    // no action
+                                    break;
+                            }
+                        }
+                    }
                 }
+                g2d.translate(-camera.getX(), -camera.getY());
+
+                handler.render(g);
+
+                g2d.translate(camera.getX(), camera.getY());
+
+                renderUi(g);
             }
         }
-
         // between this it can be drawn to the screen
-
 
         // rendering gets executed in the way it is written top down
 
-        g2d.translate(-camera.getX(), -camera.getY());
-
-        handler.render(g);
-
-        g2d.translate(camera.getX(), camera.getY());
-
-        renderUi(g);
         // end of drawing place
         g.dispose();
         bs.show();
@@ -253,7 +280,7 @@ public class Game extends Canvas implements Runnable {
             }*/
             }
         }
-        //handler.addObject(new GunnerEnemy(250, 250, ID.GunnerEnemy, handler, an)); //Test Gunner
+        //handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an)); //Test Gunner
     }
 
     /*
