@@ -16,7 +16,7 @@ public class Game extends Canvas implements Runnable {
 
     final int screenWidth = 1000;
     final int screenHeight = 563;
-    private enum game_state {
+    protected enum game_state {
         TITLE,
         MAIN_MENU,
         OPTIONS,
@@ -138,7 +138,6 @@ public class Game extends Canvas implements Runnable {
     // in every frame check where player is and update camera position
     public void update() {
         switch(state) {
-            case TITLE -> System.out.println("TITLE");
             case MAIN_MENU -> System.out.println("MAIN MENU");
             case OPTIONS -> System.out.println("OPTIONS");
             case PAUSE_MENU -> System.out.println("PAUSE MENU");
@@ -162,6 +161,7 @@ public class Game extends Canvas implements Runnable {
         }
         Graphics g = bs.getDrawGraphics();
         Graphics2D g2d = (Graphics2D) g;
+
         switch (state) {
             case TITLE -> {
                 g.setColor(Color.BLACK);
