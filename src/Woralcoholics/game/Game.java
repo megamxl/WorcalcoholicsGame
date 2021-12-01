@@ -73,7 +73,7 @@ public class Game extends Canvas implements Runnable {
         MouseInput mouse = new MouseInput(handler, camera, this, handler.object.get(playerIndex), an);
         this.addMouseListener(mouse);
 
-        KeyInput keys = new KeyInput(handler);
+        KeyInput keys = new KeyInput(handler, this);
         this.addKeyListener(keys);
 
         floor = an.getImage(1, 2, 64, 64);
@@ -166,6 +166,30 @@ public class Game extends Canvas implements Runnable {
             case TITLE -> {
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, screenWidth, screenHeight);
+                g.setColor(Color.WHITE);
+                g.drawString("TITLE", screenWidth/2, screenHeight/2);
+                g.drawString("LMB: MAIN MENU", screenWidth/2, screenHeight*3/4);
+            }
+            case MAIN_MENU -> {
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, screenWidth, screenHeight);
+                g.setColor(Color.WHITE);
+                g.drawString("MAIN MENU", screenWidth/2, screenHeight/2);
+                g.drawString("LMB: LEVEL    RMB: OPTIONS", screenWidth/2, screenHeight*3/4);
+            }
+            case OPTIONS -> {
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, screenWidth, screenHeight);
+                g.setColor(Color.WHITE);
+                g.drawString("OPTIONS", screenWidth/2, screenHeight/2);
+                g.drawString("RMB: MAIN MENU", screenWidth/2, screenHeight*3/4);
+            }
+            case PAUSE_MENU -> {
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, screenWidth, screenHeight);
+                g.setColor(Color.WHITE);
+                g.drawString("PAUSE_MENU", screenWidth/2, screenHeight/2);
+                g.drawString("RMB: LEVEL", screenWidth/2, screenHeight*3/4);
             }
             case LEVEL -> {
                 if(renderOnlyOneTime) {
