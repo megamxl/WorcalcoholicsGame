@@ -21,7 +21,7 @@ public class Enemy extends GameObject {
     boolean hittedwall = false;
 
     static int enemysAlive = 0;
-    static int waves=1;
+    static int waves = 1;
 
     public Enemy(int x, int y, ID id, GameManager manager, Animations an) {
         super(x, y, id, an);
@@ -53,7 +53,6 @@ public class Enemy extends GameObject {
                     //enemy cant aim player anymore -> prevents stucking at the wall
                     hittedwall = true;
 
-                } else if (choose == 0) {
                     //moving between 4 and -4 per iterate
                     velX = r.nextInt(high - low) + low;
                     velY = r.nextInt(high - low) + low;
@@ -63,14 +62,15 @@ public class Enemy extends GameObject {
             //if our bullet is colliding with the enemy hp get's -50
             if (tmpObject.getId() == ID.Bullet) {
                 if (getBounds().intersects(tmpObject.getBounds())) {
-                    System.out.println("hit");
+                    //System.out.println("hit");
                     hp -= 110;
                     removeWithObject(tmpObject);
+                    if (enemysAlive <= 0) {
+                        Spawner(waves++, false);
+                    }
                     //System.out.println("es sind " + enemysAlive +" enemys am leben");
                 }
-                if(enemysAlive <= 0){
-                    Spawner(waves++);
-                }
+
             }
 
             if (tmpObject.getId() == ID.Player) {
@@ -82,17 +82,27 @@ public class Enemy extends GameObject {
                     if (tmpObject.getX() > x) {
                         velX = r.nextInt(4 - 0) + 0;
 
-                    } else if (tmpObject.getX() < x) {
+                    }
+                    else if (tmpObject.getX() < x) {
 
                         velX = r.nextInt(0 - (-4)) + (-4);
 
                     }
+                    else if (tmpObject.getX() == x) {
+                        velX = 0;
+                    }
                     if (tmpObject.getY() > y) {
                         velY = r.nextInt(4 - 0) + 0;
 
-                    } else if (tmpObject.getY() < y) {
+                    }
+                    else if (tmpObject.getY() < y) {
                         velY = r.nextInt(0 - (-4)) + (-4);
                     }
+
+                    else if (tmpObject.getY() == y) {
+                        velY = 0;
+                    }
+
                 } else {
                     // if hitted the wall enemy runs different like before
                     booleanvalue = r.nextInt(100 - 1) + 1; //maybe change
@@ -106,10 +116,11 @@ public class Enemy extends GameObject {
         }
     }
 
-    private void remove(){
+    private void remove() {
         manager.removeObject(this);
     }
-    private void removeWithObject(GameObject tempobject){
+
+    private void removeWithObject(GameObject tempobject) {
         manager.removeObject(tempobject);
         enemysAlive--;
     }
@@ -135,8 +146,8 @@ public class Enemy extends GameObject {
     //Enemy is displaying in this Color for now
     public void render(Graphics g) {
         //-> Just for testing Bounding Boxes around the Enemys
-        Graphics2D g2d = (Graphics2D) g;
-        /*g.setColor(Color.GREEN);
+        /*Graphics2D g2d = (Graphics2D) g;
+        g.setColor(Color.GREEN);
         g2d.draw(getBoundsAround());*/
 
         g.drawImage(enemy_img, (int) x, (int) y, null);
@@ -147,27 +158,34 @@ public class Enemy extends GameObject {
     }
 
     public Rectangle getBoundsAround() {
-        return new Rectangle((int) x , (int) y , 32, 32);
+        return new Rectangle((int) x, (int) y, 32, 32);
     }
 
-    private void Spawner(int Wavesize){
-        for(int i = 0; i < (Wavesize* 5)+1; i++){
-            x = r.nextInt(((55*32)-1)-1);
-            y = r.nextInt(((55*32)-1)-1);
+    private void Spawner(int Wavesize, boolean solo) {
+        if (solo) {
+            Wavesize = 1;
+        } else {
+            Wavesize = (Wavesize * 5) + 1;
+        }
 
-            for (int[] c: Game.wallCords) {
-                if (c[0]== x || c[1]==y) {
+        for (int i = 0; i < Wavesize; i++) {
+            x = r.nextInt(((55 * 32) - 1) - 1);
+            y = r.nextInt(((55 * 32) - 1) - 1);
+
+            for (int[] c : Game.wallCords) {
+                if (c[0] == x || c[1] == y) {
                     //System.out.println("wall, this is i " + i);
                 }
             }
             //System.out.println("spawning");
-            Game.SpawnEnemy((int)x,(int)y);
+            Game.SpawnEnemy((int) x, (int) y);
         }
     }
 
-    private void checkIfGone(){
-        if((y > 1054 || y < 64) ||( x >1900 || x< 0)){
+    private void checkIfGone() {
+        if ((y > 1054 || y < 64) || (x > 1900 || x < 0)) {
             removeWithObject(this);
+            Spawner(1, true);
         }
     }
 

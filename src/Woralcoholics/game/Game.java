@@ -7,13 +7,23 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
 
     private static final long serialVersionUID = 1L;
+
+    final int screenWidth = 1000;
+    final int screenHeight = 563;
+    protected enum game_state {
+        TITLE,
+        MAIN_MENU,
+        OPTIONS,
+        PAUSE_MENU,
+        LEVEL
+    }
+    game_state state;
 
     private boolean isRunning;
     private Thread thread;
@@ -30,19 +40,22 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage floorDirt2 = null;
     private BufferedImage floorDirt3 = null;
 
+    public static boolean renderOnlyOneTime= true;
+
     public int ammo = 50;
     public int hp = 100;
 
     public Game() throws IOException {
+        state = game_state.TITLE;
         // make the window threw out own window class
         int playerIndex = 0;
-        new Window(1000, 563, "Workalcholics Work In Progress", this);
+        new Window(screenWidth, screenHeight, "Workalcholics Work In Progress", this);
         start();
 
         handler = new GameManager();
         camera = new Camera(0, 0);
         // when finished implement the Mouse and Key input
-        InputStream path = this.getClass().getClassLoader().getResourceAsStream("test.png");
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("level01.png");
         level = ImageIO.read(path);
 
         BufferedImageLoader loader = new BufferedImageLoader();
@@ -67,6 +80,7 @@ public class Game extends Canvas implements Runnable {
         floorDirt1 = an.getImage(2, 2, 64, 64);
         floorDirt2 = an.getImage(3, 2, 64, 64);
         floorDirt3 = an.getImage(4, 2, 64, 64);
+
     }
 
     // these tow function are responsible to not make more than one window during runtime
@@ -92,6 +106,7 @@ public class Game extends Canvas implements Runnable {
         long lastTime = System.nanoTime();
         final double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
+
         double delta = 0;
         int updates = 0;
         int frames = 0;
@@ -111,7 +126,7 @@ public class Game extends Canvas implements Runnable {
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                //System.out.println(updates + " Ticks, Fps " + frames);
+                System.out.println(updates + " Ticks, Fps " + frames);
                 updates = 0;
                 frames = 0;
             }
@@ -122,12 +137,20 @@ public class Game extends Canvas implements Runnable {
 
     // in every frame check where player is and update camera position
     public void update() {
-        for (int i = 0; i < handler.object.size(); i++) {
-            if (handler.object.get(i).getId() == ID.Player) {
-                camera.update(handler.object.get(i));
+        switch(state) {
+            case MAIN_MENU -> System.out.println("MAIN MENU");
+            case OPTIONS -> System.out.println("OPTIONS");
+            case PAUSE_MENU -> System.out.println("PAUSE MENU");
+            case LEVEL -> {
+                for (int i = 0; i < handler.object.size(); i++) {
+                    if (handler.object.get(i).getId() == ID.Player) {
+                        camera.update(handler.object.get(i));
+                    }
+                }
+                handler.update();
             }
+
         }
-        handler.update();
     }
 
     public void render() {
@@ -138,36 +161,54 @@ public class Game extends Canvas implements Runnable {
         }
         Graphics g = bs.getDrawGraphics();
         Graphics2D g2d = (Graphics2D) g;
+
+        switch (state) {
+            case TITLE -> {
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, screenWidth, screenHeight);
+            }
+            case LEVEL -> {
+                if(renderOnlyOneTime) {
+                    for (int i = 0; i < 30 * 72; i += 64) {
+                        for (int j = 0; j < 30 * 72; j += 64) {
+                            g.drawImage(floor, i, j, null);
+                            // draws a random floor dirt texture on top of the current floor tile
+                            switch (randomNumber(1, 4)) {
+                                case 1:
+                                    g.drawImage(floorDirt1, i, j, null);
+                                    break;
+                                case 2:
+                                    g.drawImage(floorDirt2, i, j, null);
+                                    break;
+                                case 3:
+                                    g.drawImage(floorDirt3, i, j, null);
+                                    break;
+                                default:
+                                    // no action
+                                    break;
+                            }
+                        }
+                    }
+                }
+                g2d.translate(-camera.getX(), -camera.getY());
+
+                handler.render(g);
+
+                g2d.translate(camera.getX(), camera.getY());
+
+                renderUi(g);
+            }
+        }
         // between this it can be drawn to the screen
 
         // rendering gets executed in the way it is written top down
-        for (int i = 0; i < 30 * 72; i += 64) {
-            for (int j = 0; j < 30 * 72; j += 64) {
-                g.drawImage(floor, i, j, null);
 
-                // draws a random floor dirt texture on top of the current floor tile
-                switch (randomNumber(1, 4)) {
-                    case 1:
-                        g.drawImage(floorDirt1, i, j, null);
-                        break;
-                    case 2:
-                        g.drawImage(floorDirt2, i, j, null);
-                        break;
-                    case 3:
-                        g.drawImage(floorDirt3, i, j, null);
-                        break;
-                    default:
-                        // no action
-                        break;
-                }
-            }
-        }
+        // end of drawing place
+        g.dispose();
+        bs.show();
+    }
 
-        g2d.translate(-camera.getX(), -camera.getY());
-
-        handler.render(g);
-
-        g2d.translate(camera.getX(), camera.getY());
+    public void renderUi(Graphics g){
 
         g.setColor(Color.gray);
         g.fillRect(5, 5, 200, 16); //hp
@@ -195,9 +236,6 @@ public class Game extends Canvas implements Runnable {
         g.drawString("Waves "+ Enemy.waves,930,17);
         g.drawString("Enemeys "+ Enemy.enemysAlive,910,40);
 
-        // end of drawing place
-        g.dispose();
-        bs.show();
     }
 
 
@@ -205,8 +243,6 @@ public class Game extends Canvas implements Runnable {
         int h = image.getHeight();
         int w = image.getWidth();
         int i= 0;
-
-
 
         for (int xx = 0; xx < w; xx++) {
             for (int yy = 0; yy < h; yy++) {
@@ -217,19 +253,19 @@ public class Game extends Canvas implements Runnable {
 
                 if (red == 255) {
                     // Creates the new blocks which function as the walls
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, 1, 1));
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an/*, 1, 1*/));
                     wallCords.add(new int[]{xx,yy});
-
-                    /*
+/*
+                  *//*  *//**//*
                     Randomly selects dirt and highlight textures, which then get added on top of the walls
-                    */
+                    *//*
                     //Dirt
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, randomNumber(2, 5), 1));
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an*//*, randomNumber(2, 5), 1)*//*));
                     wallCords.add(new int[]{xx,yy});
                     //Highlights (the end of randomNumber is 10, so that there is a possibility that no highlight
                     //gets added --> more visual diversity
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, randomNumber(5, 10), 1));
-                    wallCords.add(new int[]{xx,yy});
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an*//*, randomNumber(5, 10), 1)*//*));
+                    wallCords.add(new int[]{xx,yy});*/
                 }
                 if (blue == 255 && green == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, an));
@@ -244,7 +280,7 @@ public class Game extends Canvas implements Runnable {
             }*/
             }
         }
-        handler.addObject(new GunnerEnemy(250, 250, ID.GunnerEnemy, handler, an)); //Test Gunner
+        //handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an)); //Test Gunner
     }
 
     /*
