@@ -74,34 +74,31 @@ public class Enemy extends GameObject {
             }
 
             if (tmpObject.getId() == ID.Player) {
-                /*if (getBoundsAround().intersects(tmpObject.getBounds())) {
 
-                    System.out.println("DEAD");
-                }*/
                 if (hittedwall == false) {
-                    if (tmpObject.getX() > x) {
-                        velX = r.nextInt(4 - 0) + 0;
 
-                    }
-                    else if (tmpObject.getX() < x) {
-
-                        velX = r.nextInt(0 - (-4)) + (-4);
-
-                    }
-                    else if (tmpObject.getX() == x) {
+                    // works fine and reduces the shaking enemies if they are on the same x or y value
+                    if (tmpObject.getX() + 6 >= x && tmpObject.getX() - 6 <= x) {
                         velX = 0;
-                    }
-                    if (tmpObject.getY() > y) {
-                        velY = r.nextInt(4 - 0) + 0;
+                    } else if (tmpObject.getX() > x) {
+                        velX = r.nextInt(5 - 0) + 0;
+
+                    } else {
+
+                        velX= r.nextInt(0 - (-5)) + (-5);
 
                     }
-                    else if (tmpObject.getY() < y) {
-                        velY = r.nextInt(0 - (-4)) + (-4);
-                    }
-
-                    else if (tmpObject.getY() == y) {
+                    if (tmpObject.getY() + 6 >= y && tmpObject.getY() - 6 <= y) {
                         velY = 0;
+                    } else if (tmpObject.getY() > y) {
+                        velY = r.nextInt(5 - 0) + 0;
+
+                    } else {
+
+                        velY = r.nextInt(0 - (-5)) + (-5);
+
                     }
+
 
                 } else {
                     // if hitted the wall enemy runs different like before
