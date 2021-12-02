@@ -5,28 +5,21 @@ import Woralcoholics.game.ID;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class Block extends GameObject {
 
     private final BufferedImage block_img;
 
-    public Block(int x, int y, ID id, Animations an/*, Integer col, Integer row*/) {
+    public Block(int x, int y, ID id, Animations an, Integer col, Integer row) {
 
         super(x, y, id, an);
 
-        /*
-        If the column and row have no values/equal null, the first image
-        of the sprite sheet (default wall texture) is getting used as image for the newly created block
-         */
-/*        if(col == null && row == null)
-        {
-            block_img = an.getImage(1,1,64,64);
-        }
-        else
-        {
-            block_img = an.getImage(col, row,64,64);
-        }*/
-        block_img = an.getImage(1,1,64,64);
+        // gets the image from the specified column and row from the spritesheet
+        block_img = an.getImage(col, row,64,64);
+
+        // default
+        // block_img = an.getImage(1,1,64,64);
     }
 
     @Override

@@ -54,7 +54,6 @@ public class Game extends Canvas implements Runnable {
 
         handler = new GameManager();
         camera = new Camera(0, 0);
-        // when finished implement the Mouse and Key input
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("level01.png");
         level = ImageIO.read(path);
 
@@ -70,17 +69,19 @@ public class Game extends Canvas implements Runnable {
                 break;
             }
         }
+
         MouseInput mouse = new MouseInput(handler, camera, this, handler.object.get(playerIndex), an);
         this.addMouseListener(mouse);
 
+        // checks (/"listens to") the keys to determine if W, A, S or D is getting pressed
         KeyInput keys = new KeyInput(handler);
         this.addKeyListener(keys);
 
+        // gets the according tile from the sprite sheet
         floor = an.getImage(1, 2, 64, 64);
         floorDirt1 = an.getImage(2, 2, 64, 64);
         floorDirt2 = an.getImage(3, 2, 64, 64);
         floorDirt3 = an.getImage(4, 2, 64, 64);
-
     }
 
     // these tow function are responsible to not make more than one window during runtime
@@ -100,8 +101,8 @@ public class Game extends Canvas implements Runnable {
     }
 
     @Override
-    // this is a well-known game loop also used in minecraft for making no differnece how fast or slow you computer performce
-    // so that the calculation are made at equal tzimes no matter the computer
+    // this is a well-known game loop also used in minecraft for making no differnece how fast or slow you computer performance
+    // so that the calculation are made at equal times no matter the computer
     public void run() {
         long lastTime = System.nanoTime();
         final double amountOfTicks = 60.0;
@@ -238,7 +239,6 @@ public class Game extends Canvas implements Runnable {
 
     }
 
-
     private void loadLevel(BufferedImage image) {
         int h = image.getHeight();
         int w = image.getWidth();
@@ -253,19 +253,8 @@ public class Game extends Canvas implements Runnable {
 
                 if (red == 255) {
                     // Creates the new blocks which function as the walls
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an/*, 1, 1*/));
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, randomNumber(1, 7), 1));
                     wallCords.add(new int[]{xx,yy});
-/*
-                  *//*  *//**//*
-                    Randomly selects dirt and highlight textures, which then get added on top of the walls
-                    *//*
-                    //Dirt
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an*//*, randomNumber(2, 5), 1)*//*));
-                    wallCords.add(new int[]{xx,yy});
-                    //Highlights (the end of randomNumber is 10, so that there is a possibility that no highlight
-                    //gets added --> more visual diversity
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an*//*, randomNumber(5, 10), 1)*//*));
-                    wallCords.add(new int[]{xx,yy});*/
                 }
                 if (blue == 255 && green == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, an));
@@ -275,9 +264,10 @@ public class Game extends Canvas implements Runnable {
                 }
                 /*
                 if(green == 255 && blue == 255)
+                {
                     handler.addObject(new Create(xx*32, yy*32, ID.Create));
-
-            }*/
+                }
+                 */
             }
         }
         //handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an)); //Test Gunner

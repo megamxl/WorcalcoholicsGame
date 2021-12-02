@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class Bullet extends GameObject {
 
-    private float bulletSpeed = 8;
+    private float bulletSpeed = 30;// 8;
 
     GameManager handler;
 
