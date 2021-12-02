@@ -1,7 +1,15 @@
 package Woralcoholics.game;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Player extends GameObject {
 
@@ -16,6 +24,9 @@ public class Player extends GameObject {
     private float diagonalMultiplier = 1;
     private Boolean movingVertical = false;
     private Boolean movingHorizontal = false;
+    // better method would be to wait until the thread is finished and then start the new sound
+    private boolean IsSoundPlaying = false;
+    private boolean IsSoundPlaying2 = false;
 
     public Player(int x, int y, ID id, GameManager GameManager, Game game, Animations an) {
         super(x, y, id, an);
@@ -45,10 +56,46 @@ public class Player extends GameObject {
         if (handler.isUp() && !handler.isDown()) {
             velY = -5 * diagonalMultiplier;
             movingVertical = true;
+            try {
+                new Thread(() -> {
+
+                    try {
+                        playSound();
+                    } catch (LineUnavailableException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedAudioFileException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (handler.isDown() && !handler.isUp()) {
             velY = 5 * diagonalMultiplier;
             movingVertical = true;
+            try {
+                new Thread(() -> {
+
+                    try {
+                        playSound();
+                    } catch (LineUnavailableException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedAudioFileException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if ((handler.isUp() && handler.isDown()) || !handler.isUp() && !handler.isDown()) {
             velY = 0;
@@ -58,14 +105,88 @@ public class Player extends GameObject {
         if (handler.isRight() && !handler.isLeft()) {
             velX = 5 * diagonalMultiplier;
             movingHorizontal = true;
+            try {
+                new Thread(() -> {
+
+                    try {
+                        playSound();
+                    } catch (LineUnavailableException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedAudioFileException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (handler.isLeft() && !handler.isRight()) {
             velX = -5 * diagonalMultiplier;
             movingHorizontal = true;
+            try {
+                new Thread(() -> {
+
+                    try {
+                        playSound();
+                    } catch (LineUnavailableException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedAudioFileException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if ((handler.isLeft() && handler.isRight()) || (!handler.isLeft() && !handler.isRight())) {
             velX = 0;
             movingHorizontal = false;
+        }
+
+
+    }
+    private void playSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        if(IsSoundPlaying==false) {
+            IsSoundPlaying=true;
+            Clip sound = AudioSystem.getClip();
+            Path relativePath = Paths.get("Resource/move.wav");
+            Path absolutePath = relativePath.toAbsolutePath();
+            sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+            sound.start();
+            Thread.sleep(100);
+            sound.stop();
+            IsSoundPlaying=false;
+        }
+        else
+        {
+            //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
+
+        }
+    }
+    private void playSoundHurt() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        if(IsSoundPlaying2==false) {
+            IsSoundPlaying2=true;
+            Clip sound = AudioSystem.getClip();
+            Path relativePath = Paths.get("Resource/playerhurt.wav");
+            Path absolutePath = relativePath.toAbsolutePath();
+            sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+            sound.start();
+            Thread.sleep(1000);
+            sound.stop();
+            IsSoundPlaying2=false;
+        }
+        else
+        {
+            //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
+
         }
     }
 
@@ -104,6 +225,23 @@ public class Player extends GameObject {
             if(tempobject.getId() == ID.Enemy || tempobject.getId() == ID.EnemyBullet) {    //If Player is hit by Enemy of EnemyBullet
                 ID temp = tempobject.getId();
                 if (getBounds().intersects(tempobject.getBounds())) {
+                    try {
+                        new Thread(() -> {
+
+                            try {
+                                playSoundHurt();
+                            } catch (LineUnavailableException e) {
+                                e.printStackTrace();
+                            } catch (UnsupportedAudioFileException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }).start();
+                    } catch (Exception e) {
+                        e.printStackTrace();}
                     double now = System.currentTimeMillis();
                     if (game.hp > 1 && now > wait) {
                         switch (temp) {
@@ -114,6 +252,7 @@ public class Player extends GameObject {
                             case Enemy -> game.hp -= 10;
                         }
                         wait = now + invincibleTime;
+                        // sound
                     }
                     if (game.hp == 1) {
                         game.hp = game.hp - 1;

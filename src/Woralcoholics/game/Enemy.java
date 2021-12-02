@@ -1,7 +1,16 @@
 package Woralcoholics.game;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -85,7 +94,7 @@ public class Enemy extends GameObject {
 
                     } else {
 
-                        velX= r.nextInt(0 - (-5)) + (-5);
+                        velX = r.nextInt(0 - (-5)) + (-5);
 
                     }
                     if (tmpObject.getY() + 6 >= y && tmpObject.getY() - 6 <= y) {
@@ -115,6 +124,24 @@ public class Enemy extends GameObject {
 
     private void remove() {
         manager.removeObject(this);
+        try {
+            new Thread(() -> {
+
+                try {
+                    playSound();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void removeWithObject(GameObject tempobject) {
@@ -185,6 +212,19 @@ public class Enemy extends GameObject {
             Spawner(1, true);
         }
     }
+
+    // method of playing sound
+    private void playSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        Clip sound = AudioSystem.getClip();
+        Path relativePath = Paths.get("Resource/enemyhurt2.wav");
+        Path absolutePath = relativePath.toAbsolutePath();
+        sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+        //System.out.println("Current relative path is: " + absolutePath.toString());
+        sound.start();
+        Thread.sleep(100000);
+    }
+
+
 
 
 }
