@@ -30,7 +30,19 @@ public class MouseInput extends MouseAdapter {
         Point currentPos = e.getPoint();    //Grab current cursor position
         int button = e.getButton(); //Grab pressed button
         switch(game.state) {
-            case TITLE -> game.state = Game.game_state.LEVEL;
+            case TITLE -> {
+                if(button == 1) game.state = Game.game_state.MAIN_MENU;
+            }
+            case MAIN_MENU -> {
+                if(button == 1) game.state = Game.game_state.LEVEL;
+                if(button == 3) game.state = Game.game_state.OPTIONS;
+            }
+            case OPTIONS -> {
+                if(button == 3) game.state = Game.game_state.MAIN_MENU;
+            }
+            case PAUSE_MENU -> {
+                if(button == 3) game.state = Game.game_state.LEVEL;
+            }
             case LEVEL -> {
                 //currentPos.translate(-500, -282);
 
@@ -61,11 +73,11 @@ public class MouseInput extends MouseAdapter {
                     case 2 -> System.out.println("BUTTON 2");
                     case 3 -> {
                         //System.out.println("BUTTON 3");
-                        game.state = Game.game_state.TITLE;
+                        game.state = Game.game_state.PAUSE_MENU;
                         //Grab current cursor position
-                        float mx = currentPos.x + camera.getX();
-                        float my = currentPos.y + camera.getY();
-                        ID m = getIDAt(mx, my); //Get ID of object at cursor
+                        //float mx = currentPos.x + camera.getX();
+                        //float my = currentPos.y + camera.getY();
+                        //ID m = getIDAt(mx, my); //Get ID of object at cursor
                         //System.out.println(m);
                     }
                     default -> {

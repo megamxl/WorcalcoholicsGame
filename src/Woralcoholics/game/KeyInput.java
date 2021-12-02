@@ -6,10 +6,12 @@ import java.awt.event.KeyEvent;
 
 public class KeyInput extends KeyAdapter {
     GameManager gameManager;
+    private Game game;
 
-    public KeyInput(GameManager gameManger)
+    public KeyInput(GameManager gameManger, Game game)
     {
         this.gameManager = gameManger;
+        this.game = game;
     }
 
     @Override
@@ -19,19 +21,27 @@ public class KeyInput extends KeyAdapter {
      */
     public void keyPressed(KeyEvent e)
     {
-        switch(e.getKeyCode()) {
-            case KeyEvent.VK_A:
-                gameManager.setLeft(true);
-                break;
-            case KeyEvent.VK_D:
-                gameManager.setRight(true);
-                break;
-            case KeyEvent.VK_W:
-                gameManager.setUp(true);
-                break;
-            case KeyEvent.VK_S:
-                gameManager.setDown(true);
-                break;
+        int key = e.getKeyCode();
+        switch(game.state) {
+            case MAIN_MENU -> {
+                if(key == KeyEvent.VK_SPACE) game.state = Game.game_state.LEVEL;
+            }
+            case LEVEL -> {
+                switch(key) {
+                    case KeyEvent.VK_A:
+                        gameManager.setLeft(true);
+                        break;
+                    case KeyEvent.VK_D:
+                        gameManager.setRight(true);
+                        break;
+                    case KeyEvent.VK_W:
+                        gameManager.setUp(true);
+                        break;
+                    case KeyEvent.VK_S:
+                        gameManager.setDown(true);
+                        break;
+                }
+            }
         }
     }
 
