@@ -13,6 +13,10 @@ public class Player extends GameObject {
     private final double invincibleTime = 1000;
     private double wait;
 
+    private float diagonalMultiplier = 1;
+    private Boolean movingVertical = false;
+    private Boolean movingHorizontal = false;
+
     public Player(int x, int y, ID id, GameManager GameManager, Game game, Animations an) {
         super(x, y, id, an);
         this.handler = GameManager;
@@ -30,18 +34,39 @@ public class Player extends GameObject {
 
         collision();
 
-        if (handler.isUp()) velY = -5;
-        else if (!handler.isDown()) velY = 0;
+        if(movingVertical && movingHorizontal) {
+            diagonalMultiplier = 0.75f;
+        }
+        else {
+            diagonalMultiplier = 1;
+        }
 
-        if (handler.isDown()) velY = 5;
-        else if (!handler.isUp()) velY = 0;
-
-        if (handler.isRight()) velX = 5;
-        else if (!handler.isLeft()) velX = 0;
-
-        if (handler.isLeft()) velX = -5;
-        else if (!handler.isRight()) velX = 0;
-
+        // Vertical Movement
+        if (handler.isUp() && !handler.isDown()) {
+            velY = -5 * diagonalMultiplier;
+            movingVertical = true;
+        }
+        if (handler.isDown() && !handler.isUp()) {
+            velY = 5 * diagonalMultiplier;
+            movingVertical = true;
+        }
+        if ((handler.isUp() && handler.isDown()) || !handler.isUp() && !handler.isDown()) {
+            velY = 0;
+            movingVertical = false;
+        }
+        // Horizontal Movement
+        if (handler.isRight() && !handler.isLeft()) {
+            velX = 5 * diagonalMultiplier;
+            movingHorizontal = true;
+        }
+        if (handler.isLeft() && !handler.isRight()) {
+            velX = -5 * diagonalMultiplier;
+            movingHorizontal = true;
+        }
+        if ((handler.isLeft() && handler.isRight()) || (!handler.isLeft() && !handler.isRight())) {
+            velX = 0;
+            movingHorizontal = false;
+        }
     }
 
     @Override
@@ -64,6 +89,7 @@ public class Player extends GameObject {
 
             if (tempobject.getId() == ID.Block) {
                 if (getBounds().intersects(tempobject.getBounds())) {
+                    // IMPLEMENT DIAGONAL MOVEMENT ON WALL
                     x += velX * -1;
                     y += velY * -1;
                 }
