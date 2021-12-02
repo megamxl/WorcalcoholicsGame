@@ -74,7 +74,7 @@ public class Game extends Canvas implements Runnable {
         this.addMouseListener(mouse);
 
         // checks (/"listens to") the keys to determine if W, A, S or D is getting pressed
-        KeyInput keys = new KeyInput(handler);
+        KeyInput keys = new KeyInput(handler, this);
         this.addKeyListener(keys);
 
         // gets the according tile from the sprite sheet
