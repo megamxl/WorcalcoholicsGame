@@ -7,11 +7,13 @@ import java.awt.event.KeyEvent;
 public class KeyInput extends KeyAdapter {
     GameManager gameManager;
     private Game game;
+    GameObject player;
 
-    public KeyInput(GameManager gameManger, Game game)
+    public KeyInput(GameManager gameManager, Game game, GameObject player)
     {
-        this.gameManager = gameManger;
+        this.gameManager = gameManager;
         this.game = game;
+        this.player = player;
     }
 
     @Override
@@ -35,6 +37,7 @@ public class KeyInput extends KeyAdapter {
                         gameManager.setRight(true);
                         break;
                     case KeyEvent.VK_W:
+                        // try to check for some collision parameters
                         gameManager.setUp(true);
                         break;
                     case KeyEvent.VK_S:

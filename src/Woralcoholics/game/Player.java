@@ -210,9 +210,39 @@ public class Player extends GameObject {
 
             if (tempobject.getId() == ID.Block) {
                 if (getBounds().intersects(tempobject.getBounds())) {
-                    // IMPLEMENT DIAGONAL MOVEMENT ON WALL
-                    x += velX * -1;
+                    // change movement
+                    // check for block coordinate to see where it is located in relation to the player
+                    // or make it dependent on key pressed?
+
+                    /*
+                    System.out.println("WALL X: " + tempobject.getX());
+                    System.out.println("PLAY X:" + x);
+                     */
+                    if(x > tempobject.getX())
+                    {
+                        // is left from player
+                        // System.out.println("LEFT");
+                        if((x - 50) <= tempobject.getX())
+                        {
+                            x += velX * -1;
+                        }
+                    }
+                    else if (x < tempobject.getX())
+                    {
+                        // is right from player
+                        // System.out.println("RIGHT");
+                        if((x + 50) >= tempobject.getX())
+                        {
+                            x += velX * -1;
+                        }
+                    }
+
+                    /*
+                    System.out.println("WALL Y: " + tempobject.getY());
+                    System.out.println("PLAY Y:" + y);
+                     */
                     y += velY * -1;
+                    // System.out.println("--------------");
                 }
             }
             if(tempobject.getId() == ID.Create) {

@@ -74,7 +74,7 @@ public class Game extends Canvas implements Runnable {
         MouseInput mouse = new MouseInput(handler, camera, this, handler.object.get(playerIndex), an);
         this.addMouseListener(mouse);
 
-        KeyInput keys = new KeyInput(handler, this);
+        KeyInput keys = new KeyInput(handler, this, handler.object.get(playerIndex));
         this.addKeyListener(keys);
 
         floor = an.getImage(1, 2, 64, 64);
@@ -295,9 +295,11 @@ public class Game extends Canvas implements Runnable {
                 if (blue == 255 && green == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, an));
                 }
+                /*
                 if (green == 255) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an));
                 }
+                 */
                 /*
                 if(green == 255 && blue == 255)
                     handler.addObject(new Create(xx*32, yy*32, ID.Create));
