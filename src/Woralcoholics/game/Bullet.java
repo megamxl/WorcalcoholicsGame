@@ -1,16 +1,21 @@
 package Woralcoholics.game;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Bullet extends GameObject {
 
     private float bulletSpeed = 30;// 8;
+
+    private final BufferedImage bullet_img;
 
     GameManager handler;
 
     public Bullet(int x, int y, ID id, GameManager handler, Animations an) {
         super(x, y, id, an);
         this.handler = handler;
+
+        bullet_img = an.getImage(2, 3, 64,64);
     }
 
 
@@ -64,8 +69,10 @@ public class Bullet extends GameObject {
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.WHITE);
+        /*g.setColor(Color.WHITE);
         g.fillOval((int) x, (int) y, 8, 8);
+        */
+        g.drawImage(bullet_img,(int)x, (int)y, null);
     }
 
     @Override
