@@ -259,7 +259,7 @@ public class Game extends Canvas implements Runnable {
 
         g.setColor(Color.MAGENTA);
         g.drawString("Waves "+ Enemy.waves,930,17);
-        g.drawString("Enemys "+ Enemy.enemysAlive,910,40);
+        g.drawString("Enemies "+ Enemy.enemysAlive,910,40);
 
     }
 
