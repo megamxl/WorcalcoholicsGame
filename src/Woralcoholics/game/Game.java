@@ -16,15 +16,10 @@ public class Game extends Canvas implements Runnable {
 
     final int screenWidth = 1024;
     final int screenHeight = 576;
-    protected enum game_state {
-        STUDIO,
-        TITLE,
-        MAIN_MENU,
-        OPTIONS,
-        PAUSE_MENU,
-        LEVEL
-    }
-    game_state state;
+
+    protected GameState state;
+
+    private final double studioWait = System.currentTimeMillis() + 1000;
 
     private boolean isRunning;
     private Thread thread;
@@ -47,7 +42,7 @@ public class Game extends Canvas implements Runnable {
     public int hp = 100;
 
     public Game() throws IOException {
-        state = game_state.TITLE;
+        state = GameState.STUDIO;
         // make the window threw out own window class
         int playerIndex = 0;
         new Window(screenWidth, screenHeight, "Workalcholics Work In Progress", this);
@@ -138,7 +133,13 @@ public class Game extends Canvas implements Runnable {
 
     // in every frame check where player is and update camera position
     public void update() {
+        double now = System.currentTimeMillis();
         switch(state) {
+            case STUDIO -> {
+                if(now > studioWait) {
+                    state = GameState.TITLE;
+                }
+            }
             case MAIN_MENU -> System.out.println("MAIN MENU");
             case OPTIONS -> System.out.println("OPTIONS");
             case PAUSE_MENU -> System.out.println("PAUSE MENU");
@@ -149,8 +150,10 @@ public class Game extends Canvas implements Runnable {
                     }
                 }
                 handler.update();
+                if(hp == 0) {
+                    state = GameState.GAME_OVER;
+                }
             }
-
         }
     }
 
@@ -164,34 +167,11 @@ public class Game extends Canvas implements Runnable {
         Graphics2D g2d = (Graphics2D) g;
 
         switch (state) {
-            case TITLE -> {
-                g.setColor(Color.BLACK);
-                g.fillRect(0, 0, screenWidth, screenHeight);
-                g.setColor(Color.WHITE);
-                g.drawString("TITLE", screenWidth/2, screenHeight/2);
-                g.drawString("LMB: MAIN MENU", screenWidth/2, screenHeight*3/4);
-            }
-            case MAIN_MENU -> {
-                g.setColor(Color.BLACK);
-                g.fillRect(0, 0, screenWidth, screenHeight);
-                g.setColor(Color.WHITE);
-                g.drawString("MAIN MENU", screenWidth/2, screenHeight/2);
-                g.drawString("LMB: LEVEL    RMB: OPTIONS", screenWidth/2, screenHeight*3/4);
-            }
-            case OPTIONS -> {
-                g.setColor(Color.BLACK);
-                g.fillRect(0, 0, screenWidth, screenHeight);
-                g.setColor(Color.WHITE);
-                g.drawString("OPTIONS", screenWidth/2, screenHeight/2);
-                g.drawString("RMB: MAIN MENU", screenWidth/2, screenHeight*3/4);
-            }
-            case PAUSE_MENU -> {
-                g.setColor(Color.BLACK);
-                g.fillRect(0, 0, screenWidth, screenHeight);
-                g.setColor(Color.WHITE);
-                g.drawString("PAUSE_MENU", screenWidth/2, screenHeight/2);
-                g.drawString("RMB: LEVEL", screenWidth/2, screenHeight*3/4);
-            }
+            case STUDIO -> renderStudio(g);
+            case TITLE -> renderTitle(g);
+            case MAIN_MENU -> renderMainMenu(g);
+            case OPTIONS -> renderOptions(g);
+            case PAUSE_MENU -> renderPauseMenu(g);
             case LEVEL -> {
                 if(renderOnlyOneTime) {
                     for (int i = 0; i < 30 * 72; i += 64) {
@@ -223,6 +203,7 @@ public class Game extends Canvas implements Runnable {
 
                 renderUi(g);
             }
+            case GAME_OVER -> renderGameOver(g);
         }
         // between this it can be drawn to the screen
 
@@ -231,6 +212,54 @@ public class Game extends Canvas implements Runnable {
         // end of drawing place
         g.dispose();
         bs.show();
+    }
+
+    public void renderStudio(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.setColor(Color.WHITE);
+        g.drawString("Workalcoholics", screenWidth/2, screenHeight/2);
+        g.drawString("presents", screenWidth/2, screenHeight*3/4);
+    }
+
+    public void renderTitle(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.setColor(Color.WHITE);
+        g.drawString("TITLE", screenWidth/2, screenHeight/2);
+        g.drawString("LMB: MAIN MENU", screenWidth/2, screenHeight*3/4);
+    }
+
+    public void renderMainMenu(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.setColor(Color.WHITE);
+        g.drawString("MAIN MENU", screenWidth/2, screenHeight/2);
+        g.drawString("LMB: LEVEL    RMB: OPTIONS", screenWidth/2, screenHeight*3/4);
+    }
+
+    public void renderOptions(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.setColor(Color.WHITE);
+        g.drawString("OPTIONS", screenWidth/2, screenHeight/2);
+        g.drawString("RMB: MAIN MENU", screenWidth/2, screenHeight*3/4);
+    }
+
+    public void renderPauseMenu(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.setColor(Color.WHITE);
+        g.drawString("PAUSE_MENU", screenWidth/2, screenHeight/2);
+        g.drawString("RMB: LEVEL", screenWidth/2, screenHeight*3/4);
+    }
+
+    public void renderGameOver(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.setColor(Color.WHITE);
+        g.drawString("GAME OVER", screenWidth/2, screenHeight/2);
+        g.drawString("Press LMB to Start again", screenWidth/2, screenHeight*3/4);
     }
 
     public void renderUi(Graphics g){

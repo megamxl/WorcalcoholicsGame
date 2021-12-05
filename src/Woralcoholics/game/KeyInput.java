@@ -26,7 +26,7 @@ public class KeyInput extends KeyAdapter {
         int key = e.getKeyCode();
         switch(game.state) {
             case MAIN_MENU -> {
-                if(key == KeyEvent.VK_SPACE) game.state = Game.game_state.LEVEL;
+                if(key == KeyEvent.VK_SPACE) game.state = GameState.LEVEL;
             }
             case LEVEL -> {
                 switch(key) {

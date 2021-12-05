@@ -31,17 +31,17 @@ public class MouseInput extends MouseAdapter {
         int button = e.getButton(); //Grab pressed button
         switch(game.state) {
             case TITLE -> {
-                if(button == 1) game.state = Game.game_state.MAIN_MENU;
+                if(button == 1) game.state = GameState.MAIN_MENU;
             }
             case MAIN_MENU -> {
-                if(button == 1) game.state = Game.game_state.LEVEL;
-                if(button == 3) game.state = Game.game_state.OPTIONS;
+                if(button == 1) game.state = GameState.LEVEL;
+                if(button == 3) game.state = GameState.OPTIONS;
             }
             case OPTIONS -> {
-                if(button == 3) game.state = Game.game_state.MAIN_MENU;
+                if(button == 3) game.state = GameState.MAIN_MENU;
             }
             case PAUSE_MENU -> {
-                if(button == 3) game.state = Game.game_state.LEVEL;
+                if(button == 3) game.state = GameState.LEVEL;
             }
             case LEVEL -> {
                 //currentPos.translate(-500, -282);
@@ -73,7 +73,7 @@ public class MouseInput extends MouseAdapter {
                     case 2 -> System.out.println("BUTTON 2");
                     case 3 -> {
                         //System.out.println("BUTTON 3");
-                        game.state = Game.game_state.PAUSE_MENU;
+                        game.state = GameState.PAUSE_MENU;
                         //Grab current cursor position
                         //float mx = currentPos.x + camera.getX();
                         //float my = currentPos.y + camera.getY();
@@ -85,6 +85,13 @@ public class MouseInput extends MouseAdapter {
                 }
                 //System.out.println(currentPos.x + " " + currentPos.y);
                 //System.out.println(player.getX()+16 + " " + player.getY()+24);
+            }
+            case GAME_OVER -> {
+                if(button == 1) {
+                    game.state = GameState.LEVEL;
+                    game.hp = 100;
+                    game.ammo = 50;
+                }
             }
         }
 
