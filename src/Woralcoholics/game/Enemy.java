@@ -1,17 +1,12 @@
 package Woralcoholics.game;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Random;
 
 
@@ -28,6 +23,7 @@ public class Enemy extends GameObject {
     int high = 4;
     int booleanvalue = 0;
     boolean hittedwall = false;
+    Clip sound;
 
     static int enemysAlive = 0;
     static int waves = 1;
@@ -128,7 +124,7 @@ public class Enemy extends GameObject {
             new Thread(() -> {
 
                 try {
-                    playSound();
+                    manager.playSound();
                 } catch (LineUnavailableException e) {
                     e.printStackTrace();
                 } catch (UnsupportedAudioFileException e) {
@@ -142,6 +138,7 @@ public class Enemy extends GameObject {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //VolumeDown();
     }
 
     private void removeWithObject(GameObject tempobject) {
@@ -212,19 +209,7 @@ public class Enemy extends GameObject {
             Spawner(1, true);
         }
     }
-
-    // method of playing sound
-    private void playSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
-        Clip sound = AudioSystem.getClip();
-        Path relativePath = Paths.get("Resource/enemyhurt2.wav");
-        Path absolutePath = relativePath.toAbsolutePath();
-        sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
-        //System.out.println("Current relative path is: " + absolutePath.toString());
-        sound.start();
-        Thread.sleep(100000);
-    }
-
-
-
-
 }
+
+// method of playing sound
+

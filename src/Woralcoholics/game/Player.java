@@ -24,6 +24,7 @@ public class Player extends GameObject {
     private float diagonalMultiplier = 1;
     private Boolean movingVertical = false;
     private Boolean movingHorizontal = false;
+    private Clip sound;
     // better method would be to wait until the thread is finished and then start the new sound
     private boolean IsSoundPlaying = false;
     private boolean IsSoundPlaying2 = false;
@@ -44,6 +45,30 @@ public class Player extends GameObject {
         y += velY;
 
         collision();
+        if (handler.isL()) {
+            try{
+                handler.soundv=2;}
+            catch (Exception ex)
+            {
+
+            }
+        }
+        if (handler.isK()) {
+            try{
+                handler.soundv=1;}
+            catch (Exception ex)
+            {
+
+            }
+        }
+        if (handler.isM()) {
+            try{
+                handler.soundv=0;}
+            catch (Exception ex)
+            {
+
+            }
+        }
 
         if(movingVertical && movingHorizontal) {
             diagonalMultiplier = 0.75f;

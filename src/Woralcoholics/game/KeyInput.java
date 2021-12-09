@@ -43,6 +43,15 @@ public class KeyInput extends KeyAdapter {
                     case KeyEvent.VK_S:
                         gameManager.setDown(true);
                         break;
+                    case KeyEvent.VK_L:
+                        gameManager.setL(true);
+                        break;
+                    case KeyEvent.VK_M:
+                        gameManager.setM(true);
+                        break;
+                    case KeyEvent.VK_K:
+                        gameManager.setK(true);
+                        break;
                 }
             }
         }
@@ -67,6 +76,15 @@ public class KeyInput extends KeyAdapter {
                 break;
             case KeyEvent.VK_S:
                 gameManager.setDown(false);
+                break;
+            case KeyEvent.VK_L:
+                gameManager.setL(false);
+                break;
+            case KeyEvent.VK_K:
+                gameManager.setK(false);
+                break;
+            case KeyEvent.VK_M:
+                gameManager.setM(false);
                 break;
         }
     }
