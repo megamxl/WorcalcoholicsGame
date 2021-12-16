@@ -18,30 +18,35 @@ public class MouseInput extends MouseAdapter {
     private double wait;
     private final double del = 200;
 
-    public MouseInput(GameManager handler, Camera camera, Game game, GameObject player, Animations an) {
+    public MouseInput(GameManager handler, Camera camera, Game game, Animations an) {
         this.handler = handler;
         this.camera = camera;
         this.game = game;
-        this.player = player;
         this.an = an;
     }
 
     public void mousePressed(MouseEvent e) {
+        for (int i = 0; i < handler.object.size(); i++) {
+            if (handler.object.get(i).getId() == ID.Player) {
+                player = handler.object.get(i);
+                break;
+            }
+        }
         Point currentPos = e.getPoint();    //Grab current cursor position
         int button = e.getButton(); //Grab pressed button
-        switch(game.state) {
+        switch(game.currentState) {
             case TITLE -> {
-                if(button == 1) game.state = GameState.MAIN_MENU;
+                if(button == 1) game.currentState = GameState.MAIN_MENU;
             }
             case MAIN_MENU -> {
-                if(button == 1) game.state = GameState.LEVEL;
-                if(button == 3) game.state = GameState.OPTIONS;
+                if(button == 1) game.currentState = GameState.LEVEL;
+                if(button == 3) game.currentState = GameState.OPTIONS;
             }
             case OPTIONS -> {
-                if(button == 3) game.state = GameState.MAIN_MENU;
+                if(button == 3) game.currentState = GameState.MAIN_MENU;
             }
             case PAUSE_MENU -> {
-                if(button == 3) game.state = GameState.LEVEL;
+                if(button == 3) game.currentState = GameState.LEVEL;
             }
             case LEVEL -> {
                 //currentPos.translate(-500, -282);
@@ -73,7 +78,7 @@ public class MouseInput extends MouseAdapter {
                     case 2 -> System.out.println("BUTTON 2");
                     case 3 -> {
                         //System.out.println("BUTTON 3");
-                        game.state = GameState.PAUSE_MENU;
+                        game.currentState = GameState.PAUSE_MENU;
                         //Grab current cursor position
                         //float mx = currentPos.x + camera.getX();
                         //float my = currentPos.y + camera.getY();
@@ -88,7 +93,7 @@ public class MouseInput extends MouseAdapter {
             }
             case GAME_OVER -> {
                 if(button == 1) {
-                    game.state = GameState.LEVEL;
+                    game.currentState = GameState.LEVEL;
                     game.hp = 100;
                     game.ammo = 50;
                 }

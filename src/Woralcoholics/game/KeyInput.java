@@ -9,11 +9,11 @@ public class KeyInput extends KeyAdapter {
     private Game game;
     GameObject player;
 
-    public KeyInput(GameManager gameManager, Game game, GameObject player)
+    public KeyInput(GameManager gameManager, Game game/*, GameObject player*/)
     {
         this.gameManager = gameManager;
         this.game = game;
-        this.player = player;
+        //this.player = player;
     }
 
     @Override
@@ -23,10 +23,16 @@ public class KeyInput extends KeyAdapter {
      */
     public void keyPressed(KeyEvent e)
     {
+        for (int i = 0; i < gameManager.object.size(); i++) {
+            if (gameManager.object.get(i).getId() == ID.Player) {
+                player = gameManager.object.get(i);
+                break;
+            }
+        }
         int key = e.getKeyCode();
-        switch(game.state) {
+        switch(game.currentState) {
             case MAIN_MENU -> {
-                if(key == KeyEvent.VK_SPACE) game.state = GameState.LEVEL;
+                if(key == KeyEvent.VK_SPACE) game.currentState = GameState.LEVEL;
             }
             case LEVEL -> {
                 switch(key) {

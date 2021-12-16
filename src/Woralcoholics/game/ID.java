@@ -9,6 +9,7 @@ public enum ID {
     Enemy(),
     GunnerEnemy(),
     Bullet(),
-    EnemyBullet()
+    EnemyBullet(),
+    UIButton()
 
 }

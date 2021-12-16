@@ -17,11 +17,13 @@ public class Game extends Canvas implements Runnable {
     final int screenWidth = 1024;
     final int screenHeight = 576;
 
-    protected GameState state;
+    protected GameState currentState;
+    protected GameState previousState;
 
     private final double studioWait = System.currentTimeMillis() + 1000;
 
     private boolean isRunning;
+    protected boolean paused, loaded;
     private Thread thread;
     public static GameManager handler;
     private static Animations an;
@@ -42,10 +44,10 @@ public class Game extends Canvas implements Runnable {
     public int hp = 100;
 
     public Game() throws IOException {
-        state = GameState.STUDIO;
+        currentState = previousState = GameState.STUDIO;
         // make the window threw out own window class
-        int playerIndex = 0;
-        new Window(screenWidth, screenHeight, "Workalcholics Work In Progress", this);
+        //int playerIndex = 0;
+        new Window(screenWidth, screenHeight, "Workalcoholics Work In Progress", this);
         start();
 
         handler = new GameManager();
@@ -58,25 +60,27 @@ public class Game extends Canvas implements Runnable {
         spritesheet = loader.loadImage("/Spritesheet.png");
         an = new Animations(spritesheet);
 
-        loadLevel(level);
+        //loadLevel(level);
 
-        for (int i = 0; i < handler.object.size(); i++) {
+
+        /*for (int i = 0; i < handler.object.size(); i++) {
             if (handler.object.get(i).getId() == ID.Player) {
                 playerIndex = i;
                 break;
             }
-        }
-        MouseInput mouse = new MouseInput(handler, camera, this, handler.object.get(playerIndex), an);
+        }*/
+
+        MouseInput mouse = new MouseInput(handler, camera, this, an);
         this.addMouseListener(mouse);
 
-        KeyInput keys = new KeyInput(handler, this, handler.object.get(playerIndex));
+        KeyInput keys = new KeyInput(handler, this/*, handler.object.get(playerIndex)*/);
         this.addKeyListener(keys);
 
         floor = an.getImage(1, 2, 64, 64);
         floorDirt1 = an.getImage(2, 2, 64, 64);
         floorDirt2 = an.getImage(3, 2, 64, 64);
         floorDirt3 = an.getImage(4, 2, 64, 64);
-
+        loadMenu();
     }
 
     // these tow function are responsible to not make more than one window during runtime
@@ -96,8 +100,8 @@ public class Game extends Canvas implements Runnable {
     }
 
     @Override
-    // this is a well-known game loop also used in minecraft for making no differnece how fast or slow you computer performce
-    // so that the calculation are made at equal tzimes no matter the computer
+    // this is a well-known game loop also used in minecraft for making no difference how fast or slow you computer performance
+    // so that the calculation are made at equal times no matter the computer
     public void run() {
         long lastTime = System.nanoTime();
         final double amountOfTicks = 60.0;
@@ -133,26 +137,34 @@ public class Game extends Canvas implements Runnable {
 
     // in every frame check where player is and update camera position
     public void update() {
-        double now = System.currentTimeMillis();
-        switch(state) {
-            case STUDIO -> {
-                if(now > studioWait) {
-                    state = GameState.TITLE;
+        if(currentState == GameState.STUDIO) {
+            double now = System.currentTimeMillis();
+            if(now > studioWait) {
+                currentState = GameState.TITLE;
+            }
+        }
+        if(currentState != previousState) {     //if there was a state change...
+            if(currentState == GameState.LEVEL) {
+                if(!loaded) {                   //if no level is loaded, load the level
+                    loadLevel(level);
+                    //System.out.println(handler.object.size());
+                }
+                paused = false;                 //level is running and not paused
+            }
+            else {
+                loadMenu();                     //load the menu of currentState
+            }
+            previousState = currentState;       //the previous state becomes the current state, to again detect a state change
+        }
+        if(currentState == GameState.LEVEL && !paused) {    //if we are in level and the game is not paused...
+            for (int i = 0; i < handler.object.size(); i++) {
+                if (handler.object.get(i).getId() == ID.Player) {
+                    camera.update(handler.object.get(i));
                 }
             }
-            case MAIN_MENU -> System.out.println("MAIN MENU");
-            case OPTIONS -> System.out.println("OPTIONS");
-            case PAUSE_MENU -> System.out.println("PAUSE MENU");
-            case LEVEL -> {
-                for (int i = 0; i < handler.object.size(); i++) {
-                    if (handler.object.get(i).getId() == ID.Player) {
-                        camera.update(handler.object.get(i));
-                    }
-                }
-                handler.update();
-                if(hp == 0) {
-                    state = GameState.GAME_OVER;
-                }
+            handler.update();
+            if(hp == 0) {
+                currentState = GameState.GAME_OVER;         //if the player has no HP left, its GAME OVER
             }
         }
     }
@@ -166,44 +178,39 @@ public class Game extends Canvas implements Runnable {
         Graphics g = bs.getDrawGraphics();
         Graphics2D g2d = (Graphics2D) g;
 
-        switch (state) {
-            case STUDIO -> renderStudio(g);
-            case TITLE -> renderTitle(g);
-            case MAIN_MENU -> renderMainMenu(g);
-            case OPTIONS -> renderOptions(g);
-            case PAUSE_MENU -> renderPauseMenu(g);
-            case LEVEL -> {
-                if(renderOnlyOneTime) {
-                    for (int i = 0; i < 30 * 72; i += 64) {
-                        for (int j = 0; j < 30 * 72; j += 64) {
-                            g.drawImage(floor, i, j, null);
-                            // draws a random floor dirt texture on top of the current floor tile
-                            switch (randomNumber(1, 4)) {
-                                case 1:
-                                    g.drawImage(floorDirt1, i, j, null);
-                                    break;
-                                case 2:
-                                    g.drawImage(floorDirt2, i, j, null);
-                                    break;
-                                case 3:
-                                    g.drawImage(floorDirt3, i, j, null);
-                                    break;
-                                default:
-                                    // no action
-                                    break;
-                            }
+        if(currentState != GameState.LEVEL) {       //if we are not in the level, render a menu
+            renderMenu(g);
+        }
+        else {
+            if(renderOnlyOneTime) {
+                for (int i = 0; i < 30 * 72; i += 64) {
+                    for (int j = 0; j < 30 * 72; j += 64) {
+                        g.drawImage(floor, i, j, null);
+                        // draws a random floor dirt texture on top of the current floor tile
+                        switch (randomNumber(1, 4)) {
+                            case 1:
+                                g.drawImage(floorDirt1, i, j, null);
+                                break;
+                            case 2:
+                                g.drawImage(floorDirt2, i, j, null);
+                                break;
+                            case 3:
+                                g.drawImage(floorDirt3, i, j, null);
+                                break;
+                            default:
+                                // no action
+                                break;
                         }
                     }
                 }
-                g2d.translate(-camera.getX(), -camera.getY());
-
-                handler.render(g);
-
-                g2d.translate(camera.getX(), camera.getY());
-
-                renderUi(g);
             }
-            case GAME_OVER -> renderGameOver(g);
+            g2d.translate(-camera.getX(), -camera.getY());
+
+            handler.render(g);
+
+            g2d.translate(camera.getX(), camera.getY());
+
+            renderUi(g);
         }
         // between this it can be drawn to the screen
 
@@ -213,6 +220,7 @@ public class Game extends Canvas implements Runnable {
         g.dispose();
         bs.show();
     }
+
 
     public void renderStudio(Graphics g) {
         g.setColor(Color.BLACK);
@@ -233,6 +241,7 @@ public class Game extends Canvas implements Runnable {
     public void renderMainMenu(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, screenWidth, screenHeight);
+
         g.setColor(Color.WHITE);
         g.drawString("MAIN MENU", screenWidth/2, screenHeight/2);
         g.drawString("LMB: LEVEL    RMB: OPTIONS", screenWidth/2, screenHeight*3/4);
@@ -247,8 +256,8 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void renderPauseMenu(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, screenWidth, screenHeight);
+        //g.setColor(new Color(0,0,0,127));
+        //g.fillRect(0, 0, screenWidth, screenHeight);
         g.setColor(Color.WHITE);
         g.drawString("PAUSE_MENU", screenWidth/2, screenHeight/2);
         g.drawString("RMB: LEVEL", screenWidth/2, screenHeight*3/4);
@@ -260,6 +269,17 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.WHITE);
         g.drawString("GAME OVER", screenWidth/2, screenHeight/2);
         g.drawString("Press LMB to Start again", screenWidth/2, screenHeight*3/4);
+    }
+
+    public void renderMenu(Graphics g) {
+        switch(currentState) {
+            case STUDIO -> renderStudio(g);
+            case TITLE -> renderTitle(g);
+            case MAIN_MENU -> renderMainMenu(g);
+            case OPTIONS -> renderOptions(g);
+            case PAUSE_MENU -> renderPauseMenu(g);
+            case GAME_OVER -> renderGameOver(g);
+        }
     }
 
     public void renderUi(Graphics g){
@@ -293,50 +313,29 @@ public class Game extends Canvas implements Runnable {
     }
 
 
-    private void loadScreen(BufferedImage screen) { //Load all kinds of Screens, that are not levels
-        int h = screen.getHeight();
-        int w = screen.getWidth();
-        int i= 0;
-
-        for (int xx = 0; xx < w; xx++) {
-            for (int yy = 0; yy < h; yy++) {
-                int pixel = screen.getRGB(xx, yy);
-                int red = (pixel >> 16) & 0xff;
-                int green = (pixel >> 8) & 0xff;
-                int blue = (pixel) & 0xff;
-
-                if (red == 255) {
-                    // Creates the new blocks which function as the walls
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, 1, 1));
-                    wallCords.add(new int[]{xx,yy});
-                    /*
-                     *//*  *//**//*
-                    Randomly selects dirt and highlight textures, which then get added on top of the walls
-                    *//*
-                    //Dirt
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an*//*, randomNumber(2, 5), 1)*//*));
-                    wallCords.add(new int[]{xx,yy});
-                    //Highlights (the end of randomNumber is 10, so that there is a possibility that no highlight
-                    //gets added --> more visual diversity
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an*//*, randomNumber(5, 10), 1)*//*));
-                    wallCords.add(new int[]{xx,yy});*/
-                }
-                if (blue == 255 && green == 0) {
-                    handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, an));
-                }
-                /*
-                if (green == 255) {
-                    handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an));
-                }
-                 */
-                /*
-                if(green == 255 && blue == 255)
-                    handler.addObject(new Create(xx*32, yy*32, ID.Create));
-
-            }*/
+    private void loadMenu() {       //Load all kinds of Menus, that are not levels
+        //System.out.println(currentState);
+        switch(currentState) {
+            case STUDIO -> System.out.println("STUDIO");
+            case TITLE -> {}
+            case MAIN_MENU -> System.out.println("MAIN MENU");
+            case OPTIONS -> System.out.println("OPTIONS");
+            case PAUSE_MENU -> {
+                System.out.println("PAUSE MENU");
+                paused = true;                  //we are in PAUSE_MENU, so set paused true
+            }
+            case GAME_OVER -> {
+                System.out.println("GAME OVER");
+                loaded = false;                 //the player lost, so the level should unload
             }
         }
-        //handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an)); //Test Gunner
+        if(!loaded) {   //unload method (clear the object list)
+            while(handler.object.size() > 0) {
+                System.out.println(handler.object.get(0).getId());
+                handler.object.remove(0);
+                System.out.println(handler.object.size());
+            }
+        }
     }
 
     private void loadLevel(BufferedImage image) {
@@ -381,6 +380,7 @@ public class Game extends Canvas implements Runnable {
             }
         }
         //handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an)); //Test Gunner
+        loaded = true;
     }
 
     /*
