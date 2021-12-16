@@ -144,17 +144,8 @@ public class Game extends Canvas implements Runnable {
             }
         }
         if(currentState != previousState) {     //if there was a state change...
-            if(currentState == GameState.LEVEL) {
-                if(!loaded) {                   //if no level is loaded, load the level
-                    loadLevel(level);
-                    //System.out.println(handler.object.size());
-                }
-                paused = false;                 //level is running and not paused
-            }
-            else {
-                loadMenu();                     //load the menu of currentState
-            }
-            previousState = currentState;       //the previous state becomes the current state, to again detect a state change
+            stateChange();
+
         }
         if(currentState == GameState.LEVEL && !paused) {    //if we are in level and the game is not paused...
             for (int i = 0; i < handler.object.size(); i++) {
@@ -221,6 +212,24 @@ public class Game extends Canvas implements Runnable {
         bs.show();
     }
 
+    public void stateChange() {
+        if(currentState == GameState.LEVEL) {
+            if(!loaded) {                   //if no level is loaded, load the level
+                Enemy.waves = 1;
+                Enemy.enemysAlive = 0;
+                loadLevel(level);
+                hp = 100;
+                ammo = 50;
+
+                //System.out.println(handler.object.size());
+            }
+            paused = false;                 //level is running and not paused
+        }
+        else {
+            loadMenu();                     //load the menu of currentState
+        }
+        previousState = currentState;       //the previous state becomes the current state, to again detect a state change
+    }
 
     public void renderStudio(Graphics g) {
         g.setColor(Color.BLACK);
@@ -335,6 +344,7 @@ public class Game extends Canvas implements Runnable {
                 handler.object.remove(0);
                 System.out.println(handler.object.size());
             }
+
         }
     }
 

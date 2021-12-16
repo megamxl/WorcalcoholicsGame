@@ -94,8 +94,6 @@ public class MouseInput extends MouseAdapter {
             case GAME_OVER -> {
                 if(button == 1) {
                     game.currentState = GameState.LEVEL;
-                    game.hp = 100;
-                    game.ammo = 50;
                 }
             }
         }

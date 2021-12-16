@@ -58,6 +58,9 @@ public class KeyInput extends KeyAdapter {
                     case KeyEvent.VK_K:
                         gameManager.setK(true);
                         break;
+                    case KeyEvent.VK_F1:    //Shortcut to GAME OVER for testing
+                        game.currentState = GameState.GAME_OVER;
+                        break;
                 }
             }
         }
