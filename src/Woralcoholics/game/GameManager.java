@@ -102,6 +102,13 @@ public class GameManager {
     }
 
 
+    /**
+     * plays the sound for the enemy
+     * @throws LineUnavailableException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void playSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         sound = AudioSystem.getClip();
         Path relativePath = Paths.get("Resource/enemyhurt2.wav");
@@ -111,17 +118,17 @@ public class GameManager {
         if(soundv==0)
         {
             volume.setValue(-80f); // NormalSound
-            System.out.println("VOLUME MUTE + " +volume.toString());
+            //System.out.println("VOLUME MUTE + " +volume.toString());
         }
         else if(soundv==1)
         {
             volume.setValue(0f); // Minimum
-            System.out.println("VOLUME DOWN + " +volume.toString());
+            //System.out.println("VOLUME DOWN + " +volume.toString());
         }
         else if(soundv==2)
         {
             volume.setValue(6.0206f); // Maximum
-            System.out.println("VOLUME UP + " +volume.toString());
+            //System.out.println("VOLUME UP + " +volume.toString());
         }
         sound.start();
         Thread.sleep(100000);

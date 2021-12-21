@@ -10,6 +10,9 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 
+/**
+ * Enemy Class
+ */
 public class Enemy extends GameObject {
 
     private final BufferedImage enemy_img;
@@ -19,9 +22,18 @@ public class Enemy extends GameObject {
     Random r = new Random();
     int choose = 0;
     int hp = 100;
+    /**
+     * low and high values for different variations of enemy behaviour
+     */
     int low = -4;
     int high = 4;
+    /**
+     * booleanvalue is for determining if enemy should charge player again or just running aimless around
+     */
     int booleanvalue = 0;
+    /**
+     * hittedwall is for changing the aiming target of player to nothing
+     */
     boolean hittedwall = false;
     Clip sound;
 
@@ -42,6 +54,9 @@ public class Enemy extends GameObject {
         y += velY;
     }
 
+    /**
+     * Collision enemy with a block | Collision enemy with player
+     */
     public void collision() {
         for (int i = 0; i < manager.object.size(); i++) {
 
@@ -51,7 +66,7 @@ public class Enemy extends GameObject {
             if (tmpObject.getId() == ID.Block) {
                 if (getBoundsAround().intersects(tmpObject.getBounds())) {
                     // if it is colliding with wall it goes in the opposite direction
-                    x += (velX * 5) * -1;                                       // maybe improve these values(velx*5,velxy*= -1)
+                    x += (velX * 5) * -1;
                     y += (velY * 5) * -1;
                     velX *= -1;
                     velY *= -1;
@@ -78,11 +93,12 @@ public class Enemy extends GameObject {
 
             }
 
+            // collision enemy with player
             if (tmpObject.getId() == ID.Player) {
 
                 if (hittedwall == false) {
 
-                    // works fine and reduces the shaking enemies if they are on the same x or y value
+                    // enemy behaviour
                     if (tmpObject.getX() + 6 >= x && tmpObject.getX() - 6 <= x) {
                         velX = 0;
                     } else if (tmpObject.getX() > x) {
@@ -104,7 +120,6 @@ public class Enemy extends GameObject {
 
                     }
 
-
                 } else {
                     // if hitted the wall enemy runs different like before
                     booleanvalue = r.nextInt(100 - 1) + 1; //maybe change
@@ -118,6 +133,9 @@ public class Enemy extends GameObject {
         }
     }
 
+    /**
+     * Enemy gets removed
+     */
     private void remove() {
         manager.removeObject(this);
         try {
@@ -138,7 +156,6 @@ public class Enemy extends GameObject {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //VolumeDown();
     }
 
     private void removeWithObject(GameObject tempobject) {
@@ -164,20 +181,23 @@ public class Enemy extends GameObject {
         isDead();
     }
 
-    //Enemy is displaying in this Color for now
-    public void render(Graphics g) {
-        //-> Just for testing Bounding Boxes around the Enemys
-        /*Graphics2D g2d = (Graphics2D) g;
-        g.setColor(Color.GREEN);
-        g2d.draw(getBoundsAround());*/
 
+    public void render(Graphics g) {
         g.drawImage(enemy_img, (int) x, (int) y, null);
     }
 
+    /**
+     * check if enemy bounds with an Rectangle
+     * @return
+     */
     public Rectangle getBounds() {
         return new Rectangle((int) x, (int) y, 32, 32);
     }
 
+    /**
+     * check if enemy bounds with an Rectangle bigger than the actual enemy
+     * @return
+     */
     public Rectangle getBoundsAround() {
         return new Rectangle((int) x, (int) y, 32, 32);
     }

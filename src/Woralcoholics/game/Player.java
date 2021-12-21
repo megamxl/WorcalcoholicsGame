@@ -178,6 +178,14 @@ public class Player extends GameObject {
 
 
     }
+
+    /**
+     * plays the sound for moving player
+     * @throws LineUnavailableException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private void playSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         if(IsSoundPlaying==false) {
             IsSoundPlaying=true;
@@ -196,6 +204,14 @@ public class Player extends GameObject {
 
         }
     }
+
+    /**
+     * plays the ssound for the player
+     * @throws LineUnavailableException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private void playSoundHurt() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         if(IsSoundPlaying2==false) {
             IsSoundPlaying2=true;
