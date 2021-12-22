@@ -9,11 +9,10 @@ public class KeyInput extends KeyAdapter {
     private Game game;
     GameObject player;
 
-    public KeyInput(GameManager gameManager, Game game/*, GameObject player*/)
+    public KeyInput(GameManager gameManager, Game game)
     {
         this.gameManager = gameManager;
         this.game = game;
-        //this.player = player;
     }
 
     @Override

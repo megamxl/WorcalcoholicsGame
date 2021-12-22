@@ -11,43 +11,49 @@ import java.util.List;
 import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
-
+/* ------------ Local variables for main game ------------ */
     private static final long serialVersionUID = 1L;
 
-    final int screenWidth = 1024;
-    final int screenHeight = 576;
+    // Variables
+    final int SCREEN_WIDTH = 1024;
+    final int SCREEN_HEIGHT = 576;
+
+    private final double STUDIO_WAIT = System.currentTimeMillis() + 1000;
 
     protected GameState currentState;
     protected GameState previousState;
 
-    private final double studioWait = System.currentTimeMillis() + 1000;
-
     private boolean isRunning;
     protected boolean paused, loaded;
-    private Thread thread;
-    public static GameManager handler;
-    private static Animations an;
-    static List<int[]> wallCords = new ArrayList();
+    public static boolean renderOnlyOneTime= true;
 
     private BufferedImage level = null;
-    private Camera camera;
-
     private BufferedImage spritesheet = null;
     private BufferedImage floor = null;
     private BufferedImage floorDirt1 = null;
     private BufferedImage floorDirt2 = null;
     private BufferedImage floorDirt3 = null;
 
-    public static boolean renderOnlyOneTime= true;
+    public static List<int[]> wallCords = new ArrayList();
 
     public int ammo = 50;
     public int hp = 100;
+    
+    // Classes
+    private Thread thread;
+
+    public static GameManager handler;
+
+    private static Animations an;
+
+    private Camera camera;
+
+/* ------------- Constructor for Game Class -------------- */
 
     public Game() throws IOException {
         currentState = previousState = GameState.STUDIO;
         // make the window threw out own window class
-        //int playerIndex = 0;
-        new Window(screenWidth, screenHeight, "Workalcoholics Work In Progress", this);
+        new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
         start();
 
         handler = new GameManager();
@@ -60,20 +66,10 @@ public class Game extends Canvas implements Runnable {
         spritesheet = loader.loadImage("/Spritesheet.png");
         an = new Animations(spritesheet);
 
-        //loadLevel(level);
-
-
-        /*for (int i = 0; i < handler.object.size(); i++) {
-            if (handler.object.get(i).getId() == ID.Player) {
-                playerIndex = i;
-                break;
-            }
-        }*/
-
         MouseInput mouse = new MouseInput(handler, camera, this, an);
         this.addMouseListener(mouse);
 
-        KeyInput keys = new KeyInput(handler, this/*, handler.object.get(playerIndex)*/);
+        KeyInput keys = new KeyInput(handler, this);
         this.addKeyListener(keys);
 
         floor = an.getImage(1, 2, 64, 64);
@@ -83,25 +79,12 @@ public class Game extends Canvas implements Runnable {
         loadMenu();
     }
 
-    // these tow function are responsible to not make more than one window during runtime
-    private void start() {
-        isRunning = true;
-        thread = new Thread(this);
-        thread.start();
-    }
-
-    private void stop() {
-        isRunning = false;
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
-    // this is a well-known game loop also used in minecraft for making no difference how fast or slow you computer performance
-    // so that the calculation are made at equal times no matter the computer
+    /***
+     * this is a well-known game loop also used in minecraft for making no difference how fast or slow you computer performance
+     * so that the calculation are made at equal times no matter the computer
+     */
     public void run() {
         long lastTime = System.nanoTime();
         final double amountOfTicks = 60.0;
@@ -130,16 +113,17 @@ public class Game extends Canvas implements Runnable {
                 updates = 0;
                 frames = 0;
             }
-
         }
         stop();
     }
 
-    // in every frame check where player is and update camera position
+    /***
+     * in every frame check where player is and update camera position
+     */
     public void update() {
         if(currentState == GameState.STUDIO) {
             double now = System.currentTimeMillis();
-            if(now > studioWait) {
+            if(now > STUDIO_WAIT) {
                 currentState = GameState.TITLE;
             }
         }
@@ -160,41 +144,29 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
+    /***
+     * The complete Render functions handles UI and the game rendering every frame
+     */
     public void render() {
+        // prepares the next 3 Frames tho be rendered
         BufferStrategy bs = this.getBufferStrategy();
         if (bs == null) {
             this.createBufferStrategy(3);
             return;
         }
+        // assigning the Graphics variables that the BufferStrategy can be used
         Graphics g = bs.getDrawGraphics();
         Graphics2D g2d = (Graphics2D) g;
 
-        if(currentState != GameState.LEVEL) {       //if we are not in the level, render a menu
+        //if we are not in the level, render a menu
+        if(currentState != GameState.LEVEL) {
             renderMenu(g);
         }
         else {
             if(renderOnlyOneTime) {
-                for (int i = 0; i < 30 * 72; i += 64) {
-                    for (int j = 0; j < 30 * 72; j += 64) {
-                        g.drawImage(floor, i, j, null);
-                        // draws a random floor dirt texture on top of the current floor tile
-                        switch (randomNumber(1, 4)) {
-                            case 1:
-                                g.drawImage(floorDirt1, i, j, null);
-                                break;
-                            case 2:
-                                g.drawImage(floorDirt2, i, j, null);
-                                break;
-                            case 3:
-                                g.drawImage(floorDirt3, i, j, null);
-                                break;
-                            default:
-                                // no action
-                                break;
-                        }
-                    }
-                }
+                renderBackground(g);
             }
+            //translates our screen
             g2d.translate(-camera.getX(), -camera.getY());
 
             handler.render(g);
@@ -212,7 +184,9 @@ public class Game extends Canvas implements Runnable {
         bs.show();
     }
 
-    public void stateChange() {
+/* ---------- Private functions for game Class ----------- */
+
+    private void stateChange() {
         if(currentState == GameState.LEVEL) {
             if(!loaded) {                   //if no level is loaded, load the level
                 Enemy.waves = 1;
@@ -231,56 +205,84 @@ public class Game extends Canvas implements Runnable {
         previousState = currentState;       //the previous state becomes the current state, to again detect a state change
     }
 
-    public void renderStudio(Graphics g) {
+    /***
+     * Instructions to render the studio screen
+     * @param g the current Buffered image as Graphics object
+     */
+    private void renderStudio(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
-        g.drawString("Workalcoholics", screenWidth/2, screenHeight/2);
-        g.drawString("presents", screenWidth/2, screenHeight*3/4);
+        g.drawString("Workalcoholics", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
+        g.drawString("presents", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
     }
 
-    public void renderTitle(Graphics g) {
+    /***
+     * Instructions to render the title screen
+     * @param g the current Buffered image as Graphics object
+     */
+    private void renderTitle(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
-        g.drawString("TITLE", screenWidth/2, screenHeight/2);
-        g.drawString("LMB: MAIN MENU", screenWidth/2, screenHeight*3/4);
+        g.drawString("TITLE", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
+        g.drawString("LMB: MAIN MENU", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
     }
 
-    public void renderMainMenu(Graphics g) {
+    /***
+     * Instructions to render the Main Menu screen
+     * @param g the current Buffered image as Graphics object
+     */
+    private void renderMainMenu(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         g.setColor(Color.WHITE);
-        g.drawString("MAIN MENU", screenWidth/2, screenHeight/2);
-        g.drawString("LMB: LEVEL    RMB: OPTIONS", screenWidth/2, screenHeight*3/4);
+        g.drawString("MAIN MENU", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
+        g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
     }
 
-    public void renderOptions(Graphics g) {
+    /***
+     * Instructions to render the Options screen
+     * @param g the current Buffered image as Graphics object
+     */
+    private void renderOptions(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
-        g.drawString("OPTIONS", screenWidth/2, screenHeight/2);
-        g.drawString("RMB: MAIN MENU", screenWidth/2, screenHeight*3/4);
+        g.drawString("OPTIONS", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
+        g.drawString("RMB: MAIN MENU", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
     }
 
-    public void renderPauseMenu(Graphics g) {
+    /***
+     * Instructions to render the Pause menu screen
+     * @param g the current Buffered image as Graphics object
+     */
+    private void renderPauseMenu(Graphics g) {
         //g.setColor(new Color(0,0,0,127));
         //g.fillRect(0, 0, screenWidth, screenHeight);
         g.setColor(Color.WHITE);
-        g.drawString("PAUSE_MENU", screenWidth/2, screenHeight/2);
-        g.drawString("RMB: LEVEL", screenWidth/2, screenHeight*3/4);
+        g.drawString("PAUSE_MENU", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
+        g.drawString("RMB: LEVEL", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
     }
 
-    public void renderGameOver(Graphics g) {
+    /***
+     * Instructions to render the Game over screen
+     * @param g the current Buffered image as Graphics object
+     */
+    private void renderGameOver(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
-        g.drawString("GAME OVER", screenWidth/2, screenHeight/2);
-        g.drawString("Press LMB to Start again", screenWidth/2, screenHeight*3/4);
+        g.drawString("GAME OVER", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
+        g.drawString("Press LMB to Start again", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
     }
 
-    public void renderMenu(Graphics g) {
+    /***
+     * A switch case functions for determining what screen to render
+     * @param g Graphics object
+     */
+    private void renderMenu(Graphics g) {
         switch(currentState) {
             case STUDIO -> renderStudio(g);
             case TITLE -> renderTitle(g);
@@ -291,7 +293,11 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
-    public void renderUi(Graphics g){
+    /***
+     * just the instructions on how to render the UI
+     * @param g Graphics Object
+     */
+    private void renderUi(Graphics g){
 
         g.setColor(Color.gray);
         g.fillRect(5, 5, 200, 16); //hp
@@ -321,8 +327,10 @@ public class Game extends Canvas implements Runnable {
 
     }
 
-
-    private void loadMenu() {       //Load all kinds of Menus, that are not levels
+    /***
+     * as the name states loads all kinds of Menus, which is not the level
+     */
+    private void loadMenu() {
         //System.out.println(currentState);
         switch(currentState) {
             case STUDIO -> System.out.println("STUDIO");
@@ -348,6 +356,10 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
+    /***
+     * The function to maka a playable level out of a Buffered Image
+     * @param image The level Png
+     */
     private void loadLevel(BufferedImage image) {
         int h = image.getHeight();
         int w = image.getWidth();
@@ -364,17 +376,6 @@ public class Game extends Canvas implements Runnable {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, 1, 1));
                     wallCords.add(new int[]{xx,yy});
-/*
-                  *//*  *//**//*
-                    Randomly selects dirt and highlight textures, which then get added on top of the walls
-                    *//*
-                    //Dirt
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an*//*, randomNumber(2, 5), 1)*//*));
-                    wallCords.add(new int[]{xx,yy});
-                    //Highlights (the end of randomNumber is 10, so that there is a possibility that no highlight
-                    //gets added --> more visual diversity
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an*//*, randomNumber(5, 10), 1)*//*));
-                    wallCords.add(new int[]{xx,yy});*/
                 }
                 if (blue == 255 && green == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, an));
@@ -393,16 +394,73 @@ public class Game extends Canvas implements Runnable {
         loaded = true;
     }
 
-    /*
-    Returns a random number between inclusive start and exclusive end.
+    /***
+     * This function always renders the background
+     * @param g Graphics object
+     */
+    private void renderBackground(Graphics g){
+        for (int i = 0; i < 30 * 72; i += 64) {
+            for (int j = 0; j < 30 * 72; j += 64) {
+                g.drawImage(floor, i, j, null);
+                // draws a random floor dirt texture on top of the current floor tile
+                switch (randomNumber(1, 4)) {
+                    case 1:
+                        g.drawImage(floorDirt1, i, j, null);
+                        break;
+                    case 2:
+                        g.drawImage(floorDirt2, i, j, null);
+                        break;
+                    case 3:
+                        g.drawImage(floorDirt3, i, j, null);
+                        break;
+                    default:
+                        // no action
+                        break;
+                }
+            }
+        }
+    }
+
+    /***
+     *     This function is responsible to make a new Thread and set the game to Running
+     */
+    private void start() {
+        isRunning = true;
+        thread = new Thread(this);
+        thread.start();
+    }
+
+    /***
+     * This function stops the current Instance of the game and stops Gameloop
+     */
+    private void stop() {
+        isRunning = false;
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+/* ---------- Public functions for game Class ----------- */
+
+    /***
+     * Returns a random number between inclusive start and exclusive end.
+     * @param start Start value
+     * @param end End value
+     * @return The Random number
      */
     public Integer randomNumber(int start, int end)
     {
         return new Random().ints(start, end).findFirst().getAsInt();
     }
 
+    /***
+     * A function inside the game calls to spawn the enemy's. it is static that i can be called in other classes
+     * @param x X value
+     * @param y Y value
+     */
     public static void SpawnEnemy(int x, int y){
-
         handler.addObject(new Enemy(x, y, ID.Enemy, handler, an));
     }
 
