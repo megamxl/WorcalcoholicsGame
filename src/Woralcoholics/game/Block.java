@@ -11,6 +11,15 @@ public class Block extends GameObject {
 
     private final BufferedImage block_img;
 
+    /**
+     * Creates the Wall tile
+     * @param x
+     * @param y
+     * @param id
+     * @param an
+     * @param col
+     * @param row
+     */
     public Block(int x, int y, ID id, Animations an, Integer col, Integer row) {
 
         super(x, y, id, an);

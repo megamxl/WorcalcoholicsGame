@@ -1,12 +1,11 @@
 package Woralcoholics.game;
-
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-
-// in this class the mouse input will happen
-
+/***
+ * in this class the mouse input  happens
+ */
 public class MouseInput extends MouseAdapter {
 
     private GameManager handler;

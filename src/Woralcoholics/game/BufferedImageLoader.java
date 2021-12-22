@@ -11,7 +11,9 @@ public class BufferedImageLoader {
     // gets the image as bufferd Image type
     private BufferedImage image;
 
-    // the function that returns the wanted image or throws exception
+    /***
+     * the function that returns the wanted image or throws exception
+     */
     public BufferedImage loadImage(String path) throws IOException {
         image = ImageIO.read(getClass().getResource(path));
         return image;

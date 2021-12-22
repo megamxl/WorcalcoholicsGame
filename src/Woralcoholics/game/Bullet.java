@@ -19,6 +19,13 @@ public class Bullet extends GameObject {
     }
 
 
+    /**
+     * map the mouse input to world coordinates
+     * @param mx
+     * @param my
+     * @param px
+     * @param py
+     */
     public void direction(double mx, double my, double px, double py) {
         //double c = Math.sqrt(Math.pow(mx,2) + Math.pow(my,2));
         double dx = mx - px;
@@ -31,6 +38,9 @@ public class Bullet extends GameObject {
         //System.out.println(velX + " " + velY);
     }
 
+    /**
+     * if bullet colloids with block remove it
+     */
     public void collision() {   //Collision Detection (Enemys, Blocks)
         for (int i = 0; i < handler.object.size(); i++) {
             GameObject tmpObject = handler.object.get(i);
@@ -44,6 +54,9 @@ public class Bullet extends GameObject {
         }
     }
 
+    /**
+     * if bullet gets out of bonce remove it
+     */
     public void ooB() {
         for (int i = 0; i < handler.object.size(); i++) {
             GameObject tmp = handler.object.get(i);
@@ -64,7 +77,6 @@ public class Bullet extends GameObject {
 
         collision();
         ooB();
-
     }
 
     @Override

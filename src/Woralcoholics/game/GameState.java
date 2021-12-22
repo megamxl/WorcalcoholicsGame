@@ -1,5 +1,8 @@
 package Woralcoholics.game;
 
+/**
+ * Game state enums
+ */
 public enum GameState {
     STUDIO,
     TITLE,

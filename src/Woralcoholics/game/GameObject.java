@@ -20,12 +20,22 @@ public abstract class GameObject {
         this.an = an;
     }
 
-    // this function is the update function, because it gets called every second x amount of times
-    // wee need this for making the calculation in our game
+    /**
+     * this function is the update function, because it gets called every second x amount of times
+     * wee need this for making the calculation in our game
+     */
     public abstract void update();
-    // the render function is there to tell the computer where to put the calculated values and how they should look
+
+    /**
+     *  the render function is there to tell the computer where to put the calculated values and how they should look
+     * @param g Graphics Objects
+     */
     public abstract void render(Graphics g);
-    // this method is going to be used for all objects that move to check for collision
+
+    /**
+     * this method is going to be used for all objects that move to check for collision
+     * @return the rectangle of collision
+     */
     public abstract Rectangle getBounds();
 
 

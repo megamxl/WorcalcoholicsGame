@@ -15,6 +15,10 @@ public class Camera {
         this.game = game;
     }
 
+    /**
+     * Updates the camara positions and makes the screnn shake on hit
+     * @param object Game
+     */
     public void update(GameObject object) {
 
         x += ((object.getX() - x) - 1024 / 2) * 0.05f; //*0.05f should make it more smooth
