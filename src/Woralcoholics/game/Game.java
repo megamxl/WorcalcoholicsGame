@@ -38,7 +38,7 @@ public class Game extends Canvas implements Runnable {
 
     public int ammo = 50;
     public int hp = 100;
-    
+
     // Classes
     private Thread thread;
 
