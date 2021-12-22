@@ -15,6 +15,7 @@ public class Player extends GameObject {
 
     GameManager handler;
     Game game;
+    Camera cam;
 
     private final BufferedImage player_img;
 
@@ -29,10 +30,11 @@ public class Player extends GameObject {
     private boolean IsSoundPlaying = false;
     private boolean IsSoundPlaying2 = false;
 
-    public Player(int x, int y, ID id, GameManager GameManager, Game game, Animations an) {
+    public Player(int x, int y, ID id, GameManager GameManager, Game game, Camera cam, Animations an) {
         super(x, y, id, an);
         this.handler = GameManager;
         this.game = game;
+        this.cam = cam;
 
         player_img = an.getImage(1,3,64,64);
 
@@ -244,97 +246,90 @@ public class Player extends GameObject {
         return new Rectangle((int)x+12,(int)y, 40, 62);
     }
 
+
     private void collision() {
         for (int i = 0; i < handler.object.size(); i++) {
 
             GameObject tempobject = handler.object.get(i);
 
-            if (tempobject.getId() == ID.Block) {
-                if (getBounds().intersects(tempobject.getBounds())) {
-                    // change movement
-                    // check for block coordinate to see where it is located in relation to the player
-                    // or make it dependent on key pressed?
+            if(getBounds().intersects((tempobject.getBounds()))) {  //If player collides with another object...
+                ID tempID = tempobject.getId();     //...get ID of said object...
+                switch(tempID){         //...and determine what should happen
+                    case Block -> {
+                        // change movement
+                        // check for block coordinate to see where it is located in relation to the player
+                        // or make it dependent on key pressed?
 
                     /*
                     System.out.println("WALL X: " + tempobject.getX());
                     System.out.println("PLAY X:" + x);
                      */
-                    if(x > tempobject.getX())
-                    {
-                        // is left from player
-                        // System.out.println("LEFT");
-                        if((x - 50) <= tempobject.getX())
+                        if(x > tempobject.getX())
                         {
-                            x += velX * -1;
+                            // is left from player
+                            // System.out.println("LEFT");
+                            if((x - 50) <= tempobject.getX())
+                            {
+                                x += velX * -1;
+                            }
                         }
-                    }
-                    else if (x < tempobject.getX())
-                    {
-                        // is right from player
-                        // System.out.println("RIGHT");
-                        if((x + 50) >= tempobject.getX())
+                        else if (x < tempobject.getX())
                         {
-                            x += velX * -1;
+                            // is right from player
+                            // System.out.println("RIGHT");
+                            if((x + 50) >= tempobject.getX())
+                            {
+                                x += velX * -1;
+                            }
                         }
-                    }
 
                     /*
                     System.out.println("WALL Y: " + tempobject.getY());
                     System.out.println("PLAY Y:" + y);
                      */
-                    y += velY * -1;
-                    // System.out.println("--------------");
-                }
-            }
-            if(tempobject.getId() == ID.Create) {
-                if (getBounds().intersects(tempobject.getBounds())) {
-                    game.ammo += 20;
-                    handler.removeObject(tempobject);
-                }
-            }
+                        y += velY * -1;
+                        // System.out.println("--------------");
+                    }
+                    case Crate -> {
+                        game.ammo += 20;
+                        handler.removeObject(tempobject);
+                    }
+                    case Enemy, EnemyBullet -> {
+                        try {
+                            new Thread(() -> {
 
-            if(tempobject.getId() == ID.Enemy || tempobject.getId() == ID.EnemyBullet) {    //If Player is hit by Enemy of EnemyBullet
-                ID temp = tempobject.getId();
-                if (getBounds().intersects(tempobject.getBounds())) {
-                    try {
-                        new Thread(() -> {
-
-                            try {
-                                playSoundHurt();
-                            } catch (LineUnavailableException e) {
-                                e.printStackTrace();
-                            } catch (UnsupportedAudioFileException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                try {
+                                    playSoundHurt();
+                                } catch (LineUnavailableException e) {
+                                    e.printStackTrace();
+                                } catch (UnsupportedAudioFileException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }).start();
+                        } catch (Exception e) {
+                            e.printStackTrace();}
+                        double now = System.currentTimeMillis();
+                        if (game.hp > 0 && now > wait) {    //if player has health and is not invincible
+                            switch (tempID) {
+                                case EnemyBullet -> {
+                                    handler.removeObject(tempobject);   //Remove Enemy Bullet if Player is hit
+                                    game.hp -= 20;
+                                }
+                                case Enemy -> game.hp -= 10;
                             }
-                        }).start();
-                    } catch (Exception e) {
-                        e.printStackTrace();}
-                    double now = System.currentTimeMillis();
-                    if (game.hp > 1 && now > wait) {
-                        switch (temp) {
-                            case EnemyBullet -> {
-                                handler.removeObject(tempobject);   //Remove Enemy Bullet if Player is hit
-                                game.hp -= 20;
-                            }
-                            case Enemy -> game.hp -= 10;
+                            cam.shake = true;
+                            wait = now + invincibleTime;
+                            // sound
                         }
-                        wait = now + invincibleTime;
-                        // sound
+                        if(game.hp == 0) {
+                            game.currentState = GameState.GAME_OVER;         //if the player has no HP left, its GAME OVER
+                        }
                     }
-                    if (game.hp == 1) {
-                        game.hp = game.hp - 1;
-                        System.out.println("Game Over!");
-                    }
-                    if(game.hp == 0){
-                        game.hp = 0;
-                    }
-
                 }
-
             }
         }
     }
