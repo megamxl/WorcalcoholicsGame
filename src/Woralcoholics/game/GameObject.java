@@ -38,7 +38,6 @@ public abstract class GameObject {
      */
     public abstract Rectangle getBounds();
 
-
     // getter and setters
     public /*int*/ float getX() {return x;}
 
@@ -76,6 +75,3 @@ public abstract class GameObject {
         this.id = id;
     }
 }
-
-
-
