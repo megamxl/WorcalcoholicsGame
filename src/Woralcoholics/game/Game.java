@@ -57,7 +57,7 @@ public class Game extends Canvas implements Runnable {
         start();
 
         handler = new GameManager();
-        camera = new Camera(0, 0);
+        camera = new Camera(0, 0, this);
         // when finished implement the Mouse and Key input
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("level01.png");
         level = ImageIO.read(path);
@@ -121,7 +121,7 @@ public class Game extends Canvas implements Runnable {
      * in every frame check where player is and update camera position
      */
     public void update() {
-        if(currentState == GameState.STUDIO) {
+        if(currentState == GameState.STUDIO) {      //initially show the studio for a few seconds
             double now = System.currentTimeMillis();
             if(now > STUDIO_WAIT) {
                 currentState = GameState.TITLE;
@@ -138,9 +138,6 @@ public class Game extends Canvas implements Runnable {
                 }
             }
             handler.update();
-            if(hp == 0) {
-                currentState = GameState.GAME_OVER;         //if the player has no HP left, its GAME OVER
-            }
         }
     }
 
@@ -189,11 +186,12 @@ public class Game extends Canvas implements Runnable {
     private void stateChange() {
         if(currentState == GameState.LEVEL) {
             if(!loaded) {                   //if no level is loaded, load the level
-                Enemy.waves = 1;
+                Enemy.waves = 1;            //reset Enemy waves
                 Enemy.enemysAlive = 0;
-                loadLevel(level);
-                hp = 100;
+                loadLevel(level);           //load the level
+                hp = 100;                   //reset player specific values
                 ammo = 50;
+                camera.shake = false;
 
                 //System.out.println(handler.object.size());
             }
@@ -348,9 +346,9 @@ public class Game extends Canvas implements Runnable {
         }
         if(!loaded) {   //unload method (clear the object list)
             while(handler.object.size() > 0) {
-                System.out.println(handler.object.get(0).getId());
+                //System.out.println(handler.object.get(0).getId());
                 handler.object.remove(0);
-                System.out.println(handler.object.size());
+                //System.out.println(handler.object.size());
             }
 
         }
@@ -378,7 +376,7 @@ public class Game extends Canvas implements Runnable {
                     wallCords.add(new int[]{xx,yy});
                 }
                 if (blue == 255 && green == 0) {
-                    handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, an));
+                    handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, an));
                 }
                 if (green == 255) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an));
