@@ -223,7 +223,7 @@ public class Enemy extends GameObject {
         }
     }
 
-    private void checkIfGone() {
+    public void checkIfGone() {
         if ((y > 1054 || y < 64) || (x > 1900 || x < 0)) {
             removeWithObject(this);
             Spawner(1, true);

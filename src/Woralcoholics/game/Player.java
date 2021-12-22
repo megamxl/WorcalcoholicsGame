@@ -246,7 +246,20 @@ public class Player extends GameObject {
         return new Rectangle((int)x+12,(int)y, 40, 62);
     }
 
+    /**
+     * if player goes out of bounce ste him to the spawn point
+     */
+    private void checkIfGone() {
+        if ((y > 1054 || y < 64) || (x > 1900 || x < 0)) {
+            x = Game.PlayerX;
+            y = Game.PlayerY;
+        }
+    }
 
+
+    /***
+     * Collision Detection function for the Player
+     */
     private void collision() {
         for (int i = 0; i < handler.object.size(); i++) {
 
@@ -288,7 +301,6 @@ public class Player extends GameObject {
                     System.out.println("PLAY Y:" + y);
                      */
                         y += velY * -1;
-                        // System.out.println("--------------");
                     }
                     case Crate -> {
                         game.ammo += 20;

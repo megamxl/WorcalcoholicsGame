@@ -1,6 +1,7 @@
 package Woralcoholics.game;
 
 import javax.imageio.ImageIO;
+import javax.swing.plaf.PanelUI;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -38,6 +39,8 @@ public class Game extends Canvas implements Runnable {
 
     public int ammo = 50;
     public int hp = 100;
+    public static int PlayerX = 0;
+    public static int  PlayerY = 0;
 
     // Classes
     private Thread thread;
@@ -81,7 +84,7 @@ public class Game extends Canvas implements Runnable {
 
 
     @Override
-    /***
+    /**
      * this is a well-known game loop also used in minecraft for making no difference how fast or slow you computer performance
      * so that the calculation are made at equal times no matter the computer
      */
@@ -109,7 +112,7 @@ public class Game extends Canvas implements Runnable {
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                System.out.println(updates + " Ticks, Fps " + frames);
+                //System.out.println(updates + " Ticks, Fps " + frames);
                 updates = 0;
                 frames = 0;
             }
@@ -363,6 +366,7 @@ public class Game extends Canvas implements Runnable {
         int w = image.getWidth();
         int i= 0;
 
+
         for (int xx = 0; xx < w; xx++) {
             for (int yy = 0; yy < h; yy++) {
                 int pixel = image.getRGB(xx, yy);
@@ -377,6 +381,8 @@ public class Game extends Canvas implements Runnable {
                 }
                 if (blue == 255 && green == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, an));
+                    PlayerX =xx;
+                    PlayerY =yy;
                 }
                 if (green == 255) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an));
@@ -468,7 +474,6 @@ public class Game extends Canvas implements Runnable {
             new Game();
         } catch (IOException e) {
             e.printStackTrace();
-            new Game();
         }
     }
 }

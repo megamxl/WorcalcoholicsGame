@@ -5,6 +5,13 @@ import java.awt.*;
 
 public class Window {
 
+    /***
+     * The Window creation class
+     * @param with Window with
+     * @param height Window height
+     * @param title Window Title
+     * @param game The Class which
+     */
     public Window(int with, int height, String title, Game game) {
 
         JFrame frame = new JFrame(title);

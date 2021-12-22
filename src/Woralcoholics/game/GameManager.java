@@ -20,6 +20,10 @@ public class GameManager {
     Clip sound;
     public int soundv=1;
 
+
+    /**
+     * updates the all tempobjects in the Linked list
+     */
     public void update() {
         for (int i = 0; i < object.size(); i++) {
             try {
@@ -34,6 +38,9 @@ public class GameManager {
 
     }
 
+    /**
+     * renders the all tempobjects in the Linked list
+     */
     public void render(Graphics g) {
         for (int i = 0; i < object.size(); i++) {
             GameObject tempObject = object.get(i);

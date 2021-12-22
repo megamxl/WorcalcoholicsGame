@@ -12,6 +12,18 @@ public class UIButton extends GameObject{
     private String name;
     private GameState nextState;
 
+    /**
+     *  Constructor for UI buttons
+     * @param x X value of the button
+     * @param y Y value of the button
+     * @param width
+     * @param height
+     * @param name
+     * @param nextState
+     * @param id
+     * @param game
+     * @param an
+     */
     public UIButton(int x, int y, int width, int height, String name, GameState nextState, ID id, /*GameManager handler,*/ Game game, Animations an) {
         super(x, y, id, an);
         this.width = width;

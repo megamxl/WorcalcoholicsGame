@@ -16,7 +16,7 @@ public class KeyInput extends KeyAdapter {
     }
 
     @Override
-    /*
+    /**
     Checks if the A, D, W or S keys are getting pressed and sets the according boolean value of
     the gameManager Class to true.
      */
@@ -66,7 +66,7 @@ public class KeyInput extends KeyAdapter {
     }
 
     @Override
-    /*
+    /**
     Checks if the A, D, W or S keys are getting released and sets the according boolean value of
     the gameManager Class to false.
      */
