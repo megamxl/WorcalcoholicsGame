@@ -433,7 +433,7 @@ public class Game extends Canvas implements Runnable {
                     case 2 -> currentState = GameState.UPGRADE_MENU;     //change state to UPGRADE_MENU (because of rendering)
                     case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
                 }
-                shouldTime =false;  //deactivate the timer
+                shouldTime = false;  //deactivate the timer
             }
         }//System.out.println(TimerValue);
     }
