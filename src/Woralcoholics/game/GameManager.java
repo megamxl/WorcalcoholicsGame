@@ -13,6 +13,7 @@ public class GameManager {
     // making a linked list for storing all our GameObjects, so we can iterate threw ist every frame when we want to compare
     // or render
     LinkedList<GameObject> object = new LinkedList<GameObject>();
+    LinkedList<Object> enemy = new LinkedList<Object>();
 
     //In this script we define the 4 ways somebody can walk and set and get them
     private boolean up = false, down = false, right = false, left = false;

@@ -169,6 +169,8 @@ public class Game extends Canvas implements Runnable {
         //if we are not in the level, render a menu
         if(currentState != GameState.LEVEL) {
             renderMenu(g);
+            handler.enemy.removeAll(handler.enemy);
+            //System.out.println("SPAWN" + handler.enemy.size());
         }
         else {
                 renderBackground(g);

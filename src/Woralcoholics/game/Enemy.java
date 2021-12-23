@@ -101,7 +101,6 @@ public class Enemy extends GameObject {
             if (tmpObject.getId() == ID.Player) {
 
                 if (hittedwall == false) {
-
                     // enemy behaviour
                     if (tmpObject.getX() + 6 >= x && tmpObject.getX() - 6 <= x) {
                         velX = 0;
@@ -193,6 +192,7 @@ public class Enemy extends GameObject {
 
     /**
      * check if enemy bounds with an Rectangle
+     *
      * @return
      */
     public Rectangle getBounds() {
@@ -201,6 +201,7 @@ public class Enemy extends GameObject {
 
     /**
      * check if enemy bounds with an Rectangle bigger than the actual enemy
+     *
      * @return
      */
     public Rectangle getBoundsAround() {
@@ -233,7 +234,7 @@ public class Enemy extends GameObject {
     public void checkIfGone() {
         if ((y > 1054 || y < 64) || (x > 1900 || x < 0)) {
             removeWithObject(this);
-            Spawner(1, true,r);
+            Spawner(1, true, r);
         }
     }
 
