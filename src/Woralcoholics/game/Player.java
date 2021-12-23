@@ -1,9 +1,6 @@
 package Woralcoholics.game;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -183,9 +180,20 @@ public class Player extends GameObject {
         if(IsSoundPlaying==false) {
             IsSoundPlaying=true;
             Clip sound = AudioSystem.getClip();
-            Path relativePath = Paths.get("Resource/move.wav");
+            Path relativePath = Paths.get("Resource/move5.wav");
             Path absolutePath = relativePath.toAbsolutePath();
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+            FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+            if (handler.soundv == 0) {
+                volume.setValue(-80f); // MUTE
+                //System.out.println("VOLUME MUTE + " +volume.toString());
+            } else if (handler.soundv == 1) {
+                volume.setValue(-15f); // DEFAULT -> balanced default sound
+                //System.out.println("VOLUME DEFAULT + " +volume.toString());
+            } else if (handler.soundv == 2) {
+                volume.setValue(6.0206f); // Maximum
+                //System.out.println("VOLUME UP + " +volume.toString());
+            }
             sound.start();
             Thread.sleep(100);
             sound.stop();
@@ -211,6 +219,17 @@ public class Player extends GameObject {
             Path relativePath = Paths.get("Resource/playerhurt.wav");
             Path absolutePath = relativePath.toAbsolutePath();
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+            FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+            if (handler.soundv == 0) {
+                volume.setValue(-80f); // NormalSound
+                //System.out.println("VOLUME MUTE + " +volume.toString());
+            } else if (handler.soundv == 1) {
+                volume.setValue(-20f); // DEFAULT
+                //System.out.println("VOLUME DEFAULT + " +volume.toString());
+            } else if (handler.soundv == 2) {
+                volume.setValue(6.0206f); // Maximum
+                //System.out.println("VOLUME UP + " +volume.toString());
+            }
             sound.start();
             Thread.sleep(1000);
             sound.stop();

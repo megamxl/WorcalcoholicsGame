@@ -329,8 +329,9 @@ public class Game extends Canvas implements Runnable {
         g.drawRect(5, 30, 200, 16); //ammo
 
         g.setColor(Color.MAGENTA);
-        g.drawString("Waves "+ Enemy.waves,930,17);
-        g.drawString("Enemies "+ Enemy.enemysAlive,910,40);
+        g.drawString("Sound "+ handler.soundv,930,17);
+        g.drawString("Waves "+ Enemy.waves,930,40);
+        g.drawString("Enemies "+ Enemy.enemysAlive,915,63);
 
         if(shouldTime) {
             g.setColor(Color.YELLOW);

@@ -18,7 +18,7 @@ public class GameManager {
     private boolean up = false, down = false, right = false, left = false;
     private boolean ll = false, kk = false, mm = false;
     Clip sound;
-    public int soundv = 1;
+    public int soundv = 1; //default value for -20f sound
 
 
     /**
@@ -131,11 +131,11 @@ public class GameManager {
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
         if (soundv == 0) {
-            volume.setValue(-80f); // NormalSound
+            volume.setValue(-80f); // MUTE
             //System.out.println("VOLUME MUTE + " +volume.toString());
         } else if (soundv == 1) {
-            volume.setValue(0f); // Minimum
-            //System.out.println("VOLUME DOWN + " +volume.toString());
+            volume.setValue(-10f); // DEFAULT -> more than -20 because the sound is per default very quietly
+            //System.out.println("VOLUME DEFAULT + " +volume.toString());
         } else if (soundv == 2) {
             volume.setValue(6.0206f); // Maximum
             //System.out.println("VOLUME UP + " +volume.toString());
@@ -150,22 +150,22 @@ public class GameManager {
         if (!ammo) {
             relativePath = Paths.get("Resource/gunzeroammo.wav");
         } else {
-            relativePath = Paths.get("Resource/gunplayer1.wav");
+            relativePath = Paths.get("Resource/gunplayer2.wav");
         }
         Path absolutePath = relativePath.toAbsolutePath();
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
         if (soundv == 0) {
-            volume.setValue(-80f); // NormalSound
+            volume.setValue(-80f); // MUTE
             //System.out.println("VOLUME MUTE + " +volume.toString());
         } else if (soundv == 1) {
-            volume.setValue(0f); // Minimum
-            //System.out.println("VOLUME DOWN + " +volume.toString());
+            volume.setValue(-20f); // Default
+            //System.out.println("VOLUME DEFAULT + " +volume.toString());
         } else if (soundv == 2) {
             volume.setValue(6.0206f); // Maximum
             //System.out.println("VOLUME UP + " +volume.toString());
         }
         sound.start();
-        Thread.sleep(100000);
+        Thread.sleep(10000);
     }
 }
