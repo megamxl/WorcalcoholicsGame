@@ -38,7 +38,7 @@ public class Enemy extends GameObject {
 
     static int enemysAlive = 0;
     static int waves = 1;
-    final int upgradeAfterWave = 4;     //After how many Waves an Upgrade should be granted
+    final int upgradeAfterWave = 3;     //After how many Waves an Upgrade should be granted
 
     public Enemy(int x, int y, ID id, GameManager manager, Animations an) {
         super(x, y, id, an);
@@ -87,10 +87,15 @@ public class Enemy extends GameObject {
                     removeWithObject(tmpObject);
                     if (enemysAlive <= 0) {
                         waves++;
-                        if(waves-1 % upgradeAfterWave == 0) {
+                        if((waves-1) % upgradeAfterWave == 0) {
                             Game.TimerValue = 0;    //0 secs (actually just to unrender the last enemy and bullet)
                             Game.shouldTime = true; //activate Timer
                             Game.timerAction = 2;   //execute timerAction 2 -> wait a bit
+                        }
+                        else {
+                            Game.TimerValue = 5;    //5 secs to spawn next wave
+                            Game.shouldTime = true; //activate Timer
+                            Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
                         }
 
 
