@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
-
+import java.util.concurrent.TimeUnit;
 
 /**
  * Enemy Class
@@ -17,11 +17,14 @@ public class Enemy extends GameObject {
 
     private final BufferedImage enemy_img;
 
+
     //Handler is for collision detection
     private GameManager manager;
     Random r = new Random();
     int choose = 0;
     int hp = 100;
+    public static boolean waited = false;
+
     /**
      * low and high values for different variations of enemy behaviour
      */
@@ -86,7 +89,8 @@ public class Enemy extends GameObject {
                     hp -= 110;
                     removeWithObject(tmpObject);
                     if (enemysAlive <= 0) {
-                        Spawner(waves++, false);
+                        Game.TimerValue = 5;
+                        Game.shouldTime = true;
                     }
                     //System.out.println("es sind " + enemysAlive +" enemys am leben");
                 }
@@ -179,6 +183,7 @@ public class Enemy extends GameObject {
         collision();
 
         isDead();
+
     }
 
 
@@ -202,7 +207,7 @@ public class Enemy extends GameObject {
         return new Rectangle((int) x, (int) y, 32, 32);
     }
 
-    private void Spawner(int Wavesize, boolean solo) {
+    public static void Spawner(int Wavesize, boolean solo, Random r) {
         if (solo) {
             Wavesize = 1;
         } else {
@@ -210,6 +215,8 @@ public class Enemy extends GameObject {
         }
 
         for (int i = 0; i < Wavesize; i++) {
+            int x = 0;
+            int y = 0;
             x = r.nextInt(((55 * 32) - 1) - 1);
             y = r.nextInt(((55 * 32) - 1) - 1);
 
@@ -226,9 +233,11 @@ public class Enemy extends GameObject {
     public void checkIfGone() {
         if ((y > 1054 || y < 64) || (x > 1900 || x < 0)) {
             removeWithObject(this);
-            Spawner(1, true);
+            Spawner(1, true,r);
         }
     }
+
+
 }
 
 // method of playing sound

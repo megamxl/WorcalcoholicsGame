@@ -26,7 +26,8 @@ public class Game extends Canvas implements Runnable {
 
     private boolean isRunning;
     protected boolean paused, loaded;
-    public static boolean renderOnlyOneTime= true;
+    public static boolean shouldTime = false;
+    public static boolean spawn = false;
 
     private BufferedImage level = null;
     private BufferedImage spritesheet = null;
@@ -40,7 +41,8 @@ public class Game extends Canvas implements Runnable {
     public int ammo = 50;
     public int hp = 100;
     public static int PlayerX = 0;
-    public static int  PlayerY = 0;
+    public static int PlayerY = 0;
+    public static int TimerValue;
 
     // Classes
     private Thread thread;
@@ -50,6 +52,8 @@ public class Game extends Canvas implements Runnable {
     private static Animations an;
 
     private Camera camera;
+
+    Random r = new Random();
 
 /* ------------- Constructor for Game Class -------------- */
 
@@ -111,6 +115,9 @@ public class Game extends Canvas implements Runnable {
             frames++;
 
             if (System.currentTimeMillis() - timer > 1000) {
+                if(shouldTime){
+                    timer();
+                }
                 timer += 1000;
                 //System.out.println(updates + " Ticks, Fps " + frames);
                 updates = 0;
@@ -142,6 +149,7 @@ public class Game extends Canvas implements Runnable {
             }
             handler.update();
         }
+
     }
 
     /***
@@ -163,9 +171,7 @@ public class Game extends Canvas implements Runnable {
             renderMenu(g);
         }
         else {
-            if(renderOnlyOneTime) {
                 renderBackground(g);
-            }
             //translates our screen
             g2d.translate(-camera.getX(), -camera.getY());
 
@@ -326,6 +332,11 @@ public class Game extends Canvas implements Runnable {
         g.drawString("Waves "+ Enemy.waves,930,17);
         g.drawString("Enemies "+ Enemy.enemysAlive,910,40);
 
+        if(shouldTime) {
+            g.setColor(Color.YELLOW);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
+            g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
+        }
     }
 
     /***
@@ -396,6 +407,20 @@ public class Game extends Canvas implements Runnable {
         }
         //handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an)); //Test Gunner
         loaded = true;
+    }
+
+    /**
+     * just a counter that gets decreased thanks to our game loop
+     */
+    private void timer(){
+        if(TimerValue > 0){
+            TimerValue --;
+        }
+        else{
+            if(shouldTime)
+                Enemy.Spawner(Enemy.waves,false,r);
+            shouldTime =false;
+        }//System.out.println(TimerValue);
     }
 
     /***

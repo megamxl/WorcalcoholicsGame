@@ -59,17 +59,13 @@ public class Player extends GameObject {
             try{
                 handler.soundv=1;}
             catch (Exception ex)
-            {
-
-            }
+            {}
         }
         if (handler.isM()) {
             try{
                 handler.soundv=0;}
             catch (Exception ex)
-            {
-
-            }
+            {}
         }
 
         if(movingVertical && movingHorizontal) {
@@ -85,7 +81,6 @@ public class Player extends GameObject {
             movingVertical = true;
             try {
                 new Thread(() -> {
-
                     try {
                         playSound();
                     } catch (LineUnavailableException e) {
@@ -107,7 +102,6 @@ public class Player extends GameObject {
             movingVertical = true;
             try {
                 new Thread(() -> {
-
                     try {
                         playSound();
                     } catch (LineUnavailableException e) {
@@ -134,7 +128,6 @@ public class Player extends GameObject {
             movingHorizontal = true;
             try {
                 new Thread(() -> {
-
                     try {
                         playSound();
                     } catch (LineUnavailableException e) {
@@ -177,8 +170,6 @@ public class Player extends GameObject {
             velX = 0;
             movingHorizontal = false;
         }
-
-
     }
 
     /**
@@ -203,7 +194,6 @@ public class Player extends GameObject {
         else
         {
             //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
-
         }
     }
 
@@ -229,7 +219,6 @@ public class Player extends GameObject {
         else
         {
             //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
-
         }
     }
 
@@ -247,7 +236,7 @@ public class Player extends GameObject {
     }
 
     /**
-     * if player goes out of bounce ste him to the spawn point
+     * if player goes out of bounce set him to the spawn point
      */
     private void checkIfGone() {
         if ((y > 1054 || y < 64) || (x > 1900 || x < 0)) {
@@ -256,13 +245,11 @@ public class Player extends GameObject {
         }
     }
 
-
-    /***
+    /**
      * Collision Detection function for the Player
      */
     private void collision() {
         for (int i = 0; i < handler.object.size(); i++) {
-
             GameObject tempobject = handler.object.get(i);
 
             if(getBounds().intersects((tempobject.getBounds()))) {  //If player collides with another object...
@@ -272,22 +259,14 @@ public class Player extends GameObject {
                         // change movement
                         // check for block coordinate to see where it is located in relation to the player
                         // or make it dependent on key pressed?
-
-                    /*
-                    System.out.println("WALL X: " + tempobject.getX());
-                    System.out.println("PLAY X:" + x);
-                     */
-                        if(x > tempobject.getX())
-                        {
+                        if(x > tempobject.getX()) {
                             // is left from player
                             // System.out.println("LEFT");
-                            if((x - 50) <= tempobject.getX())
-                            {
+                            if((x - 50) <= tempobject.getX()) {
                                 x += velX * -1;
                             }
                         }
-                        else if (x < tempobject.getX())
-                        {
+                        else if (x < tempobject.getX()) {
                             // is right from player
                             // System.out.println("RIGHT");
                             if((x + 50) >= tempobject.getX())
@@ -295,7 +274,6 @@ public class Player extends GameObject {
                                 x += velX * -1;
                             }
                         }
-
                     /*
                     System.out.println("WALL Y: " + tempobject.getY());
                     System.out.println("PLAY Y:" + y);
