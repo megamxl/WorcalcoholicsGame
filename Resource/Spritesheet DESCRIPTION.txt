@@ -17,3 +17,5 @@ pos(spalte,zeile)
 03 Bullet			pos(3,5)
 
 04 Enemy       			pos(1,7)
+
+05 Enemy		64x64	pos(1,9)

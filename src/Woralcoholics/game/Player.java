@@ -247,6 +247,10 @@ public class Player extends GameObject {
 
     /**
      * Collision Detection function for the Player
+     * IMPORTANT:
+     * The collision system is still WIP,
+     * since colliding with a wall, disables even the movement alongside it as of right now.
+     * Thats why the code is still a bit messy!!!
      */
     private void collision() {
         for (int i = 0; i < handler.object.size(); i++) {

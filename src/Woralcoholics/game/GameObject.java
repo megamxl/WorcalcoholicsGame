@@ -2,7 +2,7 @@ package Woralcoholics.game;
 
 import java.awt.*;
 
-// we make this class abstract so it can only be extended bunt not initialized
+// we made this class abstract, so that it can only be extended but not initialized
 public abstract class GameObject {
 
     // location of object
@@ -38,8 +38,7 @@ public abstract class GameObject {
      */
     public abstract Rectangle getBounds();
 
-
-    // getter and setters
+    // getters and setters
     public /*int*/ float getX() {return x;}
 
     public void setX(int x) {
@@ -76,6 +75,3 @@ public abstract class GameObject {
         this.id = id;
     }
 }
-
-
-

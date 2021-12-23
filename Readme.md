@@ -1,4 +1,4 @@
-To satrt the game
+To start the game
 
 Go to the Game class scroll dow to the last function the Public static void man and lauch it. 
 
