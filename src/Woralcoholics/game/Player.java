@@ -198,7 +198,7 @@ public class Player extends GameObject {
     }
 
     /**
-     * plays the ssound for the player
+     * plays the sound for the player
      * @throws LineUnavailableException
      * @throws UnsupportedAudioFileException
      * @throws IOException

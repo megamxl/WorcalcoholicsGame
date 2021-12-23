@@ -1,7 +1,11 @@
 package Woralcoholics.game;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 /***
  * in this class the mouse input  happens
@@ -16,6 +20,7 @@ public class MouseInput extends MouseAdapter {
 
     private double wait;
     private final double del = 200;
+    private boolean ammo = true;
 
     public MouseInput(GameManager handler, Camera camera, Game game, Animations an) {
         this.handler = handler;
@@ -33,19 +38,19 @@ public class MouseInput extends MouseAdapter {
         }
         Point currentPos = e.getPoint();    //Grab current cursor position
         int button = e.getButton(); //Grab pressed button
-        switch(game.currentState) {
+        switch (game.currentState) {
             case TITLE -> {
-                if(button == 1) game.currentState = GameState.MAIN_MENU;
+                if (button == 1) game.currentState = GameState.MAIN_MENU;
             }
             case MAIN_MENU -> {
-                if(button == 1) game.currentState = GameState.LEVEL;
-                if(button == 3) game.currentState = GameState.OPTIONS;
+                if (button == 1) game.currentState = GameState.LEVEL;
+                if (button == 3) game.currentState = GameState.OPTIONS;
             }
             case OPTIONS -> {
-                if(button == 3) game.currentState = GameState.MAIN_MENU;
+                if (button == 3) game.currentState = GameState.MAIN_MENU;
             }
             case PAUSE_MENU -> {
-                if(button == 3) game.currentState = GameState.LEVEL;
+                if (button == 3) game.currentState = GameState.LEVEL;
             }
             case LEVEL -> {
                 //currentPos.translate(-500, -282);
@@ -58,20 +63,41 @@ public class MouseInput extends MouseAdapter {
                         //System.out.println("BUTTON 1");
                         double now = System.currentTimeMillis();
                         //IF waiting time is over AND player has ammo -> shoot a bullet
-                        if(now > wait && game.ammo >= 1) {
+                        if (now > wait && game.ammo >= 1) {
                             //Add camera pos, as bullets don't aim correctly otherwise
                             double mx = currentPos.x + camera.getX();
                             double my = currentPos.y + camera.getY();
                             //Middle of player coordinates
-                            double px = player.getX()+32;
-                            double py = player.getY()+32;
+                            double px = player.getX() + 32;
+                            double py = player.getY() + 32;
                             //Create a new bullet in the middle of player sprite (minus the bullet radius)
-                            Bullet temp = new Bullet((int)px-4, (int)py-4, ID.Bullet, handler, an);
+                            Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
                             temp.direction(mx, my, px, py); //Calculate the direction of this bullet
                             handler.addObject(temp);    //Add the Bullet to the ObjectList
                             game.ammo--;    //Subtract 1 from ammo (bullet was shot)
                             //aSystem.out.println(game.ammo);
                             wait = now + del;   //Waiting time for next viable Input
+                            if (game.ammo <= 0) {
+                                ammo = false;
+                            }
+                            try {
+                                new Thread(() -> {
+
+                                    try {
+                                        handler.playSoundGun(ammo);
+                                    } catch (LineUnavailableException ex) {
+                                        ex.printStackTrace();
+                                    } catch (UnsupportedAudioFileException ex) {
+                                        ex.printStackTrace();
+                                    } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                    } catch (InterruptedException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }).start();
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
+                            }
                         }
                     }
                     case 2 -> System.out.println("BUTTON 2");
@@ -91,7 +117,7 @@ public class MouseInput extends MouseAdapter {
                 //System.out.println(player.getX()+16 + " " + player.getY()+24);
             }
             case GAME_OVER -> {
-                if(button == 1) {
+                if (button == 1) {
                     game.currentState = GameState.LEVEL;
                 }
             }
@@ -109,9 +135,9 @@ public class MouseInput extends MouseAdapter {
     }
 
     public ID getIDAt(float x, float y) {   //Method for identifying objects
-        for(int i = 0; i < handler.object.size(); i++) {
+        for (int i = 0; i < handler.object.size(); i++) {
             GameObject temp = handler.object.get(i);
-            if(temp.getBounds().contains(x, y)) {
+            if (temp.getBounds().contains(x, y)) {
                 return temp.getId();
             }
         }

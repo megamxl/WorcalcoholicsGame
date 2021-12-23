@@ -16,9 +16,9 @@ public class GameManager {
 
     //In this script we define the 4 ways somebody can walk and set and get them
     private boolean up = false, down = false, right = false, left = false;
-    private boolean ll = false, kk = false,mm = false;
+    private boolean ll = false, kk = false, mm = false;
     Clip sound;
-    public int soundv=1;
+    public int soundv = 1;
 
 
     /**
@@ -86,24 +86,31 @@ public class GameManager {
     public boolean isLeft() {
         return left;
     }
+
     public void setLeft(boolean left) {
         this.left = left;
     }
+
     public boolean isL() {
         return ll;
     }
+
     public void setL(boolean l) {
         this.ll = l;
     }
+
     public boolean isK() {
         return kk;
     }
+
     public void setK(boolean k) {
         this.kk = k;
     }
+
     public boolean isM() {
         return mm;
     }
+
     public void setM(boolean m) {
         this.mm = m;
     }
@@ -111,29 +118,50 @@ public class GameManager {
 
     /**
      * plays the sound for the enemy
+     *
      * @throws LineUnavailableException
      * @throws UnsupportedAudioFileException
      * @throws IOException
      * @throws InterruptedException
      */
-    public void playSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+    public void playSoundEnemy() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         sound = AudioSystem.getClip();
         Path relativePath = Paths.get("Resource/enemyhurt2.wav");
         Path absolutePath = relativePath.toAbsolutePath();
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
-        if(soundv==0)
-        {
+        if (soundv == 0) {
             volume.setValue(-80f); // NormalSound
             //System.out.println("VOLUME MUTE + " +volume.toString());
-        }
-        else if(soundv==1)
-        {
+        } else if (soundv == 1) {
             volume.setValue(0f); // Minimum
             //System.out.println("VOLUME DOWN + " +volume.toString());
+        } else if (soundv == 2) {
+            volume.setValue(6.0206f); // Maximum
+            //System.out.println("VOLUME UP + " +volume.toString());
         }
-        else if(soundv==2)
-        {
+        sound.start();
+        Thread.sleep(100000);
+    }
+
+    public void playSoundGun(boolean ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        sound = AudioSystem.getClip();
+        Path relativePath;
+        if (!ammo) {
+            relativePath = Paths.get("Resource/gunzeroammo.wav");
+        } else {
+            relativePath = Paths.get("Resource/gunplayer1.wav");
+        }
+        Path absolutePath = relativePath.toAbsolutePath();
+        sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+        FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+        if (soundv == 0) {
+            volume.setValue(-80f); // NormalSound
+            //System.out.println("VOLUME MUTE + " +volume.toString());
+        } else if (soundv == 1) {
+            volume.setValue(0f); // Minimum
+            //System.out.println("VOLUME DOWN + " +volume.toString());
+        } else if (soundv == 2) {
             volume.setValue(6.0206f); // Maximum
             //System.out.println("VOLUME UP + " +volume.toString());
         }
