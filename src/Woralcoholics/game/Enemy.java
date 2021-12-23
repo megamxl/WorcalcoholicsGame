@@ -146,7 +146,7 @@ public class Enemy extends GameObject {
             new Thread(() -> {
 
                 try {
-                    manager.playSound();
+                    manager.playSoundEnemy();
                 } catch (LineUnavailableException e) {
                     e.printStackTrace();
                 } catch (UnsupportedAudioFileException e) {

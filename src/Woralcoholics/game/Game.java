@@ -329,8 +329,9 @@ public class Game extends Canvas implements Runnable {
         g.drawRect(5, 30, 200, 16); //ammo
 
         g.setColor(Color.MAGENTA);
-        g.drawString("Waves "+ Enemy.waves,930,17);
-        g.drawString("Enemies "+ Enemy.enemysAlive,910,40);
+        g.drawString("Sound "+ handler.soundv,930,17);
+        g.drawString("Waves "+ Enemy.waves,930,40);
+        g.drawString("Enemies "+ Enemy.enemysAlive,915,63);
 
         if(shouldTime) {
             g.setColor(Color.YELLOW);
@@ -392,8 +393,8 @@ public class Game extends Canvas implements Runnable {
                 }
                 if (blue == 255 && green == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, an));
-                    PlayerX =xx;
-                    PlayerY =yy;
+                    PlayerX =xx *32;
+                    PlayerY =yy *32;
                 }
                 if (green == 255) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an));
@@ -419,6 +420,7 @@ public class Game extends Canvas implements Runnable {
         else{
             if(shouldTime)
                 Enemy.Spawner(Enemy.waves,false,r);
+                Enemy.waves ++;
             shouldTime =false;
         }//System.out.println(TimerValue);
     }
