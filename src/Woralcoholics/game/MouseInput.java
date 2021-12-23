@@ -104,6 +104,26 @@ public class MouseInput extends MouseAdapter {
                                 exception.printStackTrace();
                             }
                         }
+                        else {
+                            try {
+                                new Thread(() -> {
+
+                                    try {
+                                        handler.playSoundGun(ammo);
+                                    } catch (LineUnavailableException ex) {
+                                        ex.printStackTrace();
+                                    } catch (UnsupportedAudioFileException ex) {
+                                        ex.printStackTrace();
+                                    } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                    } catch (InterruptedException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }).start();
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
+                            }
+                        }
                     }
                     case 2 -> System.out.println("BUTTON 2");
                     case 3 -> Game.setState(GameState.PAUSE_MENU);

@@ -160,7 +160,11 @@ public class GameManager {
             volume.setValue(-80f); // MUTE
             //System.out.println("VOLUME MUTE + " +volume.toString());
         } else if (soundv == 1) {
-            volume.setValue(-20f); // Default
+            if (!ammo) {
+                volume.setValue(-5f); //Default adjusted
+            } else {
+                volume.setValue(-20f); // Default
+            }
             //System.out.println("VOLUME DEFAULT + " +volume.toString());
         } else if (soundv == 2) {
             volume.setValue(6.0206f); // Maximum
