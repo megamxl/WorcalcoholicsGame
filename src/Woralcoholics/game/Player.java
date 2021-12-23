@@ -360,7 +360,7 @@ public class Player extends GameObject {
                             // sound
                         }
                         if (game.hp == 0) {
-                            game.currentState = GameState.GAME_OVER;         //if the player has no HP left, its GAME OVER
+                            Game.setState(GameState.GAME_OVER);         //if the player has no HP left, its GAME OVER
                         }
                     }
                 }

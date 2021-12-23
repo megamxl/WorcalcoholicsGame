@@ -29,37 +29,21 @@ public class KeyInput extends KeyAdapter {
             }
         }
         int key = e.getKeyCode();
-        switch(game.currentState) {
+        switch(Game.getState()) {
             case MAIN_MENU -> {
-                if(key == KeyEvent.VK_SPACE) game.currentState = GameState.LEVEL;
+                if(key == KeyEvent.VK_SPACE) Game.setState(GameState.LEVEL);
             }
             case LEVEL -> {
-                switch(key) {
-                    case KeyEvent.VK_A:
-                        gameManager.setLeft(true);
-                        break;
-                    case KeyEvent.VK_D:
-                        gameManager.setRight(true);
-                        break;
-                    case KeyEvent.VK_W:
-                        // try to check for some collision parameters
-                        gameManager.setUp(true);
-                        break;
-                    case KeyEvent.VK_S:
-                        gameManager.setDown(true);
-                        break;
-                    case KeyEvent.VK_L:
-                        gameManager.setL(true);
-                        break;
-                    case KeyEvent.VK_M:
-                        gameManager.setM(true);
-                        break;
-                    case KeyEvent.VK_K:
-                        gameManager.setK(true);
-                        break;
-                    case KeyEvent.VK_F1:    //Shortcut to GAME OVER for testing
-                        game.currentState = GameState.GAME_OVER;
-                        break;
+                switch (key) {
+                    case KeyEvent.VK_A -> gameManager.setLeft(true);
+                    case KeyEvent.VK_D -> gameManager.setRight(true);
+                    case KeyEvent.VK_W ->
+                            // try to check for some collision parameters
+                            gameManager.setUp(true);
+                    case KeyEvent.VK_S -> gameManager.setDown(true);
+                    case KeyEvent.VK_L -> gameManager.setL(true);
+                    case KeyEvent.VK_M -> gameManager.setM(true);
+                    case KeyEvent.VK_K -> gameManager.setK(true);
                 }
             }
         }
@@ -72,28 +56,14 @@ public class KeyInput extends KeyAdapter {
      */
     public void keyReleased(KeyEvent e)
     {
-        switch(e.getKeyCode()) {
-            case KeyEvent.VK_A:
-                gameManager.setLeft(false);
-                break;
-            case KeyEvent.VK_D:
-                gameManager.setRight(false);
-                break;
-            case KeyEvent.VK_W:
-                gameManager.setUp(false);
-                break;
-            case KeyEvent.VK_S:
-                gameManager.setDown(false);
-                break;
-            case KeyEvent.VK_L:
-                gameManager.setL(false);
-                break;
-            case KeyEvent.VK_K:
-                gameManager.setK(false);
-                break;
-            case KeyEvent.VK_M:
-                gameManager.setM(false);
-                break;
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_A -> gameManager.setLeft(false);
+            case KeyEvent.VK_D -> gameManager.setRight(false);
+            case KeyEvent.VK_W -> gameManager.setUp(false);
+            case KeyEvent.VK_S -> gameManager.setDown(false);
+            case KeyEvent.VK_L -> gameManager.setL(false);
+            case KeyEvent.VK_K -> gameManager.setK(false);
+            case KeyEvent.VK_M -> gameManager.setM(false);
         }
     }
 }
