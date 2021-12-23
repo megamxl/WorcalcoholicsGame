@@ -10,5 +10,6 @@ public enum GameState {
     OPTIONS,
     PAUSE_MENU,
     LEVEL,
+    UPGRADE_MENU,
     GAME_OVER
 }

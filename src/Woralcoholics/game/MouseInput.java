@@ -30,6 +30,7 @@ public class MouseInput extends MouseAdapter {
     }
 
     public void mousePressed(MouseEvent e) {
+        //Get the player object for its coordinates
         for (int i = 0; i < handler.object.size(); i++) {
             if (handler.object.get(i).getId() == ID.Player) {
                 player = handler.object.get(i);
@@ -38,23 +39,27 @@ public class MouseInput extends MouseAdapter {
         }
         Point currentPos = e.getPoint();    //Grab current cursor position
         int button = e.getButton(); //Grab pressed button
-        switch (game.currentState) {
+        switch (Game.getState()) {  //depending on currentState, execute the following...
             case TITLE -> {
-                if (button == 1) game.currentState = GameState.MAIN_MENU;
+                if (button == 1) Game.setState(GameState.MAIN_MENU);
             }
             case MAIN_MENU -> {
-                if (button == 1) game.currentState = GameState.LEVEL;
-                if (button == 3) game.currentState = GameState.OPTIONS;
+                if (button == 1) Game.setState(GameState.LEVEL);
+                if (button == 3) Game.setState(GameState.OPTIONS);
             }
             case OPTIONS -> {
-                if (button == 3) game.currentState = GameState.MAIN_MENU;
+                if (button == 3) Game.setState(GameState.MAIN_MENU);
             }
             case PAUSE_MENU -> {
-                if (button == 3) game.currentState = GameState.LEVEL;
+                if (button == 3) Game.setState(GameState.LEVEL);
+            }
+            case UPGRADE_MENU ->{
+                if (button == 1) Game.setState(GameState.LEVEL);
+                Game.TimerValue = 5;    //5 secs wait time
+                Game.shouldTime = true; //activate Timer
+                Game.timerAction = 1;   //execute timerAction 1 -> countdown till next wave
             }
             case LEVEL -> {
-                //currentPos.translate(-500, -282);
-
                 /* 1 = LEFT MOUSE BUTTON
                  * 2 = MOUSE WHEEL
                  * 3 = RIGHT MOUSE BUTTON */
@@ -101,24 +106,14 @@ public class MouseInput extends MouseAdapter {
                         }
                     }
                     case 2 -> System.out.println("BUTTON 2");
-                    case 3 -> {
-                        //System.out.println("BUTTON 3");
-                        game.currentState = GameState.PAUSE_MENU;
-                        //Grab current cursor position
-                        //float mx = currentPos.x + camera.getX();
-                        //float my = currentPos.y + camera.getY();
-                        //ID m = getIDAt(mx, my); //Get ID of object at cursor
-                        //System.out.println(m);
-                    }
+                    case 3 -> Game.setState(GameState.PAUSE_MENU);
                     default -> {
                     }
                 }
-                //System.out.println(currentPos.x + " " + currentPos.y);
-                //System.out.println(player.getX()+16 + " " + player.getY()+24);
             }
             case GAME_OVER -> {
                 if (button == 1) {
-                    game.currentState = GameState.LEVEL;
+                    Game.setState(GameState.LEVEL);
                 }
             }
         }
@@ -132,15 +127,8 @@ public class MouseInput extends MouseAdapter {
 
     public void mouseExited(MouseEvent e) {
         //System.out.println("MOUSE EXITED");
-    }
-
-    public ID getIDAt(float x, float y) {   //Method for identifying objects
-        for (int i = 0; i < handler.object.size(); i++) {
-            GameObject temp = handler.object.get(i);
-            if (temp.getBounds().contains(x, y)) {
-                return temp.getId();
-            }
+        if(Game.getState() == GameState.LEVEL) {
+            Game.setState(GameState.PAUSE_MENU);
         }
-        return null;
     }
 }

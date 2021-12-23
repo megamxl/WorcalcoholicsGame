@@ -3,12 +3,8 @@ package Woralcoholics.game;
 import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Enemy Class
@@ -42,6 +38,7 @@ public class Enemy extends GameObject {
 
     static int enemysAlive = 0;
     static int waves = 1;
+    final int upgradeAfterWave = 4;     //After how many Waves an Upgrade should be granted
 
     public Enemy(int x, int y, ID id, GameManager manager, Animations an) {
         super(x, y, id, an);
@@ -89,8 +86,14 @@ public class Enemy extends GameObject {
                     hp -= 110;
                     removeWithObject(tmpObject);
                     if (enemysAlive <= 0) {
-                        Game.TimerValue = 5;
-                        Game.shouldTime = true;
+                        waves++;
+                        if(waves-1 % upgradeAfterWave == 0) {
+                            Game.TimerValue = 0;    //0 secs (actually just to unrender the last enemy and bullet)
+                            Game.shouldTime = true; //activate Timer
+                            Game.timerAction = 2;   //execute timerAction 2 -> wait a bit
+                        }
+
+
                     }
                     //System.out.println("es sind " + enemysAlive +" enemys am leben");
                 }
@@ -183,6 +186,8 @@ public class Enemy extends GameObject {
 
         isDead();
 
+
+
     }
 
 
@@ -212,7 +217,7 @@ public class Enemy extends GameObject {
         if (solo) {
             Wavesize = 1;
         } else {
-            Wavesize = (Wavesize * 5) + 1;
+            Wavesize = (Wavesize * 2) + 1;
         }
 
         for (int i = 0; i < Wavesize; i++) {

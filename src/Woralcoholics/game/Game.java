@@ -19,10 +19,8 @@ public class Game extends Canvas implements Runnable {
     final int SCREEN_WIDTH = 1024;
     final int SCREEN_HEIGHT = 576;
 
-    private final double STUDIO_WAIT = System.currentTimeMillis() + 1000;
-
-    protected GameState currentState;
-    protected GameState previousState;
+    private static GameState currentState;
+    private GameState previousState;
 
     private boolean isRunning;
     protected boolean paused, loaded;
@@ -43,6 +41,7 @@ public class Game extends Canvas implements Runnable {
     public static int PlayerX = 0;
     public static int PlayerY = 0;
     public static int TimerValue;
+    public static int timerAction;
 
     // Classes
     private Thread thread;
@@ -58,7 +57,7 @@ public class Game extends Canvas implements Runnable {
 /* ------------- Constructor for Game Class -------------- */
 
     public Game() throws IOException {
-        currentState = previousState = GameState.STUDIO;
+        currentState = previousState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
         start();
@@ -73,9 +72,9 @@ public class Game extends Canvas implements Runnable {
         spritesheet = loader.loadImage("/Spritesheet.png");
         an = new Animations(spritesheet);
 
+        //Adding Mouse and Keyboard Input
         MouseInput mouse = new MouseInput(handler, camera, this, an);
         this.addMouseListener(mouse);
-
         KeyInput keys = new KeyInput(handler, this);
         this.addKeyListener(keys);
 
@@ -84,6 +83,10 @@ public class Game extends Canvas implements Runnable {
         floorDirt2 = an.getImage(3, 2, 64, 64);
         floorDirt3 = an.getImage(4, 2, 64, 64);
         loadMenu();
+        //activate the timer, to show the Studio for 1 sec
+        TimerValue = 0;
+        shouldTime = true;
+        timerAction = 3;
     }
 
 
@@ -115,7 +118,7 @@ public class Game extends Canvas implements Runnable {
             frames++;
 
             if (System.currentTimeMillis() - timer > 1000) {
-                if(shouldTime){
+                if(shouldTime && !paused){
                     timer();
                 }
                 timer += 1000;
@@ -131,23 +134,16 @@ public class Game extends Canvas implements Runnable {
      * in every frame check where player is and update camera position
      */
     public void update() {
-        if(currentState == GameState.STUDIO) {      //initially show the studio for a few seconds
-            double now = System.currentTimeMillis();
-            if(now > STUDIO_WAIT) {
-                currentState = GameState.TITLE;
-            }
-        }
         if(currentState != previousState) {     //if there was a state change...
             stateChange();
-
         }
         if(currentState == GameState.LEVEL && !paused) {    //if we are in level and the game is not paused...
             for (int i = 0; i < handler.object.size(); i++) {
                 if (handler.object.get(i).getId() == ID.Player) {
-                    camera.update(handler.object.get(i));
+                    camera.update(handler.object.get(i));   //update the camera position to stay focused on the player
                 }
             }
-            handler.update();
+            handler.update();   //update every GameObject (camera is NOT a GameObject)
         }
 
     }
@@ -173,7 +169,7 @@ public class Game extends Canvas implements Runnable {
             //System.out.println("SPAWN" + handler.enemy.size());
         }
         else {
-                renderBackground(g);
+            renderBackground(g);
             //translates our screen
             g2d.translate(-camera.getX(), -camera.getY());
 
@@ -195,18 +191,21 @@ public class Game extends Canvas implements Runnable {
 /* ---------- Private functions for game Class ----------- */
 
     private void stateChange() {
-        if(currentState == GameState.LEVEL) {
-            if(!loaded) {                   //if no level is loaded, load the level
+        if(!loaded) {   //unload function (clear the object list)
+            while(handler.object.size() > 0) {
+                handler.object.remove(0);
+            }
+        }
+        if(currentState == GameState.LEVEL) {   //if we have changed to LEVEL...
+            if(!loaded) {                   //...if no level is loaded, load the level
                 Enemy.waves = 1;            //reset Enemy waves
                 Enemy.enemysAlive = 0;
-                loadLevel(level);           //load the level
                 hp = 100;                   //reset player specific values
                 ammo = 50;
-                camera.shake = false;
-
-                //System.out.println(handler.object.size());
+                camera.shake = false;       //camera should not shake
+                loadLevel(level);           //load the level
             }
-            paused = false;                 //level is running and not paused
+            paused = false;  //level is running and not paused (when coming from e.g. PAUSE_MENU or UPGRADE_MENU, where a level is already loaded)
         }
         else {
             loadMenu();                     //load the menu of currentState
@@ -276,6 +275,18 @@ public class Game extends Canvas implements Runnable {
     }
 
     /***
+     * Instructions to render the Upgrade Menu screen
+     * @param g the current Buffered image as Graphics object
+     */
+    private void renderUpgradeMenu(Graphics g) {
+        //g.setColor(new Color(0,0,0,127));
+        //g.fillRect(0, 0, screenWidth, screenHeight);
+        g.setColor(Color.WHITE);
+        g.drawString("UPGRADE_MENU", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
+        g.drawString("LMB: BACK TO LEVEL", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
+    }
+
+    /***
      * Instructions to render the Game over screen
      * @param g the current Buffered image as Graphics object
      */
@@ -298,6 +309,7 @@ public class Game extends Canvas implements Runnable {
             case MAIN_MENU -> renderMainMenu(g);
             case OPTIONS -> renderOptions(g);
             case PAUSE_MENU -> renderPauseMenu(g);
+            case UPGRADE_MENU -> renderUpgradeMenu(g);
             case GAME_OVER -> renderGameOver(g);
         }
     }
@@ -335,7 +347,7 @@ public class Game extends Canvas implements Runnable {
         g.drawString("Waves "+ Enemy.waves,930,40);
         g.drawString("Enemies "+ Enemy.enemysAlive,915,63);
 
-        if(shouldTime) {
+        if(shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...
             g.setColor(Color.YELLOW);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
             g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
@@ -346,7 +358,6 @@ public class Game extends Canvas implements Runnable {
      * as the name states loads all kinds of Menus, which is not the level
      */
     private void loadMenu() {
-        //System.out.println(currentState);
         switch(currentState) {
             case STUDIO -> System.out.println("STUDIO");
             case TITLE -> {}
@@ -356,18 +367,14 @@ public class Game extends Canvas implements Runnable {
                 System.out.println("PAUSE MENU");
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
+            case UPGRADE_MENU -> {
+                System.out.println("UPGRADE_MENU");
+                paused = true;      //Pause the game until Player chose an Upgrade
+            }
             case GAME_OVER -> {
                 System.out.println("GAME OVER");
                 loaded = false;                 //the player lost, so the level should unload
             }
-        }
-        if(!loaded) {   //unload method (clear the object list)
-            while(handler.object.size() > 0) {
-                //System.out.println(handler.object.get(0).getId());
-                handler.object.remove(0);
-                //System.out.println(handler.object.size());
-            }
-
         }
     }
 
@@ -395,8 +402,8 @@ public class Game extends Canvas implements Runnable {
                 }
                 if (blue == 255 && green == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, an));
-                    PlayerX =xx *32;
-                    PlayerY =yy *32;
+                    PlayerX =xx;
+                    PlayerY =yy;
                 }
                 if (green == 255) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an));
@@ -416,14 +423,18 @@ public class Game extends Canvas implements Runnable {
      * just a counter that gets decreased thanks to our game loop
      */
     private void timer(){
-        if(TimerValue > 0){
+        if(TimerValue > 0){     //if the time is not over, decrease TimerValue
             TimerValue --;
         }
-        else{
-            if(shouldTime)
-                Enemy.Spawner(Enemy.waves,false,r);
-                Enemy.waves ++;
-            shouldTime =false;
+        else{   //if the waiting time is over...
+            if(shouldTime) {    //...execute the previously set timerAction
+                switch (timerAction) {
+                    case 1 -> Enemy.Spawner(Enemy.waves, false, r);     //Spawn the next wave of enemies
+                    case 2 -> currentState = GameState.UPGRADE_MENU;     //change state to UPGRADE_MENU (because of rendering)
+                    case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
+                }
+                shouldTime =false;  //deactivate the timer
+            }
         }//System.out.println(TimerValue);
     }
 
@@ -495,6 +506,21 @@ public class Game extends Canvas implements Runnable {
      */
     public static void SpawnEnemy(int x, int y){
         handler.addObject(new Enemy(x, y, ID.Enemy, handler, an));
+    }
+
+    /***
+     * Function to get the current GameState
+     */
+    public static GameState getState() {
+        return currentState;
+    }
+
+    /***
+     * Function to set the current GameState
+     * @param state State to change to
+     */
+    public static void setState(GameState state) {
+        currentState = state;
     }
 
     // the main function that runs everything
