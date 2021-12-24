@@ -145,7 +145,7 @@ public class GameManager {
         Thread.sleep(100000);
     }
 
-    public void playSoundGun(boolean ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+    public void playSoundGun(boolean ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException, IllegalArgumentException {
         sound = AudioSystem.getClip();
         Path relativePath;
         if (!ammo) {

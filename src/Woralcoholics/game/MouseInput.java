@@ -85,6 +85,10 @@ public class MouseInput extends MouseAdapter {
                             if (game.ammo <= 0) {
                                 ammo = false;
                             }
+                            else
+                            {
+                                ammo=true;
+                            }
                             try {
                                 new Thread(() -> {
 
@@ -97,6 +101,9 @@ public class MouseInput extends MouseAdapter {
                                     } catch (IOException ex) {
                                         ex.printStackTrace();
                                     } catch (InterruptedException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                    catch (IllegalArgumentException ex) {
                                         ex.printStackTrace();
                                     }
                                 }).start();
@@ -117,6 +124,9 @@ public class MouseInput extends MouseAdapter {
                                     } catch (IOException ex) {
                                         ex.printStackTrace();
                                     } catch (InterruptedException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                    catch (IllegalArgumentException ex) {
                                         ex.printStackTrace();
                                     }
                                 }).start();
