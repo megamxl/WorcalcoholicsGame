@@ -191,8 +191,6 @@ public class Enemy extends GameObject {
 
         isDead();
 
-
-
     }
 
 
@@ -222,6 +220,7 @@ public class Enemy extends GameObject {
         if (solo) {
             Wavesize = 1;
         } else {
+            Game.SpawnGunnerEnemy();
             Wavesize = (Wavesize * 2) + 1;
         }
 
@@ -237,8 +236,9 @@ public class Enemy extends GameObject {
                 }
             }
             //System.out.println("spawning");
-            Game.SpawnEnemy((int) x, (int) y);
+            Game.SpawnEnemy(x, y);
         }
+
     }
 
     public void checkIfGone() {

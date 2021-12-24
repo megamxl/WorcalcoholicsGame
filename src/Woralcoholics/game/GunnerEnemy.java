@@ -1,10 +1,13 @@
 package Woralcoholics.game;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class GunnerEnemy extends Enemy {
 
     GameManager handler;
+
+    private final BufferedImage gunner_enemy_img;
 
     private float minDistanceToPlayer = 250;
     private float maxDistanceToPlayer = 500;
@@ -31,7 +34,7 @@ public class GunnerEnemy extends Enemy {
         super(x, y, id, manager, an);
         handler = manager;
 
-        enemysAlive++;
+        gunner_enemy_img = an.getImage(1,5,64,64);
     }
 
     private void calcDistanceToPlayer() {
@@ -101,8 +104,19 @@ public class GunnerEnemy extends Enemy {
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.MAGENTA);
-        g.fillRect((int)x, (int)y, 32, 32);
+       /* g.setColor(Color.MAGENTA);
+        g.fillRect((int)x +8, (int)y +2, 52, 60);*/
+        g.drawImage(gunner_enemy_img,(int)x,(int)y, null);
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle((int)x +8, (int)y +2, 52, 60);
+    }
+
+    @Override
+    public Rectangle getBoundsAround() {
+        return new Rectangle((int)x +8, (int)y +2, 52, 60);
     }
 
     public float getMinDistanceToPlayer() {

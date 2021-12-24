@@ -361,7 +361,7 @@ public class Player extends GameObject {
                             //wait = now + invincibleTime;
                             // sound
                         }
-                        if (game.hp == 0) {
+                        if (game.hp <= 0) {
                             Game.setState(GameState.GAME_OVER);         //if the player has no HP left, its GAME OVER
                         }
                     }

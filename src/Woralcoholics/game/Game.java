@@ -415,7 +415,7 @@ public class Game extends Canvas implements Runnable {
             }*/
             }
         }
-        //handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an)); //Test Gunner
+        handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an)); //Test Gunner
         loaded = true;
     }
 
@@ -429,7 +429,7 @@ public class Game extends Canvas implements Runnable {
         else{   //if the waiting time is over...
             if(shouldTime) {    //...execute the previously set timerAction
                 switch (timerAction) {
-                    case 1 -> Enemy.Spawner(Enemy.waves, false, r);     //Spawn the next wave of enemies
+                    case 1 -> Enemy.Spawner(Enemy.waves, false, r);      //Spawn the next wave of enemies
                     case 2 -> currentState = GameState.UPGRADE_MENU;     //change state to UPGRADE_MENU (because of rendering)
                     case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
                 }
@@ -506,6 +506,9 @@ public class Game extends Canvas implements Runnable {
      */
     public static void SpawnEnemy(int x, int y){
         handler.addObject(new Enemy(x, y, ID.Enemy, handler, an));
+    }
+    public static void SpawnGunnerEnemy(){
+        handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, an));
     }
 
     /***
