@@ -9,6 +9,7 @@ public abstract class GameObject {
     protected /*int*/float x,y;
     // speed of object
     protected float velX =0, velY = 0;
+    protected GameState nextState;
     protected ID id;
     protected Animations an;
     protected GameManager handler;
@@ -16,6 +17,14 @@ public abstract class GameObject {
     public GameObject(int x, int y, ID id, Animations an) {
         this.x = x;
         this.y = y;
+        this.id = id;
+        this.an = an;
+    }
+
+    public GameObject(int x, int y, GameState nextState, ID id, Animations an) {
+        this.x = x;
+        this.y = y;
+        this.nextState = nextState;
         this.id = id;
         this.an = an;
     }

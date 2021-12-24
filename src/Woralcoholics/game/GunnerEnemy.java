@@ -14,9 +14,12 @@ public class GunnerEnemy extends Enemy {
     private double distanceToPlayer;
     private double alpha;
 
+    private final int checkFreeDistance = 32+50;
+
     private float movementSpeed = 5;
 
     protected double px = 0, py = 0;
+    protected double gx, gy;
 
     private double wait = 0;
     private final double shootDel = 1500;
@@ -24,6 +27,7 @@ public class GunnerEnemy extends Enemy {
     private enum state {
         TOO_CLOSE,
         TOO_FAR,
+        NEAR_WALL,
         STAY
     }
 
@@ -33,13 +37,12 @@ public class GunnerEnemy extends Enemy {
     public GunnerEnemy(int x, int y, ID id, GameManager manager, Animations an) {
         super(x, y, id, manager, an);
         handler = manager;
-
+        gx = getX();
+        gy = getY();
         gunner_enemy_img = an.getImage(1,5,64,64);
     }
 
     private void calcDistanceToPlayer() {
-        double gx = this.getX();
-        double gy = this.getY();
         for(int i = 0; i < handler.object.size(); i++) {
             GameObject temp = handler.object.get(i);
 
@@ -73,17 +76,23 @@ public class GunnerEnemy extends Enemy {
                 velX = (float) (Math.cos(alpha) * movementSpeed);
                 velY = (float) (Math.sin(alpha) * movementSpeed);
             }
+            case NEAR_WALL -> {
+                //alpha += checkIfFree();
+            }
             case STAY -> velX = velY = 0;
         }
         //System.out.println(gunnerState);
     }
 
     public void shoot() {
-        double gx = this.getX()+16;
-        double gy = this.getY()+16;
+        gx += 16;
+        gy += 16;
         EnemyBullet temp = new EnemyBullet((int) gx-4, (int) gy-4, ID.EnemyBullet, handler, an);
         temp.direction(px, py, gx, gy);
         handler.addObject(temp);
+    }
+
+    private void checkIfFree() {
     }
 
     public boolean los(GameObject o) {
@@ -91,10 +100,13 @@ public class GunnerEnemy extends Enemy {
     }
 
     public void update() {
+        gx = getX();
+        gy = getY();
         calcDistanceToPlayer();
         behaviour();
         move();
         collision();
+        //checkIfFree();
         double now = System.currentTimeMillis();
         if(now > wait) {
             shoot();
@@ -106,6 +118,10 @@ public class GunnerEnemy extends Enemy {
     public void render(Graphics g) {
        /* g.setColor(Color.MAGENTA);
         g.fillRect((int)x +8, (int)y +2, 52, 60);*/
+        //g.setColor(Color.WHITE);
+        //g.drawRect((int)gx+2, (int)gy, 64, 64);
+        //g.drawLine((int)gx+32, (int)gy+32, (int)px, (int)py);
+        //g.drawLine((int)gx+32, (int)gy+32, (int)(gx+Math.cos(alpha)*(distanceToPlayer-50)), (int)(gy+Math.sin(alpha)*(distanceToPlayer-50)));
         g.drawImage(gunner_enemy_img,(int)x,(int)y, null);
     }
 
@@ -116,7 +132,7 @@ public class GunnerEnemy extends Enemy {
 
     @Override
     public Rectangle getBoundsAround() {
-        return new Rectangle((int)x +8, (int)y +2, 52, 60);
+        return new Rectangle((int)gx, (int)gy, 50, 50);
     }
 
     public float getMinDistanceToPlayer() {

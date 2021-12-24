@@ -10,9 +10,9 @@ public class EnemyBullet extends Bullet{
         super(x, y, id, handler, an);
     }
 
-    @Override
+    /*@Override
     public void render(Graphics g) {
         g.setColor(Color.RED);
         g.fillOval((int) x, (int) y, 8, 8);
-    }
+    }*/
 }

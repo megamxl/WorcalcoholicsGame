@@ -248,6 +248,8 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.WHITE);
         g.drawString("MAIN MENU", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
         g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
+
+
     }
 
     /***
@@ -312,6 +314,10 @@ public class Game extends Canvas implements Runnable {
             case UPGRADE_MENU -> renderUpgradeMenu(g);
             case GAME_OVER -> renderGameOver(g);
         }
+        if(!loaded) {
+            handler.render(g);
+        }
+
     }
 
     /***
@@ -361,10 +367,13 @@ public class Game extends Canvas implements Runnable {
         switch(currentState) {
             case STUDIO -> System.out.println("STUDIO");
             case TITLE -> {}
-            case MAIN_MENU -> System.out.println("MAIN MENU");
-            case OPTIONS -> System.out.println("OPTIONS");
+            case MAIN_MENU -> {
+                //System.out.println("MAIN MENU");
+                handler.addObject(new UIButton(10, 10, 400, 300, "Level", GameState.LEVEL, ID.UIButton, this, an));
+                handler.addObject(new UIButton(510, 10, 400, 300, "Options", GameState.OPTIONS, ID.UIButton, this, an));
+            }
+            case OPTIONS -> handler.addObject(new UIButton(10, 10, 400, 300, "Main Menu", GameState.MAIN_MENU, ID.UIButton, this, an));//System.out.println("OPTIONS");
             case PAUSE_MENU -> {
-                System.out.println("PAUSE MENU");
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {

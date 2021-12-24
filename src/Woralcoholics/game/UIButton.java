@@ -10,7 +10,6 @@ public class UIButton extends GameObject{
 
     private int width, height;
     private String name;
-    private GameState nextState;
 
     /**
      *  Constructor for UI buttons
@@ -19,18 +18,15 @@ public class UIButton extends GameObject{
      * @param width
      * @param height
      * @param name
-     * @param nextState
      * @param id
      * @param game
      * @param an
      */
-    public UIButton(int x, int y, int width, int height, String name, GameState nextState, ID id, /*GameManager handler,*/ Game game, Animations an) {
-        super(x, y, id, an);
+    public UIButton(int x, int y, int width, int height, String name, GameState nextState, ID id, Game game, Animations an) {
+        super(x, y, nextState, id, an);
         this.width = width;
         this.height = height;
         this.name = name;
-        this.nextState = nextState;
-        //this.handler = handler;
         this.game = game;
     }
 
@@ -42,14 +38,13 @@ public class UIButton extends GameObject{
     @Override
     public void render(Graphics g) {
         g.setColor(Color.RED);
-        g.drawRect((int)x, (int)y, width, height);
+        g.fillRect((int)x, (int)y, width, height);
         g.setColor(Color.WHITE);
-        g.drawString(name, width/2, height/2);
+        g.drawString(name, (int)x + width/2, (int)y + height/2);
     }
-
 
     @Override
     public Rectangle getBounds() {
-        return null;
+        return new Rectangle((int)x, (int)y, width, height);
     }
 }
