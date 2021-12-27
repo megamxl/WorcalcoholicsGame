@@ -19,6 +19,7 @@ public class GameManager {
     private boolean up = false, down = false, right = false, left = false;
     private boolean ll = false, kk = false, mm = false;
     Clip sound;
+    public Clip backgroundsound;
     public int soundv = 1; //default value for -20f sound
 
 
@@ -192,5 +193,21 @@ public class GameManager {
         }
         sound.start();
         Thread.sleep(100000);
+    }
+
+    public void playBackgroundSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        backgroundsound = AudioSystem.getClip();
+        Path relativePath = Paths.get("Resource/backgroundsound.wav");
+        Path absolutePath = relativePath.toAbsolutePath();
+        backgroundsound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+        FloatControl volume = (FloatControl) backgroundsound.getControl(FloatControl.Type.MASTER_GAIN);
+        if (soundv == 0) {
+            volume.setValue(-80f); // MUTE
+        } else if (soundv == 1) {
+            volume.setValue(-35f); // DEFAULT -> less than -20 because the sound is per default very loud
+        } else if (soundv == 2) {
+            volume.setValue(6.0206f); // Maximum
+        }
+        backgroundsound.start();
     }
 }

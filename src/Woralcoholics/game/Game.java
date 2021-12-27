@@ -1,6 +1,8 @@
 package Woralcoholics.game;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.plaf.PanelUI;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -12,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
-/* ------------ Local variables for main game ------------ */
+    /* ------------ Local variables for main game ------------ */
     private static final long serialVersionUID = 1L;
 
     // Variables
@@ -42,6 +44,8 @@ public class Game extends Canvas implements Runnable {
     public static int PlayerY = 0;
     public static int TimerValue;
     public static int timerAction;
+    private boolean wasstopped = false;
+    private boolean triggeredonce = false;
 
     // Classes
     private Thread thread;
@@ -53,8 +57,9 @@ public class Game extends Canvas implements Runnable {
     private Camera camera;
 
     Random r = new Random();
+    Thread t1;
 
-/* ------------- Constructor for Game Class -------------- */
+    /* ------------- Constructor for Game Class -------------- */
 
     public Game() throws IOException {
         currentState = previousState = GameState.STUDIO;    //initialize the currentState to STUDIO
@@ -118,7 +123,7 @@ public class Game extends Canvas implements Runnable {
             frames++;
 
             if (System.currentTimeMillis() - timer > 1000) {
-                if(shouldTime && !paused){
+                if (shouldTime && !paused) {
                     timer();
                 }
                 timer += 1000;
@@ -134,16 +139,29 @@ public class Game extends Canvas implements Runnable {
      * in every frame check where player is and update camera position
      */
     public void update() {
-        if(currentState != previousState) {     //if there was a state change...
+        if (currentState != previousState) {     //if there was a state change...
             stateChange();
         }
-        if(currentState == GameState.LEVEL && !paused) {    //if we are in level and the game is not paused...
+        if (currentState == GameState.LEVEL && !paused) {    //if we are in level and the game is not paused...
             for (int i = 0; i < handler.object.size(); i++) {
                 if (handler.object.get(i).getId() == ID.Player) {
                     camera.update(handler.object.get(i));   //update the camera position to stay focused on the player
                 }
             }
             handler.update();   //update every GameObject (camera is NOT a GameObject)
+        }
+        if (paused && !triggeredonce) {
+            handler.backgroundsound.stop();
+            wasstopped=true;
+            triggeredonce=true;
+            //System.out.println("STOP");
+        }
+        if(!paused && wasstopped)
+        {
+            handler.backgroundsound.start();
+            wasstopped=false;
+            triggeredonce=false;
+            //System.out.println("START");
         }
 
     }
@@ -163,12 +181,11 @@ public class Game extends Canvas implements Runnable {
         Graphics2D g2d = (Graphics2D) g;
 
         //if we are not in the level, render a menu
-        if(currentState != GameState.LEVEL) {
+        if (currentState != GameState.LEVEL) {
             renderMenu(g);
             handler.enemy.removeAll(handler.enemy);
             //System.out.println("SPAWN" + handler.enemy.size());
-        }
-        else {
+        } else {
             renderBackground(g);
             //translates our screen
             g2d.translate(-camera.getX(), -camera.getY());
@@ -188,16 +205,16 @@ public class Game extends Canvas implements Runnable {
         bs.show();
     }
 
-/* ---------- Private functions for game Class ----------- */
+    /* ---------- Private functions for game Class ----------- */
 
     private void stateChange() {
-        if(!loaded) {   //unload function (clear the object list)
-            while(handler.object.size() > 0) {
+        if (!loaded) {   //unload function (clear the object list)
+            while (handler.object.size() > 0) {
                 handler.object.remove(0);
             }
         }
-        if(currentState == GameState.LEVEL) {   //if we have changed to LEVEL...
-            if(!loaded) {                   //...if no level is loaded, load the level
+        if (currentState == GameState.LEVEL) {   //if we have changed to LEVEL...
+            if (!loaded) {                   //...if no level is loaded, load the level
                 Enemy.waves = 1;            //reset Enemy waves
                 Enemy.enemysAlive = 0;
                 hp = 100;                   //reset player specific values
@@ -206,8 +223,7 @@ public class Game extends Canvas implements Runnable {
                 loadLevel(level);           //load the level
             }
             paused = false;  //level is running and not paused (when coming from e.g. PAUSE_MENU or UPGRADE_MENU, where a level is already loaded)
-        }
-        else {
+        } else {
             loadMenu();                     //load the menu of currentState
         }
         previousState = currentState;       //the previous state becomes the current state, to again detect a state change
@@ -221,8 +237,8 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
-        g.drawString("Workalcoholics", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
-        g.drawString("presents", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
+        g.drawString("Workalcoholics", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.drawString("presents", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
     /***
@@ -233,8 +249,8 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
-        g.drawString("TITLE", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
-        g.drawString("LMB: MAIN MENU", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
+        g.drawString("TITLE", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.drawString("LMB: MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
     /***
@@ -246,8 +262,8 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         g.setColor(Color.WHITE);
-        g.drawString("MAIN MENU", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
-        g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
+        g.drawString("MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
 
 
     }
@@ -260,8 +276,8 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
-        g.drawString("OPTIONS", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
-        g.drawString("RMB: MAIN MENU", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
+        g.drawString("OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.drawString("RMB: MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
     /***
@@ -272,8 +288,8 @@ public class Game extends Canvas implements Runnable {
         //g.setColor(new Color(0,0,0,127));
         //g.fillRect(0, 0, screenWidth, screenHeight);
         g.setColor(Color.WHITE);
-        g.drawString("PAUSE_MENU", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
-        g.drawString("RMB: LEVEL", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
+        g.drawString("PAUSE_MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.drawString("RMB: LEVEL", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
     /***
@@ -284,8 +300,8 @@ public class Game extends Canvas implements Runnable {
         //g.setColor(new Color(0,0,0,127));
         //g.fillRect(0, 0, screenWidth, screenHeight);
         g.setColor(Color.WHITE);
-        g.drawString("UPGRADE_MENU", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
-        g.drawString("LMB: BACK TO LEVEL", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
+        g.drawString("UPGRADE_MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.drawString("LMB: BACK TO LEVEL", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
     /***
@@ -296,8 +312,8 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
-        g.drawString("GAME OVER", SCREEN_WIDTH /2, SCREEN_HEIGHT /2);
-        g.drawString("Press LMB to Start again", SCREEN_WIDTH /2, SCREEN_HEIGHT *3/4);
+        g.drawString("GAME OVER", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.drawString("Press LMB to Start again", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
     /***
@@ -305,7 +321,7 @@ public class Game extends Canvas implements Runnable {
      * @param g Graphics object
      */
     private void renderMenu(Graphics g) {
-        switch(currentState) {
+        switch (currentState) {
             case STUDIO -> renderStudio(g);
             case TITLE -> renderTitle(g);
             case MAIN_MENU -> renderMainMenu(g);
@@ -314,7 +330,7 @@ public class Game extends Canvas implements Runnable {
             case UPGRADE_MENU -> renderUpgradeMenu(g);
             case GAME_OVER -> renderGameOver(g);
         }
-        if(!loaded) {
+        if (!loaded) {
             handler.render(g);
         }
 
@@ -324,7 +340,7 @@ public class Game extends Canvas implements Runnable {
      * just the instructions on how to render the UI
      * @param g Graphics Object
      */
-    private void renderUi(Graphics g){
+    private void renderUi(Graphics g) {
 
         g.setColor(Color.gray);
         g.fillRect(5, 5, 200, 16); //hp
@@ -349,11 +365,11 @@ public class Game extends Canvas implements Runnable {
         g.drawRect(5, 30, 200, 16); //ammo
 
         g.setColor(Color.MAGENTA);
-        g.drawString("Sound "+ handler.soundv,930,17);
-        g.drawString("Waves "+ Enemy.waves,930,40);
-        g.drawString("Enemies "+ Enemy.enemysAlive,915,63);
+        g.drawString("Sound " + handler.soundv, 930, 17);
+        g.drawString("Waves " + Enemy.waves, 930, 40);
+        g.drawString("Enemies " + Enemy.enemysAlive, 915, 63);
 
-        if(shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...
+        if (shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...
             g.setColor(Color.YELLOW);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
             g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
@@ -364,9 +380,10 @@ public class Game extends Canvas implements Runnable {
      * as the name states loads all kinds of Menus, which is not the level
      */
     private void loadMenu() {
-        switch(currentState) {
+        switch (currentState) {
             case STUDIO -> System.out.println("STUDIO");
-            case TITLE -> {}
+            case TITLE -> {
+            }
             case MAIN_MENU -> {
                 //System.out.println("MAIN MENU");
                 handler.addObject(new UIButton(10, 10, 400, 300, "Level", GameState.LEVEL, ID.UIButton, this, an));
@@ -382,6 +399,8 @@ public class Game extends Canvas implements Runnable {
             }
             case GAME_OVER -> {
                 System.out.println("GAME OVER");
+                handler.backgroundsound.close();
+                //System.out.println("SOUND CLOSE");
                 loaded = false;                 //the player lost, so the level should unload
             }
         }
@@ -394,7 +413,7 @@ public class Game extends Canvas implements Runnable {
     private void loadLevel(BufferedImage image) {
         int h = image.getHeight();
         int w = image.getWidth();
-        int i= 0;
+        int i = 0;
 
 
         for (int xx = 0; xx < w; xx++) {
@@ -407,12 +426,12 @@ public class Game extends Canvas implements Runnable {
                 if (red == 255) {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, 1, 1));
-                    wallCords.add(new int[]{xx,yy});
+                    wallCords.add(new int[]{xx, yy});
                 }
                 if (blue == 255 && green == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, an));
-                    PlayerX =xx *32;
-                    PlayerY =yy *32;
+                    PlayerX = xx * 32;
+                    PlayerY = yy * 32;
                 }
                 if (green == 255) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an));
@@ -426,17 +445,18 @@ public class Game extends Canvas implements Runnable {
         }
         handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an)); //Test Gunner
         loaded = true;
+        playBackgroundSound();
+        //System.out.println("NEW GAME");
     }
 
     /**
      * just a counter that gets decreased thanks to our game loop
      */
-    private void timer(){
-        if(TimerValue > 0){     //if the time is not over, decrease TimerValue
-            TimerValue --;
-        }
-        else{   //if the waiting time is over...
-            if(shouldTime) {    //...execute the previously set timerAction
+    private void timer() {
+        if (TimerValue > 0) {     //if the time is not over, decrease TimerValue
+            TimerValue--;
+        } else {   //if the waiting time is over...
+            if (shouldTime) {    //...execute the previously set timerAction
                 switch (timerAction) {
                     case 1 -> Enemy.Spawner(Enemy.waves, false, r);      //Spawn the next wave of enemies
                     case 2 -> currentState = GameState.UPGRADE_MENU;     //change state to UPGRADE_MENU (because of rendering)
@@ -451,7 +471,7 @@ public class Game extends Canvas implements Runnable {
      * This function always renders the background
      * @param g Graphics object
      */
-    private void renderBackground(Graphics g){
+    private void renderBackground(Graphics g) {
         for (int i = 0; i < 30 * 72; i += 64) {
             for (int j = 0; j < 30 * 72; j += 64) {
                 g.drawImage(floor, i, j, null);
@@ -495,7 +515,7 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
-/* ---------- Public functions for game Class ----------- */
+    /* ---------- Public functions for game Class ----------- */
 
     /***
      * Returns a random number between inclusive start and exclusive end.
@@ -503,8 +523,7 @@ public class Game extends Canvas implements Runnable {
      * @param end End value
      * @return The Random number
      */
-    public Integer randomNumber(int start, int end)
-    {
+    public Integer randomNumber(int start, int end) {
         return new Random().ints(start, end).findFirst().getAsInt();
     }
 
@@ -513,10 +532,11 @@ public class Game extends Canvas implements Runnable {
      * @param x X value
      * @param y Y value
      */
-    public static void SpawnEnemy(int x, int y){
+    public static void SpawnEnemy(int x, int y) {
         handler.addObject(new Enemy(x, y, ID.Enemy, handler, an));
     }
-    public static void SpawnGunnerEnemy(){
+
+    public static void SpawnGunnerEnemy() {
         handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, an));
     }
 
@@ -543,4 +563,28 @@ public class Game extends Canvas implements Runnable {
             e.printStackTrace();
         }
     }
+
+    private void playBackgroundSound() {
+        t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    handler.playBackgroundSound();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t1.start();
+
+        // bei gameover soundv 0 -> alles muten
+
+    }
+
 }
