@@ -152,15 +152,14 @@ public class Game extends Canvas implements Runnable {
         }
         if (paused && !triggeredonce) {
             handler.backgroundsound.stop();
-            wasstopped=true;
-            triggeredonce=true;
+            wasstopped = true;
+            triggeredonce = true;
             //System.out.println("STOP");
         }
-        if(!paused && wasstopped)
-        {
+        if (!paused && wasstopped) {
             handler.backgroundsound.start();
-            wasstopped=false;
-            triggeredonce=false;
+            wasstopped = false;
+            triggeredonce = false;
             //System.out.println("START");
         }
 
@@ -564,6 +563,9 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
+    /***
+     * Function to run backgroundsound
+     */
     private void playBackgroundSound() {
         t1 = new Thread(new Runnable() {
             @Override
@@ -582,9 +584,6 @@ public class Game extends Canvas implements Runnable {
             }
         });
         t1.start();
-
-        // bei gameover soundv 0 -> alles muten
-
     }
 
 }

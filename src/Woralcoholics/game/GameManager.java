@@ -21,6 +21,7 @@ public class GameManager {
     Clip sound;
     public Clip backgroundsound;
     public int soundv = 1; //default value for -20f sound
+    protected boolean IsSoundPlaying, IsSoundPlaying2 = false;
 
 
     /**
@@ -146,6 +147,15 @@ public class GameManager {
         Thread.sleep(100000);
     }
 
+    /**
+     * plays the sound for the gun of the player
+     * @param ammo
+     * @throws LineUnavailableException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws IllegalArgumentException
+     */
     public void playSoundGun(boolean ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException, IllegalArgumentException {
         sound = AudioSystem.getClip();
         Path relativePath;
@@ -175,6 +185,13 @@ public class GameManager {
         Thread.sleep(10000);
     }
 
+    /**
+     * plays the sound for the gunnerenemy
+     * @throws LineUnavailableException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void playSoundGunnerEnemy() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         sound = AudioSystem.getClip();
         Path relativePath = Paths.get("Resource/gunplayer1.wav");
@@ -195,6 +212,13 @@ public class GameManager {
         Thread.sleep(100000);
     }
 
+    /**
+     * plays the background sound
+     * @throws LineUnavailableException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void playBackgroundSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         backgroundsound = AudioSystem.getClip();
         Path relativePath = Paths.get("Resource/backgroundsound.wav");
@@ -209,5 +233,75 @@ public class GameManager {
             volume.setValue(6.0206f); // Maximum
         }
         backgroundsound.start();
+    }
+
+    /**
+     * plays the sound for the player
+     *
+     * @throws LineUnavailableException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void playSoundHurt() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        if (IsSoundPlaying2 == false) {
+            IsSoundPlaying2 = true;
+            Clip sound = AudioSystem.getClip();
+            Path relativePath = Paths.get("Resource/playerhurt.wav");
+            Path absolutePath = relativePath.toAbsolutePath();
+            sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+            FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+            if (soundv == 0) {
+                volume.setValue(-80f); // NormalSound
+                //System.out.println("VOLUME MUTE + " +volume.toString());
+            } else if (soundv == 1) {
+                volume.setValue(-20f); // DEFAULT
+                //System.out.println("VOLUME DEFAULT + " +volume.toString());
+            } else if (soundv == 2) {
+                volume.setValue(6.0206f); // Maximum
+                //System.out.println("VOLUME UP + " +volume.toString());
+            }
+            sound.start();
+            Thread.sleep(1000);
+            sound.stop();
+            IsSoundPlaying2 = false;
+        } else {
+            //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
+        }
+    }
+
+    /**
+     * plays the sound for moving player
+     *
+     * @throws LineUnavailableException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void playerMovementSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        if (IsSoundPlaying == false) {
+            IsSoundPlaying = true;
+            Clip sound = AudioSystem.getClip();
+            Path relativePath = Paths.get("Resource/move5.wav");
+            Path absolutePath = relativePath.toAbsolutePath();
+            sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+            FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+            if (soundv == 0) {
+                volume.setValue(-80f); // MUTE
+                //System.out.println("VOLUME MUTE + " +volume.toString());
+            } else if (soundv == 1) {
+                volume.setValue(-15f); // DEFAULT -> balanced default sound
+                //System.out.println("VOLUME DEFAULT + " +volume.toString());
+            } else if (soundv == 2) {
+                volume.setValue(6.0206f); // Maximum
+                //System.out.println("VOLUME UP + " +volume.toString());
+            }
+            sound.start();
+            Thread.sleep(100);
+            sound.stop();
+            IsSoundPlaying = false;
+        } else {
+            //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
+        }
     }
 }

@@ -87,12 +87,11 @@ public class Enemy extends GameObject {
                     removeWithObject(tmpObject);
                     if (enemysAlive <= 0) {
                         waves++;
-                        if((waves-1) % upgradeAfterWave == 0) {
+                        if ((waves - 1) % upgradeAfterWave == 0) {
                             Game.TimerValue = 0;    //0 secs (actually just to unrender the last enemy and bullet)
                             Game.shouldTime = true; //activate Timer
                             Game.timerAction = 2;   //execute timerAction 2 -> wait a bit
-                        }
-                        else {
+                        } else {
                             Game.TimerValue = 5;    //5 secs to spawn next wave
                             Game.shouldTime = true; //activate Timer
                             Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
@@ -149,24 +148,7 @@ public class Enemy extends GameObject {
      */
     private void remove() {
         manager.removeObject(this);
-        try {
-            new Thread(() -> {
-
-                try {
-                    manager.playSoundEnemy();
-                } catch (LineUnavailableException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedAudioFileException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        playSoundEnemy();
     }
 
     private void removeWithObject(GameObject tempobject) {
@@ -245,6 +227,27 @@ public class Enemy extends GameObject {
         if ((y > 1054 || y < 64) || (x > 1900 || x < 0)) {
             removeWithObject(this);
             Spawner(1, true, r);
+        }
+    }
+
+    private void playSoundEnemy() {
+        try {
+            new Thread(() -> {
+
+                try {
+                    manager.playSoundEnemy();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
