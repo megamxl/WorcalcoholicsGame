@@ -37,8 +37,8 @@ public class GunnerEnemy extends Enemy {
     private state gunnerState;
 
 
-    public GunnerEnemy(int x, int y, ID id, GameManager manager, Animations an) {
-        super(x, y, id, manager, an);
+    public GunnerEnemy(int x, int y, ID id, GameManager manager, Animations an, Score score) {
+        super(x, y, id, manager, an, score);
         handler = manager;
         gx = getX();
         gy = getY();

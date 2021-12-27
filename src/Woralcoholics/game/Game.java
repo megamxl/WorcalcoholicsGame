@@ -41,7 +41,7 @@ public class Game extends Canvas implements Runnable {
 
     public int ammo = 50;
     public int hp = 100;
-    //static Score score = new Score(100);
+    static Score score = new Score(0);
 
     public int shield = 0;
     public int armor = 0; //armor is referred to in %, so 10 would make a shield absorbing 10% of damage
@@ -451,7 +451,7 @@ public class Game extends Canvas implements Runnable {
                     PlayerY = yy * 32;
                 }
                 if (green == 255) {
-                    handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an));
+                    handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an, score));
                 }
                 /*
                 if(green == 255 && blue == 255)
@@ -460,7 +460,7 @@ public class Game extends Canvas implements Runnable {
             }*/
             }
         }
-        handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an)); //Test Gunner
+        handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an, score)); //Test Gunner
         loaded = true;
         playBackgroundSound();
         //System.out.println("NEW GAME");
@@ -550,11 +550,11 @@ public class Game extends Canvas implements Runnable {
      * @param y Y value
      */
     public static void SpawnEnemy(int x, int y) {
-        handler.addObject(new Enemy(x, y, ID.Enemy, handler, an));
+        handler.addObject(new Enemy(x, y, ID.Enemy, handler, an, score));
     }
 
     public static void SpawnGunnerEnemy() {
-        handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, an));
+        handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, an, score));
     }
 
     /***

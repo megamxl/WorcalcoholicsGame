@@ -45,7 +45,7 @@ public class Enemy extends GameObject {
     static int waves = 1;
     final int upgradeAfterWave = 3;     //After how many Waves an Upgrade should be granted
 
-    public Enemy(int x, int y, ID id, GameManager manager, Animations an) {
+    public Enemy(int x, int y, ID id, GameManager manager, Animations an, Score score) {
         super(x, y, id, an);
         this.manager = manager;
         this.score = score;
