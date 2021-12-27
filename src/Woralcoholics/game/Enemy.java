@@ -20,6 +20,8 @@ public class Enemy extends GameObject {
     Random r = new Random();
     int choose = 0;
     int hp = 100;
+    Score score;
+
     public static boolean waited = false;
 
     public static float velocity = 0;
@@ -46,6 +48,7 @@ public class Enemy extends GameObject {
     public Enemy(int x, int y, ID id, GameManager manager, Animations an) {
         super(x, y, id, an);
         this.manager = manager;
+        this.score = score;
 
         enemy_img = an.getImage(1, 4, 32, 32);
         enemysAlive++;
@@ -87,6 +90,11 @@ public class Enemy extends GameObject {
                 if (getBounds().intersects(tmpObject.getBounds())) {
                     //System.out.println("hit");
                     hp -= 110;
+
+                    if(this.getId() == ID.Enemy){score.addScore(3);}
+                    else if(this.getId() == ID.GunnerEnemy){score.addScore(10);}
+                    System.out.println(score.showScore());
+
                     removeWithObject(tmpObject);
                     if (enemysAlive <= 0) {
                         waves++;

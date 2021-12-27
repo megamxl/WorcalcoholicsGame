@@ -41,6 +41,7 @@ public class Game extends Canvas implements Runnable {
 
     public int ammo = 50;
     public int hp = 100;
+    //static Score score = new Score(100);
 
     public int shield = 0;
     public int armor = 0; //armor is referred to in %, so 10 would make a shield absorbing 10% of damage

@@ -19,5 +19,3 @@ pos(spalte,zeile)
 04 Enemy       			pos(1,7)
 
 05 Enemy		64x64	pos(1,9)
-
-05 Enemy		64x64	pos(1,9)
