@@ -1,7 +1,10 @@
 package Woralcoholics.game;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class GunnerEnemy extends Enemy {
 
@@ -90,9 +93,32 @@ public class GunnerEnemy extends Enemy {
         EnemyBullet temp = new EnemyBullet((int) gx-4, (int) gy-4, ID.EnemyBullet, handler, an);
         temp.direction(px, py, gx, gy);
         handler.addObject(temp);
+        playSoundGunnerEnemy();
     }
 
     private void checkIfFree() {
+    }
+
+    private void playSoundGunnerEnemy()
+    {
+        try {
+            new Thread(() -> {
+
+                try {
+                    handler.playSoundGunnerEnemy();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean los(GameObject o) {
