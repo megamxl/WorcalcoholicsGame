@@ -4,6 +4,7 @@ import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -20,6 +21,8 @@ public class Enemy extends GameObject {
     int choose = 0;
     int hp = 100;
     public static boolean waited = false;
+
+    public static float velocity = 0;
 
     /**
      * low and high values for different variations of enemy behaviour
@@ -50,8 +53,8 @@ public class Enemy extends GameObject {
     }
 
     public void move() {
-        x += velX;
-        y += velY;
+        x += velX + velocity;
+        y += velY + velocity;
     }
 
     /**

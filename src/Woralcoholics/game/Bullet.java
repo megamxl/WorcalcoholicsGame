@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 public class Bullet extends GameObject {
 
-    private float bulletSpeed = 30;// 8;
+    public static float bulletSpeed = 30;// 8;
 
     private final BufferedImage bullet_img;
 

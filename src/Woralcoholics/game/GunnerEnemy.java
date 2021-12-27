@@ -19,7 +19,7 @@ public class GunnerEnemy extends Enemy {
 
     private final int checkFreeDistance = 32+50;
 
-    private float movementSpeed = 5;
+    public static float movementSpeed = 5;
 
     protected double px = 0, py = 0;
     protected double gx, gy;

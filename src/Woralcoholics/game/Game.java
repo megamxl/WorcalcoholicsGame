@@ -35,11 +35,16 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage floorDirt1 = null;
     private BufferedImage floorDirt2 = null;
     private BufferedImage floorDirt3 = null;
+    private Upgrades upgrades;
 
     public static List<int[]> wallCords = new ArrayList();
 
     public int ammo = 50;
     public int hp = 100;
+
+    public int shield = 0;
+    public int armor = 0; //armor is referred to in %, so 10 would make a shield absorbing 10% of damage
+
     public static int PlayerX = 0;
     public static int PlayerY = 0;
     public static int TimerValue;
@@ -92,6 +97,7 @@ public class Game extends Canvas implements Runnable {
         TimerValue = 0;
         shouldTime = true;
         timerAction = 3;
+        this.upgrades = new Upgrades(this); //use upgrades.method for upgrade changes in Game and Player class
     }
 
 
@@ -217,7 +223,9 @@ public class Game extends Canvas implements Runnable {
                 Enemy.waves = 1;            //reset Enemy waves
                 Enemy.enemysAlive = 0;
                 hp = 100;                   //reset player specific values
-                ammo = 50;
+                ammo = 50;                  // max hp = 100, max ammo = 50, max shield = 40, max armor = ...
+                shield = 0;
+                armor = 0;
                 camera.shake = false;       //camera should not shake
                 loadLevel(level);           //load the level
             }
@@ -343,10 +351,17 @@ public class Game extends Canvas implements Runnable {
 
         g.setColor(Color.gray);
         g.fillRect(5, 5, 200, 16); //hp
-
         g.fillRect(5, 30, 200, 16); //ammo
+        if(shield > 0)
+            g.fillRect(5, 55, 200, 16); //shield
 
-        g.setColor(Color.blue);
+        if(shield > 0){
+            g.setColor(Color.blue);
+            g.drawString("SHIELD: " + shield + "/40", 210, 67);
+            g.fillRect(5, 55, shield * 5, 16);
+        }
+
+        g.setColor(Color.cyan);
         g.drawString("AMMO: " + ammo + "/50", 210, 42);
         g.fillRect(5, 30, ammo * 4, 16);
 
@@ -362,6 +377,8 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.black);
         g.drawRect(5, 5, 200, 16); //hp
         g.drawRect(5, 30, 200, 16); //ammo
+        if(shield > 0)
+            g.drawRect(5, 55, 200, 16);
 
         g.setColor(Color.MAGENTA);
         g.drawString("Sound " + handler.soundv, 930, 17);
