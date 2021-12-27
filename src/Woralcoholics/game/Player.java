@@ -259,7 +259,7 @@ public class Player extends GameObject {
      * if player goes out of bounce set him to the spawn point
      */
     private void checkIfGone() {
-        if ((y > 1054 || y < 64) || (x > 1900 || x < 0)) {
+        if ((y > 1054 || y < 64) || (x > 2000 || x < 0)) {
             x = Game.PlayerX;
             y = Game.PlayerY;
         }

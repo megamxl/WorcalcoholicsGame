@@ -39,7 +39,7 @@ public class Block extends GameObject {
     @Override
     public void render(Graphics g) {
         g.drawImage(block_img, (int)x, (int)y,null);
-        /*Graphics2D g2d = (Graphics2D) g;
+/*        Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
         g2d.draw(getBounds());*/
     }
