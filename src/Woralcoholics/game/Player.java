@@ -293,23 +293,20 @@ public class Player extends GameObject {
                         // change movement
                         // check for block coordinate to see where it is located in relation to the player
                         // or make it dependent on key pressed?
+                        /*
                         if (x > tempobject.getX()) {
                             // is left from player
-                            // System.out.println("LEFT");
                             if ((x - 50) <= tempobject.getX()) {
                                 x += velX * -1;
                             }
                         } else if (x < tempobject.getX()) {
                             // is right from player
-                            // System.out.println("RIGHT");
                             if ((x + 50) >= tempobject.getX()) {
                                 x += velX * -1;
                             }
                         }
-                    /*
-                    System.out.println("WALL Y: " + tempobject.getY());
-                    System.out.println("PLAY Y:" + y);
-                     */
+                         */
+                        x += velX * -1;
                         y += velY * -1;
                     }
                     case Crate -> {
