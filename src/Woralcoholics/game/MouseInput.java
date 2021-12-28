@@ -18,8 +18,6 @@ public class MouseInput extends MouseAdapter {
     private Game game;
     private Animations an;
 
-    private double wait;
-    private final double del = 200;
     private boolean ammo = true;
 
     public MouseInput(GameManager handler, Camera camera, Game game, Animations an) {
@@ -44,11 +42,11 @@ public class MouseInput extends MouseAdapter {
                 if (button == 1) Game.setState(GameState.MAIN_MENU);
             }
             case MAIN_MENU -> {
-                if (button == 1){
-                    for(int i = 0; i < handler.object.size(); i++) {
+                if (button == 1) {
+                    for (int i = 0; i < handler.object.size(); i++) {
                         GameObject temp = handler.object.get(i);
-                        if(temp.getId() == ID.UIButton && temp.getBounds().contains(currentPos)) {
-                            switch(temp.nextState) {
+                        if (temp.getId() == ID.UIButton && temp.getBounds().contains(currentPos)) {
+                            switch (temp.nextState) {
                                 case LEVEL -> Game.setState(GameState.LEVEL);
                                 case OPTIONS -> Game.setState(GameState.OPTIONS);
                             }
@@ -57,11 +55,11 @@ public class MouseInput extends MouseAdapter {
                 }
             }
             case OPTIONS -> {
-                if (button == 1){
-                    for(int i = 0; i < handler.object.size(); i++) {
+                if (button == 1) {
+                    for (int i = 0; i < handler.object.size(); i++) {
                         GameObject temp = handler.object.get(i);
-                        if(temp.getId() == ID.UIButton && temp.getBounds().contains(currentPos)) {
-                            switch(temp.nextState) {
+                        if (temp.getId() == ID.UIButton && temp.getBounds().contains(currentPos)) {
+                            switch (temp.nextState) {
                                 case MAIN_MENU -> Game.setState(GameState.MAIN_MENU);
                             }
                         }
@@ -69,11 +67,11 @@ public class MouseInput extends MouseAdapter {
                 }
             }
             case PAUSE_MENU -> {
-                if(button == 3) {
+                if (button == 3) {
                     Game.setState(GameState.LEVEL);
                 }
             }
-            case UPGRADE_MENU ->{
+            case UPGRADE_MENU -> {
                 if (button == 1) Game.setState(GameState.LEVEL);
                 Game.TimerValue = 5;    //5 secs wait time
                 Game.shouldTime = true; //activate Timer
@@ -86,9 +84,9 @@ public class MouseInput extends MouseAdapter {
                 switch (button) {
                     case 1 -> {
                         //System.out.println("BUTTON 1");
-                        double now = System.currentTimeMillis();
+                        handler.now = System.currentTimeMillis();
                         //IF waiting time is over AND player has ammo -> shoot a bullet
-                        if (now > wait && game.ammo >= 1) {
+                        if (handler.now > handler.wait && game.ammo >= 1) {
                             //Add camera pos, as bullets don't aim correctly otherwise
                             double mx = currentPos.x + camera.getX();
                             double my = currentPos.y + camera.getY();
@@ -100,59 +98,18 @@ public class MouseInput extends MouseAdapter {
                             temp.direction(mx, my, px, py); //Calculate the direction of this bullet
                             handler.addObject(temp);    //Add the Bullet to the ObjectList
                             game.ammo--;    //Subtract 1 from ammo (bullet was shot)
-                            //aSystem.out.println(game.ammo);
-                            wait = now + del;   //Waiting time for next viable Input
+                            //System.out.println(game.ammo);
+                            handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
+                            playSoundGun(ammo);
                             if (game.ammo <= 0) {
                                 ammo = false;
+                            } else {
+                                ammo = true;
                             }
-                            else
-                            {
-                                ammo=true;
-                            }
-                            try {
-                                new Thread(() -> {
-
-                                    try {
-                                        handler.playSoundGun(ammo);
-                                    } catch (LineUnavailableException ex) {
-                                        ex.printStackTrace();
-                                    } catch (UnsupportedAudioFileException ex) {
-                                        ex.printStackTrace();
-                                    } catch (IOException ex) {
-                                        ex.printStackTrace();
-                                    } catch (InterruptedException ex) {
-                                        ex.printStackTrace();
-                                    }
-                                    catch (IllegalArgumentException ex) {
-                                        ex.printStackTrace();
-                                    }
-                                }).start();
-                            } catch (Exception exception) {
-                                exception.printStackTrace();
-                            }
-                        }
-                        else {
-                            try {
-                                new Thread(() -> {
-
-                                    try {
-                                        handler.playSoundGun(ammo);
-                                    } catch (LineUnavailableException ex) {
-                                        ex.printStackTrace();
-                                    } catch (UnsupportedAudioFileException ex) {
-                                        ex.printStackTrace();
-                                    } catch (IOException ex) {
-                                        ex.printStackTrace();
-                                    } catch (InterruptedException ex) {
-                                        ex.printStackTrace();
-                                    }
-                                    catch (IllegalArgumentException ex) {
-                                        ex.printStackTrace();
-                                    }
-                                }).start();
-                            } catch (Exception exception) {
-                                exception.printStackTrace();
-                            }
+                        } else if (handler.now > handler.wait && game.ammo <= 0) {
+                            playSoundGun(ammo); //has no ammo
+                            handler.wait = handler.now + handler.del;
+                        } else {
                         }
                     }
                     case 2 -> System.out.println("BUTTON 2");
@@ -177,8 +134,35 @@ public class MouseInput extends MouseAdapter {
 
     public void mouseExited(MouseEvent e) {
         //System.out.println("MOUSE EXITED");
-        if(Game.getState() == GameState.LEVEL) {
+        if (Game.getState() == GameState.LEVEL) {
             Game.setState(GameState.PAUSE_MENU);
+        }
+    }
+
+    /***
+     * Runs the sound if player gets hurt
+     * @param ammo
+     */
+    private void playSoundGun(boolean ammo) {
+        try {
+            new Thread(() -> {
+
+                try {
+                    handler.playSoundGun(ammo);
+                } catch (LineUnavailableException ex) {
+                    ex.printStackTrace();
+                } catch (UnsupportedAudioFileException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                } catch (IllegalArgumentException ex) {
+                    ex.printStackTrace();
+                }
+            }).start();
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 }
