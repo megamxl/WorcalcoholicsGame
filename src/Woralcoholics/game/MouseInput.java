@@ -2,6 +2,7 @@ package Woralcoholics.game;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,6 +18,7 @@ public class MouseInput extends MouseAdapter {
     private Camera camera;
     private Game game;
     private Animations an;
+    volatile private boolean mouseDown = false;
 
     private boolean ammo = true;
 
@@ -28,6 +30,8 @@ public class MouseInput extends MouseAdapter {
     }
 
     public void mousePressed(MouseEvent e) {
+        mouseDown = true;
+        System.out.println("mouse pressed");
         //Get the player object for its coordinates
         for (int i = 0; i < handler.object.size(); i++) {
             if (handler.object.get(i).getId() == ID.Player) {
@@ -83,33 +87,42 @@ public class MouseInput extends MouseAdapter {
                  * 3 = RIGHT MOUSE BUTTON */
                 switch (button) {
                     case 1 -> {
-                        //System.out.println("BUTTON 1");
-                        handler.now = System.currentTimeMillis();
-                        //IF waiting time is over AND player has ammo -> shoot a bullet
-                        if (handler.now > handler.wait && game.ammo >= 1) {
-                            //Add camera pos, as bullets don't aim correctly otherwise
-                            double mx = currentPos.x + camera.getX();
-                            double my = currentPos.y + camera.getY();
-                            //Middle of player coordinates
-                            double px = player.getX() + 32;
-                            double py = player.getY() + 32;
-                            //Create a new bullet in the middle of player sprite (minus the bullet radius)
-                            Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-                            temp.direction(mx, my, px, py); //Calculate the direction of this bullet
-                            handler.addObject(temp);    //Add the Bullet to the ObjectList
-                            game.ammo--;    //Subtract 1 from ammo (bullet was shot)
-                            //System.out.println(game.ammo);
-                            handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
-                            playSoundGun(ammo);
-                            if (game.ammo <= 0) {
-                                ammo = false;
-                            } else {
-                                ammo = true;
+                        if (handler.del == 0) {
+                            try {
+                                new Thread(() -> {
+                                    machinegun(e);
+                                }).start();
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
                             }
-                        } else if (handler.now > handler.wait && game.ammo <= 0) {
-                            playSoundGun(ammo); //has no ammo
-                            handler.wait = handler.now + handler.del;
                         } else {
+                            //System.out.println("BUTTON 1");
+                            handler.now = System.currentTimeMillis();
+                            //IF waiting time is over AND player has ammo -> shoot a bullet
+                            if (handler.now > handler.wait && game.ammo >= 1) {
+                                //Add camera pos, as bullets don't aim correctly otherwise
+                                double mx = currentPos.x + camera.getX();
+                                double my = currentPos.y + camera.getY();
+                                //Middle of player coordinates
+                                double px = player.getX() + 32;
+                                double py = player.getY() + 32;
+                                //Create a new bullet in the middle of player sprite (minus the bullet radius)
+                                Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
+                                temp.direction(mx, my, px, py); //Calculate the direction of this bullet
+                                handler.addObject(temp);    //Add the Bullet to the ObjectList
+                                game.ammo--;    //Subtract 1 from ammo (bullet was shot)
+                                //System.out.println(game.ammo);
+                                handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
+                                playSoundGun(ammo);
+                                if (game.ammo <= 0) {
+                                    ammo = false;
+                                } else {
+                                    ammo = true;
+                                }
+                            } else if (handler.now > handler.wait && game.ammo <= 0) {
+                                playSoundGun(ammo); //has no ammo
+                                handler.wait = handler.now + handler.del;
+                            }
                         }
                     }
                     case 2 -> System.out.println("BUTTON 2");
@@ -126,6 +139,13 @@ public class MouseInput extends MouseAdapter {
         }
 
 
+    }
+
+    public void mouseReleased(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            mouseDown = false;
+            System.out.println("mouse rel");
+        }
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -163,6 +183,46 @@ public class MouseInput extends MouseAdapter {
             }).start();
         } catch (Exception exception) {
             exception.printStackTrace();
+        }
+    }
+
+    private void machinegun(MouseEvent e) {
+        System.out.println("MACHINE");
+        handler.now = System.currentTimeMillis();
+        //IF waiting time is over AND player has ammo -> shoot a bullet
+        while (mouseDown && game.ammo >= 1) {
+
+            PointerInfo a = MouseInfo.getPointerInfo();
+            Point point = new Point(a.getLocation());
+            SwingUtilities.convertPointFromScreen(point, e.getComponent());
+            int x = (int) point.getX();
+            int y = (int) point.getY();
+            //Add camera pos, as bullets don't aim correctly otherwise
+            double mx = x + camera.getX();
+            double my = y + camera.getY();
+            //Middle of player coordinates
+            double px = player.getX() + 32;
+            double py = player.getY() + 32;
+            //Create a new bullet in the middle of player sprite (minus the bullet radius)
+            Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
+            temp.direction(mx, my, px, py); //Calculate the direction of this bullet
+            handler.addObject(temp);    //Add the Bullet to the ObjectList
+            game.ammo--;    //Subtract 1 from ammo (bullet was shot)
+            playSoundGun(ammo);
+            handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (game.ammo <= 0) {
+                ammo = false;
+            } else {
+                ammo = true;
+            }
+        }
+        if (ammo == false) {
+            playSoundGun(ammo); //has no ammo
         }
     }
 }

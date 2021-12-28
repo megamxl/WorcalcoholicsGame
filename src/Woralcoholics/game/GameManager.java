@@ -23,7 +23,8 @@ public class GameManager {
     public int soundv = 1; //default value for -20f sound
     protected boolean IsSoundPlaying, IsSoundPlaying2 = false;
     protected double wait;
-    protected final double del = 1000; //how fast player can shoot, less -> faster
+    //machine gun - del=0 | normal gun - del=200 | slowgun - del=1000
+    protected final double del = 0; //how fast player can shoot, less -> faster
     protected double now;
     protected boolean ammo = true;
     protected boolean reloaded = true;
