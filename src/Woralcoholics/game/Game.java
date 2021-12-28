@@ -182,6 +182,7 @@ public class Game extends Canvas implements Runnable {
             //System.out.println("START");
         }
         CalculateReloadingRectangle(handler.wait, (int) handler.del);
+
         CheckReloaded();
 
     }
@@ -650,7 +651,13 @@ public class Game extends Canvas implements Runnable {
             percent=100;
         } else {
             //System.out.println("not");
-            percent=0;
+            if(percent==100 && del!=0)
+                percent=0;
+            if(percent<100)
+                if(del==200)
+                    percent += 5; // default for 200 del
+                else if(del==1000)
+                    percent += 1.6;
         }
 
     }
