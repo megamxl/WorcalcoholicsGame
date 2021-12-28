@@ -10,7 +10,7 @@ public class Score {
     public void addScore(int add){
         this.score += add;
     }
-
+    public void resetSore(){this.score = 0;}
     public int showScore(){
         return this.score ;
     }

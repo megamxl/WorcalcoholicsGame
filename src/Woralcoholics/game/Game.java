@@ -7,6 +7,7 @@ import javax.swing.plaf.PanelUI;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -272,8 +273,6 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.WHITE);
         g.drawString("MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
-
-
     }
 
     /***
@@ -341,7 +340,6 @@ public class Game extends Canvas implements Runnable {
         if (!loaded) {
             handler.render(g);
         }
-
     }
 
     /***
@@ -382,14 +380,27 @@ public class Game extends Canvas implements Runnable {
             g.drawRect(5, 55, 200, 16);
 
         g.setColor(Color.MAGENTA);
-        g.drawString("Sound " + handler.soundv, 930, 17);
+        //g.drawString("Sound " + handler.soundv, 930, 17);
         g.drawString("Waves " + Enemy.waves, 930, 40);
-        g.drawString("Enemies " + Enemy.enemysAlive, 915, 63);
+        //g.drawString("Enemies " + Enemy.enemysAlive, 915, 63);
+        g.drawString("Score " + score.showScore(), 915, 76);
 
         if (shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...
-            g.setColor(Color.YELLOW);
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
-            g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
+            g.setColor(Color.RED);
+            try {
+                Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Future Blood.ttf")).deriveFont(12f);
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                //register the font
+                ge.registerFont(customFont);
+                g.setFont(new Font("Future Blood",Font.PLAIN,80));
+                g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
+            } catch (FontFormatException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
         }
     }
 
@@ -416,6 +427,7 @@ public class Game extends Canvas implements Runnable {
             }
             case GAME_OVER -> {
                 System.out.println("GAME OVER");
+                score.resetSore();
                 handler.backgroundsound.close();
                 //System.out.println("SOUND CLOSE");
                 loaded = false;                 //the player lost, so the level should unload
