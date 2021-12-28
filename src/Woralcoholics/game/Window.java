@@ -28,7 +28,6 @@ public class Window {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        //frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("../Resource/floor.png"))); //Relative Path does not really work
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("jar.png")));
     }
 

@@ -403,7 +403,7 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.MAGENTA);
         //g.drawString("Sound " + handler.soundv, 930, 17);
         g.drawString("Waves " + Enemy.waves, 930, 40);
-        //g.drawString("Enemies " + Enemy.enemysAlive, 915, 63);
+        g.drawString("Enemies " + Enemy.enemysAlive, 915, 63);
         g.drawString("Score " + score.showScore(), 915, 76);
 
         if (shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...

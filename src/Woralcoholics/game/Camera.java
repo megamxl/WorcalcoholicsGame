@@ -23,21 +23,28 @@ public class Camera {
 
         x += ((object.getX() - x) - 1024 / 2) * 0.05f; //*0.05f should make it more smooth
         y += ((object.getY() - y) - 576 / 2) * 0.05f;
+        //checking the corner cases if x or y are bigger than scree with or heigth rest them
         if (x <= 0) x = 0;
         if (x >= 1070) x = 1070;
         if (y <= 0) y = 0;
         if (y >= 500) y = 500;
+        // Camera shake
         if(shake) {
-            if(shakeCycles == 0) {
-                shake = false;
-                shakeCycles = 30;
-            }
-            x += game.randomNumber(-wiggle, wiggle);
-            y += game.randomNumber(-wiggle, wiggle);
-            shakeCycles--;
+            screenShake();
         }
+
     }
 
+    private void screenShake(){
+        if(shakeCycles == 0) {                      // check if shake should be executed
+            shake = false;
+            shakeCycles = 30;
+        }
+        // generate random wiggle variables
+        x += game.randomNumber(-wiggle, wiggle);
+        y += game.randomNumber(-wiggle, wiggle);
+        shakeCycles--;                             // reduces shake cycles that screen does not shake infinity
+    }
 
     public float getX() {
         return x;

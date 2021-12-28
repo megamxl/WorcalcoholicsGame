@@ -12,6 +12,7 @@ public class Crate extends GameObject{
         //crate_image = an.getImage()
     }
 
+    // create should do nothing in update is a static piece
     public void update() {
 
     }

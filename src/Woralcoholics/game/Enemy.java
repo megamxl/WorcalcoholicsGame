@@ -162,6 +162,10 @@ public class Enemy extends GameObject {
         playSoundEnemy();
     }
 
+    /**
+     * needed if a specific enemy should get removed
+     * @param tempobject
+     */
     private void removeWithObject(GameObject tempobject) {
         manager.removeObject(tempobject);
         enemysAlive--;
@@ -210,30 +214,29 @@ public class Enemy extends GameObject {
     }
 
     public static void Spawner(int Wavesize, boolean solo, Random r) {
-        if (solo) {
+        if (solo) {                                         // if function gets passed false just spawn one enemy
             Wavesize = 1;
-        } else {
+        } else {                                            // else increase the amount of the wave and calculate the amount of enemies
             Game.SpawnGunnerEnemy();
             Wavesize = (Wavesize * 2) + 1;
         }
 
-        for (int i = 0; i < Wavesize; i++) {
+        for (int i = 0; i < Wavesize; i++) {                // spawner script
+            // reset and declare x and y for every iteration
             int x = 0;
             int y = 0;
+            // generate x an y random in range we use to load level
             x = r.nextInt(((55 * 32) - 1) - 1);
             y = r.nextInt(((55 * 32) - 1) - 1);
 
-            for (int[] c : Game.wallCords) {
-                if (c[0] == x || c[1] == y) {
-                    //System.out.println("wall, this is i " + i);
-                }
-            }
-            //System.out.println("spawning");
-            Game.SpawnEnemy(x, y);
+            Game.SpawnEnemy(x, y);                          // spawns enemy
         }
 
     }
 
+    /**
+     * if an enemy gets out of bounce delete it and respawn it random
+     */
     public void checkIfGone() {
         if ((y > 1054 || y < 64) || (x > 1900 || x < 0)) {
             removeWithObject(this);
@@ -261,8 +264,6 @@ public class Enemy extends GameObject {
             e.printStackTrace();
         }
     }
-
-
 }
 
 // method of playing sound
