@@ -25,6 +25,7 @@ public class Game extends Canvas implements Runnable {
     private static GameState currentState;
     private GameState previousState;
 
+    private boolean reloaded = true;
     private boolean isRunning;
     protected boolean paused, loaded;
     public static boolean shouldTime = false;
@@ -39,7 +40,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage floorDirt2 = null;
     private BufferedImage floorDirt3 = null;
     private Upgrades upgrades;
-    private boolean reloaded = true;
+
 
     public static List<int[]> wallCords = new ArrayList();
 
@@ -406,8 +407,9 @@ public class Game extends Canvas implements Runnable {
         g.drawString("Score " + score.showScore(), 915, 76);
 
         if (shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...
-            g.setColor(Color.RED);
-            g.setFont(new Font("Future Blood",Font.PLAIN,80));
+            g.setColor(Color.ORANGE);
+            //g.setFont(new Font("Future Blood",Font.PLAIN,80));
+            g.setFont(new Font("Masked Hero Demo",Font.PLAIN,45));
             g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
 
         }
@@ -447,11 +449,11 @@ public class Game extends Canvas implements Runnable {
 
     private void fontLoader(){
         try {
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Future Blood.ttf")).deriveFont(12f);
+            //Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Future Blood.ttf")).deriveFont(12f);
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Masked Hero.ttf")).deriveFont(12f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font
             ge.registerFont(customFont);
-
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {

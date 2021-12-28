@@ -166,7 +166,6 @@ public class Player extends GameObject {
         }
     }
 
-
     private void EnemyCharged(Object tempobject) {
         invincibleTime++;
         System.out.println(invincibleTime);
