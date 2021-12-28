@@ -32,6 +32,8 @@ public class Game extends Canvas implements Runnable {
 
     private BufferedImage level = null;
     private BufferedImage spritesheet = null;
+    private BufferedImage upgradBoarder = null;
+    private BufferedImage upgradBoard = null;
     private BufferedImage floor = null;
     private BufferedImage floorDirt1 = null;
     private BufferedImage floorDirt2 = null;
@@ -60,6 +62,7 @@ public class Game extends Canvas implements Runnable {
     public static GameManager handler;
 
     private static Animations an;
+    private static Animations upgradeBoarderGet;
 
     private Camera camera;
 
@@ -84,6 +87,9 @@ public class Game extends Canvas implements Runnable {
         spritesheet = loader.loadImage("/Spritesheet.png");
         an = new Animations(spritesheet);
 
+        upgradBoarder =loader.loadImage("/UpgradeBorder.png");
+        upgradeBoarderGet = new  Animations(upgradBoarder);
+
         //Adding Mouse and Keyboard Input
         MouseInput mouse = new MouseInput(handler, camera, this, an);
         this.addMouseListener(mouse);
@@ -100,6 +106,8 @@ public class Game extends Canvas implements Runnable {
         shouldTime = true;
         timerAction = 3;
         this.upgrades = new Upgrades(this); //use upgrades.method for upgrade changes in Game and Player class
+
+        fontLoader();
     }
 
 
@@ -177,7 +185,7 @@ public class Game extends Canvas implements Runnable {
      * The complete Render functions handles UI and the game rendering every frame
      */
     public void render() {
-        // prepares the next 3 Frames tho be rendered
+        // prepares the next 3 Frames to be rendered
         BufferStrategy bs = this.getBufferStrategy();
         if (bs == null) {
             this.createBufferStrategy(3);
@@ -304,10 +312,13 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderUpgradeMenu(Graphics g) {
-        //g.setColor(new Color(0,0,0,127));
-        //g.fillRect(0, 0, screenWidth, screenHeight);
+        g.setColor(new Color(0,0,0,127));
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        upgradBoard = upgradeBoarderGet.getImage(1,1,320,600);
+        g.drawImage(upgradBoard, 137, 30,null);
+        g.drawImage(upgradBoard, 377, 30,null);
+        g.drawImage(upgradBoard, 617 , 30,null);
         g.setColor(Color.WHITE);
-        g.drawString("UPGRADE_MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         g.drawString("LMB: BACK TO LEVEL", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
@@ -387,19 +398,8 @@ public class Game extends Canvas implements Runnable {
 
         if (shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...
             g.setColor(Color.RED);
-            try {
-                Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Future Blood.ttf")).deriveFont(12f);
-                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-                //register the font
-                ge.registerFont(customFont);
-                g.setFont(new Font("Future Blood",Font.PLAIN,80));
-                g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
-            } catch (FontFormatException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            g.setFont(new Font("Future Blood",Font.PLAIN,80));
+            g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
 
         }
     }
@@ -434,6 +434,22 @@ public class Game extends Canvas implements Runnable {
             }
         }
     }
+
+
+    private void fontLoader(){
+        try {
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Future Blood.ttf")).deriveFont(12f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            //register the font
+            ge.registerFont(customFont);
+
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /***
      * The function to maka a playable level out of a Buffered Image
