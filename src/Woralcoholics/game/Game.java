@@ -39,6 +39,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage floorDirt2 = null;
     private BufferedImage floorDirt3 = null;
     private Upgrades upgrades;
+    private boolean reloaded = true;
 
     public static List<int[]> wallCords = new ArrayList();
 
@@ -65,6 +66,7 @@ public class Game extends Canvas implements Runnable {
     private static Animations upgradeBoarderGet;
 
     private Camera camera;
+    private double percent;
 
     Random r = new Random();
     Thread t1;
@@ -178,6 +180,8 @@ public class Game extends Canvas implements Runnable {
             triggeredonce = false;
             //System.out.println("START");
         }
+        CalculateReloadingRectangle(handler.wait, (int) handler.del);
+        CheckReloaded();
 
     }
 
@@ -362,6 +366,7 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.gray);
         g.fillRect(5, 5, 200, 16); //hp
         g.fillRect(5, 30, 200, 16); //ammo
+        g.fillRect(5, 70, 200, 8); //reload
         if(shield > 0)
             g.fillRect(5, 55, 200, 16); //shield
 
@@ -374,6 +379,10 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.cyan);
         g.drawString("AMMO: " + ammo + "/50", 210, 42);
         g.fillRect(5, 30, ammo * 4, 16);
+
+        g.setColor(Color.orange);
+        g.drawString("RELOAD: " + (int)percent + "%", 210, 78);
+        g.fillRect(5, 70, (int) percent * 2, 8);
 
         if (hp >= 70)
             g.setColor(Color.green);
@@ -630,6 +639,27 @@ public class Game extends Canvas implements Runnable {
             }
         });
         t1.start();
+    }
+
+    private void CalculateReloadingRectangle(double wait, int del) {
+
+        if (reloaded == true) {
+            //System.out.println("reloaded");
+            percent=100;
+        } else {
+            //System.out.println("not");
+            percent=0;
+        }
+
+    }
+
+    private void CheckReloaded() {
+        handler.now = System.currentTimeMillis();
+        if (handler.now > handler.wait && handler.ammo == true) {
+            reloaded = true;
+        } else {
+            reloaded = false;
+        }
     }
 
 }
