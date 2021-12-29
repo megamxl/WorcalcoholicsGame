@@ -28,7 +28,7 @@ public class Game extends Canvas implements Runnable {
 
     private boolean reloaded = true;
     private boolean isRunning;
-    protected boolean paused, loaded;
+    protected static boolean paused, loaded;
     public static boolean shouldTime = false;
     public static boolean spawn = false;
 

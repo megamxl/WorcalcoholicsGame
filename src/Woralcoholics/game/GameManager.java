@@ -73,6 +73,7 @@ public class GameManager {
      */
     public void clearHandler() {
         while (this.object.size() > 0) {
+            //System.out.println(this.object.size());
             this.object.remove(0);
         }
     }
