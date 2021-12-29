@@ -233,10 +233,8 @@ public class Game extends Canvas implements Runnable {
 
     private void stateChange() {
         //System.out.println("is " + currentState + " equal to " + checkState + "?");
-        if (!loaded) {   //unload function (clear the object list)
-            while (handler.object.size() > 0) {
-                handler.object.remove(0);
-            }
+        if (!loaded) {   //if nothing is loaded...
+            clearHandler(); //clear everything in the handler
         }
         if (currentState == GameState.LEVEL) {   //if we have changed to LEVEL...
             if (!loaded) {                   //...if no level is loaded, load the level
@@ -454,6 +452,15 @@ public class Game extends Canvas implements Runnable {
                 //System.out.println("SOUND CLOSE");
                 loaded = false;                 //the player lost, so the level should unload
             }
+        }
+    }
+
+    /***
+     * A function to clear all objects in the handler
+     */
+    private void clearHandler() {
+        while (handler.object.size() > 0) {
+            handler.object.remove(0);
         }
     }
 
