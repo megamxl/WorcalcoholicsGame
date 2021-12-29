@@ -173,7 +173,7 @@ public class Enemy extends GameObject {
 
     public void isDead() {
         if (hp <= 0) {
-            int prob = Game.randomNumber(1,5);
+            int prob = Game.randomNumber(1,4);
             if(prob == 2){
                 Game.SpawnCreate((int)x,(int)y);
             }

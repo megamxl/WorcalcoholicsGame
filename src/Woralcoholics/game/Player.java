@@ -231,7 +231,6 @@ public class Player extends GameObject {
                         //y += velY * -1;
                     }
                     case Create -> {
-                        System.out.println("here");
                         game.ammo += 10;
                         if (game.ammo > 49){
                             game.ammo = 50;
