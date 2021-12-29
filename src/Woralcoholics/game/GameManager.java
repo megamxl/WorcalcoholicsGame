@@ -68,6 +68,27 @@ public class GameManager {
         object.remove(tempObject);
     }
 
+    /***
+     * A function to clear all objects in the handler
+     */
+    public void clearHandler() {
+        while (this.object.size() > 0) {
+            this.object.remove(0);
+        }
+    }
+
+    /***
+     * A function to clear all instances of one specific object in the handler
+     */
+    public void clearObjects(ID toClear) {
+        for(int i = this.object.size()-1; i > 0; i--) {
+            GameObject temp = this.object.get(i);
+            if(temp.getId() == toClear) {
+                this.object.remove(temp);
+            }
+        }
+    }
+
     public boolean isUp() {
         return up;
     }

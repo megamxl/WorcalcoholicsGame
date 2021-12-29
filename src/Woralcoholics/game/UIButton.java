@@ -1,6 +1,7 @@
 package Woralcoholics.game;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class UIButton extends GameObject{
 
@@ -10,6 +11,7 @@ public class UIButton extends GameObject{
 
     private int width, height;
     private String name;
+    private Animations sprite = null;
 
     /**
      *  Constructor for UI buttons
@@ -22,11 +24,12 @@ public class UIButton extends GameObject{
      * @param game
      * @param an
      */
-    public UIButton(int x, int y, int width, int height, String name, GameState nextState, ID id, Game game, Animations an) {
+    public UIButton(int x, int y, int width, int height, String name, GameState nextState, Animations sprite, ID id, Game game, Animations an) {
         super(x, y, nextState, id, an);
         this.width = width;
         this.height = height;
         this.name = name;
+        this.sprite = sprite;
         this.game = game;
     }
 
@@ -37,8 +40,10 @@ public class UIButton extends GameObject{
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.RED);
-        g.fillRect((int)x, (int)y, width, height);
+        BufferedImage upgradeBoard = sprite.getImage(1,1, 320, 600);
+        g.drawImage(upgradeBoard, (int)x, (int)y,null);
+        /*g.setColor(Color.RED);
+        g.fillRect((int)x, (int)y, width, height);*/
         g.setColor(Color.WHITE);
         g.drawString(name, (int)x + width/2, (int)y + height/2);
     }
