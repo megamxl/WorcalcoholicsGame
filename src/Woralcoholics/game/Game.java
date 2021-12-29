@@ -522,14 +522,14 @@ public class Game extends Canvas implements Runnable {
      * @param image The level Png
      */
     private void loadLevel(BufferedImage image) {
-        int h = image.getHeight();
-        int w = image.getWidth();
+        float h = image.getHeight();
+        float w = image.getWidth();
         int i = 0;
 
 
         for (int xx = 0; xx < w; xx++) {
             for (int yy = 0; yy < h; yy++) {
-                int pixel = image.getRGB(xx, yy);
+                int pixel = image.getRGB((int)xx, (int)yy);
                 int red = (pixel >> 16) & 0xff;
                 int green = (pixel >> 8) & 0xff;
                 int blue = (pixel) & 0xff;
@@ -537,13 +537,15 @@ public class Game extends Canvas implements Runnable {
                 if (red == 255) {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, randomNumber(1, 7), 1));
-                    wallCords.add(new int[]{xx, yy});
+                    wallCords.add(new int[]{(int)xx, (int)yy});
                 }
+                /*
                 if (red == 155) {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, randomNumber(5, 7), 2));
                     wallCords.add(new int[]{xx, yy});
                 }
+                */
                 if (blue == 255 && green == 0 && red == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, an));
                     PlayerX = xx * 32;
