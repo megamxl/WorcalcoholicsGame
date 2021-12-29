@@ -31,7 +31,7 @@ public class MouseInput extends MouseAdapter {
 
     public void mousePressed(MouseEvent e) {
         mouseDown = true;
-        System.out.println("mouse pressed");
+        //System.out.println("mouse pressed");
         //Get the player object for its coordinates
         for (int i = 0; i < handler.object.size(); i++) {
             if (handler.object.get(i).getId() == ID.Player) {
@@ -144,7 +144,7 @@ public class MouseInput extends MouseAdapter {
     public void mouseReleased(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
             mouseDown = false;
-            System.out.println("mouse rel");
+            //System.out.println("mouse rel");
         }
     }
 
@@ -187,7 +187,7 @@ public class MouseInput extends MouseAdapter {
     }
 
     private void machinegun(MouseEvent e) {
-        System.out.println("MACHINE");
+        //System.out.println("MACHINE");
         handler.now = System.currentTimeMillis();
         //IF waiting time is over AND player has ammo -> shoot a bullet
         while (mouseDown && game.ammo >= 1) {

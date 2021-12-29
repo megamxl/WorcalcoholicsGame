@@ -65,6 +65,7 @@ public class Game extends Canvas implements Runnable {
 
     private static Animations an;
     private static Animations upgradeBoarderGet;
+    private static Gun gun;
 
     private Camera camera;
     private double percent;
@@ -82,6 +83,8 @@ public class Game extends Canvas implements Runnable {
 
         handler = new GameManager();
         camera = new Camera(0, 0, this);
+        gun = new Gun();
+        AddGuns();
         // when finished implement the Mouse and Key input
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level02.png");
         level = ImageIO.read(path);
@@ -90,8 +93,8 @@ public class Game extends Canvas implements Runnable {
         spritesheet = loader.loadImage("/Spritesheet.png");
         an = new Animations(spritesheet);
 
-        upgradBoarder =loader.loadImage("/UpgradeBorder.png");
-        upgradeBoarderGet = new  Animations(upgradBoarder);
+        upgradBoarder = loader.loadImage("/UpgradeBorder.png");
+        upgradeBoarderGet = new Animations(upgradBoarder);
 
         //Adding Mouse and Keyboard Input
         MouseInput mouse = new MouseInput(handler, camera, this, an);
@@ -322,12 +325,12 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderUpgradeMenu(Graphics g) {
-        g.setColor(new Color(0,0,0,127));
+        g.setColor(new Color(0, 0, 0, 127));
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        upgradBoard = upgradeBoarderGet.getImage(1,1,320,600);
-        g.drawImage(upgradBoard, 137, 30,null);
-        g.drawImage(upgradBoard, 377, 30,null);
-        g.drawImage(upgradBoard, 617 , 30,null);
+        upgradBoard = upgradeBoarderGet.getImage(1, 1, 320, 600);
+        g.drawImage(upgradBoard, 137, 30, null);
+        g.drawImage(upgradBoard, 377, 30, null);
+        g.drawImage(upgradBoard, 617, 30, null);
         g.setColor(Color.WHITE);
         g.drawString("LMB: BACK TO LEVEL", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
@@ -373,10 +376,10 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(5, 5, 200, 16); //hp
         g.fillRect(5, 30, 200, 16); //ammo
         g.fillRect(5, 70, 200, 8); //reload
-        if(shield > 0)
+        if (shield > 0)
             g.fillRect(5, 55, 200, 16); //shield
 
-        if(shield > 0){
+        if (shield > 0) {
             g.setColor(Color.blue);
             g.drawString("SHIELD: " + shield + "/40", 210, 67);
             g.fillRect(5, 55, shield * 5, 16);
@@ -387,8 +390,19 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(5, 30, ammo * 4, 16);
 
         g.setColor(Color.orange);
-        g.drawString("RELOAD: " + (int)percent + "%", 210, 78);
+        g.drawString("RELOAD: " + (int) percent + "%", 210, 78);
         g.fillRect(5, 70, (int) percent * 2, 8);
+
+        if (handler.del == 0) {
+            g.setColor(Color.cyan);
+            g.drawString("MACHINE GUN", 210, 95);
+        } else if (handler.del == 200) {
+            g.setColor(Color.cyan);
+            g.drawString("PISTOL", 210, 95);
+        } else if (handler.del == 1000) {
+            g.setColor(Color.cyan);
+            g.drawString("SHOTGUN", 210, 95);
+        }
 
         if (hp >= 70)
             g.setColor(Color.green);
@@ -402,7 +416,7 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.black);
         g.drawRect(5, 5, 200, 16); //hp
         g.drawRect(5, 30, 200, 16); //ammo
-        if(shield > 0)
+        if (shield > 0)
             g.drawRect(5, 55, 200, 16);
 
         g.setColor(Color.MAGENTA);
@@ -414,7 +428,7 @@ public class Game extends Canvas implements Runnable {
         if (shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...
             g.setColor(Color.ORANGE);
             //g.setFont(new Font("Future Blood",Font.PLAIN,80));
-            g.setFont(new Font("Masked Hero Demo",Font.PLAIN,45));
+            g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 45));
             g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
 
         }
@@ -465,7 +479,7 @@ public class Game extends Canvas implements Runnable {
     }
 
 
-    private void fontLoader(){
+    private void fontLoader() {
         try {
             //Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Future Blood.ttf")).deriveFont(12f);
             Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Masked Hero.ttf")).deriveFont(12f);
@@ -629,14 +643,6 @@ public class Game extends Canvas implements Runnable {
         currentState = state;
     }
 
-    // the main function that runs everything
-    public static void main(String[] args) throws IOException {
-        try {
-            new Game();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /***
      * Function to run backgroundsound
@@ -665,15 +671,15 @@ public class Game extends Canvas implements Runnable {
 
         if (reloaded == true) {
             //System.out.println("reloaded");
-            percent=100;
+            percent = 100;
         } else {
             //System.out.println("not");
-            if(percent==100 && del!=0)
-                percent=0;
-            if(percent<100)
-                if(del==200)
+            if (percent == 100 && del != 0)
+                percent = 0;
+            if (percent < 100)
+                if (del == 200)
                     percent += 5; // default for 200 del
-                else if(del==1000)
+                else if (del == 1000)
                     percent += 1.6;
         }
 
@@ -685,6 +691,22 @@ public class Game extends Canvas implements Runnable {
             reloaded = true;
         } else {
             reloaded = false;
+        }
+    }
+
+    private void AddGuns() {
+        gun.addObject(new Gun(), "Machinegun", true);
+        gun.addObject(new Gun(), "Pistol", false);
+        gun.addObject(new Gun(), "Shotgun", true);
+        // if crate is collected, set locked to false so it can be displayed and choosen in UI
+    }
+
+    // the main function that runs everything
+    public static void main(String[] args) throws IOException {
+        try {
+            new Game();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
