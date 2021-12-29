@@ -46,34 +46,14 @@ public class MouseInput extends MouseAdapter {
             case TITLE -> {
                 if (button == 1) Game.setState(GameState.MAIN_MENU);
             }
-            case MAIN_MENU -> {
+            case MAIN_MENU, OPTIONS, PAUSE_MENU -> {
                 if (button == 1) {
                     for (int i = 0; i < handler.object.size(); i++) {
                         GameObject temp = handler.object.get(i);
                         if (temp.getId() == ID.UIButton && temp.getBounds().contains(currentPos)) {
-                            switch (temp.nextState) {
-                                case LEVEL -> Game.setState(GameState.LEVEL);
-                                case OPTIONS -> Game.setState(GameState.OPTIONS);
-                            }
+                            Game.setState(temp.nextState);
                         }
                     }
-                }
-            }
-            case OPTIONS -> {
-                if (button == 1) {
-                    for (int i = 0; i < handler.object.size(); i++) {
-                        GameObject temp = handler.object.get(i);
-                        if (temp.getId() == ID.UIButton && temp.getBounds().contains(currentPos)) {
-                            switch (temp.nextState) {
-                                case MAIN_MENU -> Game.setState(GameState.MAIN_MENU);
-                            }
-                        }
-                    }
-                }
-            }
-            case PAUSE_MENU -> {
-                if (button == 3) {
-                    Game.setState(GameState.LEVEL);
                 }
             }
             case UPGRADE_MENU -> {

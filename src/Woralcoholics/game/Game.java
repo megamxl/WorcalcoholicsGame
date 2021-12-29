@@ -34,8 +34,8 @@ public class Game extends Canvas implements Runnable {
 
     private BufferedImage level = null;
     private BufferedImage spritesheet = null;
-    private BufferedImage upgradBoarder = null;
-    private BufferedImage upgradBoard = null;
+    private BufferedImage upgradeBoarder = null;
+    private BufferedImage upgradeBoard = null;
     private BufferedImage floor = null;
     private BufferedImage floorDirt1 = null;
     private BufferedImage floorDirt2 = null;
@@ -60,7 +60,6 @@ public class Game extends Canvas implements Runnable {
     public static boolean isDead = false;
     private boolean wasstopped = false;
     private boolean triggeredonce = false;
-
 
     // Classes
     private Thread thread;
@@ -98,8 +97,8 @@ public class Game extends Canvas implements Runnable {
         spritesheet = loader.loadImage("/Spritesheet.png");
         an = new Animations(spritesheet);
 
-        upgradBoarder = loader.loadImage("/UpgradeBorder.png");
-        upgradeBoarderGet = new Animations(upgradBoarder);
+        upgradeBoarder = loader.loadImage("/UpgradeBorder.png");
+        upgradeBoarderGet = new Animations(upgradeBoarder);
 
         //Adding Mouse and Keyboard Input
         MouseInput mouse = new MouseInput(handler, camera, this, an);
@@ -242,8 +241,12 @@ public class Game extends Canvas implements Runnable {
 
     private void stateChange() {
         //System.out.println("is " + currentState + " equal to " + checkState + "?");
+        previousState = checkState;      //save the state before the state change
+        checkState = currentState;       //the checkState becomes the current state, to again detect a state change
+        System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
+        handler.clearObjects(ID.UIButton);      //clear all UI buttons
         if (!loaded) {   //if nothing is loaded...
-            clearHandler(); //clear everything in the handler
+            handler.clearHandler(); //clear everything in the handler
         }
         if (currentState == GameState.LEVEL) {   //if we have changed to LEVEL...
             if (!loaded) {                   //...if no level is loaded, load the level
@@ -257,12 +260,10 @@ public class Game extends Canvas implements Runnable {
                 loadLevel(level);           //load the level
             }
             paused = false;  //level is running and not paused (when coming from e.g. PAUSE_MENU or UPGRADE_MENU, where a level is already loaded)
-        } else {
+        }
+        else {
             loadMenu();                     //load the menu of currentState
         }
-        previousState = checkState;      //save the state before the state change
-        checkState = currentState;       //the checkState becomes the current state, to again detect a state change
-        //System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
     }
 
     /***
@@ -297,7 +298,6 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.WHITE);
         g.drawString("TITLE", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         g.drawString("LMB: MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
-
     }
 
     /***
@@ -318,8 +318,13 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderOptions(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        if(!loaded) {
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        }
+        else {
+            renderBackground(g);
+        }
         g.setColor(Color.WHITE);
         g.drawString("OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         g.drawString("RMB: MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
@@ -344,10 +349,10 @@ public class Game extends Canvas implements Runnable {
     private void renderUpgradeMenu(Graphics g) {
         g.setColor(new Color(0, 0, 0, 127));
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        upgradBoard = upgradeBoarderGet.getImage(1, 1, 320, 600);
-        g.drawImage(upgradBoard, 137, 30, null);
-        g.drawImage(upgradBoard, 377, 30, null);
-        g.drawImage(upgradBoard, 617, 30, null);
+        upgradeBoard = upgradeBoarderGet.getImage(1,1,320,600);
+        g.drawImage(upgradeBoard, 137, 30,null);
+        g.drawImage(upgradeBoard, 377, 30,null);
+        g.drawImage(upgradeBoard, 617, 30,null);
         g.setColor(Color.WHITE);
         g.drawString("LMB: BACK TO LEVEL", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
@@ -357,7 +362,6 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderGameOver(Graphics g) {
-        clearHandler();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
@@ -380,8 +384,16 @@ public class Game extends Canvas implements Runnable {
             case UPGRADE_MENU -> renderUpgradeMenu(g);
             case GAME_OVER -> renderGameOver(g);
         }
-        if (!loaded) {
+        if (!loaded) {      //if no Level is loaded, render all Menu Elements
             handler.render(g);
+        }
+        else {
+            for(int i = 0; i < handler.object.size(); i++) {
+                GameObject temp = handler.object.get(i);
+                if(temp.getId() == ID.UIButton) {
+                    handler.render(g);
+                }
+            }
         }
     }
 
@@ -460,21 +472,27 @@ public class Game extends Canvas implements Runnable {
      * as the name states loads all kinds of Menus, which is not the level
      */
     private void loadMenu() {
+        GameState RETURN = previousState;
+        if(previousState == GameState.OPTIONS) {
+            menuCount--;
+        }
         switch (currentState) {
             case STUDIO -> System.out.println("STUDIO");
             case TITLE -> {
             }
             case MAIN_MENU -> {
                 menuCount = 0;
-                handler.addObject(new UIButton(10, 10, 400, 300, "Level", GameState.LEVEL, ID.UIButton, this, an));
-                handler.addObject(new UIButton(510, 10, 400, 300, "Options", GameState.OPTIONS, ID.UIButton, this, an));
+                handler.addObject(new UIButton(10, 10, 400, 300, "Level", GameState.LEVEL, upgradeBoarderGet, ID.UIButton, this, an));
+                handler.addObject(new UIButton(510, 10, 400, 300, "Options", GameState.OPTIONS, upgradeBoarderGet, ID.UIButton, this, an));
             }
             case OPTIONS -> {
                 menuCount++;
-                handler.addObject(new UIButton(10, 10, 400, 300, "Main Menu", GameState.MAIN_MENU, ID.UIButton, this, an));//System.out.println("OPTIONS");
+                handler.addObject(new UIButton(10, 10, 400, 300, "Return", RETURN, upgradeBoarderGet, ID.UIButton, this, an));
             }
             case PAUSE_MENU -> {
                 menuCount = 10;
+                handler.addObject(new UIButton(10, 10, 400, 300, "Return", GameState.LEVEL, upgradeBoarderGet, ID.UIButton, this, an));
+                handler.addObject(new UIButton(510, 10, 400, 300, "Options", GameState.OPTIONS, upgradeBoarderGet, ID.UIButton, this, an));
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
@@ -491,16 +509,6 @@ public class Game extends Canvas implements Runnable {
             }
         }
     }
-
-    /***
-     * A function to clear all objects in the handler
-     */
-    private void clearHandler() {
-        while (handler.object.size() > 0) {
-            handler.object.remove(0);
-        }
-    }
-
 
     private void fontLoader() {
         try {
@@ -576,16 +584,12 @@ public class Game extends Canvas implements Runnable {
         } else {   //if the waiting time is over...
             if (shouldTime) {    //...execute the previously set timerAction
                 switch (timerAction) {
-                    case 1:
-                        Enemy.Spawner(Enemy.waves, false, r); //Spawn the next wave of enemies
+                    case 1 -> {
+                        Enemy.Spawner(Enemy.waves, false, r);      //Spawn the next wave of enemies
                         upgrades.setMunition(upgrades.getMunition() + 20); //adds 20 rounds after each wave
-                        break;
-                    case 2:
-                        currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
-                        break;
-                    case 3:
-                        currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
-                        break;
+                    }
+                    case 2 -> currentState = GameState.UPGRADE_MENU;     //change state to UPGRADE_MENU (because of rendering)
+                    case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
                 }
                 shouldTime = false;  //deactivate the timer
             }
