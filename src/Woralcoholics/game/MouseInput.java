@@ -4,9 +4,9 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
+import java.awt.event.MouseWheelEvent;
 
 /***
  * in this class the mouse input  happens
@@ -29,6 +29,8 @@ public class MouseInput extends MouseAdapter {
         this.an = an;
     }
 
+
+    //region MouseEvents
     public void mousePressed(MouseEvent e) {
         mouseDown = true;
         //System.out.println("mouse pressed");
@@ -159,6 +161,18 @@ public class MouseInput extends MouseAdapter {
         }
     }
 
+    //endregion
+    //region MouseWheelEvents
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        if (e.getWheelRotation() < 0) {
+            //System.out.println("Rotated Up... " + e.getWheelRotation()); weapon index +1
+        } else {
+            // System.out.println("Rotated Down... " + e.getWheelRotation()); weapon index -1
+        }
+    }
+    //endregion
+    //region PRIVATE METHODS
+
     /***
      * Runs the sound if player gets hurt
      * @param ammo
@@ -225,4 +239,5 @@ public class MouseInput extends MouseAdapter {
             playSoundGun(ammo); //has no ammo
         }
     }
+//endregion
 }

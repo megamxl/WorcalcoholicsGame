@@ -99,6 +99,7 @@ public class Game extends Canvas implements Runnable {
         //Adding Mouse and Keyboard Input
         MouseInput mouse = new MouseInput(handler, camera, this, an);
         this.addMouseListener(mouse);
+        this.addMouseWheelListener(mouse);
         KeyInput keys = new KeyInput(handler, this);
         this.addKeyListener(keys);
 
