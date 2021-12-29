@@ -12,5 +12,4 @@ public enum ID {
     Bullet(),
     EnemyBullet(),
     UIButton()
-
 }

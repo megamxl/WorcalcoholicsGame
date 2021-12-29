@@ -83,7 +83,7 @@ public class Game extends Canvas implements Runnable {
         handler = new GameManager();
         camera = new Camera(0, 0, this);
         // when finished implement the Mouse and Key input
-        InputStream path = this.getClass().getClassLoader().getResourceAsStream("level01.png");
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level02.png");
         level = ImageIO.read(path);
 
         BufferedImageLoader loader = new BufferedImageLoader();
@@ -207,9 +207,12 @@ public class Game extends Canvas implements Runnable {
             handler.enemy.removeAll(handler.enemy);
             //System.out.println("SPAWN" + handler.enemy.size());
         } else {
-            renderBackground(g);
             //translates our screen
             g2d.translate(-camera.getX(), -camera.getY());
+
+            // IMPORTANT: renderBackground(g) has to be called AFTER g2d.translate
+            // else the background moves with the camera
+            renderBackground(g);
 
             handler.render(g);
 
