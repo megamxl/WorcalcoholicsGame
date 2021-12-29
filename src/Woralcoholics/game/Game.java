@@ -3,6 +3,7 @@ package Woralcoholics.game;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -34,12 +35,13 @@ public class Game extends Canvas implements Runnable {
 
     private BufferedImage level = null;
     private BufferedImage spritesheet = null;
-    private BufferedImage upgradeBoarder = null;
-    private BufferedImage upgradeBoard = null;
+    private BufferedImage upgradBoarder = null;
+    private BufferedImage upgradBoard = null;
     private BufferedImage floor = null;
     private BufferedImage floorDirt1 = null;
     private BufferedImage floorDirt2 = null;
     private BufferedImage floorDirt3 = null;
+    private BufferedImage imgOver = null;
     private BufferedImage currGun = null;
     private Upgrades upgrades;
 
@@ -57,9 +59,10 @@ public class Game extends Canvas implements Runnable {
     public static int PlayerY = 0;
     public static int TimerValue;
     public static int timerAction;
-    public static boolean isDead = false;
+    public static boolean isDead= false;
     private boolean wasstopped = false;
     private boolean triggeredonce = false;
+
 
     // Classes
     private Thread thread;
@@ -68,6 +71,7 @@ public class Game extends Canvas implements Runnable {
 
     private static Animations an;
     private static Animations upgradeBoarderGet;
+    private static Animations GamoverScreenImg;
     private static Gun gun;
 
     private Camera camera;
@@ -82,7 +86,7 @@ public class Game extends Canvas implements Runnable {
         currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
-        new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress");
+        new Window(SCREEN_WIDTH,SCREEN_HEIGHT,"Workalcoholics Work In Progress");
         start();
 
         handler = new GameManager();
@@ -97,8 +101,13 @@ public class Game extends Canvas implements Runnable {
         spritesheet = loader.loadImage("/Spritesheet.png");
         an = new Animations(spritesheet);
 
-        upgradeBoarder = loader.loadImage("/UpgradeBorder.png");
-        upgradeBoarderGet = new Animations(upgradeBoarder);
+        upgradBoarder = loader.loadImage("/UpgradeBorder.png");
+        upgradeBoarderGet = new Animations(upgradBoarder);
+
+        BufferedImage GamoverScreen = loader.loadImage("/gameOverPicture.png");
+        GamoverScreenImg = new Animations(GamoverScreen);
+        imgOver = GamoverScreen.getSubimage(1,1,720,480);
+
 
         //Adding Mouse and Keyboard Input
         MouseInput mouse = new MouseInput(handler, camera, this, an);
@@ -189,7 +198,7 @@ public class Game extends Canvas implements Runnable {
             triggeredonce = false;
             //System.out.println("START");
         }
-        CalculateReloadingRectangle(handler.del);
+        CalculateReloadingRectangle(handler.wait, (int) handler.del);
 
         CheckReloaded();
 
@@ -241,12 +250,8 @@ public class Game extends Canvas implements Runnable {
 
     private void stateChange() {
         //System.out.println("is " + currentState + " equal to " + checkState + "?");
-        previousState = checkState;      //save the state before the state change
-        checkState = currentState;       //the checkState becomes the current state, to again detect a state change
-        System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
-        handler.clearObjects(ID.UIButton);      //clear all UI buttons
         if (!loaded) {   //if nothing is loaded...
-            handler.clearHandler(); //clear everything in the handler
+            clearHandler(); //clear everything in the handler
         }
         if (currentState == GameState.LEVEL) {   //if we have changed to LEVEL...
             if (!loaded) {                   //...if no level is loaded, load the level
@@ -260,10 +265,12 @@ public class Game extends Canvas implements Runnable {
                 loadLevel(level);           //load the level
             }
             paused = false;  //level is running and not paused (when coming from e.g. PAUSE_MENU or UPGRADE_MENU, where a level is already loaded)
-        }
-        else {
+        } else {
             loadMenu();                     //load the menu of currentState
         }
+        previousState = checkState;      //save the state before the state change
+        checkState = currentState;       //the checkState becomes the current state, to again detect a state change
+        //System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
     }
 
     /***
@@ -276,7 +283,7 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.WHITE);
         g.drawString("Workalcoholics", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         g.drawString("presents", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
-        isDead = true;
+        isDead =true;
     }
 
     /***
@@ -298,6 +305,7 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.WHITE);
         g.drawString("TITLE", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         g.drawString("LMB: MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
+
     }
 
     /***
@@ -318,13 +326,8 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderOptions(Graphics g) {
-        if(!loaded) {
-            g.setColor(Color.BLACK);
-            g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        }
-        else {
-            renderBackground(g);
-        }
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
         g.drawString("OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         g.drawString("RMB: MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
@@ -349,10 +352,10 @@ public class Game extends Canvas implements Runnable {
     private void renderUpgradeMenu(Graphics g) {
         g.setColor(new Color(0, 0, 0, 127));
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        upgradeBoard = upgradeBoarderGet.getImage(1,1,320,600);
-        g.drawImage(upgradeBoard, 137, 30,null);
-        g.drawImage(upgradeBoard, 377, 30,null);
-        g.drawImage(upgradeBoard, 617, 30,null);
+        upgradBoard = upgradeBoarderGet.getImage(1, 1, 320, 600);
+        g.drawImage(upgradBoard, 137, 30, null);
+        g.drawImage(upgradBoard, 377, 30, null);
+        g.drawImage(upgradBoard, 617, 30, null);
         g.setColor(Color.WHITE);
         g.drawString("LMB: BACK TO LEVEL", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
@@ -362,12 +365,15 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderGameOver(Graphics g) {
-        g.setColor(Color.BLACK);
+        clearHandler();
+        g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        g.setColor(Color.WHITE);
-        g.drawString("GAME OVER", 200, 200);
-        g.drawString("your Score was " + lastScore, 500, SCREEN_HEIGHT / 2);
-        g.drawString("Press LMB to Start again", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
+        g.setColor(Color.black);
+        //g.drawString("GAME OVER", 200, 200);
+        g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 55));
+        g.drawImage(imgOver,1,1,null);
+        g.drawString("your Score was " + lastScore , 320, SCREEN_HEIGHT -80 );
+        //g.drawString("Press LMB to Start again", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
     /***
@@ -384,16 +390,8 @@ public class Game extends Canvas implements Runnable {
             case UPGRADE_MENU -> renderUpgradeMenu(g);
             case GAME_OVER -> renderGameOver(g);
         }
-        if (!loaded) {      //if no Level is loaded, render all Menu Elements
+        if (!loaded) {
             handler.render(g);
-        }
-        else {
-            for(int i = 0; i < handler.object.size(); i++) {
-                GameObject temp = handler.object.get(i);
-                if(temp.getId() == ID.UIButton) {
-                    handler.render(g);
-                }
-            }
         }
     }
 
@@ -424,7 +422,6 @@ public class Game extends Canvas implements Runnable {
         g.drawString("RELOAD: " + (int) percent + "%", 210, 78);
         g.fillRect(5, 70, (int) percent * 2, 8);
 
-        //for each gun different displaying in the UI
         if (handler.del == 0) {
             g.setColor(Color.cyan);
             g.drawString("MACHINE GUN", 210, 95);
@@ -464,7 +461,7 @@ public class Game extends Canvas implements Runnable {
             g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
 
         }
-        g.drawImage(currGun, 10, 470, null);
+        g.drawImage(currGun,10,470,null);
 
     }
 
@@ -510,6 +507,16 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
+    /***
+     * A function to clear all objects in the handler
+     */
+    private void clearHandler() {
+        while (handler.object.size() > 0) {
+            handler.object.remove(0);
+        }
+    }
+
+
     private void fontLoader() {
         try {
             //Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Future Blood.ttf")).deriveFont(12f);
@@ -517,6 +524,11 @@ public class Game extends Canvas implements Runnable {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font
             ge.registerFont(customFont);
+
+            Font customFont1 = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/DebugFreeTrial-MVdYB.otf")).deriveFont(12f);
+            GraphicsEnvironment ge1 = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            //register the font
+            ge1.registerFont(customFont1);
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -530,14 +542,14 @@ public class Game extends Canvas implements Runnable {
      * @param image The level Png
      */
     private void loadLevel(BufferedImage image) {
-        float h = image.getHeight();
-        float w = image.getWidth();
+        int h = image.getHeight();
+        int w = image.getWidth();
         int i = 0;
 
 
         for (int xx = 0; xx < w; xx++) {
             for (int yy = 0; yy < h; yy++) {
-                int pixel = image.getRGB((int) xx, (int) yy);
+                int pixel = image.getRGB(xx, yy);
                 int red = (pixel >> 16) & 0xff;
                 int green = (pixel >> 8) & 0xff;
                 int blue = (pixel) & 0xff;
@@ -545,15 +557,13 @@ public class Game extends Canvas implements Runnable {
                 if (red == 255) {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, randomNumber(1, 7), 1));
-                    wallCords.add(new int[]{(int) xx, (int) yy});
+                    wallCords.add(new int[]{xx, yy});
                 }
-                /*
                 if (red == 155) {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, randomNumber(5, 7), 2));
                     wallCords.add(new int[]{xx, yy});
                 }
-                */
                 if (blue == 255 && green == 0 && red == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, an));
                     PlayerX = xx * 32;
@@ -562,16 +572,15 @@ public class Game extends Canvas implements Runnable {
                 if (green == 255) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an, score));
                 }
-                if (green == 255 && blue == 255) {
+                if(green == 255 && blue == 255){
 
                 }
             }
         }
         handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an, score)); //Test Gunner
         loaded = true;
-        currGun = an.getImage(2, 10, 64, 64);
+        currGun = an.getImage(2,10,64,64);
         playBackgroundSound();
-        handler.ammo=true;
         //System.out.println("NEW GAME");
     }
 
@@ -584,10 +593,7 @@ public class Game extends Canvas implements Runnable {
         } else {   //if the waiting time is over...
             if (shouldTime) {    //...execute the previously set timerAction
                 switch (timerAction) {
-                    case 1 -> {
-                        Enemy.Spawner(Enemy.waves, false, r);      //Spawn the next wave of enemies
-                        upgrades.setMunition(upgrades.getMunition() + 20); //adds 20 rounds after each wave
-                    }
+                    case 1 -> Enemy.Spawner(Enemy.waves, false, r);      //Spawn the next wave of enemies
                     case 2 -> currentState = GameState.UPGRADE_MENU;     //change state to UPGRADE_MENU (because of rendering)
                     case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
                 }
@@ -669,8 +675,8 @@ public class Game extends Canvas implements Runnable {
         handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, an, score));
     }
 
-    public static void SpawnCreate(int x, int y) {
-        handler.addObject(new Crate(y, x, ID.Create, an));
+    public static void SpawnCreate(int x, int y){
+        handler.addObject(new Crate(y, x, ID.Create,an));
     }
 
     /***
@@ -688,53 +694,6 @@ public class Game extends Canvas implements Runnable {
         currentState = state;
     }
 
-
-    //region RELOADING
-    /***
-     * Progress Bar (Reloading)
-     * @param del
-     */
-    private void CalculateReloadingRectangle(int del) {
-
-        if (reloaded == true) {
-            //System.out.println("reloaded");
-            percent = 100;
-        } else {
-            //System.out.println("not");
-            if (percent == 100 && del != 0)
-                percent = 0;
-            if (percent < 100)
-                if (del == 200)
-                    percent += 5; // default for 200 del
-                else if (del == 1000)
-                    percent += 1.6;
-        }
-    }
-
-    /***
-     * Check if Player can shoot a bullet
-     */
-    private void CheckReloaded() {
-        handler.now = System.currentTimeMillis();
-        if (handler.now > handler.wait && handler.ammo == true) {
-            reloaded = true;
-        } else {
-            reloaded = false;
-        }
-    }
-
-    /***
-     * Add guns to Gunlist
-     */
-    private void AddGuns() {
-        gun.addObject(new Gun(), GunType.MachineGun, true);
-        gun.addObject(new Gun(), GunType.Pistol, false);
-        gun.addObject(new Gun(), GunType.Shotgun, true);
-        // if crate is collected, set locked to false so it can be displayed and choosen in UI
-    }
-    //endregion
-
-    // region BACKGROUND SOUND
 
     /***
      * Function to run backgroundsound
@@ -758,7 +717,40 @@ public class Game extends Canvas implements Runnable {
         });
         t1.start();
     }
-    //endregion
+
+    private void CalculateReloadingRectangle(double wait, int del) {
+
+        if (reloaded == true) {
+            //System.out.println("reloaded");
+            percent = 100;
+        } else {
+            //System.out.println("not");
+            if (percent == 100 && del != 0)
+                percent = 0;
+            if (percent < 100)
+                if (del == 200)
+                    percent += 5; // default for 200 del
+                else if (del == 1000)
+                    percent += 1.6;
+        }
+
+    }
+
+    private void CheckReloaded() {
+        handler.now = System.currentTimeMillis();
+        if (handler.now > handler.wait && handler.ammo == true) {
+            reloaded = true;
+        } else {
+            reloaded = false;
+        }
+    }
+
+    private void AddGuns() {
+        gun.addObject(new Gun(), GunType.MachineGun, true);
+        gun.addObject(new Gun(), GunType.Pistol, false);
+        gun.addObject(new Gun(), GunType.Shotgun, true);
+        // if crate is collected, set locked to false so it can be displayed and choosen in UI
+    }
 
     // the main function that runs everything
     public static void main(String[] args) throws IOException {
