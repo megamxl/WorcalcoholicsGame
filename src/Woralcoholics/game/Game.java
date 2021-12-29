@@ -3,7 +3,6 @@ package Woralcoholics.game;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.plaf.PanelUI;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -23,7 +22,8 @@ public class Game extends Canvas implements Runnable {
     final int SCREEN_HEIGHT = 576;
 
     private static GameState currentState;
-    private GameState previousState;
+    private GameState previousState, checkState;
+    private int menuCount;
 
     private boolean reloaded = true;
     private boolean isRunning;
@@ -75,7 +75,7 @@ public class Game extends Canvas implements Runnable {
     /* ------------- Constructor for Game Class -------------- */
 
     public Game() throws IOException {
-        currentState = previousState = GameState.STUDIO;    //initialize the currentState to STUDIO
+        currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
         start();
@@ -158,7 +158,7 @@ public class Game extends Canvas implements Runnable {
      * in every frame check where player is and update camera position
      */
     public void update() {
-        if (currentState != previousState) {     //if there was a state change...
+        if (currentState != checkState) {     //if there was a state change...
             stateChange();
         }
         if (currentState == GameState.LEVEL && !paused) {    //if we are in level and the game is not paused...
@@ -229,6 +229,7 @@ public class Game extends Canvas implements Runnable {
     /* ---------- Private functions for game Class ----------- */
 
     private void stateChange() {
+        //System.out.println("is " + currentState + " equal to " + checkState + "?");
         if (!loaded) {   //unload function (clear the object list)
             while (handler.object.size() > 0) {
                 handler.object.remove(0);
@@ -249,7 +250,9 @@ public class Game extends Canvas implements Runnable {
         } else {
             loadMenu();                     //load the menu of currentState
         }
-        previousState = currentState;       //the previous state becomes the current state, to again detect a state change
+        previousState = checkState;      //save the state before the state change
+        checkState = currentState;       //the checkState becomes the current state, to again detect a state change
+        //System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
     }
 
     /***
@@ -425,12 +428,16 @@ public class Game extends Canvas implements Runnable {
             case TITLE -> {
             }
             case MAIN_MENU -> {
-                //System.out.println("MAIN MENU");
+                menuCount = 0;
                 handler.addObject(new UIButton(10, 10, 400, 300, "Level", GameState.LEVEL, ID.UIButton, this, an));
                 handler.addObject(new UIButton(510, 10, 400, 300, "Options", GameState.OPTIONS, ID.UIButton, this, an));
             }
-            case OPTIONS -> handler.addObject(new UIButton(10, 10, 400, 300, "Main Menu", GameState.MAIN_MENU, ID.UIButton, this, an));//System.out.println("OPTIONS");
+            case OPTIONS -> {
+                menuCount++;
+                handler.addObject(new UIButton(10, 10, 400, 300, "Main Menu", GameState.MAIN_MENU, ID.UIButton, this, an));//System.out.println("OPTIONS");
+            }
             case PAUSE_MENU -> {
+                menuCount = 10;
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
