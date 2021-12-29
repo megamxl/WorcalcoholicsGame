@@ -3,6 +3,7 @@ package Woralcoholics.game;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -24,6 +25,7 @@ public class Game extends Canvas implements Runnable {
     private static GameState currentState;
     private GameState previousState, checkState;
     private int menuCount;
+    private int lastScore = 0;
 
     private boolean reloaded = true;
     private boolean isRunning;
@@ -39,6 +41,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage floorDirt1 = null;
     private BufferedImage floorDirt2 = null;
     private BufferedImage floorDirt3 = null;
+    private BufferedImage currGun = null;
     private Upgrades upgrades;
 
 
@@ -55,8 +58,10 @@ public class Game extends Canvas implements Runnable {
     public static int PlayerY = 0;
     public static int TimerValue;
     public static int timerAction;
+    public static boolean isDead= false;
     private boolean wasstopped = false;
     private boolean triggeredonce = false;
+
 
     // Classes
     private Thread thread;
@@ -79,6 +84,7 @@ public class Game extends Canvas implements Runnable {
         currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
+        new Window(SCREEN_WIDTH,SCREEN_HEIGHT,"Workalcoholics Work In Progress");
         start();
 
         handler = new GameManager();
@@ -270,6 +276,7 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.WHITE);
         g.drawString("Workalcoholics", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         g.drawString("presents", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
+        isDead =true;
     }
 
     /***
@@ -277,11 +284,21 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderTitle(Graphics g) {
+//        if(isDead) {
+//            Window.frame.setVisible(false);
+//            Window.GameOverFrame.setVisible(true);
+//            isDead =false;
+//        }
+//        Window.GameOverFrame.setVisible(false);
+//        Window.frame.setVisible(true);
+
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
         g.setColor(Color.WHITE);
         g.drawString("TITLE", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         g.drawString("LMB: MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
+
     }
 
     /***
@@ -341,10 +358,12 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderGameOver(Graphics g) {
+        clearHandler();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
-        g.drawString("GAME OVER", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.drawString("GAME OVER", 200, 200);
+        g.drawString("your Score was " + lastScore , 500, SCREEN_HEIGHT /2 );
         g.drawString("Press LMB to Start again", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
@@ -433,6 +452,8 @@ public class Game extends Canvas implements Runnable {
             g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
 
         }
+        g.drawImage(currGun,10,470,null);
+
     }
 
     /***
@@ -462,6 +483,7 @@ public class Game extends Canvas implements Runnable {
             }
             case GAME_OVER -> {
                 System.out.println("GAME OVER");
+                lastScore = score.showScore();
                 score.resetSore();
                 handler.backgroundsound.close();
                 //System.out.println("SOUND CLOSE");
@@ -525,15 +547,14 @@ public class Game extends Canvas implements Runnable {
                 if (green == 255) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an, score));
                 }
-                /*
-                if(green == 255 && blue == 255)
-                    handler.addObject(new Create(xx*32, yy*32, ID.Create));
+                if(green == 255 && blue == 255){
 
-            }*/
+                }
             }
         }
         handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an, score)); //Test Gunner
         loaded = true;
+        currGun = an.getImage(2,10,64,64);
         playBackgroundSound();
         //System.out.println("NEW GAME");
     }
@@ -612,7 +633,7 @@ public class Game extends Canvas implements Runnable {
      * @param end End value
      * @return The Random number
      */
-    public Integer randomNumber(int start, int end) {
+    public static Integer randomNumber(int start, int end) {
         return new Random().ints(start, end).findFirst().getAsInt();
     }
 
@@ -627,6 +648,10 @@ public class Game extends Canvas implements Runnable {
 
     public static void SpawnGunnerEnemy() {
         handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, an, score));
+    }
+
+    public static void SpawnCreate(int x, int y){
+        handler.addObject(new Crate(y, x, ID.Create,an));
     }
 
     /***

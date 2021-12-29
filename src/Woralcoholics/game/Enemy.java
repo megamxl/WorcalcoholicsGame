@@ -93,7 +93,7 @@ public class Enemy extends GameObject {
 
                     if(this.getId() == ID.Enemy){score.addScore(3);}
                     else if(this.getId() == ID.GunnerEnemy){score.addScore(10);}
-                    System.out.println(score.showScore());
+                    //System.out.println(score.showScore());
 
                     removeWithObject(tmpObject);
                     if (enemysAlive <= 0) {
@@ -173,6 +173,10 @@ public class Enemy extends GameObject {
 
     public void isDead() {
         if (hp <= 0) {
+            int prob = Game.randomNumber(1,5);
+            if(prob == 2){
+                Game.SpawnCreate((int)x,(int)y);
+            }
             remove();
         }
     }

@@ -9,7 +9,7 @@ public class Crate extends GameObject{
 
     public Crate(int x, int y, ID id, Animations an){
         super(x, y, id, an);
-        //crate_image = an.getImage()
+        crate_image = an.getImage(4,10,64,64);
     }
 
     // create should do nothing in update is a static piece
@@ -19,8 +19,9 @@ public class Crate extends GameObject{
 
 
     public void render(Graphics g) {
-        g.setColor(Color.cyan);
-        g.fillRect((int)x, (int)y, 32, 32);
+//        g.setColor(Color.cyan);
+//        g.fillRect((int)x, (int)y, 32, 32);
+        g.drawImage(crate_image,(int) x,(int) y,null);
     }
 
     public Rectangle getBounds() {

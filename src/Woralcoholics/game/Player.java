@@ -230,10 +230,15 @@ public class Player extends GameObject {
                         //x += velX * -1;
                         //y += velY * -1;
                     }
-                    case Crate -> {
-                        game.ammo += 20;
+                    case Create -> {
+                        System.out.println("here");
+                        game.ammo += 10;
+                        if (game.ammo > 49){
+                            game.ammo = 50;
+                        }
                         handler.removeObject(tempobject);
                     }
+
                     case Enemy, EnemyBullet -> {
                         playerSoundHurt();
                         if (game.hp > 0) {    //if player has health and is not invincible

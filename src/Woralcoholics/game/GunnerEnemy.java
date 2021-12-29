@@ -142,18 +142,18 @@ public class GunnerEnemy extends Enemy {
     }
 
     public void render(Graphics g) {
-       /* g.setColor(Color.MAGENTA);
-        g.fillRect((int)x +8, (int)y +2, 52, 60);*/
-        //g.setColor(Color.WHITE);
-        //g.drawRect((int)gx+2, (int)gy, 64, 64);
-        //g.drawLine((int)gx+32, (int)gy+32, (int)px, (int)py);
-        //g.drawLine((int)gx+32, (int)gy+32, (int)(gx+Math.cos(alpha)*(distanceToPlayer-50)), (int)(gy+Math.sin(alpha)*(distanceToPlayer-50)));
+        /*g.setColor(Color.MAGENTA);
+        g.fillRect((int)x +4, (int)y +2, 52, 60);
+        g.setColor(Color.WHITE);
+        g.drawRect((int)gx+2, (int)gy, 64, 64);
+        g.drawLine((int)gx+32, (int)gy+32, (int)px, (int)py);
+        g.drawLine((int)gx+32, (int)gy+32, (int)(gx+Math.cos(alpha)*(distanceToPlayer-50)), (int)(gy+Math.sin(alpha)*(distanceToPlayer-50)));*/
         g.drawImage(gunner_enemy_img,(int)x,(int)y, null);
     }
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int)x +8, (int)y +2, 52, 60);
+        return new Rectangle((int)x +4, (int)y +2, 52, 60);
     }
 
     @Override

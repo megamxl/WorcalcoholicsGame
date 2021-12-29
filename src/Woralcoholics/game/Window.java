@@ -2,8 +2,21 @@ package Woralcoholics.game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Window {
+
+
+    public static JFrame frame =null;
+    public static JFrame GameOverFrame =null;
+
+    private static JLabel txtUser;
+
+    private static JLabel l1, l2, l3;
+    private static JTextField tf1;
+    private static JButton btn1;
+    private static JPasswordField p1;
 
     /***
      * The Window creation class
@@ -14,7 +27,7 @@ public class Window {
      */
     public Window(int with, int height, String title, Game game) {
 
-        JFrame frame = new JFrame(title);
+        frame = new JFrame(title);
 
         // the size of the window
         frame.setPreferredSize(new Dimension(with, height));
@@ -29,6 +42,45 @@ public class Window {
         frame.setVisible(true);
 
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("jar.png")));
+
     }
 
+    public Window(int with, int height, String title){
+        GameOverFrame = new JFrame(title);
+
+        // the size of the window
+        GameOverFrame.setPreferredSize(new Dimension(with, height));
+        GameOverFrame.setMaximumSize(new Dimension(with, height));
+        GameOverFrame.setMinimumSize(new Dimension(with, height));
+
+        //options of the window
+        GameOverFrame.setResizable(false);
+        GameOverFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        GameOverFrame.setLocationRelativeTo(null);
+        GameOverFrame.setVisible(true);
+
+        GameOverFrame.setBackground(Color.BLACK);
+
+        GameOverFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("jar.png")));
+
+        tf1 = new JTextField(15);
+        l1 = new JLabel("Name");
+
+        tf1.addActionListener(e->{
+            // Show text when user presses ENTER.
+            System.out.println(tf1.getText());
+        });
+
+
+
+        // Add the label to the content pane.
+        GameOverFrame.add(tf1);
+        GameOverFrame.pack();
+
+        GameOverFrame.setVisible(false);
+    }
+
+
+
 }
+
