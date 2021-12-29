@@ -394,11 +394,11 @@ public class Game extends Canvas implements Runnable {
         clearHandler();
         g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        g.setColor(Color.black);
+        g.setColor(Color.DARK_GRAY);
         //g.drawString("GAME OVER", 200, 200);
-        g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 55));
+        g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 75));
         g.drawImage(imgOver,1,1,null);
-        g.drawString("your Score was " + lastScore , 320, SCREEN_HEIGHT -80 );
+        g.drawString("your Score is " + lastScore , 300, SCREEN_HEIGHT -65 );
         //g.drawString("Press LMB to Start again", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
@@ -453,12 +453,15 @@ public class Game extends Canvas implements Runnable {
         if (handler.del == 0) {
             g.setColor(Color.cyan);
             g.drawString("MACHINE GUN", 210, 95);
+            currGun = an.getImage(2,10,64,64);
         } else if (handler.del == 200) {
             g.setColor(Color.cyan);
             g.drawString("PISTOL", 210, 95);
+            currGun = an.getImage(3,10,64,64);
         } else if (handler.del == 1000) {
             g.setColor(Color.cyan);
             g.drawString("SHOTGUN", 210, 95);
+            currGun = an.getImage(1,10,64,64);
         }
 
         if (hp >= 70)
@@ -618,7 +621,6 @@ public class Game extends Canvas implements Runnable {
         }
         handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an, score)); //Test Gunner
         loaded = true;
-        currGun = an.getImage(2,10,64,64);
         playBackgroundSound();
         //System.out.println("NEW GAME");
     }
