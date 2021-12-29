@@ -43,7 +43,6 @@ public class Player extends GameObject {
 
     @Override
     public void update() {
-
         x += velX;
         y += velY;
 
@@ -145,15 +144,35 @@ public class Player extends GameObject {
 
     @Override
     public void render(Graphics g) {
-      /*  Graphics2D g2d = (Graphics2D) g;
+        /*Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
         g2d.draw(getBounds());*/
         g.drawImage(player_img, (int) x, (int) y, null);
+        // draw other colliders
+        /*g.setColor(Color.RED);
+        g2d.draw(getBoundsX());
+        g.setColor(Color.RED);
+        g2d.draw(getBoundsY());*/
     }
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int) x + 12, (int) y, 40, 62);
+        //return new Rectangle((int) x + 12, (int) y, 40, 62);
+        return new Rectangle((int) x + 13, (int) y, 38, 62);
+    }
+
+    public Rectangle getBoundsX(){
+        Rectangle tempX = getBounds();
+        tempX.width += 9.4;
+        tempX.x -= 4.5f;
+        return tempX;
+    }
+
+    public Rectangle getBoundsY(){
+        Rectangle tempY = getBounds();
+        tempY.height += 8;
+        tempY.y -= 4f;
+        return tempY;
     }
 
     /**
@@ -176,41 +195,40 @@ public class Player extends GameObject {
 
     /**
      * Collision Detection function for the Player
-     * IMPORTANT:
-     * The collision system is still WIP,
-     * since colliding with a wall, disables even the movement alongside it as of right now.
-     * Thats why the code is still a bit messy!!!
      */
     private void collision() {
         for (int i = 0; i < handler.object.size(); i++) {
             GameObject tempobject = handler.object.get(i);
 
-
+            // --------------------------------------------------------------
+            if (getBoundsX().intersects((tempobject.getBounds()))) {
+                ID tempID = tempobject.getId();
+                switch (tempID) {
+                    case Block -> {
+                        //System.out.println("X");
+                        x += velX * -1;
+                    }
+                }
+            }
+            // --------------------------------------------------------------
+            if (getBoundsY().intersects((tempobject.getBounds()))) {
+                ID tempID = tempobject.getId();
+                switch (tempID) {
+                    case Block -> {
+                        //System.out.println("Y");
+                        y += velY * -1;
+                    }
+                }
+            }
+            // --------------------------------------------------------------
             if (getBounds().intersects((tempobject.getBounds()))) {  //If player collides with another object...
                 ID tempID = tempobject.getId();     //...get ID of said object...
                 switch (tempID) {         //...and determine what should happen
                     case Block -> {
-                        // change movement
                         // check for block coordinate to see where it is located in relation to the player
                         // or make it dependent on key pressed?
-                        if (x > tempobject.getX()) {
-                            // is left from player
-                            // System.out.println("LEFT");
-                            if ((x - 50) <= tempobject.getX()) {
-                                x += velX * -1;
-                            }
-                        } else if (x < tempobject.getX()) {
-                            // is right from player
-                            // System.out.println("RIGHT");
-                            if ((x + 50) >= tempobject.getX()) {
-                                x += velX * -1;
-                            }
-                        }
-                    /*
-                    System.out.println("WALL Y: " + tempobject.getY());
-                    System.out.println("PLAY Y:" + y);
-                     */
-                        y += velY * -1;
+                        //x += velX * -1;
+                        //y += velY * -1;
                     }
                     case Crate -> {
                         game.ammo += 20;
@@ -236,7 +254,6 @@ public class Player extends GameObject {
                                         handler.enemy.add(tempobject);
                                         //System.out.println(handler.enemy.size() + String.valueOf(tempobject));
                                     }
-
                                 }
                             }
                             cam.shake = true;

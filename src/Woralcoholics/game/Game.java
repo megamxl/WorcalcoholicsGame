@@ -482,7 +482,7 @@ public class Game extends Canvas implements Runnable {
 
                 if (red == 255) {
                     // Creates the new blocks which function as the walls
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, 1, 1));
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, randomNumber(1, 7), 1));
                     wallCords.add(new int[]{xx, yy});
                 }
                 if (blue == 255 && green == 0) {

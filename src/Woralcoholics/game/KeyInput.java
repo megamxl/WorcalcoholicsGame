@@ -37,9 +37,7 @@ public class KeyInput extends KeyAdapter {
                 switch (key) {
                     case KeyEvent.VK_A -> gameManager.setLeft(true);
                     case KeyEvent.VK_D -> gameManager.setRight(true);
-                    case KeyEvent.VK_W ->
-                            // try to check for some collision parameters
-                            gameManager.setUp(true);
+                    case KeyEvent.VK_W -> gameManager.setUp(true);
                     case KeyEvent.VK_S -> gameManager.setDown(true);
                     case KeyEvent.VK_L -> gameManager.setL(true);
                     case KeyEvent.VK_M -> gameManager.setM(true);
