@@ -7,14 +7,17 @@ import java.awt.image.BufferedImage;
  * Animation Class for the sprites assigned to the objects
  */
 public class Animations {
-    private BufferedImage img;
 
+    ////region INSTANCE VARIABLES
+    private BufferedImage img;
+    //endregion
+    //region CONSTRUCTOR
     public Animations(BufferedImage img)
     {
         this.img =img;
     }
-
-
+    //endregion
+    //region METHODS
     /**
      * A function to get a sub image out of a Images
      * @param col col of the image *64
@@ -27,5 +30,5 @@ public class Animations {
     {
         return img.getSubimage((col*64)-64, (row*64)-64,width,height);
     }
-
+    //endregion
 }

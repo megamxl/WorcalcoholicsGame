@@ -107,41 +107,6 @@ public class Player extends GameObject {
         }
     }
 
-    /**
-     * plays the sound for moving player
-     *
-     * @throws LineUnavailableException
-     * @throws UnsupportedAudioFileException
-     * @throws IOException
-     * @throws InterruptedException
-     */
-    private void playSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
-        if (IsSoundPlaying == false) {
-            IsSoundPlaying = true;
-            Clip sound = AudioSystem.getClip();
-            Path relativePath = Paths.get("Resource/move5.wav");
-            Path absolutePath = relativePath.toAbsolutePath();
-            sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
-            FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
-            if (handler.soundv == 0) {
-                volume.setValue(-80f); // MUTE
-                //System.out.println("VOLUME MUTE + " +volume.toString());
-            } else if (handler.soundv == 1) {
-                volume.setValue(-15f); // DEFAULT -> balanced default sound
-                //System.out.println("VOLUME DEFAULT + " +volume.toString());
-            } else if (handler.soundv == 2) {
-                volume.setValue(6.0206f); // Maximum
-                //System.out.println("VOLUME UP + " +volume.toString());
-            }
-            sound.start();
-            Thread.sleep(100);
-            sound.stop();
-            IsSoundPlaying = false;
-        } else {
-            //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
-        }
-    }
-
     @Override
     public void render(Graphics g) {
         /*Graphics2D g2d = (Graphics2D) g;
@@ -185,13 +150,6 @@ public class Player extends GameObject {
         }
     }
 
-    private void EnemyCharged(Object tempobject) {
-        invincibleTime++;
-        System.out.println(invincibleTime);
-        if (invincibleTime % 30 == 0) {
-            upgrades.damaged(10);
-        }
-    }
 
     /**
      * Collision Detection function for the Player
@@ -235,6 +193,7 @@ public class Player extends GameObject {
                         if (game.ammo > 49){
                             game.ammo = 50;
                         }
+                        handler.ammo=true;
                         handler.removeObject(tempobject);
                     }
 
@@ -279,6 +238,8 @@ public class Player extends GameObject {
         }
     }
 
+
+    // region SOUND
     /***
      * Runs the sound if player gets hurt
      */
@@ -326,4 +287,5 @@ public class Player extends GameObject {
             e.printStackTrace();
         }
     }
+    //endregion
 }
