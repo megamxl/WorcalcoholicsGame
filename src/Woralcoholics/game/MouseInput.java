@@ -18,9 +18,8 @@ public class MouseInput extends MouseAdapter {
     private Camera camera;
     private Game game;
     private Animations an;
-    volatile private boolean mouseDown = false;
+    volatile private boolean mouseDown = false; //determine if mouse1 is pressed or not
 
-    private boolean ammo = true;
 
     public MouseInput(GameManager handler, Camera camera, Game game, Animations an) {
         this.handler = handler;
@@ -115,14 +114,9 @@ public class MouseInput extends MouseAdapter {
                                 game.ammo--;    //Subtract 1 from ammo (bullet was shot)
                                 //System.out.println(game.ammo);
                                 handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
-                                playSoundGun(ammo);
-                                if (game.ammo <= 0) {
-                                    ammo = false;
-                                } else {
-                                    ammo = true;
-                                }
+                                playSoundGun(game.ammo);
                             } else if (handler.now > handler.wait && game.ammo <= 0) {
-                                playSoundGun(ammo); //has no ammo
+                                playSoundGun(game.ammo); //has no ammo
                                 handler.wait = handler.now + handler.del;
                             }
                         }
@@ -177,7 +171,7 @@ public class MouseInput extends MouseAdapter {
      * Runs the sound if player gets hurt
      * @param ammo
      */
-    private void playSoundGun(boolean ammo) {
+    private void playSoundGun(int ammo) {
         try {
             new Thread(() -> {
 
@@ -222,21 +216,16 @@ public class MouseInput extends MouseAdapter {
             temp.direction(mx, my, px, py); //Calculate the direction of this bullet
             handler.addObject(temp);    //Add the Bullet to the ObjectList
             game.ammo--;    //Subtract 1 from ammo (bullet was shot)
-            playSoundGun(ammo);
+            playSoundGun(game.ammo);
             handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
-            if (game.ammo <= 0) {
-                ammo = false;
-            } else {
-                ammo = true;
-            }
         }
-        if (ammo == false) {
-            playSoundGun(ammo); //has no ammo
+        if (game.ammo <= 0) {
+            playSoundGun(game.ammo); //has no ammo
         }
     }
 //endregion

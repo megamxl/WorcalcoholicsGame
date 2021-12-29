@@ -3,7 +3,6 @@ package Woralcoholics.game;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -191,7 +190,7 @@ public class Game extends Canvas implements Runnable {
             triggeredonce = false;
             //System.out.println("START");
         }
-        CalculateReloadingRectangle(handler.wait, (int) handler.del);
+        CalculateReloadingRectangle(handler.del);
 
         CheckReloaded();
 
@@ -413,6 +412,7 @@ public class Game extends Canvas implements Runnable {
         g.drawString("RELOAD: " + (int) percent + "%", 210, 78);
         g.fillRect(5, 70, (int) percent * 2, 8);
 
+        //for each gun different displaying in the UI
         if (handler.del == 0) {
             g.setColor(Color.cyan);
             g.drawString("MACHINE GUN", 210, 95);
@@ -529,7 +529,7 @@ public class Game extends Canvas implements Runnable {
 
         for (int xx = 0; xx < w; xx++) {
             for (int yy = 0; yy < h; yy++) {
-                int pixel = image.getRGB((int)xx, (int)yy);
+                int pixel = image.getRGB((int) xx, (int) yy);
                 int red = (pixel >> 16) & 0xff;
                 int green = (pixel >> 8) & 0xff;
                 int blue = (pixel) & 0xff;
@@ -537,7 +537,7 @@ public class Game extends Canvas implements Runnable {
                 if (red == 255) {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, an, randomNumber(1, 7), 1));
-                    wallCords.add(new int[]{(int)xx, (int)yy});
+                    wallCords.add(new int[]{(int) xx, (int) yy});
                 }
                 /*
                 if (red == 155) {
@@ -563,6 +563,7 @@ public class Game extends Canvas implements Runnable {
         loaded = true;
         currGun = an.getImage(2, 10, 64, 64);
         playBackgroundSound();
+        handler.ammo=true;
         //System.out.println("NEW GAME");
     }
 
@@ -684,6 +685,53 @@ public class Game extends Canvas implements Runnable {
     }
 
 
+    //region RELOADING
+    /***
+     * Progress Bar (Reloading)
+     * @param del
+     */
+    private void CalculateReloadingRectangle(int del) {
+
+        if (reloaded == true) {
+            //System.out.println("reloaded");
+            percent = 100;
+        } else {
+            //System.out.println("not");
+            if (percent == 100 && del != 0)
+                percent = 0;
+            if (percent < 100)
+                if (del == 200)
+                    percent += 5; // default for 200 del
+                else if (del == 1000)
+                    percent += 1.6;
+        }
+    }
+
+    /***
+     * Check if Player can shoot a bullet
+     */
+    private void CheckReloaded() {
+        handler.now = System.currentTimeMillis();
+        if (handler.now > handler.wait && handler.ammo == true) {
+            reloaded = true;
+        } else {
+            reloaded = false;
+        }
+    }
+
+    /***
+     * Add guns to Gunlist
+     */
+    private void AddGuns() {
+        gun.addObject(new Gun(), GunType.MachineGun, true);
+        gun.addObject(new Gun(), GunType.Pistol, false);
+        gun.addObject(new Gun(), GunType.Shotgun, true);
+        // if crate is collected, set locked to false so it can be displayed and choosen in UI
+    }
+    //endregion
+
+    // region BACKGROUND SOUND
+
     /***
      * Function to run backgroundsound
      */
@@ -706,40 +754,7 @@ public class Game extends Canvas implements Runnable {
         });
         t1.start();
     }
-
-    private void CalculateReloadingRectangle(double wait, int del) {
-
-        if (reloaded == true) {
-            //System.out.println("reloaded");
-            percent = 100;
-        } else {
-            //System.out.println("not");
-            if (percent == 100 && del != 0)
-                percent = 0;
-            if (percent < 100)
-                if (del == 200)
-                    percent += 5; // default for 200 del
-                else if (del == 1000)
-                    percent += 1.6;
-        }
-
-    }
-
-    private void CheckReloaded() {
-        handler.now = System.currentTimeMillis();
-        if (handler.now > handler.wait && handler.ammo == true) {
-            reloaded = true;
-        } else {
-            reloaded = false;
-        }
-    }
-
-    private void AddGuns() {
-        gun.addObject(new Gun(), "Machinegun", true);
-        gun.addObject(new Gun(), "Pistol", false);
-        gun.addObject(new Gun(), "Shotgun", true);
-        // if crate is collected, set locked to false so it can be displayed and choosen in UI
-    }
+    //endregion
 
     // the main function that runs everything
     public static void main(String[] args) throws IOException {

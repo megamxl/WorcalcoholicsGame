@@ -12,39 +12,24 @@ import java.util.Random;
  */
 public class Enemy extends GameObject {
 
+    //region INSTANCE VARIABLES
     private final BufferedImage enemy_img;
-
-
-    //Handler is for collision detection
+    public static float velocity = 0;
     private GameManager manager;
-    Random r = new Random();
     int choose = 0;
     int hp = 100;
+    Random r = new Random();
     Score score;
-
-    public static boolean waited = false;
-
-    public static float velocity = 0;
-
-    /**
-     * low and high values for different variations of enemy behaviour
-     */
-    int low = -4;
+    int low = -4; //low and high values for different variations of enemy behaviour
     int high = 4;
-    /**
-     * booleanvalue is for determining if enemy should charge player again or just running aimless around
-     */
-    int booleanvalue = 0;
-    /**
-     * hittedwall is for changing the aiming target of player to nothing
-     */
-    boolean hittedwall = false;
-    Clip sound;
-
+    int booleanvalue = 0; //booleanvalue is for determining if enemy should charge player again or just running aimless around
+    boolean hittedwall = false; //hittedwall is for changing the aiming target of player to nothing
     static int enemysAlive = 0;
     static int waves = 1;
     final int upgradeAfterWave = 3;     //After how many Waves an Upgrade should be granted
+    //endregion
 
+    //region CONSTRUCTOR
     public Enemy(int x, int y, ID id, GameManager manager, Animations an, Score score) {
         super(x, y, id, an);
         this.manager = manager;
@@ -54,7 +39,12 @@ public class Enemy extends GameObject {
         enemysAlive++;
         //System.out.println("enemy created "+ enemysAlive );
     }
+    //endregion
 
+    //region PUBLIC METHODS
+    /***
+     * x value of enemy gets changed by vel Values
+     */
     public void move() {
         x += velX + velocity;
         y += velY + velocity;
@@ -154,22 +144,6 @@ public class Enemy extends GameObject {
         }
     }
 
-    /**
-     * Enemy gets removed
-     */
-    private void remove() {
-        manager.removeObject(this);
-        playSoundEnemy();
-    }
-
-    /**
-     * needed if a specific enemy should get removed
-     * @param tempobject
-     */
-    private void removeWithObject(GameObject tempobject) {
-        manager.removeObject(tempobject);
-        enemysAlive--;
-    }
 
     public void isDead() {
         if (hp <= 0) {
@@ -248,6 +222,25 @@ public class Enemy extends GameObject {
         }
     }
 
+    //endregion
+
+    //region PRIVATE METHODS
+    /**
+     * Enemy gets removed
+     */
+    private void remove() {
+        manager.removeObject(this);
+        playSoundEnemy();
+    }
+
+    /**
+     * needed if a specific enemy should get removed
+     * @param tempobject
+     */
+    private void removeWithObject(GameObject tempobject) {
+        manager.removeObject(tempobject);
+        enemysAlive--;
+    }
     private void playSoundEnemy() {
         try {
             new Thread(() -> {
@@ -268,7 +261,7 @@ public class Enemy extends GameObject {
             e.printStackTrace();
         }
     }
+    //endregion
 }
 
-// method of playing sound
 

@@ -24,7 +24,7 @@ public class GameManager {
     protected boolean IsSoundPlaying, IsSoundPlaying2 = false;
     protected double wait;
     //machine gun - del=0 | normal gun - del=200 | slowgun - del=1000
-    protected final double del = 0; //how fast player can shoot, less -> faster
+    protected final int del = 200; //how fast player can shoot, less -> faster
     protected double now;
     protected boolean ammo = true;
     protected boolean reloaded = true;
@@ -163,10 +163,10 @@ public class GameManager {
      * @throws InterruptedException
      * @throws IllegalArgumentException
      */
-    public void playSoundGun(boolean ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException, IllegalArgumentException {
+    public void playSoundGun(int ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException, IllegalArgumentException {
         sound = AudioSystem.getClip();
         Path relativePath;
-        if (!ammo) {
+        if (ammo<=0) {
             relativePath = Paths.get("Resource/gunzeroammo.wav");
         } else {
             relativePath = Paths.get("Resource/gunplayer2.wav");
@@ -178,7 +178,7 @@ public class GameManager {
             volume.setValue(-80f); // MUTE
             //System.out.println("VOLUME MUTE + " +volume.toString());
         } else if (soundv == 1) {
-            if (!ammo) {
+            if (ammo<=0) {
                 volume.setValue(-5f); //Default adjusted
             } else {
                 volume.setValue(-20f); // Default

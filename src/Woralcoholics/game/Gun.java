@@ -4,30 +4,30 @@ import java.util.LinkedList;
 
 public class Gun {
 
-    //region VARIABLES
+    //region INSTANCE VARIABLES
     LinkedList<Gun> guns = new LinkedList<>();
-    private String type;
+    private Enum type;
     private boolean locked;
     //endregion
     //region CONSTRUCTOR
-    public void Gun(String type, boolean locked) {
+    public void Gun(Enum type, boolean locked) {
         this.type = type;
         this.locked = locked;
     }
     //endregion
     //region METHODS
-    public void addObject(Gun tempObject, String type, boolean locked) {
+    public void addObject(Gun tempObject, Enum type, boolean locked) {
         tempObject.type=type;
         tempObject.locked=locked;
         guns.add(tempObject);
     }
     //endregion
     //region GETTER/SETTER
-    public String getType() {
+    public Enum getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Enum type) {
         this.type = type;
     }
 
