@@ -13,7 +13,10 @@ public class Upgrades {
     } //max ammo is 50
 
     public void setMunition(int ammo) {
-        game.ammo = ammo;
+        if(ammo > 50)
+            game.ammo = 50;
+        else
+            game.ammo = ammo;
     }
 
     public int getMunition(){
