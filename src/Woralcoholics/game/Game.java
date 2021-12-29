@@ -322,6 +322,32 @@ public class Game extends Canvas implements Runnable {
     }
 
     /***
+     * Instructions to render the Main Menu screen
+     * @param g the current Buffered image as Graphics object
+     */
+    private void renderTutorial(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        g.setColor(Color.WHITE);
+        g.drawString("TUTORIAL", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
+    }
+
+    /***
+     * Instructions to render the Main Menu screen
+     * @param g the current Buffered image as Graphics object
+     */
+    private void renderHighScores(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        g.setColor(Color.WHITE);
+        g.drawString("HIGH SCORES", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
+    }
+
+    /***
      * Instructions to render the Options screen
      * @param g the current Buffered image as Graphics object
      */
@@ -385,6 +411,8 @@ public class Game extends Canvas implements Runnable {
             case STUDIO -> renderStudio(g);
             case TITLE -> renderTitle(g);
             case MAIN_MENU -> renderMainMenu(g);
+            case TUTORIAL -> renderTutorial(g);
+            case HIGH_SCORES -> renderHighScores(g);
             case OPTIONS -> renderOptions(g);
             case PAUSE_MENU -> renderPauseMenu(g);
             case UPGRADE_MENU -> renderUpgradeMenu(g);
@@ -479,17 +507,28 @@ public class Game extends Canvas implements Runnable {
             }
             case MAIN_MENU -> {
                 menuCount = 0;
-                handler.addObject(new UIButton(10, 10, 400, 300, "Level", GameState.LEVEL, upgradeBoarderGet, ID.UIButton, this, an));
-                handler.addObject(new UIButton(510, 10, 400, 300, "Options", GameState.OPTIONS, upgradeBoarderGet, ID.UIButton, this, an));
+                //JMenu mainMenu = new JMenu("Main Menu");
+                //mainMenu.add(new JMenuItem("test"));
+                handler.addObject(new UIButton(10, 10, 64, 64, "Level", GameState.LEVEL, ID.UIButton, this, an));
+                handler.addObject(new UIButton(110, 10, 64, 64, "Tutorial", GameState.TUTORIAL, ID.UIButton, this, an));
+                handler.addObject(new UIButton(10, 110, 64, 64, "HighScores", GameState.HIGH_SCORES, ID.UIButton, this, an));
+                handler.addObject(new UIButton(110, 110, 64, 64, "Options", GameState.OPTIONS, ID.UIButton, this, an));
+
+            }
+            case TUTORIAL -> {
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an));
+            }
+            case HIGH_SCORES -> {
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an));
             }
             case OPTIONS -> {
                 menuCount++;
-                handler.addObject(new UIButton(10, 10, 400, 300, "Return", RETURN, upgradeBoarderGet, ID.UIButton, this, an));
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an));
             }
             case PAUSE_MENU -> {
                 menuCount = 10;
-                handler.addObject(new UIButton(10, 10, 400, 300, "Return", GameState.LEVEL, upgradeBoarderGet, ID.UIButton, this, an));
-                handler.addObject(new UIButton(510, 10, 400, 300, "Options", GameState.OPTIONS, upgradeBoarderGet, ID.UIButton, this, an));
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", GameState.LEVEL, ID.UIButton, this, an));
+                handler.addObject(new UIButton(110, 10, 64, 64, "Options", GameState.OPTIONS, ID.UIButton, this, an));
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {

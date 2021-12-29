@@ -46,7 +46,7 @@ public class MouseInput extends MouseAdapter {
             case TITLE -> {
                 if (button == 1) Game.setState(GameState.MAIN_MENU);
             }
-            case MAIN_MENU, OPTIONS, PAUSE_MENU -> {
+            case MAIN_MENU, TUTORIAL, HIGH_SCORES, OPTIONS, PAUSE_MENU -> {
                 if (button == 1) {
                     for (int i = 0; i < handler.object.size(); i++) {
                         GameObject temp = handler.object.get(i);
