@@ -58,7 +58,7 @@ public class Game extends Canvas implements Runnable {
     public static int PlayerY = 0;
     public static int TimerValue;
     public static int timerAction;
-    public static boolean isDead= false;
+    public static boolean isDead = false;
     private boolean wasstopped = false;
     private boolean triggeredonce = false;
 
@@ -84,7 +84,7 @@ public class Game extends Canvas implements Runnable {
         currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
-        new Window(SCREEN_WIDTH,SCREEN_HEIGHT,"Workalcoholics Work In Progress");
+        new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress");
         start();
 
         handler = new GameManager();
@@ -276,7 +276,7 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.WHITE);
         g.drawString("Workalcoholics", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         g.drawString("presents", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
-        isDead =true;
+        isDead = true;
     }
 
     /***
@@ -363,7 +363,7 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
         g.drawString("GAME OVER", 200, 200);
-        g.drawString("your Score was " + lastScore , 500, SCREEN_HEIGHT /2 );
+        g.drawString("your Score was " + lastScore, 500, SCREEN_HEIGHT / 2);
         g.drawString("Press LMB to Start again", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
@@ -452,7 +452,7 @@ public class Game extends Canvas implements Runnable {
             g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
 
         }
-        g.drawImage(currGun,10,470,null);
+        g.drawImage(currGun, 10, 470, null);
 
     }
 
@@ -552,14 +552,14 @@ public class Game extends Canvas implements Runnable {
                 if (green == 255) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an, score));
                 }
-                if(green == 255 && blue == 255){
+                if (green == 255 && blue == 255) {
 
                 }
             }
         }
         handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, an, score)); //Test Gunner
         loaded = true;
-        currGun = an.getImage(2,10,64,64);
+        currGun = an.getImage(2, 10, 64, 64);
         playBackgroundSound();
         //System.out.println("NEW GAME");
     }
@@ -573,9 +573,16 @@ public class Game extends Canvas implements Runnable {
         } else {   //if the waiting time is over...
             if (shouldTime) {    //...execute the previously set timerAction
                 switch (timerAction) {
-                    case 1 -> Enemy.Spawner(Enemy.waves, false, r);      //Spawn the next wave of enemies
-                    case 2 -> currentState = GameState.UPGRADE_MENU;     //change state to UPGRADE_MENU (because of rendering)
-                    case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
+                    case 1:
+                        Enemy.Spawner(Enemy.waves, false, r); //Spawn the next wave of enemies
+                        upgrades.setMunition(upgrades.getMunition() + 20); //adds 20 rounds after each wave
+                        break;
+                    case 2:
+                        currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
+                        break;
+                    case 3:
+                        currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
+                        break;
                 }
                 shouldTime = false;  //deactivate the timer
             }
@@ -655,8 +662,8 @@ public class Game extends Canvas implements Runnable {
         handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, an, score));
     }
 
-    public static void SpawnCreate(int x, int y){
-        handler.addObject(new Crate(y, x, ID.Create,an));
+    public static void SpawnCreate(int x, int y) {
+        handler.addObject(new Crate(y, x, ID.Create, an));
     }
 
     /***

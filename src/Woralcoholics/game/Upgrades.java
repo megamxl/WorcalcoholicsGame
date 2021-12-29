@@ -16,6 +16,10 @@ public class Upgrades {
         game.ammo = ammo;
     }
 
+    public int getMunition(){
+        return game.ammo;
+    }
+
     public void maxHP() {
         game.hp = 100;
     } //max hp is 100

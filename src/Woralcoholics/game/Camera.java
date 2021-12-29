@@ -16,14 +16,14 @@ public class Camera {
     }
 
     /**
-     * Updates the camara positions and makes the screnn shake on hit
+     * Updates the camara positions and makes the screen shake on hit
      * @param object Game
      */
     public void update(GameObject object) {
 
-        x += ((object.getX() - x) - 1024 / 2) * 0.05f; //*0.05f should make it more smooth
-        y += ((object.getY() - y) - 576 / 2) * 0.05f;
-        //checking the corner cases if x or y are bigger than scree with or heigth rest them
+        x += ((object.getX() - x) - game.SCREEN_WIDTH / 2 + 40) * 0.1f; // *0.1 makes the camera smoother
+        y += ((object.getY() - y) - game.SCREEN_HEIGHT / 2 + 64) * 0.1f;
+        //checking the corner cases if x or y are bigger than screen width or height rest them
         if (x <= 0) x = 0;
         if (x >= 1070) x = 1070;
         if (y <= 0) y = 0;
