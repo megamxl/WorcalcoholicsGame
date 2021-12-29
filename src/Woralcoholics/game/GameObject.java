@@ -14,7 +14,7 @@ public abstract class GameObject {
     protected Animations an;
     protected GameManager handler;
 
-    public GameObject(int x, int y, ID id, Animations an) {
+    public GameObject(float x, float y, ID id, Animations an) {
         this.x = x;
         this.y = y;
         this.id = id;

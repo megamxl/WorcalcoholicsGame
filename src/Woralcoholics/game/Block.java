@@ -20,7 +20,7 @@ public class Block extends GameObject {
      * @param col
      * @param row
      */
-    public Block(int x, int y, ID id, Animations an, Integer col, Integer row) {
+    public Block(float x, float y, ID id, Animations an, Integer col, Integer row) {
 
         super(x, y, id, an);
 

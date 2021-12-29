@@ -231,10 +231,9 @@ public class Player extends GameObject {
                         //y += velY * -1;
                     }
                     case Create -> {
-                        System.out.println("here");
-                        upgrades.setMunition(upgrades.getMunition() + 10);
-                        if (upgrades.getMunition() > 49){
-                            upgrades.setMunition(50);
+                        game.ammo += 10;
+                        if (game.ammo > 49){
+                            game.ammo = 50;
                         }
                         handler.removeObject(tempobject);
                     }
