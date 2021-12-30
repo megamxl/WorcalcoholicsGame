@@ -520,10 +520,10 @@ public class Game extends Canvas implements Runnable {
                 menuCount = 0;
                 //JMenu mainMenu = new JMenu("Main Menu");
                 //mainMenu.add(new JMenuItem("test"));
-                handler.addObject(new UIButton(10, 10, 352, 102, "Level", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet));
-                handler.addObject(new UIButton(510, 10, 352, 102, "Tutorial", GameState.TUTORIAL, ID.UIButton, this, uiButtonAnGet));
-                handler.addObject(new UIButton(10, 310, 352, 102, "HighScores", GameState.HIGH_SCORES, ID.UIButton, this, uiButtonAnGet));
-                handler.addObject(new UIButton(510, 310, 352, 102, "Options", GameState.OPTIONS, ID.UIButton, this, uiButtonAnGet));
+                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 19, 352, 102, "Level", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet));
+                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 144, 352, 102, "Tutorial", GameState.TUTORIAL, ID.UIButton, this, uiButtonAnGet));
+                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 269, 352, 102, "HighScores", GameState.HIGH_SCORES, ID.UIButton, this, uiButtonAnGet));
+                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 394, 352, 102, "Options", GameState.OPTIONS, ID.UIButton, this, uiButtonAnGet));
 
             }
             case TUTORIAL -> {
