@@ -225,7 +225,7 @@ public class Player extends GameObject {
                         }
                         if (game.hp <= 0) {
                             Game.setState(GameState.GAME_OVER);         //if the player has no HP left, its GAME OVER
-                            Game.loaded = false;
+                            game.loaded = false;
                         }
                     }
                 }

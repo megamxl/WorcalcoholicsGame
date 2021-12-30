@@ -60,7 +60,7 @@ public class Game extends Canvas implements Runnable {
     public static int PlayerY = 0;
     public static int TimerValue;
     public static int timerAction;
-    public static boolean isDead= false;
+    public static boolean isDead = false;
     private boolean wasstopped = false;
     private boolean triggeredonce = false;
 
@@ -88,7 +88,7 @@ public class Game extends Canvas implements Runnable {
         currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
-        new Window(SCREEN_WIDTH,SCREEN_HEIGHT,"Workalcoholics Work In Progress");
+        new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress");
         start();
 
         handler = new GameManager();
@@ -111,7 +111,7 @@ public class Game extends Canvas implements Runnable {
 
         BufferedImage GamoverScreen = loader.loadImage("/gameOverPicture.png");
         GamoverScreenImg = new Animations(GamoverScreen);
-        imgOver = GamoverScreen.getSubimage(1,1,720,480);
+        imgOver = GamoverScreen.getSubimage(1, 1, 720, 480);
 
 
         //Adding Mouse and Keyboard Input
@@ -288,7 +288,7 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.WHITE);
         g.drawString("Workalcoholics", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         g.drawString("presents", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
-        isDead =true;
+        isDead = true;
     }
 
     /***
@@ -388,6 +388,10 @@ public class Game extends Canvas implements Runnable {
         g.drawImage(upgradBoard, 377, 30, null);
         g.drawImage(upgradBoard, 617, 30, null);
         g.setColor(Color.WHITE);
+        int[] randomUpgrades = upgrades.getUpgrades();
+        g.drawString(upgrades.drawUpgrades(randomUpgrades[0]), 300, 315);
+        g.drawString(upgrades.drawUpgrades(randomUpgrades[1]), 500, 315);
+        g.drawString(upgrades.drawUpgrades(randomUpgrades[2]), 700, 315);
         g.drawString("LMB: BACK TO LEVEL", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
@@ -401,8 +405,8 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.DARK_GRAY);
         //g.drawString("GAME OVER", 200, 200);
         g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 75));
-        g.drawImage(imgOver,1,1,null);
-        g.drawString("your Score is " + lastScore , 300, SCREEN_HEIGHT -65 );
+        g.drawImage(imgOver, 1, 1, null);
+        g.drawString("your Score is " + lastScore, 300, SCREEN_HEIGHT - 65);
         //g.drawString("Press LMB to Start again", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
@@ -457,15 +461,15 @@ public class Game extends Canvas implements Runnable {
         if (handler.del == 0) {
             g.setColor(Color.cyan);
             g.drawString("MACHINE GUN", 210, 95);
-            currGun = an.getImage(2,10,64,64);
+            currGun = an.getImage(2, 10, 64, 64);
         } else if (handler.del == 200) {
             g.setColor(Color.cyan);
             g.drawString("PISTOL", 210, 95);
-            currGun = an.getImage(3,10,64,64);
+            currGun = an.getImage(3, 10, 64, 64);
         } else if (handler.del == 1000) {
             g.setColor(Color.cyan);
             g.drawString("SHOTGUN", 210, 95);
-            currGun = an.getImage(1,10,64,64);
+            currGun = an.getImage(1, 10, 64, 64);
         }
 
         if (hp >= 70)
@@ -496,7 +500,7 @@ public class Game extends Canvas implements Runnable {
             g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
 
         }
-        g.drawImage(currGun,10,470,null);
+        g.drawImage(currGun, 10, 470, null);
 
     }
 
@@ -505,7 +509,7 @@ public class Game extends Canvas implements Runnable {
      */
     private void loadMenu() {
         GameState RETURN = previousState;
-        if(previousState == GameState.OPTIONS) {
+        if (previousState == GameState.OPTIONS) {
             menuCount--;
         }
         switch (currentState) {
@@ -618,7 +622,7 @@ public class Game extends Canvas implements Runnable {
                 if (green == 255) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, an, score));
                 }
-                if(green == 255 && blue == 255){
+                if (green == 255 && blue == 255) {
 
                 }
             }
@@ -638,9 +642,16 @@ public class Game extends Canvas implements Runnable {
         } else {   //if the waiting time is over...
             if (shouldTime) {    //...execute the previously set timerAction
                 switch (timerAction) {
-                    case 1 -> Enemy.Spawner(Enemy.waves, false, r);      //Spawn the next wave of enemies
-                    case 2 -> currentState = GameState.UPGRADE_MENU;     //change state to UPGRADE_MENU (because of rendering)
-                    case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
+                    case 1:
+                        Enemy.Spawner(Enemy.waves, false, r); //Spawn the next wave of enemies
+                        upgrades.addMunition(20);
+                        break;
+                    case 2:
+                        currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
+                        break;
+                    case 3:
+                        currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
+                        break;
                 }
                 shouldTime = false;  //deactivate the timer
             }
@@ -720,8 +731,8 @@ public class Game extends Canvas implements Runnable {
         handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, an, score));
     }
 
-    public static void SpawnCreate(int x, int y){
-        handler.addObject(new Crate(y, x, ID.Create,an));
+    public static void SpawnCreate(int x, int y) {
+        handler.addObject(new Crate(y, x, ID.Create, an));
     }
 
     /***

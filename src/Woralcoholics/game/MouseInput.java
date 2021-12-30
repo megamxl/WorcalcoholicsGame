@@ -5,6 +5,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import java.awt.event.MouseWheelEvent;
 
@@ -19,6 +20,7 @@ public class MouseInput extends MouseAdapter {
     private Game game;
     private Animations an;
     volatile private boolean mouseDown = false; //determine if mouse1 is pressed or not
+    Upgrades upgrades;
 
 
     public MouseInput(GameManager handler, Camera camera, Game game, Animations an) {
@@ -26,6 +28,7 @@ public class MouseInput extends MouseAdapter {
         this.camera = camera;
         this.game = game;
         this.an = an;
+        this.upgrades = new Upgrades(game);
     }
 
 
@@ -57,7 +60,23 @@ public class MouseInput extends MouseAdapter {
                 }
             }
             case UPGRADE_MENU -> {
-                if (button == 1) Game.setState(GameState.LEVEL);
+                //if (button == 1) Game.setState(GameState.LEVEL);
+                int[] randomUpgrades = upgrades.getUpgrades();
+                if(button == 1) {
+                        if (e.getX() >= 137 && e.getX() <= 457 && e.getY() >= 30 && e.getY() <= 630) { //button 1
+                            upgrades.getUpgrade(randomUpgrades[0]);
+                            Upgrades.drawRandomUpgrades(); //draw random 3 upgrades for 2nd, 3rd... time buying them
+                            Game.setState(GameState.LEVEL);
+                        } else if (e.getX() >= 377 && e.getX() <= 697 && e.getY() >= 30 && e.getY() <= 630) { //button 2
+                            upgrades.getUpgrade(randomUpgrades[1]);
+                            Upgrades.drawRandomUpgrades();
+                            Game.setState(GameState.LEVEL);
+                        } else if (e.getX() >= 617 && e.getX() <= 937 && e.getY() >= 30 && e.getY() <= 630) { //button 3
+                            upgrades.getUpgrade(randomUpgrades[2]);
+                            Upgrades.drawRandomUpgrades();
+                            Game.setState(GameState.LEVEL);
+                        }
+                }
                 Game.TimerValue = 5;    //5 secs wait time
                 Game.shouldTime = true; //activate Timer
                 Game.timerAction = 1;   //execute timerAction 1 -> countdown till next wave

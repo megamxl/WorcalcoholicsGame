@@ -21,8 +21,8 @@ public class Camera {
      */
     public void update(GameObject object) {
 
-        x += ((object.getX() - x) - game.SCREEN_WIDTH / 2 + 40) * 0.1f; // *0.1 makes the camera smoother
-        y += ((object.getY() - y) - game.SCREEN_HEIGHT / 2 + 64) * 0.1f;
+        x += ((object.getX() - x) - game.SCREEN_WIDTH / 2 + 40) * 0.25f; // *0.1 makes the camera smoother
+        y += ((object.getY() - y) - game.SCREEN_HEIGHT / 2 + 64) * 0.25f;
         //checking the corner cases if x or y are bigger than screen width or height rest them
         if (x <= 0) x = 0;
         if (x >= 1070) x = 1070;
