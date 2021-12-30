@@ -283,7 +283,7 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderStudio(Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
         g.drawString("Workalcoholics", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
@@ -304,7 +304,7 @@ public class Game extends Canvas implements Runnable {
 //        Window.GameOverFrame.setVisible(false);
 //        Window.frame.setVisible(true);
 
-        g.setColor(Color.BLACK);
+        g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         g.setColor(Color.WHITE);
@@ -318,7 +318,7 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderMainMenu(Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         g.setColor(Color.WHITE);
@@ -331,7 +331,7 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderTutorial(Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         g.setColor(Color.WHITE);
@@ -344,7 +344,7 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderHighScores(Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         g.setColor(Color.WHITE);
@@ -357,7 +357,7 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderOptions(Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.WHITE);
         g.drawString("OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
@@ -381,8 +381,8 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderUpgradeMenu(Graphics g) {
-        g.setColor(new Color(0, 0, 0, 127));
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        //g.setColor(Color(0, 0, 0, 127));
+        //g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         upgradBoard = upgradeBoarderGet.getImage(1, 1, 320, 600);
         g.drawImage(upgradBoard, 137, 30, null);
         g.drawImage(upgradBoard, 377, 30, null);
@@ -396,7 +396,6 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderGameOver(Graphics g) {
-        clearHandler();
         g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.DARK_GRAY);
