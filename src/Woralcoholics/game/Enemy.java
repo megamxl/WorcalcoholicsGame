@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * Enemy Class
  */
-public class Enemy extends GameObject {
+public class Enemy<privare> extends GameObject {
 
     //region INSTANCE VARIABLES
     private final BufferedImage enemy_img;
@@ -23,6 +23,10 @@ public class Enemy extends GameObject {
     int low = -4; //low and high values for different variations of enemy behaviour
     int high = 4;
     int booleanvalue = 0; //booleanvalue is for determining if enemy should charge player again or just running aimless around
+    private int curX = 0;
+    private int curY = 0;
+
+
     boolean hittedwall = false; //hittedwall is for changing the aiming target of player to nothing
     static int enemysAlive = 0;
     static int waves = 1;
@@ -46,6 +50,8 @@ public class Enemy extends GameObject {
      * x value of enemy gets changed by vel Values
      */
     public void move() {
+        curX = (int)x;
+        curY =(int) y;
         x += velX + velocity;
         y += velY + velocity;
     }
@@ -147,11 +153,13 @@ public class Enemy extends GameObject {
 
     public void isDead() {
         if (hp <= 0) {
-            int prob = Game.randomNumber(1,4);
-            if(prob == 2){
-                Game.SpawnCreate((int)x,(int)y);
-            }
+            //int prob = Game.randomNumber(1,4);
             remove();
+            int prob = 2;
+            if(prob == 2){
+                Game.SpawnCreate(curX ,curY);
+            }
+
         }
     }
 

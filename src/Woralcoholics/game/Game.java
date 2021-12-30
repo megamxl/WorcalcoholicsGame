@@ -96,7 +96,7 @@ public class Game extends Canvas implements Runnable {
         gun = new Gun();
         AddGuns();
         // when finished implement the Mouse and Key input
-        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level02.png");
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level01.png");
         level = ImageIO.read(path);
 
         BufferedImageLoader loader = new BufferedImageLoader();
@@ -460,15 +460,15 @@ public class Game extends Canvas implements Runnable {
 
         if (handler.del == 0) {
             g.setColor(Color.cyan);
-            g.drawString("MACHINE GUN", 210, 95);
+            //g.drawString("MACHINE GUN", 210, 95);
             currGun = an.getImage(2, 10, 64, 64);
         } else if (handler.del == 200) {
             g.setColor(Color.cyan);
-            g.drawString("PISTOL", 210, 95);
+            //g.drawString("PISTOL", 210, 95);
             currGun = an.getImage(3, 10, 64, 64);
         } else if (handler.del == 1000) {
             g.setColor(Color.cyan);
-            g.drawString("SHOTGUN", 210, 95);
+            //g.drawString("SHOTGUN", 210, 95);
             currGun = an.getImage(1, 10, 64, 64);
         }
 
@@ -497,7 +497,7 @@ public class Game extends Canvas implements Runnable {
             g.setColor(Color.ORANGE);
             //g.setFont(new Font("Future Blood",Font.PLAIN,80));
             g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 45));
-            g.drawString("Next Wave spawns in " + TimerValue + " s", 50, 250);
+            g.drawString("Next Wave spawns in " + TimerValue , 50, 250);
 
         }
         g.drawImage(currGun, 10, 470, null);
@@ -520,26 +520,26 @@ public class Game extends Canvas implements Runnable {
                 menuCount = 0;
                 //JMenu mainMenu = new JMenu("Main Menu");
                 //mainMenu.add(new JMenuItem("test"));
-                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 19, 352, 102, "Level", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet));
-                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 144, 352, 102, "Tutorial", GameState.TUTORIAL, ID.UIButton, this, uiButtonAnGet));
-                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 269, 352, 102, "HighScores", GameState.HIGH_SCORES, ID.UIButton, this, uiButtonAnGet));
-                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 394, 352, 102, "Options", GameState.OPTIONS, ID.UIButton, this, uiButtonAnGet));
+                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 19, 352, 102, "Level", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet,410,90,40));
+                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 144, 352, 102, "Tutorial", GameState.TUTORIAL, ID.UIButton, this, uiButtonAnGet,390,210,30));
+                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 269, 352, 102, "Scores", GameState.HIGH_SCORES, ID.UIButton, this, uiButtonAnGet,397,337,35));
+                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 394, 352, 102, "Options", GameState.OPTIONS, ID.UIButton, this, uiButtonAnGet,400,460,32));
 
             }
             case TUTORIAL -> {
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an));
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an,0,0,40));
             }
             case HIGH_SCORES -> {
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an));
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an,0,0,40));
             }
             case OPTIONS -> {
                 menuCount++;
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an));
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an,0,0,40));
             }
             case PAUSE_MENU -> {
                 menuCount = 10;
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", GameState.LEVEL, ID.UIButton, this, an));
-                handler.addObject(new UIButton(110, 10, 64, 64, "Options", GameState.OPTIONS, ID.UIButton, this, an));
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", GameState.LEVEL, ID.UIButton, this, an,0,0,40));
+                handler.addObject(new UIButton(110, 10, 64, 64, "Options", GameState.OPTIONS, ID.UIButton, this, an,0,0,40));
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
@@ -569,16 +569,13 @@ public class Game extends Canvas implements Runnable {
 
     private void fontLoader() {
         try {
-            //Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Future Blood.ttf")).deriveFont(12f);
             Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Masked Hero.ttf")).deriveFont(12f);
+            Font customFont1 = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/DebugFreeTrial-MVdYB.otf")).deriveFont(12f);
+
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font
             ge.registerFont(customFont);
-
-            Font customFont1 = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/DebugFreeTrial-MVdYB.otf")).deriveFont(12f);
-            GraphicsEnvironment ge1 = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            //register the font
-            ge1.registerFont(customFont1);
+            ge.registerFont(customFont1);
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {
