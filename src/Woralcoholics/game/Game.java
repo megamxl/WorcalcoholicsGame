@@ -732,7 +732,7 @@ public class Game extends Canvas implements Runnable {
     }
 
     public static void SpawnCreate(int x, int y) {
-        handler.addObject(new Crate(y, x, ID.Create, an));
+        handler.addObject(new Crate(x, y, ID.Create, an));
     }
 
     /***

@@ -151,9 +151,11 @@ public class Enemy<privare> extends GameObject {
         if (hp <= 0) {
             //int prob = Game.randomNumber(1,4);
             remove();
+            float curX = x;
+            float curY = y;
             int prob = 2;
             if(prob == 2){
-                Game.SpawnCreate(r.nextInt(55)*32 ,r.nextInt(55)*32);
+                Game.SpawnCreate((int)curX,(int)curY);
             }
 
         }
@@ -235,6 +237,7 @@ public class Enemy<privare> extends GameObject {
     private void remove() {
         manager.removeObject(this);
         playSoundEnemy();
+
     }
 
     /**
