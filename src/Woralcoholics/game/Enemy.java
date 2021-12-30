@@ -23,8 +23,6 @@ public class Enemy<privare> extends GameObject {
     int low = -4; //low and high values for different variations of enemy behaviour
     int high = 4;
     int booleanvalue = 0; //booleanvalue is for determining if enemy should charge player again or just running aimless around
-    private int curX = 0;
-    private int curY = 0;
 
 
     boolean hittedwall = false; //hittedwall is for changing the aiming target of player to nothing
@@ -50,8 +48,6 @@ public class Enemy<privare> extends GameObject {
      * x value of enemy gets changed by vel Values
      */
     public void move() {
-        curX = (int)x;
-        curY =(int) y;
         x += velX + velocity;
         y += velY + velocity;
     }
@@ -157,7 +153,7 @@ public class Enemy<privare> extends GameObject {
             remove();
             int prob = 2;
             if(prob == 2){
-                Game.SpawnCreate(curX ,curY);
+                Game.SpawnCreate(r.nextInt(55)*32 ,r.nextInt(55)*32);
             }
 
         }

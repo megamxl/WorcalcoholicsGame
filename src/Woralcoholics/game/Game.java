@@ -96,8 +96,8 @@ public class Game extends Canvas implements Runnable {
         gun = new Gun();
         AddGuns();
         // when finished implement the Mouse and Key input
-        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level01.png");
-        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level01.png");
+        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
         level = ImageIO.read(path);
 
         BufferedImageLoader loader = new BufferedImageLoader();
@@ -322,9 +322,9 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        g.setColor(Color.WHITE);
+       /* g.setColor(Color.WHITE);
         g.drawString("MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
+        g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);*/
     }
 
     /***
