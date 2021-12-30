@@ -24,10 +24,13 @@ public class GameManager {
     protected boolean IsSoundPlaying, IsSoundPlaying2 = false;
     protected double wait;
     //machine gun - del=0 | normal gun - del=200 | slowgun - del=1000
-    protected final int del = 200; //how fast player can shoot, less -> faster
+    protected int del = 1000; //how fast player can shoot, less -> faster
     protected double now;
     protected boolean ammo = true;
     protected boolean reloaded = true;
+    protected int gunindex = 0;
+    protected Gun selectedgun;
+
 
 
     /**

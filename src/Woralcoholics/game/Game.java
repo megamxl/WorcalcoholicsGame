@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -27,7 +28,6 @@ public class Game extends Canvas implements Runnable {
     private int menuCount;
     private int lastScore = 0;
 
-    private boolean reloaded = true;
     private boolean isRunning;
     protected static boolean paused, loaded;
     public static boolean shouldTime = false;
@@ -95,6 +95,7 @@ public class Game extends Canvas implements Runnable {
         camera = new Camera(0, 0, this);
         gun = new Gun();
         AddGuns();
+        StarterGun();
         // when finished implement the Mouse and Key input
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level01.png");
         //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
@@ -116,7 +117,7 @@ public class Game extends Canvas implements Runnable {
 
 
         //Adding Mouse and Keyboard Input
-        MouseInput mouse = new MouseInput(handler, camera, this, an);
+        MouseInput mouse = new MouseInput(handler, camera, this, an, gun);
         this.addMouseListener(mouse);
         this.addMouseWheelListener(mouse);
         KeyInput keys = new KeyInput(handler, this);
@@ -135,6 +136,7 @@ public class Game extends Canvas implements Runnable {
 
         fontLoader();
     }
+
 
 
     @Override
@@ -207,6 +209,7 @@ public class Game extends Canvas implements Runnable {
         CalculateReloadingRectangle(handler.wait, (int) handler.del);
 
         CheckReloaded();
+        CheckGunStatus();
 
     }
 
@@ -773,7 +776,7 @@ public class Game extends Canvas implements Runnable {
 
     private void CalculateReloadingRectangle(double wait, int del) {
 
-        if (reloaded == true) {
+        if (handler.reloaded == true) {
             //System.out.println("reloaded");
             percent = 100;
         } else {
@@ -792,18 +795,33 @@ public class Game extends Canvas implements Runnable {
     private void CheckReloaded() {
         handler.now = System.currentTimeMillis();
         if (handler.now > handler.wait && handler.ammo == true) {
-            reloaded = true;
+            handler.reloaded = true;
         } else {
-            reloaded = false;
+            handler.reloaded = false;
         }
     }
 
     private void AddGuns() {
-        gun.addObject(new Gun(), GunType.MachineGun, true);
-        gun.addObject(new Gun(), GunType.Pistol, false);
-        gun.addObject(new Gun(), GunType.Shotgun, true);
+        gun.addObject(new Gun(), GunType.Pistol, false); // start with pistol
+        gun.addObject(new Gun(), GunType.Shotgun, true); // second shotgun
+        gun.addObject(new Gun(), GunType.MachineGun, true); //third machine gun  -> weakest to strongest
         // if crate is collected, set locked to false so it can be displayed and choosen in UI
     }
+
+    private void StarterGun() {
+        handler.selectedgun = gun.guns.get(0);
+    }
+
+    private void CheckGunStatus()
+    {
+        if(handler.selectedgun.getType()==GunType.Pistol)
+            handler.del = 200;
+        else if (handler.selectedgun.getType()==GunType.Shotgun)
+            handler.del = 1000;
+        else //Machine Gun
+            handler.del = 0;
+    }
+
 
     // the main function that runs everything
     public static void main(String[] args) throws IOException {

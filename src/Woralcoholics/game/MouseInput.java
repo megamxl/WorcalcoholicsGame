@@ -19,16 +19,18 @@ public class MouseInput extends MouseAdapter {
     private Camera camera;
     private Game game;
     private Animations an;
+    private Gun gun;
     volatile private boolean mouseDown = false; //determine if mouse1 is pressed or not
     Upgrades upgrades;
 
 
-    public MouseInput(GameManager handler, Camera camera, Game game, Animations an) {
+    public MouseInput(GameManager handler, Camera camera, Game game, Animations an, Gun gun) {
         this.handler = handler;
         this.camera = camera;
         this.game = game;
         this.an = an;
         this.upgrades = new Upgrades(game);
+        this.gun = gun;
     }
 
 
@@ -62,20 +64,20 @@ public class MouseInput extends MouseAdapter {
             case UPGRADE_MENU -> {
                 //if (button == 1) Game.setState(GameState.LEVEL);
                 int[] randomUpgrades = upgrades.getUpgrades();
-                if(button == 1) {
-                        if (e.getX() >= 137 && e.getX() <= 457 && e.getY() >= 30 && e.getY() <= 630) { //button 1
-                            upgrades.getUpgrade(randomUpgrades[0]);
-                            Upgrades.drawRandomUpgrades(); //draw random 3 upgrades for 2nd, 3rd... time buying them
-                            Game.setState(GameState.LEVEL);
-                        } else if (e.getX() >= 377 && e.getX() <= 697 && e.getY() >= 30 && e.getY() <= 630) { //button 2
-                            upgrades.getUpgrade(randomUpgrades[1]);
-                            Upgrades.drawRandomUpgrades();
-                            Game.setState(GameState.LEVEL);
-                        } else if (e.getX() >= 617 && e.getX() <= 937 && e.getY() >= 30 && e.getY() <= 630) { //button 3
-                            upgrades.getUpgrade(randomUpgrades[2]);
-                            Upgrades.drawRandomUpgrades();
-                            Game.setState(GameState.LEVEL);
-                        }
+                if (button == 1) {
+                    if (e.getX() >= 137 && e.getX() <= 457 && e.getY() >= 30 && e.getY() <= 630) { //button 1
+                        upgrades.getUpgrade(randomUpgrades[0]);
+                        Upgrades.drawRandomUpgrades(); //draw random 3 upgrades for 2nd, 3rd... time buying them
+                        Game.setState(GameState.LEVEL);
+                    } else if (e.getX() >= 377 && e.getX() <= 697 && e.getY() >= 30 && e.getY() <= 630) { //button 2
+                        upgrades.getUpgrade(randomUpgrades[1]);
+                        Upgrades.drawRandomUpgrades();
+                        Game.setState(GameState.LEVEL);
+                    } else if (e.getX() >= 617 && e.getX() <= 937 && e.getY() >= 30 && e.getY() <= 630) { //button 3
+                        upgrades.getUpgrade(randomUpgrades[2]);
+                        Upgrades.drawRandomUpgrades();
+                        Game.setState(GameState.LEVEL);
+                    }
                 }
                 Game.TimerValue = 5;    //5 secs wait time
                 Game.shouldTime = true; //activate Timer
@@ -158,9 +160,23 @@ public class MouseInput extends MouseAdapter {
     //region MouseWheelEvents
     public void mouseWheelMoved(MouseWheelEvent e) {
         if (e.getWheelRotation() < 0) {
-            //System.out.println("Rotated Up... " + e.getWheelRotation()); weapon index +1
+            if (handler.gunindex == gun.guns.size() - 1) { // 3 values -> 0 to 2
+
+            } else {
+                handler.gunindex++;
+            }
+            //gun.guns.indexOf(handler.gunindex);
+            handler.selectedgun = gun.guns.get(handler.gunindex);
+            System.out.println(handler.gunindex);
+
         } else {
-            // System.out.println("Rotated Down... " + e.getWheelRotation()); weapon index -1
+            if (handler.gunindex == 0) {
+
+            } else {
+                handler.gunindex--;
+            }
+            handler.selectedgun = gun.guns.get(handler.gunindex);
+            System.out.println(handler.gunindex);
         }
     }
     //endregion
