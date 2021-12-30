@@ -96,7 +96,8 @@ public class Game extends Canvas implements Runnable {
         gun = new Gun();
         AddGuns();
         // when finished implement the Mouse and Key input
-        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level01.png");
+        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level01.png");
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
         level = ImageIO.read(path);
 
         BufferedImageLoader loader = new BufferedImageLoader();
@@ -441,10 +442,9 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(5, 5, 200, 16); //hp
         g.fillRect(5, 30, 200, 16); //ammo
         g.fillRect(5, 70, 200, 8); //reload
-        if (shield > 0)
+        if (shield > 0){
             g.fillRect(5, 55, 200, 16); //shield
 
-        if (shield > 0) {
             g.setColor(Color.blue);
             g.drawString("SHIELD: " + shield + "/40", 210, 67);
             g.fillRect(5, 55, shield * 5, 16);
