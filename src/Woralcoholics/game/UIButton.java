@@ -39,7 +39,7 @@ public class UIButton extends GameObject{
 
     @Override
     public void render(Graphics g) {
-        BufferedImage sprite = an.getImage(1,2, 64, 64);
+        BufferedImage sprite = an.getImage(1,1, width, height);
         g.drawImage(sprite, (int)x, (int)y,null);
         /*g.setColor(Color.RED);
         g.fillRect((int)x, (int)y, width, height);*/

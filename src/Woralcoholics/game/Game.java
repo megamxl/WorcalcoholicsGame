@@ -37,6 +37,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage spritesheet = null;
     private BufferedImage upgradBoarder = null;
     private BufferedImage upgradBoard = null;
+    private BufferedImage uiButtonAn = null;
     private BufferedImage floor = null;
     private BufferedImage floorDirt1 = null;
     private BufferedImage floorDirt2 = null;
@@ -72,6 +73,7 @@ public class Game extends Canvas implements Runnable {
     private static Animations an;
     private static Animations upgradeBoarderGet;
     private static Animations GamoverScreenImg;
+    private static Animations uiButtonAnGet;
     private static Gun gun;
 
     private Camera camera;
@@ -103,6 +105,9 @@ public class Game extends Canvas implements Runnable {
 
         upgradBoarder = loader.loadImage("/UpgradeBorder.png");
         upgradeBoarderGet = new Animations(upgradBoarder);
+
+        uiButtonAn = loader.loadImage("/UIButton_352x102.png");
+        uiButtonAnGet = new Animations(uiButtonAn);
 
         BufferedImage GamoverScreen = loader.loadImage("/gameOverPicture.png");
         GamoverScreenImg = new Animations(GamoverScreen);
@@ -512,10 +517,10 @@ public class Game extends Canvas implements Runnable {
                 menuCount = 0;
                 //JMenu mainMenu = new JMenu("Main Menu");
                 //mainMenu.add(new JMenuItem("test"));
-                handler.addObject(new UIButton(10, 10, 64, 64, "Level", GameState.LEVEL, ID.UIButton, this, an));
-                handler.addObject(new UIButton(110, 10, 64, 64, "Tutorial", GameState.TUTORIAL, ID.UIButton, this, an));
-                handler.addObject(new UIButton(10, 110, 64, 64, "HighScores", GameState.HIGH_SCORES, ID.UIButton, this, an));
-                handler.addObject(new UIButton(110, 110, 64, 64, "Options", GameState.OPTIONS, ID.UIButton, this, an));
+                handler.addObject(new UIButton(10, 10, 352, 102, "Level", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet));
+                handler.addObject(new UIButton(510, 10, 352, 102, "Tutorial", GameState.TUTORIAL, ID.UIButton, this, uiButtonAnGet));
+                handler.addObject(new UIButton(10, 310, 352, 102, "HighScores", GameState.HIGH_SCORES, ID.UIButton, this, uiButtonAnGet));
+                handler.addObject(new UIButton(510, 310, 352, 102, "Options", GameState.OPTIONS, ID.UIButton, this, uiButtonAnGet));
 
             }
             case TUTORIAL -> {
