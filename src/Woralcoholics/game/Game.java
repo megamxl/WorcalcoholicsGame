@@ -259,6 +259,9 @@ public class Game extends Canvas implements Runnable {
 
     private void stateChange() {
         //System.out.println("is " + currentState + " equal to " + checkState + "?");
+        previousState = checkState;      //save the state before the state change
+        checkState = currentState;       //the checkState becomes the current state, to again detect a state change
+        //System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
         if (!loaded) {   //if nothing is loaded...
             clearHandler(); //clear everything in the handler
         }
@@ -277,9 +280,6 @@ public class Game extends Canvas implements Runnable {
         } else {
             loadMenu();                     //load the menu of currentState
         }
-        previousState = checkState;      //save the state before the state change
-        checkState = currentState;       //the checkState becomes the current state, to again detect a state change
-        //System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
     }
 
     /***
