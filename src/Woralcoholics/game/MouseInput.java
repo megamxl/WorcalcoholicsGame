@@ -97,6 +97,14 @@ public class MouseInput extends MouseAdapter {
                             } catch (Exception exception) {
                                 exception.printStackTrace();
                             }
+                        } else if (handler.del == 1000) {
+                            try {
+                                new Thread(() -> {
+                                    shotgun(e);
+                                }).start();
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
+                            }
                         } else {
                             //System.out.println("BUTTON 1");
                             handler.now = System.currentTimeMillis();
@@ -160,23 +168,9 @@ public class MouseInput extends MouseAdapter {
     //region MouseWheelEvents
     public void mouseWheelMoved(MouseWheelEvent e) {
         if (e.getWheelRotation() < 0) {
-            if (handler.gunindex == gun.guns.size() - 1) { // 3 values -> 0 to 2
-
-            } else {
-                handler.gunindex++;
-            }
-            //gun.guns.indexOf(handler.gunindex);
-            handler.selectedgun = gun.guns.get(handler.gunindex);
-            System.out.println(handler.gunindex);
-
+            MouseWheelUp();
         } else {
-            if (handler.gunindex == 0) {
-
-            } else {
-                handler.gunindex--;
-            }
-            handler.selectedgun = gun.guns.get(handler.gunindex);
-            System.out.println(handler.gunindex);
+            MouseWheelDown();
         }
     }
     //endregion
@@ -242,6 +236,69 @@ public class MouseInput extends MouseAdapter {
         if (game.ammo <= 0) {
             playSoundGun(game.ammo); //has no ammo
         }
+    }
+
+    private void shotgun(MouseEvent e) {
+        System.out.println("SHOTGUN");
+        handler.now = System.currentTimeMillis();
+        //IF waiting time is over AND player has ammo -> shoot a bullet
+        if (handler.now > handler.wait && game.ammo >= 1) {
+            PointerInfo a = MouseInfo.getPointerInfo();
+            Point point = new Point(a.getLocation());
+            SwingUtilities.convertPointFromScreen(point, e.getComponent());
+            int x = (int) point.getX();
+            int y = (int) point.getY();
+            //Add camera pos, as bullets don't aim correctly otherwise
+            double mx = x + camera.getX();
+            double my = y + camera.getY();
+            //Middle of player coordinates
+            double px = player.getX() + 32;
+            double py = player.getY() + 32;
+            //Create a new bullet in the middle of player sprite (minus the bullet radius)
+
+            Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
+            temp.direction(mx, my, px, py); //Calculate the direction of this bullet
+            handler.addObject(temp);    //Add the Bullet to the ObjectList
+
+            Bullet temp2 = new Bullet((int) px - 40, (int) py - 40, ID.Bullet, handler, an);
+            temp2.direction(mx, my, px, py); //Calculate the direction of this bullet
+            handler.addObject(temp2);    //Add the Bullet to the ObjectList
+
+            Bullet temp3 = new Bullet((int) px + 32, (int) py + 32, ID.Bullet, handler, an);
+            temp3.direction(mx, my, px, py); //Calculate the direction of this bullet
+            handler.addObject(temp3);    //Add the Bullet to the ObjectList
+
+            if (game.ammo <= 3) {
+                game.ammo = 0;
+            } else {
+                game.ammo = game.ammo - 3;    //Subtract 1 from ammo (bullet was shot)
+            }
+            //System.out.println(game.ammo);
+            handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
+            playSoundGun(game.ammo);
+        } else if (handler.now > handler.wait && game.ammo <= 0) {
+            playSoundGun(game.ammo); //has no ammo
+            handler.wait = handler.now + handler.del;
+        }
+    }
+
+    private void MouseWheelUp() {
+        if (handler.gunindex == gun.guns.size() - 1) { // 3 values -> 0 to 2
+
+        } else {
+            handler.gunindex++;
+        }
+        //gun.guns.indexOf(handler.gunindex);
+        handler.selectedgun = gun.guns.get(handler.gunindex);
+    }
+
+    private void MouseWheelDown() {
+        if (handler.gunindex == 0) {
+
+        } else {
+            handler.gunindex--;
+        }
+        handler.selectedgun = gun.guns.get(handler.gunindex);
     }
 //endregion
 }
