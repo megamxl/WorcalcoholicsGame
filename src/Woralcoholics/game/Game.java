@@ -441,7 +441,7 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.gray);
         g.fillRect(5, 5, 200, 16); //hp
         g.fillRect(5, 30, 200, 16); //ammo
-        g.fillRect(5, 70, 200, 8); //reload
+        g.fillRect(5, 80, 200, 8); //reload
         if (shield > 0){
             g.fillRect(5, 55, 200, 16); //shield
 
@@ -455,8 +455,8 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(5, 30, ammo * 4, 16);
 
         g.setColor(Color.orange);
-        g.drawString("RELOAD: " + (int) percent + "%", 210, 78);
-        g.fillRect(5, 70, (int) percent * 2, 8);
+        g.drawString("RELOAD: " + (int) percent + "%", 210, 89);
+        g.fillRect(5, 80, (int) percent * 2, 8);
 
         if (handler.del == 0) {
             g.setColor(Color.cyan);
