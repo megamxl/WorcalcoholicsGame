@@ -339,27 +339,27 @@ public class GameManager {
     }
 
     public void playSoundEquip() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
-        if (IsSoundPlaying2 == false) {
-            IsSoundPlaying2 = true;
+        if (IsSoundPlaying == false) {
+            IsSoundPlaying = true;
             Clip sound = AudioSystem.getClip();
             Path relativePath = Paths.get("Resource/gunequip.wav");
             Path absolutePath = relativePath.toAbsolutePath();
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
             FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
             if (soundv == 0) {
-                volume.setValue(-80f); // NormalSound
+                volume.setValue(-80f); // MUTE
                 //System.out.println("VOLUME MUTE + " +volume.toString());
             } else if (soundv == 1) {
-                volume.setValue(-20f); // DEFAULT
+                volume.setValue(-15f); // DEFAULT -> balanced default sound
                 //System.out.println("VOLUME DEFAULT + " +volume.toString());
             } else if (soundv == 2) {
                 volume.setValue(6.0206f); // Maximum
                 //System.out.println("VOLUME UP + " +volume.toString());
             }
             sound.start();
-            Thread.sleep(450);
+            Thread.sleep(350);
             sound.stop();
-            IsSoundPlaying2 = false;
+            IsSoundPlaying = false;
         } else {
             //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
         }
