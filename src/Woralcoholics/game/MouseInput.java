@@ -49,15 +49,13 @@ public class MouseInput extends MouseAdapter {
         Point currentPos = e.getPoint();    //Grab current cursor position
         int button = e.getButton(); //Grab pressed button
         switch (Game.getState()) {  //depending on currentState, execute the following...
-            case TITLE -> {
-                if (button == 1) Game.setState(GameState.MAIN_MENU);
-            }
-            case MAIN_MENU, HIGH_SCORES, OPTIONS, PAUSE_MENU -> {
+            case TITLE, MAIN_MENU, HIGH_SCORES, OPTIONS, PAUSE_MENU -> {
                 if (button == 1) {
                     for (int i = 0; i < handler.object.size(); i++) {
                         GameObject temp = handler.object.get(i);
                         if (temp.getId() == ID.UIButton && temp.getBounds().contains(currentPos)) {
                             Game.setState(temp.nextState);
+                            break;
                         }
                     }
                 }

@@ -7,12 +7,11 @@ public class UIButton extends GameObject{
 
     private GameManager handler;
     private Game game;
-    private boolean isPressed = false;
 
     private int width, height;
     private int stringWidth, stringHeight, fontsize;
     private String name;
-    private Animations sprite = null;
+    private BufferedImage sprite = null;
 
     /**
      *  Constructor for UI buttons
@@ -25,7 +24,7 @@ public class UIButton extends GameObject{
      * @param game
      * @param an
      */
-    public UIButton(int x, int y, int width, int height, String name, GameState nextState, ID id, Game game, Animations an , int stringWidth, int stringHeight, int fontsize) {
+    public UIButton(int x, int y, int width, int height, String name, GameState nextState, ID id, Game game, Animations an, int stringWidth, int stringHeight, int fontsize) {
         super(x, y, nextState, id, an);
         this.width = width;
         this.height = height;
@@ -34,6 +33,7 @@ public class UIButton extends GameObject{
         this.stringWidth = stringWidth;
         this.stringHeight = stringHeight;
         this.fontsize = fontsize;
+        sprite = an.getImage(1,1, width, height);
     }
 
     @Override
@@ -43,7 +43,6 @@ public class UIButton extends GameObject{
 
     @Override
     public void render(Graphics g) {
-        BufferedImage sprite = an.getImage(1,1, width, height);
         g.drawImage(sprite, (int)x, (int)y,null);
         /*g.setColor(Color.RED);
         g.fillRect((int)x, (int)y, width, height);*/

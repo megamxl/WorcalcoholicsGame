@@ -60,6 +60,13 @@ public class GameManager {
         }
     }
 
+    public void render(Graphics g, ID id) {
+        for (int i = 0; i < object.size(); i++) {
+            GameObject tempObject = object.get(i);
+            if(tempObject.getId() == id) tempObject.render(g);
+        }
+    }
+
     // these function enable us to add and remove objects from our Handler to
 
     public void addObject(GameObject tempObject) {

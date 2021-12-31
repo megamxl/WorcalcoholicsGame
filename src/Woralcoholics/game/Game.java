@@ -290,7 +290,8 @@ public class Game extends Canvas implements Runnable {
                 }*/
             }
             paused = false;  //level is running and not paused (when coming from e.g. PAUSE_MENU or UPGRADE_MENU, where a level is already loaded)
-        } else {
+        }
+        else {
             loadMenu();                     //load the menu of currentState
         }
     }
@@ -361,7 +362,6 @@ public class Game extends Canvas implements Runnable {
         g.drawString(upgrades.drawUpgrades(randomUpgrades[0]), 300, 315);
         g.drawString(upgrades.drawUpgrades(randomUpgrades[1]), 500, 315);
         g.drawString(upgrades.drawUpgrades(randomUpgrades[2]), 700, 315);
-        g.drawString("LMB: BACK TO LEVEL", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
     /***
@@ -395,6 +395,7 @@ public class Game extends Canvas implements Runnable {
             case UPGRADE_MENU -> renderUpgradeMenu(g);
             case GAME_OVER -> renderGameOver(g);
         }
+        //handler.render(g, ID.UIButton);
         if (!loaded) {
             handler.render(g);
         }
@@ -483,6 +484,7 @@ public class Game extends Canvas implements Runnable {
         switch (currentState) {
             case STUDIO -> {}
             case TITLE -> {
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 176, (SCREEN_HEIGHT-25) / 2 - 51, 352, 102, "START", GameState.MAIN_MENU, ID.UIButton, this, uiButtonAnGet, 400, (SCREEN_HEIGHT-25) / 2 + 20, 40));
             }
             case MAIN_MENU -> {
                 menuCount = 0;
@@ -512,7 +514,9 @@ public class Game extends Canvas implements Runnable {
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
-                System.out.println("UPGRADE_MENU");
+                handler.addObject(new UIButton(10, 10, 64, 64, "", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet, 0, 0, 40));
+                handler.addObject(new UIButton(10, 10, 64, 64, "", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet, 0, 0, 40));
+                handler.addObject(new UIButton(10, 10, 64, 64, "", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet, 0, 0, 40));
                 paused = true;      //Pause the game until Player chose an Upgrade
             }
             case GAME_OVER -> {
