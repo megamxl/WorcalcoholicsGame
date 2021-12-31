@@ -30,10 +30,12 @@ public class Game extends Canvas implements Runnable {
 
     private boolean isRunning;
     protected static boolean paused, loaded;
+    public static boolean inTutorial = false;
     public static boolean shouldTime = false;
     public static boolean spawn = false;
 
     private BufferedImage level = null;
+    private BufferedImage tutorialLevel = null;
     private BufferedImage spritesheet = null;
     private BufferedImage upgradBoarder = null;
     private BufferedImage upgradBoard = null;
@@ -97,9 +99,10 @@ public class Game extends Canvas implements Runnable {
         AddGuns();
         StarterGun();
         // when finished implement the Mouse and Key input
-        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level01.png");
-        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level02.png");
+        InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
         level = ImageIO.read(path);
+        tutorialLevel = ImageIO.read(pathToTutorial);
 
         BufferedImageLoader loader = new BufferedImageLoader();
         spritesheet = loader.loadImage("/Spritesheet.png");
@@ -136,7 +139,6 @@ public class Game extends Canvas implements Runnable {
 
         fontLoader();
     }
-
 
 
     @Override
@@ -186,7 +188,8 @@ public class Game extends Canvas implements Runnable {
         if (currentState != checkState) {     //if there was a state change...
             stateChange();
         }
-        if (currentState == GameState.LEVEL && !paused) {    //if we are in level and the game is not paused...
+        System.out.println(currentState.toString());
+        if (currentState == GameState.LEVEL && !paused ) {    //if we are in level and the game is not paused...
             for (int i = 0; i < handler.object.size(); i++) {
                 if (handler.object.get(i).getId() == ID.Player) {
                     camera.update(handler.object.get(i));   //update the camera position to stay focused on the player
@@ -194,6 +197,7 @@ public class Game extends Canvas implements Runnable {
             }
             handler.update();   //update every GameObject (camera is NOT a GameObject)
         }
+
         if (paused && !triggeredonce) {
             handler.backgroundsound.stop();
             wasstopped = true;
@@ -228,11 +232,7 @@ public class Game extends Canvas implements Runnable {
         Graphics2D g2d = (Graphics2D) g;
 
         //if we are not in the level, render a menu
-        if (currentState != GameState.LEVEL) {
-            renderMenu(g);
-            handler.enemy.removeAll(handler.enemy);
-            //System.out.println("SPAWN" + handler.enemy.size());
-        } else {
+        if (currentState == GameState.LEVEL || currentState == GameState.TUTORIAL) {
             //translates our screen
             g2d.translate(-camera.getX(), -camera.getY());
 
@@ -245,6 +245,11 @@ public class Game extends Canvas implements Runnable {
             g2d.translate(camera.getX(), camera.getY());
 
             renderUi(g);
+
+        } else {
+            renderMenu(g);
+            handler.enemy.removeAll(handler.enemy);
+            //System.out.println("SPAWN" + handler.enemy.size());
         }
         // between this it can be drawn to the screen
 
@@ -265,7 +270,7 @@ public class Game extends Canvas implements Runnable {
         if (!loaded) {   //if nothing is loaded...
             clearHandler(); //clear everything in the handler
         }
-        if (currentState == GameState.LEVEL) {   //if we have changed to LEVEL...
+        if (currentState == GameState.LEVEL || currentState == GameState.TUTORIAL) {   //if we have changed to LEVEL...
             if (!loaded) {                   //...if no level is loaded, load the level
                 Enemy.waves = 1;            //reset Enemy waves
                 Enemy.enemysAlive = 0;
@@ -273,8 +278,12 @@ public class Game extends Canvas implements Runnable {
                 ammo = 50;                  // max hp = 100, max ammo = 50, max shield = 40, max armor = ...
                 shield = 0;
                 armor = 0;
-                camera.shake = false;       //camera should not shake
-                loadLevel(level);           //load the level
+                camera.shake = false;
+                if(currentState == GameState.TUTORIAL){
+                    loadLevel(tutorialLevel);//camera should not shake
+                }else {
+                    loadLevel(level);
+                }                           //load the level
             }
             paused = false;  //level is running and not paused (when coming from e.g. PAUSE_MENU or UPGRADE_MENU, where a level is already loaded)
         } else {
@@ -445,7 +454,7 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(5, 5, 200, 16); //hp
         g.fillRect(5, 30, 200, 16); //ammo
         g.fillRect(5, 80, 200, 8); //reload
-        if (shield > 0){
+        if (shield > 0) {
             g.fillRect(5, 55, 200, 16); //shield
 
             g.setColor(Color.blue);
@@ -500,7 +509,7 @@ public class Game extends Canvas implements Runnable {
             g.setColor(Color.ORANGE);
             //g.setFont(new Font("Future Blood",Font.PLAIN,80));
             g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 45));
-            g.drawString("Next Wave spawns in " + TimerValue , 50, 250);
+            g.drawString("Next Wave spawns in " + TimerValue, 50, 250);
 
         }
         g.drawImage(currGun, 10, 470, null);
@@ -523,26 +532,29 @@ public class Game extends Canvas implements Runnable {
                 menuCount = 0;
                 //JMenu mainMenu = new JMenu("Main Menu");
                 //mainMenu.add(new JMenuItem("test"));
-                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 19, 352, 102, "Level", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet,410,90,40));
-                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 144, 352, 102, "Tutorial", GameState.TUTORIAL, ID.UIButton, this, uiButtonAnGet,390,210,30));
-                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 269, 352, 102, "Scores", GameState.HIGH_SCORES, ID.UIButton, this, uiButtonAnGet,397,337,35));
-                handler.addObject(new UIButton(SCREEN_WIDTH/2 - 176, 394, 352, 102, "Options", GameState.OPTIONS, ID.UIButton, this, uiButtonAnGet,400,460,32));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 176, 19, 352, 102, "Level", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet, 410, 90, 40));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 176, 144, 352, 102, "Tutorial", GameState.TUTORIAL, ID.UIButton, this, uiButtonAnGet, 390, 210, 30));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 176, 269, 352, 102, "Scores", GameState.HIGH_SCORES, ID.UIButton, this, uiButtonAnGet, 397, 337, 35));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 176, 394, 352, 102, "Options", GameState.OPTIONS, ID.UIButton, this, uiButtonAnGet, 400, 460, 32));
 
             }
             case TUTORIAL -> {
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an,0,0,40));
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
+/*                System.out.println(currentState.toString());*/
+
+
             }
             case HIGH_SCORES -> {
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an,0,0,40));
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
             }
             case OPTIONS -> {
                 menuCount++;
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an,0,0,40));
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
             }
             case PAUSE_MENU -> {
                 menuCount = 10;
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", GameState.LEVEL, ID.UIButton, this, an,0,0,40));
-                handler.addObject(new UIButton(110, 10, 64, 64, "Options", GameState.OPTIONS, ID.UIButton, this, an,0,0,40));
+                handler.addObject(new UIButton(10, 10, 64, 64, "Return", GameState.LEVEL, ID.UIButton, this, an, 0, 0, 40));
+                handler.addObject(new UIButton(110, 10, 64, 64, "Options", GameState.OPTIONS, ID.UIButton, this, an, 0, 0, 40));
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
@@ -644,7 +656,7 @@ public class Game extends Canvas implements Runnable {
                 switch (timerAction) {
                     case 1:
                         Enemy.Spawner(Enemy.waves, false, r); //Spawn the next wave of enemies
-                        upgrades.addMunition(20);
+                        //upgrades.addMunition(20);
                         break;
                     case 2:
                         currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
@@ -812,11 +824,10 @@ public class Game extends Canvas implements Runnable {
         handler.selectedgun = gun.guns.get(0);
     }
 
-    private void CheckGunStatus()
-    {
-        if(handler.selectedgun.getType()==GunType.Pistol)
+    private void CheckGunStatus() {
+        if (handler.selectedgun.getType() == GunType.Pistol)
             handler.del = 200;
-        else if (handler.selectedgun.getType()==GunType.Shotgun)
+        else if (handler.selectedgun.getType() == GunType.Shotgun)
             handler.del = 1000;
         else //Machine Gun
             handler.del = 0;

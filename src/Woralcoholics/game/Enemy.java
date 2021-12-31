@@ -88,18 +88,19 @@ public class Enemy<privare> extends GameObject {
                     //System.out.println(score.showScore());
 
                     removeWithObject(tmpObject);
-                    if (enemysAlive <= 0) {
-                        waves++;
-                        if ((waves - 1) % upgradeAfterWave == 0) {
-                            Game.TimerValue = 0;    //0 secs (actually just to unrender the last enemy and bullet)
-                            Game.shouldTime = true; //activate Timer
-                            Game.timerAction = 2;   //execute timerAction 2 -> wait a bit
-                        } else {
-                            Game.TimerValue = 5;    //5 secs to spawn next wave
-                            Game.shouldTime = true; //activate Timer
-                            Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
-                        }
-
+                    if(!Game.inTutorial){
+                        if (enemysAlive <= 0) {
+                            waves++;
+                            if ((waves - 1) % upgradeAfterWave == 0) {
+                                Game.TimerValue = 0;    //0 secs (actually just to unrender the last enemy and bullet)
+                                Game.shouldTime = true; //activate Timer
+                                Game.timerAction = 2;   //execute timerAction 2 -> wait a bit
+                            } else {
+                                Game.TimerValue = 5;    //5 secs to spawn next wave
+                                Game.shouldTime = true; //activate Timer
+                                Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
+                            }
+                    }
 
                     }
                     //System.out.println("es sind " + enemysAlive +" enemys am leben");
@@ -149,11 +150,11 @@ public class Enemy<privare> extends GameObject {
 
     public void isDead() {
         if (hp <= 0) {
-            //int prob = Game.randomNumber(1,4);
+            int prob = Game.randomNumber(1,4);
             remove();
             float curX = x;
             float curY = y;
-            int prob = 2;
+            //int prob = 2;
             if(prob == 2){
                 Game.SpawnCreate((int)curX,(int)curY);
             }
