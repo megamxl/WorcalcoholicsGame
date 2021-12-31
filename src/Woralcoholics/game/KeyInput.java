@@ -29,10 +29,19 @@ public class KeyInput extends KeyAdapter {
             }
         }
         int key = e.getKeyCode();
+        switch(key) {
+            case KeyEvent.VK_NUMPAD0 -> Game.setState(GameState.STUDIO);
+            case KeyEvent.VK_NUMPAD1 -> Game.setState(GameState.TITLE);
+            case KeyEvent.VK_NUMPAD2 -> Game.setState(GameState.MAIN_MENU);
+            case KeyEvent.VK_NUMPAD3 -> Game.setState(GameState.LEVEL);
+            case KeyEvent.VK_NUMPAD4 -> Game.setState(GameState.TUTORIAL);
+            case KeyEvent.VK_NUMPAD5 -> Game.setState(GameState.HIGH_SCORES);
+            case KeyEvent.VK_NUMPAD6 -> Game.setState(GameState.OPTIONS);
+            case KeyEvent.VK_NUMPAD7 -> Game.setState(GameState.PAUSE_MENU);
+            case KeyEvent.VK_NUMPAD8 -> Game.setState(GameState.GAME_OVER);
+
+        }
         switch(Game.getState()) {
-            case MAIN_MENU -> {
-                if(key == KeyEvent.VK_SPACE) Game.setState(GameState.LEVEL);
-            }
             case LEVEL, TUTORIAL -> {
                 switch (key) {
                     case KeyEvent.VK_A -> gameManager.setLeft(true);

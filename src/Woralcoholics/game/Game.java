@@ -265,7 +265,7 @@ public class Game extends Canvas implements Runnable {
         //System.out.println("is " + currentState + " equal to " + checkState + "?");
         previousState = checkState;      //save the state before the state change
         checkState = currentState;       //the checkState becomes the current state, to again detect a state change
-        System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
+        //System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
         if (!loaded) {   //if nothing is loaded...
             clearHandler(); //clear everything in the handler
         }
@@ -300,12 +300,6 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderStudio(Graphics g) {
-        g.setColor(Color.lightGray);
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        g.setColor(Color.WHITE);
-        g.drawString("Workalcoholics", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        g.drawString("presents", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
-        isDead = true;
     }
 
     /***
@@ -313,21 +307,6 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderTitle(Graphics g) {
-//        if(isDead) {
-//            Window.frame.setVisible(false);
-//            Window.GameOverFrame.setVisible(true);
-//            isDead =false;
-//        }
-//        Window.GameOverFrame.setVisible(false);
-//        Window.frame.setVisible(true);
-
-        g.setColor(Color.lightGray);
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-        g.setColor(Color.WHITE);
-        g.drawString("TITLE", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        g.drawString("LMB: MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
-
     }
 
     /***
@@ -335,12 +314,6 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderMainMenu(Graphics g) {
-        g.setColor(Color.lightGray);
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-       /* g.setColor(Color.WHITE);
-        g.drawString("MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);*/
     }
 
     /***
@@ -348,12 +321,6 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderTutorial(Graphics g) {
-        g.setColor(Color.lightGray);
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-        g.setColor(Color.WHITE);
-        g.drawString("TUTORIAL", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
     /***
@@ -361,12 +328,6 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderHighScores(Graphics g) {
-        g.setColor(Color.lightGray);
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-        g.setColor(Color.WHITE);
-        g.drawString("HIGH SCORES", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        g.drawString("LMB: LEVEL    RMB: OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
     /***
@@ -374,11 +335,6 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderOptions(Graphics g) {
-        g.setColor(Color.lightGray);
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        g.setColor(Color.WHITE);
-        g.drawString("OPTIONS", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        g.drawString("RMB: MAIN MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
     }
 
     /***
@@ -386,11 +342,7 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderPauseMenu(Graphics g) {
-        //g.setColor(new Color(0,0,0,127));
-        //g.fillRect(0, 0, screenWidth, screenHeight);
-        g.setColor(Color.WHITE);
-        g.drawString("PAUSE_MENU", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        g.drawString("RMB: LEVEL", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
+
     }
 
     /***
@@ -417,8 +369,6 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderGameOver(Graphics g) {
-        g.setColor(Color.lightGray);
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.setColor(Color.DARK_GRAY);
         //g.drawString("GAME OVER", 200, 200);
         g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 75));
@@ -432,6 +382,8 @@ public class Game extends Canvas implements Runnable {
      * @param g Graphics object
      */
     private void renderMenu(Graphics g) {
+        g.setColor(Color.lightGray);
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         switch (currentState) {
             case STUDIO -> renderStudio(g);
             case TITLE -> renderTitle(g);
@@ -568,10 +520,9 @@ public class Game extends Canvas implements Runnable {
                 lastScore = score.showScore();
                 score.resetSore();
                 handler.backgroundsound.close();
-                ScoerSaveWindow.frame.setVisible(true);
-                Window.frame.setVisible(false);
+                //ScoerSaveWindow.frame.setVisible(true);
+                //Window.frame.setVisible(false);
                 //System.out.println("SOUND CLOSE");
-                loaded = false;                 //the player lost, so the level should unload
             }
         }
     }
