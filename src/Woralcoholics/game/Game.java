@@ -55,6 +55,8 @@ public class Game extends Canvas implements Runnable {
     public int hp = 100;
     static Score score = new Score(0);
 
+    private String playerName = null;
+
     public int shield = 0;
     public int armor = 0; //armor is referred to in %, so 10 would make a shield absorbing 10% of damage
 
@@ -89,7 +91,7 @@ public class Game extends Canvas implements Runnable {
     public Game() throws IOException {
         currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
-        new ScoerSaveWindow(SCREEN_WIDTH,SCREEN_HEIGHT,"");
+        //new ScoerSaveWindow(SCREEN_WIDTH,SCREEN_HEIGHT,"");
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
         start();
 
@@ -267,7 +269,7 @@ public class Game extends Canvas implements Runnable {
         checkState = currentState;       //the checkState becomes the current state, to again detect a state change
         //System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
         if (!loaded) {   //if nothing is loaded...
-            clearHandler(); //clear everything in the handler
+            handler.clearHandler(); //clear everything in the handler
         }
         if (currentState == GameState.LEVEL || currentState == GameState.TUTORIAL) {   //if we have changed to LEVEL...
             if (!loaded) {                   //...if no level is loaded, load the level
@@ -501,6 +503,8 @@ public class Game extends Canvas implements Runnable {
                 //System.out.println(currentState.toString());
             }
             case HIGH_SCORES -> {
+
+                //JOptionPane playerDataInput = new JOptionPane();
                 handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
             }
             case OPTIONS -> {
@@ -520,23 +524,17 @@ public class Game extends Canvas implements Runnable {
                 paused = true;      //Pause the game until Player chose an Upgrade
             }
             case GAME_OVER -> {
-                System.out.println("GAME OVER");
                 lastScore = score.showScore();
                 score.resetSore();
                 handler.backgroundsound.close();
                 //ScoerSaveWindow.frame.setVisible(true);
                 //Window.frame.setVisible(false);
                 //System.out.println("SOUND CLOSE");
+                System.out.println(playerName);
+                Game.TimerValue = 0;    //5 secs wait time
+                Game.shouldTime = true; //activate Timer
+                Game.timerAction = 4;   //execute timerAction 4 -> enter name and upload score dialogs
             }
-        }
-    }
-
-    /***
-     * A function to clear all objects in the handler
-     */
-    private void clearHandler() {
-        while (handler.object.size() > 0) {
-            handler.object.remove(0);
         }
     }
 
@@ -613,16 +611,16 @@ public class Game extends Canvas implements Runnable {
         } else {   //if the waiting time is over...
             if (shouldTime) {    //...execute the previously set timerAction
                 switch (timerAction) {
-                    case 1:
+                    case 1 -> {
                         Enemy.Spawner(Enemy.waves, false, r); //Spawn the next wave of enemies
                         //upgrades.addMunition(20);
-                        break;
-                    case 2:
-                        currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
-                        break;
-                    case 3:
-                        currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
-                        break;
+                    }
+                    case 2 -> currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
+                    case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
+                    case 4 -> { //enter your name and choose whether to upload your score
+                        playerName = JOptionPane.showInputDialog(null, "Please enter your name", null, JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?", null, JOptionPane.YES_NO_OPTION);
+                    }
                 }
                 shouldTime = false;  //deactivate the timer
             }
