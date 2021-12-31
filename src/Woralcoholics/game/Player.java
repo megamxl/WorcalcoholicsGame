@@ -27,8 +27,6 @@ public class Player extends GameObject {
     private Boolean movingHorizontal = false;
     private Clip sound;
     // better method would be to wait until the thread is finished and then start the new sound
-    private boolean IsSoundPlaying = false;
-    private boolean IsSoundPlaying2 = false;
 
     public Player(int x, int y, ID id, GameManager GameManager, Game game, Camera cam, Animations an) {
         super(x, y, id, an);

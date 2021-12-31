@@ -168,8 +168,10 @@ public class MouseInput extends MouseAdapter {
     //region MouseWheelEvents
     public void mouseWheelMoved(MouseWheelEvent e) {
         if (e.getWheelRotation() < 0) {
+            playSoundEquip();
             MouseWheelUp();
         } else {
+            playSoundEquip();
             MouseWheelDown();
         }
     }
@@ -196,6 +198,29 @@ public class MouseInput extends MouseAdapter {
                     ex.printStackTrace();
                 } catch (IllegalArgumentException ex) {
                     ex.printStackTrace();
+                }
+            }).start();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void playSoundEquip() {
+        try {
+            new Thread(() -> {
+
+                try {
+                    handler.playSoundEquip();
+                } catch (LineUnavailableException ex) {
+                    ex.printStackTrace();
+                } catch (UnsupportedAudioFileException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (IllegalArgumentException ex) {
+                    ex.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }).start();
         } catch (Exception exception) {
