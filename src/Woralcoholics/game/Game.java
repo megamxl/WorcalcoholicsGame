@@ -89,8 +89,8 @@ public class Game extends Canvas implements Runnable {
     public Game() throws IOException {
         currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
+        new ScoerSaveWindow(SCREEN_WIDTH,SCREEN_HEIGHT,"");
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
-        new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress");
         start();
 
         handler = new GameManager();
@@ -188,7 +188,6 @@ public class Game extends Canvas implements Runnable {
         if (currentState != checkState) {     //if there was a state change...
             stateChange();
         }
-        System.out.println(currentState.toString());
         if (currentState == GameState.LEVEL && !paused ) {    //if we are in level and the game is not paused...
             for (int i = 0; i < handler.object.size(); i++) {
                 if (handler.object.get(i).getId() == ID.Player) {
@@ -566,6 +565,8 @@ public class Game extends Canvas implements Runnable {
                 lastScore = score.showScore();
                 score.resetSore();
                 handler.backgroundsound.close();
+                ScoerSaveWindow.frame.setVisible(true);
+                Window.frame.setVisible(false);
                 //System.out.println("SOUND CLOSE");
                 loaded = false;                 //the player lost, so the level should unload
             }
