@@ -1,6 +1,7 @@
 package Woralcoholics.game;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.nio.FloatBuffer;
 
 // in this class the input management will happen through KeyAdapter
 
@@ -29,18 +30,8 @@ public class KeyInput extends KeyAdapter {
             }
         }
         int key = e.getKeyCode();
-        switch(key) {
-            case KeyEvent.VK_NUMPAD0 -> Game.setState(GameState.STUDIO);
-            case KeyEvent.VK_NUMPAD1 -> Game.setState(GameState.TITLE);
-            case KeyEvent.VK_NUMPAD2 -> Game.setState(GameState.MAIN_MENU);
-            case KeyEvent.VK_NUMPAD3 -> Game.setState(GameState.LEVEL);
-            case KeyEvent.VK_NUMPAD4 -> Game.setState(GameState.TUTORIAL);
-            case KeyEvent.VK_NUMPAD5 -> Game.setState(GameState.HIGH_SCORES);
-            case KeyEvent.VK_NUMPAD6 -> Game.setState(GameState.OPTIONS);
-            case KeyEvent.VK_NUMPAD7 -> Game.setState(GameState.PAUSE_MENU);
-            case KeyEvent.VK_NUMPAD8 -> Game.setState(GameState.GAME_OVER);
+        DEVELOPER_SCREEN_CHANGER(key);
 
-        }
         switch(Game.getState()) {
             case LEVEL, TUTORIAL -> {
                 switch (key) {
@@ -71,6 +62,72 @@ public class KeyInput extends KeyAdapter {
             case KeyEvent.VK_L -> gameManager.setL(false);
             case KeyEvent.VK_K -> gameManager.setK(false);
             case KeyEvent.VK_M -> gameManager.setM(false);
+        }
+    }
+
+    private void DEVELOPER_SCREEN_CHANGER(int key) {
+        switch(key) {
+            case KeyEvent.VK_NUMPAD0 -> {
+                Game.setState(GameState.STUDIO);
+                System.out.println("SWITCHED TO " + Game.getState());
+                gameManager.clearHandler();
+                Game.loaded = false;
+                gameManager.backgroundsound.close();
+            }
+            case KeyEvent.VK_NUMPAD1 -> {
+                Game.setState(GameState.TITLE);
+                System.out.println("SWITCHED TO " + Game.getState());
+                gameManager.clearHandler();
+                Game.loaded = false;
+                gameManager.backgroundsound.close();
+            }
+            case KeyEvent.VK_NUMPAD2 -> {
+                Game.setState(GameState.MAIN_MENU);
+                System.out.println("SWITCHED TO " + Game.getState());
+                gameManager.clearHandler();
+                Game.loaded = false;
+                gameManager.backgroundsound.close();
+            }
+            case KeyEvent.VK_NUMPAD3 -> {
+                if(Game.loaded) Game.loaded = false;
+                Game.setState(GameState.LEVEL);
+                System.out.println("SWITCHED TO " + Game.getState());
+                gameManager.clearHandler();
+            }
+            case KeyEvent.VK_NUMPAD4 -> {
+                if(Game.loaded) Game.loaded = false;
+                Game.setState(GameState.TUTORIAL);
+                System.out.println("SWITCHED TO " + Game.getState());
+                gameManager.clearHandler();
+
+            }
+            case KeyEvent.VK_NUMPAD5 -> {
+                Game.setState(GameState.HIGH_SCORES);
+                System.out.println("SWITCHED TO " + Game.getState());
+                gameManager.clearHandler();
+                Game.loaded = false;
+                gameManager.backgroundsound.close();
+            }
+            case KeyEvent.VK_NUMPAD6 -> {
+                Game.setState(GameState.OPTIONS);
+                System.out.println("SWITCHED TO " + Game.getState());
+                gameManager.clearHandler();
+                Game.loaded = false;
+                gameManager.backgroundsound.close();
+            }
+            case KeyEvent.VK_NUMPAD7 -> {
+                Game.setState(GameState.PAUSE_MENU);
+                System.out.println("SWITCHED TO " + Game.getState());
+                gameManager.clearHandler();
+                gameManager.backgroundsound.close();
+            }
+            case KeyEvent.VK_NUMPAD8 -> {
+                Game.setState(GameState.GAME_OVER);
+                System.out.println("SWITCHED TO " + Game.getState());
+                gameManager.clearHandler();
+                Game.loaded = false;
+                gameManager.backgroundsound.close();
+            }
         }
     }
 }

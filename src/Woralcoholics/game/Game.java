@@ -481,7 +481,7 @@ public class Game extends Canvas implements Runnable {
             menuCount--;
         }
         switch (currentState) {
-            case STUDIO -> System.out.println("STUDIO");
+            case STUDIO -> {}
             case TITLE -> {
             }
             case MAIN_MENU -> {
