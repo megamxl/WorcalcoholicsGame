@@ -33,7 +33,7 @@ public class KeyInput extends KeyAdapter {
             case MAIN_MENU -> {
                 if(key == KeyEvent.VK_SPACE) Game.setState(GameState.LEVEL);
             }
-            case LEVEL -> {
+            case LEVEL, TUTORIAL -> {
                 switch (key) {
                     case KeyEvent.VK_A -> gameManager.setLeft(true);
                     case KeyEvent.VK_D -> gameManager.setRight(true);

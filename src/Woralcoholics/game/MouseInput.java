@@ -51,7 +51,7 @@ public class MouseInput extends MouseAdapter {
             case TITLE -> {
                 if (button == 1) Game.setState(GameState.MAIN_MENU);
             }
-            case MAIN_MENU, TUTORIAL, HIGH_SCORES, OPTIONS, PAUSE_MENU -> {
+            case MAIN_MENU, HIGH_SCORES, OPTIONS, PAUSE_MENU -> {
                 if (button == 1) {
                     for (int i = 0; i < handler.object.size(); i++) {
                         GameObject temp = handler.object.get(i);
@@ -83,7 +83,7 @@ public class MouseInput extends MouseAdapter {
                 Game.shouldTime = true; //activate Timer
                 Game.timerAction = 1;   //execute timerAction 1 -> countdown till next wave
             }
-            case LEVEL -> {
+            case LEVEL, TUTORIAL -> {
                 /* 1 = LEFT MOUSE BUTTON
                  * 2 = MOUSE WHEEL
                  * 3 = RIGHT MOUSE BUTTON */

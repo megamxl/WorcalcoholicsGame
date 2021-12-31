@@ -188,7 +188,7 @@ public class Game extends Canvas implements Runnable {
         if (currentState != checkState) {     //if there was a state change...
             stateChange();
         }
-        if (currentState == GameState.LEVEL && !paused ) {    //if we are in level and the game is not paused...
+        if ((currentState == GameState.LEVEL || currentState == GameState.TUTORIAL) && !paused ) {    //if we are in level and the game is not paused...
             for (int i = 0; i < handler.object.size(); i++) {
                 if (handler.object.get(i).getId() == ID.Player) {
                     camera.update(handler.object.get(i));   //update the camera position to stay focused on the player
@@ -265,7 +265,7 @@ public class Game extends Canvas implements Runnable {
         //System.out.println("is " + currentState + " equal to " + checkState + "?");
         previousState = checkState;      //save the state before the state change
         checkState = currentState;       //the checkState becomes the current state, to again detect a state change
-        //System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
+        System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
         if (!loaded) {   //if nothing is loaded...
             clearHandler(); //clear everything in the handler
         }
@@ -277,12 +277,17 @@ public class Game extends Canvas implements Runnable {
                 ammo = 50;                  // max hp = 100, max ammo = 50, max shield = 40, max armor = ...
                 shield = 0;
                 armor = 0;
-                camera.shake = false;
-                if(currentState == GameState.TUTORIAL){
-                    loadLevel(tutorialLevel);//camera should not shake
-                }else {
+                camera.shake = false;   //camera should not shake
+                switch(currentState) {
+                    case LEVEL -> loadLevel(level); //load the level
+                    case TUTORIAL -> loadLevel(tutorialLevel);
+                }
+                /*if(currentState == GameState.TUTORIAL){
+                    loadLevel(tutorialLevel);
+                }
+                else {
                     loadLevel(level);
-                }                           //load the level
+                }*/
             }
             paused = false;  //level is running and not paused (when coming from e.g. PAUSE_MENU or UPGRADE_MENU, where a level is already loaded)
         } else {
@@ -538,10 +543,8 @@ public class Game extends Canvas implements Runnable {
 
             }
             case TUTORIAL -> {
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
-/*                System.out.println(currentState.toString());*/
-
-
+                //handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
+                //System.out.println(currentState.toString());
             }
             case HIGH_SCORES -> {
                 handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
