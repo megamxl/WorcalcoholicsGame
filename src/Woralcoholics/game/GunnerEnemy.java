@@ -17,7 +17,7 @@ public class GunnerEnemy extends Enemy {
     private double distanceToPlayer;
     private double alpha;       //angle that is needed for calculating the bullet path
 
-    private final int checkFreeDistance = 32+50;
+    private final int checkFreeDistance = 32 + 50;
 
     public static float movementSpeed = 5;  //Movement-Speed of the Gunner
 
@@ -33,6 +33,7 @@ public class GunnerEnemy extends Enemy {
         NEAR_WALL,
         STAY
     }
+
     private state gunnerState;
 
 
@@ -41,32 +42,30 @@ public class GunnerEnemy extends Enemy {
         handler = manager;
         gx = getX();    //get Position of Gunner
         gy = getY();
-        gunner_enemy_img = an.getImage(1,5,64,64);  //Get the Sprite for the Gunner from Spritesheet
+        gunner_enemy_img = an.getImage(1, 5, 64, 64);  //Get the Sprite for the Gunner from Spritesheet
     }
 
     /***
      * Function to calculate the Distance to the player, and act accordingly
      */
     private void calcDistanceToPlayer() {
-        for(int i = 0; i < handler.object.size(); i++) {
+        for (int i = 0; i < handler.object.size(); i++) {
             GameObject temp = handler.object.get(i);
 
-            if(temp.getId() == ID.Player) {
-                px = temp.getX()+32;
-                py = temp.getY()+32;
+            if (temp.getId() == ID.Player) {
+                px = temp.getX() + 32;
+                py = temp.getY() + 32;
                 break;
             }
         }
-        distanceToPlayer = Math.sqrt(Math.pow(px-gx, 2) + Math.pow(py-gy, 2));
-        alpha = Math.atan2(py-gy, px-gx);
+        distanceToPlayer = Math.sqrt(Math.pow(px - gx, 2) + Math.pow(py - gy, 2));
+        alpha = Math.atan2(py - gy, px - gx);
 
-        if(distanceToPlayer > maxDistanceToPlayer) {
+        if (distanceToPlayer > maxDistanceToPlayer) {
             gunnerState = state.TOO_FAR;
-        }
-        else if(distanceToPlayer < minDistanceToPlayer) {
+        } else if (distanceToPlayer < minDistanceToPlayer) {
             gunnerState = state.TOO_CLOSE;
-        }
-        else
+        } else
             gunnerState = state.STAY;
     }
 
@@ -74,7 +73,7 @@ public class GunnerEnemy extends Enemy {
      * How the Gunner should act depending on its state
      */
     public void behaviour() {
-        switch(gunnerState) {
+        switch (gunnerState) {
             case TOO_FAR -> {   //-> move closer to the player
                 velX = (float) (Math.cos(alpha) * movementSpeed);
                 velY = (float) (Math.sin(alpha) * movementSpeed);
@@ -98,8 +97,8 @@ public class GunnerEnemy extends Enemy {
     public void shoot() {
         gx += 16;
         gy += 16;
-        EnemyBullet temp = new EnemyBullet((int) gx-4, (int) gy-4, ID.EnemyBullet, handler, an);    //Create a new bullet, that can harm the player
-        temp.direction(px, py, gx, gy);     //Set the direction
+        EnemyBullet temp = new EnemyBullet((int) gx - 4, (int) gy - 4, ID.EnemyBullet, handler, an);    //Create a new bullet, that can harm the player
+        temp.direction(px, py, gx, gy, false, 0);     //Set the direction
         handler.addObject(temp);
         playSoundGunnerEnemy();
     }
@@ -107,8 +106,7 @@ public class GunnerEnemy extends Enemy {
     private void checkIfFree() {
     }
 
-    private void playSoundGunnerEnemy()
-    {
+    private void playSoundGunnerEnemy() {
         try {
             new Thread(() -> {
 
@@ -142,7 +140,7 @@ public class GunnerEnemy extends Enemy {
         //checkIfFree();
         //Shoot after a delay
         double now = System.currentTimeMillis();
-        if(now > wait) {
+        if (now > wait) {
             shoot();
             wait = now + shootDel;
         }
@@ -159,17 +157,17 @@ public class GunnerEnemy extends Enemy {
         g.drawRect((int)gx+2, (int)gy, 64, 64);
         g.drawLine((int)gx+32, (int)gy+32, (int)px, (int)py);
         g.drawLine((int)gx+32, (int)gy+32, (int)(gx+Math.cos(alpha)*(distanceToPlayer-50)), (int)(gy+Math.sin(alpha)*(distanceToPlayer-50)));*/
-        g.drawImage(gunner_enemy_img,(int)x,(int)y, null);
+        g.drawImage(gunner_enemy_img, (int) x, (int) y, null);
     }
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int)x +4, (int)y +2, 52, 60);
+        return new Rectangle((int) x + 4, (int) y + 2, 52, 60);
     }
 
     @Override
     public Rectangle getBoundsAround() {
-        return new Rectangle((int)gx, (int)gy, 50, 50);
+        return new Rectangle((int) gx, (int) gy, 50, 50);
     }
 
     /***

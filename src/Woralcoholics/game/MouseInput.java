@@ -21,6 +21,7 @@ public class MouseInput extends MouseAdapter {
     private Animations an;
     private Gun gun;
     volatile private boolean mouseDown = false; //determine if mouse1 is pressed or not
+    private boolean gunequiperror = false;
     Upgrades upgrades;
 
 
@@ -118,7 +119,7 @@ public class MouseInput extends MouseAdapter {
                                 double py = player.getY() + 32;
                                 //Create a new bullet in the middle of player sprite (minus the bullet radius)
                                 Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-                                temp.direction(mx, my, px, py); //Calculate the direction of this bullet
+                                temp.direction(mx, my, px, py, false, 0); //Calculate the direction of this bullet
                                 handler.addObject(temp);    //Add the Bullet to the ObjectList
                                 game.ammo--;    //Subtract 1 from ammo (bullet was shot)
                                 //System.out.println(game.ammo);
@@ -168,11 +169,11 @@ public class MouseInput extends MouseAdapter {
     //region MouseWheelEvents
     public void mouseWheelMoved(MouseWheelEvent e) {
         if (e.getWheelRotation() < 0) {
-            playSoundEquip();
-            MouseWheelUp();
+            gunequiperror = MouseWheelUp();
+            playSoundEquip(gunequiperror);
         } else {
-            playSoundEquip();
-            MouseWheelDown();
+            gunequiperror = MouseWheelDown();
+            playSoundEquip(gunequiperror);
         }
     }
     //endregion
@@ -205,12 +206,12 @@ public class MouseInput extends MouseAdapter {
         }
     }
 
-    private void playSoundEquip() {
+    private void playSoundEquip(boolean error) {
         try {
             new Thread(() -> {
 
                 try {
-                    handler.playSoundEquip();
+                    handler.playSoundEquip(error);
                 } catch (LineUnavailableException ex) {
                     ex.printStackTrace();
                 } catch (UnsupportedAudioFileException ex) {
@@ -247,7 +248,7 @@ public class MouseInput extends MouseAdapter {
             double py = player.getY() + 32;
             //Create a new bullet in the middle of player sprite (minus the bullet radius)
             Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-            temp.direction(mx, my, px, py); //Calculate the direction of this bullet
+            temp.direction(mx, my, px, py, false, 0); //Calculate the direction of this bullet
             handler.addObject(temp);    //Add the Bullet to the ObjectList
             game.ammo--;    //Subtract 1 from ammo (bullet was shot)
             playSoundGun(game.ammo);
@@ -264,7 +265,6 @@ public class MouseInput extends MouseAdapter {
     }
 
     private void shotgun(MouseEvent e) {
-        System.out.println("SHOTGUN");
         handler.now = System.currentTimeMillis();
         //IF waiting time is over AND player has ammo -> shoot a bullet
         if (handler.now > handler.wait && game.ammo >= 1) {
@@ -282,15 +282,15 @@ public class MouseInput extends MouseAdapter {
             //Create a new bullet in the middle of player sprite (minus the bullet radius)
 
             Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-            temp.direction(mx, my, px, py); //Calculate the direction of this bullet
+            temp.direction(mx, my, px, py, true, 0); //Calculate the direction of this bullet
             handler.addObject(temp);    //Add the Bullet to the ObjectList
 
             Bullet temp2 = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-            temp2.directionRightbullet(mx, my, px, py); //Calculate the direction of this bullet
+            temp2.direction(mx, my, px, py, true, 10); //Calculate the direction of this bullet
             handler.addObject(temp2);    //Add the Bullet to the ObjectList
 
             Bullet temp3 = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-            temp3.directionLeftbullet(mx, my, px, py); //Calculate the direction of this bullet
+            temp3.direction(mx, my, px, py, true, -10); //Calculate the direction of this bullet
             handler.addObject(temp3);    //Add the Bullet to the ObjectList
 
             if (game.ammo <= 3) {
@@ -307,23 +307,27 @@ public class MouseInput extends MouseAdapter {
         }
     }
 
-    private void MouseWheelUp() {
+    private boolean MouseWheelUp() {
         if (handler.gunindex == gun.guns.size() - 1) { // 3 values -> 0 to 2
+            return gunequiperror = true;
 
         } else {
             handler.gunindex++;
         }
         //gun.guns.indexOf(handler.gunindex);
         handler.selectedgun = gun.guns.get(handler.gunindex);
+        return gunequiperror = false;
     }
 
-    private void MouseWheelDown() {
+    private boolean MouseWheelDown() {
         if (handler.gunindex == 0) {
+            return gunequiperror = true;
 
         } else {
             handler.gunindex--;
         }
         handler.selectedgun = gun.guns.get(handler.gunindex);
+        return gunequiperror = false;
     }
 //endregion
 }

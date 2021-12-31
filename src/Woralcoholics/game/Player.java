@@ -3,12 +3,7 @@ package Woralcoholics.game;
 import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Player extends GameObject {
 
@@ -247,7 +242,7 @@ public class Player extends GameObject {
             new Thread(() -> {
 
                 try {
-                    handler.playSoundHurt();
+                    handler.playSoundPlayerHurt();
                 } catch (LineUnavailableException e) {
                     e.printStackTrace();
                 } catch (UnsupportedAudioFileException e) {

@@ -776,7 +776,7 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void StarterGun() {
-        handler.selectedgun = gun.guns.get(1);
+        handler.selectedgun = gun.guns.get(handler.gunindex);
     }
 
     private void CheckGunStatus() {

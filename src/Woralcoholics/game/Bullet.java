@@ -21,48 +21,19 @@ public class Bullet extends GameObject {
 
     /**
      * map the mouse input to world coordinates
+     * anglediff is the angle +- the 2 other bullets of the shotgun have
      *
      * @param mx
      * @param my
      * @param px
      * @param py
      */
-    public void direction(double mx, double my, double px, double py) {
-        double dx = mx - px;
-        double dy = my - py;
-        double alpha = Math.atan2(dy, dx);
-        velX = (float) (Math.cos(alpha) * bulletSpeed);
-        velY = (float) (Math.sin(alpha) * bulletSpeed);
-
-    }
-
-    public void directionRightbullet(double mx, double my, double px, double py) {
-        double dx = mx - px;
-        double dy = my - py;
-        double alpha = Math.atan2(dy, dx);
-        float angle = (float) Math.toDegrees(alpha);
-        angle += 10; //change for wider range of the rights bullet
-
-        angle = CheckAngle(angle); // get's overwritten if angle is not valid
-        alpha = Math.toRadians(angle); // overwrite angle
-
-        velX = (float) (Math.cos(alpha) * bulletSpeed);
-        velY = (float) (Math.sin(alpha) * bulletSpeed);
-    }
-
-    public void directionLeftbullet(double mx, double my, double px, double py) {
-        double dx = mx - px;
-        double dy = my - py;
-        double alpha = Math.atan2(dy, dx);
-        float angle = (float) Math.toDegrees(alpha);
-        angle -= 10; //change for wider range of the left bullet
-
-        CheckAngle(angle);
-        alpha = Math.toRadians(angle);
-
-
-        velX = (float) (Math.cos(alpha) * bulletSpeed);
-        velY = (float) (Math.sin(alpha) * bulletSpeed);
+    public void direction(double mx, double my, double px, double py, boolean shotgun, float anglediff) {
+        if (!shotgun) {
+            direction(mx, my, px, py); //normal bullet as usual
+        } else {
+            direction(mx, my, px, py, anglediff); //bullets for the shotgun
+        }
     }
 
     /**
@@ -97,11 +68,33 @@ public class Bullet extends GameObject {
         }
     }
 
-    private float CheckAngle(float angle) {
+    private float checkAngle(float angle) {
         if (angle < 0) {
             angle += 360;
         }
         return angle;
+    }
+
+    private void direction(double mx, double my, double px, double py) {
+        double dx = mx - px;
+        double dy = my - py;
+        double alpha = Math.atan2(dy, dx);
+        velX = (float) (Math.cos(alpha) * bulletSpeed);
+        velY = (float) (Math.sin(alpha) * bulletSpeed);
+    }
+
+    private void direction(double mx, double my, double px, double py, float anglediff) {
+        double dx = mx - px;
+        double dy = my - py;
+        double alpha = Math.atan2(dy, dx);
+        float angle = (float) Math.toDegrees(alpha);
+        angle += anglediff; //change for wider range of the rights bullet
+
+        angle = checkAngle(angle); // get's overwritten if angle is not valid
+        alpha = Math.toRadians(angle); // overwrite angle
+
+        velX = (float) (Math.cos(alpha) * bulletSpeed);
+        velY = (float) (Math.sin(alpha) * bulletSpeed);
     }
 
     @Override

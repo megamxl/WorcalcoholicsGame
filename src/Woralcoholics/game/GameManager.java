@@ -21,14 +21,14 @@ public class GameManager {
     Clip sound;
     public Clip backgroundsound;
     public int soundv = 1; //default value for -20f sound
-    protected boolean IsSoundPlaying, IsSoundPlaying2 = false;
+    protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip = false;
     protected double wait;
     //machine gun - del=0 | normal gun - del=200 | slowgun - del=1000
     protected int del = 1000; //how fast player can shoot, less -> faster
     protected double now;
     protected boolean ammo = true;
     protected boolean reloaded = true;
-    protected int gunindex = 0;
+    protected int gunindex = 1;
     protected Gun selectedgun;
 
 
@@ -276,9 +276,9 @@ public class GameManager {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void playSoundHurt() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
-        if (IsSoundPlaying2 == false) {
-            IsSoundPlaying2 = true;
+    public void playSoundPlayerHurt() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        if (IsSoundPlayingPlayerHurt == false) {
+            IsSoundPlayingPlayerHurt = true;
             Clip sound = AudioSystem.getClip();
             Path relativePath = Paths.get("Resource/playerhurt.wav");
             Path absolutePath = relativePath.toAbsolutePath();
@@ -297,7 +297,7 @@ public class GameManager {
             sound.start();
             Thread.sleep(1000);
             sound.stop();
-            IsSoundPlaying2 = false;
+            IsSoundPlayingPlayerHurt = false;
         } else {
             //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
         }
@@ -312,8 +312,8 @@ public class GameManager {
      * @throws InterruptedException
      */
     public void playerMovementSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
-        if (IsSoundPlaying == false) {
-            IsSoundPlaying = true;
+        if (IsSoundPlayingMove == false) {
+            IsSoundPlayingMove = true;
             Clip sound = AudioSystem.getClip();
             Path relativePath = Paths.get("Resource/move5.wav");
             Path absolutePath = relativePath.toAbsolutePath();
@@ -332,34 +332,45 @@ public class GameManager {
             sound.start();
             Thread.sleep(100);
             sound.stop();
-            IsSoundPlaying = false;
+            IsSoundPlayingMove = false;
         } else {
             //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
         }
     }
 
-    public void playSoundEquip() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
-        if (IsSoundPlaying == false) {
-            IsSoundPlaying = true;
+    public void playSoundEquip(boolean error) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        if (isSoundPlayingEquip == false) {
+            isSoundPlayingEquip = true;
             Clip sound = AudioSystem.getClip();
-            Path relativePath = Paths.get("Resource/gunequip.wav");
+            Path relativePath;
+            if (error == true) {
+                relativePath = Paths.get("Resource/gunequiperror.wav");
+            } else {
+                relativePath = Paths.get("Resource/gunequip.wav");
+            }
             Path absolutePath = relativePath.toAbsolutePath();
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
             FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
             if (soundv == 0) {
                 volume.setValue(-80f); // MUTE
                 //System.out.println("VOLUME MUTE + " +volume.toString());
-            } else if (soundv == 1) {
+            } else if (soundv == 1&& error==false) {
                 volume.setValue(-15f); // DEFAULT -> balanced default sound
                 //System.out.println("VOLUME DEFAULT + " +volume.toString());
-            } else if (soundv == 2) {
+            }
+            else if (soundv == 1 && error==true) {
+                volume.setValue(-5f); // DEFAULT -> balanced default sound
+                //System.out.println("VOLUME DEFAULT + " +volume.toString());
+            }
+            else if (soundv == 2) {
                 volume.setValue(6.0206f); // Maximum
                 //System.out.println("VOLUME UP + " +volume.toString());
             }
             sound.start();
-            Thread.sleep(350);
+            Thread.sleep(100);
+            isSoundPlayingEquip = false;
+            Thread.sleep(220);
             sound.stop();
-            IsSoundPlaying = false;
         } else {
             //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
         }
