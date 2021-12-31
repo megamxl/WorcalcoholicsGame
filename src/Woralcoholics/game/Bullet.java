@@ -15,27 +15,54 @@ public class Bullet extends GameObject {
         super(x, y, id, an);
         this.handler = handler;
 
-        bullet_img = an.getImage(2, 3, 64,64);
+        bullet_img = an.getImage(2, 3, 64, 64);
     }
 
 
     /**
      * map the mouse input to world coordinates
+     *
      * @param mx
      * @param my
      * @param px
      * @param py
      */
     public void direction(double mx, double my, double px, double py) {
-        //double c = Math.sqrt(Math.pow(mx,2) + Math.pow(my,2));
         double dx = mx - px;
         double dy = my - py;
         double alpha = Math.atan2(dy, dx);
-        //System.out.println(dx + " " + dy);
-        //System.out.println(alpha);
         velX = (float) (Math.cos(alpha) * bulletSpeed);
         velY = (float) (Math.sin(alpha) * bulletSpeed);
-        //System.out.println(velX + " " + velY);
+
+    }
+
+    public void directionRightbullet(double mx, double my, double px, double py) {
+        double dx = mx - px;
+        double dy = my - py;
+        double alpha = Math.atan2(dy, dx);
+        float angle = (float) Math.toDegrees(alpha);
+        angle += 10; //change for wider range of the rights bullet
+
+        angle = CheckAngle(angle); // get's overwritten if angle is not valid
+        alpha = Math.toRadians(angle); // overwrite angle
+
+        velX = (float) (Math.cos(alpha) * bulletSpeed);
+        velY = (float) (Math.sin(alpha) * bulletSpeed);
+    }
+
+    public void directionLeftbullet(double mx, double my, double px, double py) {
+        double dx = mx - px;
+        double dy = my - py;
+        double alpha = Math.atan2(dy, dx);
+        float angle = (float) Math.toDegrees(alpha);
+        angle -= 10; //change for wider range of the left bullet
+
+        CheckAngle(angle);
+        alpha = Math.toRadians(angle);
+
+
+        velX = (float) (Math.cos(alpha) * bulletSpeed);
+        velY = (float) (Math.sin(alpha) * bulletSpeed);
     }
 
     /**
@@ -45,7 +72,7 @@ public class Bullet extends GameObject {
         for (int i = 0; i < handler.object.size(); i++) {
             GameObject tmpObject = handler.object.get(i);
 
-            if (tmpObject.getId() == ID.Block ) {
+            if (tmpObject.getId() == ID.Block) {
                 if (this.getBounds().intersects(tmpObject.getBounds())) {
                     handler.removeObject(this);
                     //System.out.println("Collision");
@@ -70,6 +97,13 @@ public class Bullet extends GameObject {
         }
     }
 
+    private float CheckAngle(float angle) {
+        if (angle < 0) {
+            angle += 360;
+        }
+        return angle;
+    }
+
     @Override
     public void update() {
         x += velX;
@@ -84,7 +118,7 @@ public class Bullet extends GameObject {
         /*g.setColor(Color.WHITE);
         g.fillOval((int) x, (int) y, 8, 8);
         */
-        g.drawImage(bullet_img,(int)x, (int)y, null);
+        g.drawImage(bullet_img, (int) x, (int) y, null);
     }
 
     @Override

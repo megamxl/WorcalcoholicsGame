@@ -260,12 +260,12 @@ public class MouseInput extends MouseAdapter {
             temp.direction(mx, my, px, py); //Calculate the direction of this bullet
             handler.addObject(temp);    //Add the Bullet to the ObjectList
 
-            Bullet temp2 = new Bullet((int) px - 40, (int) py - 40, ID.Bullet, handler, an);
-            temp2.direction(mx, my, px, py); //Calculate the direction of this bullet
+            Bullet temp2 = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
+            temp2.directionRightbullet(mx, my, px, py); //Calculate the direction of this bullet
             handler.addObject(temp2);    //Add the Bullet to the ObjectList
 
-            Bullet temp3 = new Bullet((int) px + 32, (int) py + 32, ID.Bullet, handler, an);
-            temp3.direction(mx, my, px, py); //Calculate the direction of this bullet
+            Bullet temp3 = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
+            temp3.directionLeftbullet(mx, my, px, py); //Calculate the direction of this bullet
             handler.addObject(temp3);    //Add the Bullet to the ObjectList
 
             if (game.ammo <= 3) {
