@@ -374,19 +374,19 @@ public class GameManager {
     public void playSoundGun(int ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException, IllegalArgumentException {
         if (GunType.Pistol.equals(selectedgun.getType())) {
             if (ammo <= 0) {
-                relativePath = Paths.get("Resource/gunzeroammo.wav");
+                relativePath = Paths.get("Resource/pistolempty.wav");
             } else {
                 relativePath = Paths.get("Resource/pistolfire3.wav");
             }
         } else if (GunType.Shotgun.equals(selectedgun.getType())) {
             if (ammo <= 0) {
-                relativePath = Paths.get("Resource/gunzeroammo.wav");
+                relativePath = Paths.get("Resource/shotgunempty.wav");
             } else {
                 relativePath = Paths.get("Resource/shotgunfire.wav");
             }
         } else if (GunType.MachineGun.equals(selectedgun.getType())) {
             if (ammo <= 0) {
-                relativePath = Paths.get("Resource/gunzeroammo.wav");
+                relativePath = Paths.get("Resource/machinegunempty.wav");
             } else {
                 relativePath = Paths.get("Resource/machinegunfire.wav");
             }

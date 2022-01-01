@@ -123,10 +123,10 @@ public class MouseInput extends MouseAdapter {
                                 Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
                                 temp.direction(mx, my, px, py, false, 0); //Calculate the direction of this bullet
                                 handler.addObject(temp);    //Add the Bullet to the ObjectList
+                                playSoundGun(game.ammo);
                                 game.ammo--;    //Subtract 1 from ammo (bullet was shot)
                                 //System.out.println(game.ammo);
                                 handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
-                                playSoundGun(game.ammo);
                             } else if (handler.now > handler.wait && game.ammo <= 0) {
                                 playSoundGun(game.ammo); //has no ammo
                                 handler.wait = handler.now + handler.del;
@@ -235,6 +235,9 @@ public class MouseInput extends MouseAdapter {
         //System.out.println("MACHINE");
         handler.now = System.currentTimeMillis();
         //IF waiting time is over AND player has ammo -> shoot a bullet
+        if (game.ammo <= 0) {
+            playSoundGun(game.ammo); //has no ammo
+        }
         while (mouseDown && game.ammo >= 1) {
 
             PointerInfo a = MouseInfo.getPointerInfo();
@@ -252,17 +255,14 @@ public class MouseInput extends MouseAdapter {
             Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
             temp.direction(mx, my, px, py, false, 0); //Calculate the direction of this bullet
             handler.addObject(temp);    //Add the Bullet to the ObjectList
-            game.ammo--;    //Subtract 1 from ammo (bullet was shot)
             playSoundGun(game.ammo);
+            game.ammo--;    //Subtract 1 from ammo (bullet was shot)
             handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
-        }
-        if (game.ammo <= 0) {
-            playSoundGun(game.ammo); //has no ammo
         }
     }
 
@@ -294,7 +294,7 @@ public class MouseInput extends MouseAdapter {
             Bullet temp3 = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
             temp3.direction(mx, my, px, py, true, -10); //Calculate the direction of this bullet
             handler.addObject(temp3);    //Add the Bullet to the ObjectList
-
+            playSoundGun(game.ammo);
             if (game.ammo <= 3) {
                 game.ammo = 0;
             } else {
@@ -302,7 +302,6 @@ public class MouseInput extends MouseAdapter {
             }
             //System.out.println(game.ammo);
             handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
-            playSoundGun(game.ammo);
         } else if (handler.now > handler.wait && game.ammo <= 0) {
             playSoundGun(game.ammo); //has no ammo
             handler.wait = handler.now + handler.del;
