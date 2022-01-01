@@ -20,6 +20,9 @@ public class GameManager {
     private boolean ll = false, kk = false, mm = false;
     Clip sound;
     public Clip backgroundsound;
+    Path relativePath;
+    Path absolutePath;
+    FloatControl volume;
     public int soundv = 1; //default value for -20f sound
     protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip = false;
     protected double wait;
@@ -183,44 +186,6 @@ public class GameManager {
         Thread.sleep(100000);
     }
 
-    /**
-     * plays the sound for the gun of the player
-     *
-     * @param ammo
-     * @throws LineUnavailableException
-     * @throws UnsupportedAudioFileException
-     * @throws IOException
-     * @throws InterruptedException
-     * @throws IllegalArgumentException
-     */
-    public void playSoundGun(int ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException, IllegalArgumentException {
-        sound = AudioSystem.getClip();
-        Path relativePath;
-        if (ammo <= 0) {
-            relativePath = Paths.get("Resource/gunzeroammo.wav");
-        } else {
-            relativePath = Paths.get("Resource/gunplayer2.wav");
-        }
-        Path absolutePath = relativePath.toAbsolutePath();
-        sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
-        FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
-        if (soundv == 0) {
-            volume.setValue(-80f); // MUTE
-            //System.out.println("VOLUME MUTE + " +volume.toString());
-        } else if (soundv == 1) {
-            if (ammo <= 0) {
-                volume.setValue(-5f); //Default adjusted
-            } else {
-                volume.setValue(-20f); // Default
-            }
-            //System.out.println("VOLUME DEFAULT + " +volume.toString());
-        } else if (soundv == 2) {
-            volume.setValue(6.0206f); // Maximum
-            //System.out.println("VOLUME UP + " +volume.toString());
-        }
-        sound.start();
-        Thread.sleep(10000);
-    }
 
     /**
      * plays the sound for the gunnerenemy
@@ -240,7 +205,7 @@ public class GameManager {
             volume.setValue(-80f); // MUTE
             //System.out.println("VOLUME MUTE + " +volume.toString());
         } else if (soundv == 1) {
-            volume.setValue(-15f); // DEFAULT -> more than -20 because the sound is per default very quietly
+            volume.setValue(-20f); // DEFAULT -> more than -20 because the sound is per default very quietly
             //System.out.println("VOLUME DEFAULT + " +volume.toString());
         } else if (soundv == 2) {
             volume.setValue(6.0206f); // Maximum
@@ -394,5 +359,61 @@ public class GameManager {
             volume.setValue(6.0206f); // Maximum
         }
         sound.start();
+    }
+
+    /**
+     * plays the sound for the gun of the player
+     *
+     * @param ammo
+     * @throws LineUnavailableException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws IllegalArgumentException
+     */
+    public void playSoundGun(int ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException, IllegalArgumentException {
+        if (GunType.Pistol.equals(selectedgun.getType())) {
+            if (ammo <= 0) {
+                relativePath = Paths.get("Resource/gunzeroammo.wav");
+            } else {
+                relativePath = Paths.get("Resource/pistolfire3.wav");
+            }
+        } else if (GunType.Shotgun.equals(selectedgun.getType())) {
+            if (ammo <= 0) {
+                relativePath = Paths.get("Resource/gunzeroammo.wav");
+            } else {
+                relativePath = Paths.get("Resource/shotgunfire.wav");
+            }
+        } else if (GunType.MachineGun.equals(selectedgun.getType())) {
+            if (ammo <= 0) {
+                relativePath = Paths.get("Resource/gunzeroammo.wav");
+            } else {
+                relativePath = Paths.get("Resource/machinegunfire.wav");
+            }
+        }
+
+        volume = getClip(relativePath);
+        if (soundv == 0) {
+            volume.setValue(-80f); // MUTE
+        } else if (soundv == 1) {
+            if (ammo <= 0) {
+                volume.setValue(-5f); //Default adjusted
+            } else {
+                volume.setValue(-20f); // Default
+            }
+        } else if (soundv == 2) {
+            volume.setValue(6.0206f); // Maximum
+        }
+        sound.start();
+        Thread.sleep(1000);
+
+    }
+
+    private FloatControl getClip(Path path) throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+        sound = AudioSystem.getClip();
+        absolutePath = relativePath.toAbsolutePath();
+        sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+        FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+        return volume;
     }
 }

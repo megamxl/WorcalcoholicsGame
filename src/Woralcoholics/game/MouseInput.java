@@ -58,7 +58,7 @@ public class MouseInput extends MouseAdapter {
                             break;
                         }
                     }
-                    if(Game.getState() == GameState.UPGRADE_MENU) {
+                    if (Game.getState() == GameState.UPGRADE_MENU) {
                         Game.TimerValue = 5;    //5 secs wait time
                         Game.shouldTime = true; //activate Timer
                         Game.timerAction = 1;   //execute timerAction 1 -> countdown till next wave

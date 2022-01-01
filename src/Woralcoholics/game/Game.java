@@ -98,7 +98,7 @@ public class Game extends Canvas implements Runnable {
         camera = new Camera(0, 0, this);
         gun = new Gun();
         addGuns();
-        starterGun();
+        checkSelectedGun();
         // when finished implement the Mouse and Key input
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level02.png");
         InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
@@ -214,6 +214,7 @@ public class Game extends Canvas implements Runnable {
 
         checkReloaded();
         checkGunStatus();
+        checkSelectedGun();
 
     }
 
@@ -807,7 +808,7 @@ public class Game extends Canvas implements Runnable {
         // if crate is collected, set locked to false so it can be displayed and choosen in UI
     }
 
-    private void starterGun() {
+    private void checkSelectedGun() {
         handler.selectedgun = gun.guns.get(handler.gunindex);
     }
 
