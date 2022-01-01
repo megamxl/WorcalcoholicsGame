@@ -119,14 +119,14 @@ public class Player extends GameObject {
         return new Rectangle((int) x + 13, (int) y, 38, 62);
     }
 
-    public Rectangle getBoundsX(){
+    public Rectangle getBoundsX() {
         Rectangle tempX = getBounds();
         tempX.width += 9.4;
         tempX.x -= 4.5f;
         return tempX;
     }
 
-    public Rectangle getBoundsY(){
+    public Rectangle getBoundsY() {
         Rectangle tempY = getBounds();
         tempY.height += 8;
         tempY.y -= 4f;
@@ -183,10 +183,10 @@ public class Player extends GameObject {
                     }
                     case Create -> {
                         upgrades.setMunition(upgrades.getMunition() + 10);
-                        if (upgrades.getMunition() > 49){
+                        if (upgrades.getMunition() > 49) {
                             upgrades.setMunition(50);
                         }
-                        handler.ammo=true;
+                        handler.ammo = true;
                         handler.removeObject(tempobject);
                     }
 
@@ -217,6 +217,7 @@ public class Player extends GameObject {
                             // sound
                         }
                         if (game.hp <= 0) {
+                            playSoundGameOver();
                             Game.setState(GameState.GAME_OVER);         //if the player has no HP left, its GAME OVER
                             Game.loaded = false;
                         }
@@ -234,6 +235,7 @@ public class Player extends GameObject {
 
 
     // region SOUND
+
     /***
      * Runs the sound if player gets hurt
      */
@@ -250,6 +252,24 @@ public class Player extends GameObject {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void playSoundGameOver() {
+        try {
+            new Thread(() -> {
+                try {
+                    handler.playSoundGameOver();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }).start();

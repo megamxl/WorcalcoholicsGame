@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -98,8 +97,8 @@ public class Game extends Canvas implements Runnable {
         handler = new GameManager();
         camera = new Camera(0, 0, this);
         gun = new Gun();
-        AddGuns();
-        StarterGun();
+        addGuns();
+        starterGun();
         // when finished implement the Mouse and Key input
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level02.png");
         InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
@@ -190,7 +189,7 @@ public class Game extends Canvas implements Runnable {
         if (currentState != checkState) {     //if there was a state change...
             stateChange();
         }
-        if ((currentState == GameState.LEVEL || currentState == GameState.TUTORIAL) && !paused ) {    //if we are in level and the game is not paused...
+        if ((currentState == GameState.LEVEL || currentState == GameState.TUTORIAL) && !paused) {    //if we are in level and the game is not paused...
             for (int i = 0; i < handler.object.size(); i++) {
                 if (handler.object.get(i).getId() == ID.Player) {
                     camera.update(handler.object.get(i));   //update the camera position to stay focused on the player
@@ -211,10 +210,10 @@ public class Game extends Canvas implements Runnable {
             triggeredonce = false;
             //System.out.println("START");
         }
-        CalculateReloadingRectangle(handler.wait, (int) handler.del);
+        calculateReloadingRectangle(handler.wait, (int) handler.del);
 
-        CheckReloaded();
-        CheckGunStatus();
+        checkReloaded();
+        checkGunStatus();
 
     }
 
@@ -280,15 +279,14 @@ public class Game extends Canvas implements Runnable {
                 shield = 0;
                 armor = 0;
                 camera.shake = false;   //camera should not shake
-                switch(currentState) {
+                switch (currentState) {
                     case LEVEL -> loadLevel(level); //load the level
                     case TUTORIAL -> loadLevel(tutorialLevel);
                 }
             }
             handler.clearObjects(ID.UIButton);      //clear the handler from all buttons, when we are in the level
             paused = false;  //level is running and not paused (when coming from e.g. PAUSE_MENU or UPGRADE_MENU, where a level is already loaded)
-        }
-        else {
+        } else {
             loadMenu();                     //load the menu of currentState
         }
         System.out.println(currentState + ": " + handler.object.size());
@@ -396,8 +394,7 @@ public class Game extends Canvas implements Runnable {
         //handler.render(g, ID.UIButton);
         if (!loaded) {
             handler.render(g);
-        }
-        else {
+        } else {
             handler.render(g, ID.UIButton);
         }
     }
@@ -483,11 +480,12 @@ public class Game extends Canvas implements Runnable {
             menuCount--;
         }
         switch (currentState) {
-            case STUDIO -> {}
+            case STUDIO -> {
+            }
             case TITLE -> {
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT-25) / 2, 352, 102,
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT - 25) / 2, 352, 102,
                         "START", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
-                        uiButtonAnGet, 1, 1, 400, (SCREEN_HEIGHT-25) / 2 + 20, 40));
+                        uiButtonAnGet, 1, 1, 400, (SCREEN_HEIGHT - 25) / 2 + 20, 40));
             }
             case MAIN_MENU -> {
                 menuCount = 0;
@@ -527,7 +525,7 @@ public class Game extends Canvas implements Runnable {
             case PAUSE_MENU -> {
                 menuCount = 10;
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", GameState.LEVEL,
-                        ID.UIButton, this, 1, 0,  an, 1 , 2, 0, 0,
+                        ID.UIButton, this, 1, 0, an, 1, 2, 0, 0,
                         40));
                 handler.addObject(new UIButton(96, 32, 64, 64, "Options", GameState.OPTIONS,
                         ID.UIButton, this, 1, 0, an, 1, 2, 0, 0,
@@ -536,18 +534,18 @@ public class Game extends Canvas implements Runnable {
             }
             case UPGRADE_MENU -> {
                 int[] randomUpgrades = upgrades.getUpgrades();
-                handler.addObject(new UIButton(SCREEN_WIDTH / 4, (SCREEN_HEIGHT+25) / 2, 320, 600,
+                handler.addObject(new UIButton(SCREEN_WIDTH / 4, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[0]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[0], upgradeBoarderGet, 1, 1,  SCREEN_WIDTH / 4,
-                        (SCREEN_HEIGHT+25) / 2, 20));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT+25) / 2, 320, 600,
+                        randomUpgrades[0], upgradeBoarderGet, 1, 1, SCREEN_WIDTH / 4,
+                        (SCREEN_HEIGHT + 25) / 2, 20));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[1]), GameState.LEVEL, ID.UIButton, this, 2,
                         randomUpgrades[1], upgradeBoarderGet, 1, 1, SCREEN_WIDTH / 2,
-                        (SCREEN_HEIGHT+25) / 2, 20));
-                handler.addObject(new UIButton(SCREEN_WIDTH * 3/4, (SCREEN_HEIGHT+25) / 2, 320, 600,
+                        (SCREEN_HEIGHT + 25) / 2, 20));
+                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[2]), GameState.LEVEL, ID.UIButton, this, 2,
                         randomUpgrades[2], upgradeBoarderGet, 1, 1, SCREEN_WIDTH * 3 / 4,
-                        (SCREEN_HEIGHT+25) / 2, 20));
+                        (SCREEN_HEIGHT + 25) / 2, 20));
                 paused = true;      //Pause the game until Player chose an Upgrade
                 /*for(int i = 0; i < 3; i++) {
                     System.out.println(i + ": " + randomUpgrades[i] + " " + upgrades.drawUpgrades(randomUpgrades[i]));
@@ -775,7 +773,7 @@ public class Game extends Canvas implements Runnable {
         t1.start();
     }
 
-    private void CalculateReloadingRectangle(double wait, int del) {
+    private void calculateReloadingRectangle(double wait, int del) {
 
         if (handler.reloaded == true) {
             //System.out.println("reloaded");
@@ -793,7 +791,7 @@ public class Game extends Canvas implements Runnable {
 
     }
 
-    private void CheckReloaded() {
+    private void checkReloaded() {
         handler.now = System.currentTimeMillis();
         if (handler.now > handler.wait && handler.ammo == true) {
             handler.reloaded = true;
@@ -802,18 +800,18 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
-    private void AddGuns() {
+    private void addGuns() {
         gun.addObject(new Gun(), GunType.Pistol, false); // start with pistol
         gun.addObject(new Gun(), GunType.Shotgun, true); // second shotgun
         gun.addObject(new Gun(), GunType.MachineGun, true); //third machine gun  -> weakest to strongest
         // if crate is collected, set locked to false so it can be displayed and choosen in UI
     }
 
-    private void StarterGun() {
+    private void starterGun() {
         handler.selectedgun = gun.guns.get(handler.gunindex);
     }
 
-    private void CheckGunStatus() {
+    private void checkGunStatus() {
         if (handler.selectedgun.getType() == GunType.Pistol)
             handler.del = 200;
         else if (handler.selectedgun.getType() == GunType.Shotgun)
