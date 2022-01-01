@@ -284,18 +284,14 @@ public class Game extends Canvas implements Runnable {
                     case LEVEL -> loadLevel(level); //load the level
                     case TUTORIAL -> loadLevel(tutorialLevel);
                 }
-                /*if(currentState == GameState.TUTORIAL){
-                    loadLevel(tutorialLevel);
-                }
-                else {
-                    loadLevel(level);
-                }*/
             }
+            handler.clearObjects(ID.UIButton);      //clear the handler from all buttons, when we are in the level
             paused = false;  //level is running and not paused (when coming from e.g. PAUSE_MENU or UPGRADE_MENU, where a level is already loaded)
         }
         else {
             loadMenu();                     //load the menu of currentState
         }
+        System.out.println(currentState + ": " + handler.object.size());
     }
 
     /***
@@ -355,7 +351,7 @@ public class Game extends Canvas implements Runnable {
     private void renderUpgradeMenu(Graphics g) {
         //g.setColor(Color(0, 0, 0, 127));
         //g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        upgradBoard = upgradeBoarderGet.getImage(1, 1, 320, 600);
+        /*upgradBoard = upgradeBoarderGet.getImage(1, 1, 320, 600);
         g.drawImage(upgradBoard, 137, 30, null);
         g.drawImage(upgradBoard, 377, 30, null);
         g.drawImage(upgradBoard, 617, 30, null);
@@ -363,7 +359,7 @@ public class Game extends Canvas implements Runnable {
         int[] randomUpgrades = upgrades.getUpgrades();
         g.drawString(upgrades.drawUpgrades(randomUpgrades[0]), 300, 315);
         g.drawString(upgrades.drawUpgrades(randomUpgrades[1]), 500, 315);
-        g.drawString(upgrades.drawUpgrades(randomUpgrades[2]), 700, 315);
+        g.drawString(upgrades.drawUpgrades(randomUpgrades[2]), 700, 315);*/
     }
 
     /***
@@ -400,6 +396,9 @@ public class Game extends Canvas implements Runnable {
         //handler.render(g, ID.UIButton);
         if (!loaded) {
             handler.render(g);
+        }
+        else {
+            handler.render(g, ID.UIButton);
         }
     }
 
@@ -486,16 +485,26 @@ public class Game extends Canvas implements Runnable {
         switch (currentState) {
             case STUDIO -> {}
             case TITLE -> {
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 176, (SCREEN_HEIGHT-25) / 2 - 51, 352, 102, "START", GameState.MAIN_MENU, ID.UIButton, this, uiButtonAnGet, 400, (SCREEN_HEIGHT-25) / 2 + 20, 40));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT-25) / 2, 352, 102,
+                        "START", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
+                        uiButtonAnGet, 1, 1, 400, (SCREEN_HEIGHT-25) / 2 + 20, 40));
             }
             case MAIN_MENU -> {
                 menuCount = 0;
                 //JMenu mainMenu = new JMenu("Main Menu");
                 //mainMenu.add(new JMenuItem("test"));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 176, 19, 352, 102, "Level", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet, 410, 90, 40));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 176, 144, 352, 102, "Tutorial", GameState.TUTORIAL, ID.UIButton, this, uiButtonAnGet, 390, 210, 30));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 176, 269, 352, 102, "Scores", GameState.HIGH_SCORES, ID.UIButton, this, uiButtonAnGet, 397, 337, 35));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 176, 394, 352, 102, "Options", GameState.OPTIONS, ID.UIButton, this, uiButtonAnGet, 400, 460, 32));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, 70, 352, 102, "Level",
+                        GameState.LEVEL, ID.UIButton, this, 1, 0, uiButtonAnGet, 1, 1,
+                        410, 90, 40));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, 195, 352, 102, "Tutorial",
+                        GameState.TUTORIAL, ID.UIButton, this, 1, 0, uiButtonAnGet, 1, 1,
+                        390, 210, 30));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, 320, 352, 102, "Scores",
+                        GameState.HIGH_SCORES, ID.UIButton, this, 1, 0, uiButtonAnGet, 1,
+                        1, 397, 337, 35));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, 445, 352, 102, "Options",
+                        GameState.OPTIONS, ID.UIButton, this, 1, 0, uiButtonAnGet, 1, 1,
+                        400, 460, 32));
 
             }
             case TUTORIAL -> {
@@ -505,23 +514,44 @@ public class Game extends Canvas implements Runnable {
             case HIGH_SCORES -> {
 
                 //JOptionPane playerDataInput = new JOptionPane();
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
+                handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
+                        ID.UIButton, this, 1, 0, an, 1, 2, 0, 0,
+                        40));
             }
             case OPTIONS -> {
                 menuCount++;
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
+                handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
+                        ID.UIButton, this, 1, 0, an, 1, 2, 0, 0,
+                        40));
             }
             case PAUSE_MENU -> {
                 menuCount = 10;
-                handler.addObject(new UIButton(10, 10, 64, 64, "Return", GameState.LEVEL, ID.UIButton, this, an, 0, 0, 40));
-                handler.addObject(new UIButton(110, 10, 64, 64, "Options", GameState.OPTIONS, ID.UIButton, this, an, 0, 0, 40));
+                handler.addObject(new UIButton(32, 32, 64, 64, "Return", GameState.LEVEL,
+                        ID.UIButton, this, 1, 0,  an, 1 , 2, 0, 0,
+                        40));
+                handler.addObject(new UIButton(96, 32, 64, 64, "Options", GameState.OPTIONS,
+                        ID.UIButton, this, 1, 0, an, 1, 2, 0, 0,
+                        40));
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
-                handler.addObject(new UIButton(10, 10, 64, 64, "", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet, 0, 0, 40));
-                handler.addObject(new UIButton(10, 10, 64, 64, "", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet, 0, 0, 40));
-                handler.addObject(new UIButton(10, 10, 64, 64, "", GameState.LEVEL, ID.UIButton, this, uiButtonAnGet, 0, 0, 40));
+                int[] randomUpgrades = upgrades.getUpgrades();
+                handler.addObject(new UIButton(SCREEN_WIDTH / 4, (SCREEN_HEIGHT+25) / 2, 320, 600,
+                        upgrades.drawUpgrades(randomUpgrades[0]), GameState.LEVEL, ID.UIButton, this, 2,
+                        randomUpgrades[0], upgradeBoarderGet, 1, 1,  SCREEN_WIDTH / 4,
+                        (SCREEN_HEIGHT+25) / 2, 20));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT+25) / 2, 320, 600,
+                        upgrades.drawUpgrades(randomUpgrades[1]), GameState.LEVEL, ID.UIButton, this, 2,
+                        randomUpgrades[1], upgradeBoarderGet, 1, 1, SCREEN_WIDTH / 2,
+                        (SCREEN_HEIGHT+25) / 2, 20));
+                handler.addObject(new UIButton(SCREEN_WIDTH * 3/4, (SCREEN_HEIGHT+25) / 2, 320, 600,
+                        upgrades.drawUpgrades(randomUpgrades[2]), GameState.LEVEL, ID.UIButton, this, 2,
+                        randomUpgrades[2], upgradeBoarderGet, 1, 1, SCREEN_WIDTH * 3 / 4,
+                        (SCREEN_HEIGHT+25) / 2, 20));
                 paused = true;      //Pause the game until Player chose an Upgrade
+                /*for(int i = 0; i < 3; i++) {
+                    System.out.println(i + ": " + randomUpgrades[i] + " " + upgrades.drawUpgrades(randomUpgrades[i]));
+                }*/
             }
             case GAME_OVER -> {
                 lastScore = score.showScore();
@@ -618,8 +648,10 @@ public class Game extends Canvas implements Runnable {
                     case 2 -> currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
                     case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
                     case 4 -> { //enter your name and choose whether to upload your score
-                        playerName = JOptionPane.showInputDialog(null, "Please enter your name", null, JOptionPane.INFORMATION_MESSAGE);
-                        JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?", null, JOptionPane.YES_NO_OPTION);
+                        playerName = JOptionPane.showInputDialog(null, "Please enter your name",
+                                null, JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?",
+                                null, JOptionPane.YES_NO_OPTION);
                     }
                 }
                 shouldTime = false;  //deactivate the timer

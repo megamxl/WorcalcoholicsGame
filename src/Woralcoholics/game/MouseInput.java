@@ -49,19 +49,23 @@ public class MouseInput extends MouseAdapter {
         Point currentPos = e.getPoint();    //Grab current cursor position
         int button = e.getButton(); //Grab pressed button
         switch (Game.getState()) {  //depending on currentState, execute the following...
-            case TITLE, MAIN_MENU, HIGH_SCORES, OPTIONS, PAUSE_MENU -> {
+            case TITLE, MAIN_MENU, HIGH_SCORES, OPTIONS, PAUSE_MENU, UPGRADE_MENU -> {
                 if (button == 1) {
                     for (int i = 0; i < handler.object.size(); i++) {
                         GameObject temp = handler.object.get(i);
                         if (temp.getId() == ID.UIButton && temp.getBounds().contains(currentPos)) {
-                            Game.setState(temp.nextState);
+                            temp.action();
                             break;
                         }
                     }
+                    if(Game.getState() == GameState.UPGRADE_MENU) {
+                        Game.TimerValue = 5;    //5 secs wait time
+                        Game.shouldTime = true; //activate Timer
+                        Game.timerAction = 1;   //execute timerAction 1 -> countdown till next wave
+                    }
                 }
             }
-            case UPGRADE_MENU -> {
-                //if (button == 1) Game.setState(GameState.LEVEL);
+            /*case UPGRADE_MENU -> {
                 int[] randomUpgrades = upgrades.getUpgrades();
                 if (button == 1) {
                     if (e.getX() >= 137 && e.getX() <= 457 && e.getY() >= 30 && e.getY() <= 630) { //button 1
@@ -81,7 +85,7 @@ public class MouseInput extends MouseAdapter {
                 Game.TimerValue = 5;    //5 secs wait time
                 Game.shouldTime = true; //activate Timer
                 Game.timerAction = 1;   //execute timerAction 1 -> countdown till next wave
-            }
+            }*/
             case LEVEL, TUTORIAL -> {
                 /* 1 = LEFT MOUSE BUTTON
                  * 2 = MOUSE WHEEL
