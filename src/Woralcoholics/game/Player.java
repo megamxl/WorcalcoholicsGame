@@ -188,6 +188,7 @@ public class Player extends GameObject {
                         }
                         handler.ammo = true;
                         handler.removeObject(tempobject);
+                        playSoundAmmoReload();
                     }
 
                     case Enemy, EnemyBullet -> {
@@ -252,6 +253,28 @@ public class Player extends GameObject {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /***
+     * Runs the sound if crate is collected
+     */
+    private void playSoundAmmoReload() {
+        try {
+            new Thread(() -> {
+
+                try {
+                    handler.playSoundAmmoReload();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }).start();

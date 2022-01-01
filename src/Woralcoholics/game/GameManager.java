@@ -392,7 +392,7 @@ public class GameManager {
             }
         }
 
-        volume = getClip(relativePath);
+        volume = getClip();
         if (soundv == 0) {
             volume.setValue(-80f); // MUTE
         } else if (soundv == 1) {
@@ -409,11 +409,31 @@ public class GameManager {
 
     }
 
-    private FloatControl getClip(Path path) throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+    private FloatControl getClip() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
         sound = AudioSystem.getClip();
         absolutePath = relativePath.toAbsolutePath();
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
         return volume;
+    }
+
+    public void playSoundAmmoReload() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        if (GunType.Pistol.equals(selectedgun.getType())) {
+            relativePath = Paths.get("Resource/pistolreload.wav");
+        } else if (GunType.Shotgun.equals(selectedgun.getType())) {
+            relativePath = Paths.get("Resource/shotgunreload.wav");
+        } else if (GunType.MachineGun.equals(selectedgun.getType())) {
+            relativePath = Paths.get("Resource/machinegunreload.wav");
+        }
+        volume = getClip();
+        if (soundv == 0) {
+            volume.setValue(-80f); // MUTE
+        } else if (soundv == 1) {
+            volume.setValue(-5f); // DEFAULT -> less than -20 because the sound is per default very loud
+        } else if (soundv == 2) {
+            volume.setValue(6.0206f); // Maximum
+        }
+        sound.start();
+
     }
 }
