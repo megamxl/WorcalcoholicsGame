@@ -60,6 +60,7 @@ public class Game extends Canvas implements Runnable {
     static Score score = new Score(0);
 
     private String playerName = null;
+    private String levelDecision;
 
     public int shield = 0;
     public int armor = 0; //armor is referred to in %, so 10 would make a shield absorbing 10% of damage
@@ -100,13 +101,14 @@ public class Game extends Canvas implements Runnable {
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
         start();
 
+        levelDecision = String.valueOf(randomNumber(1,4));
         handler = new GameManager();
         camera = new Camera(0, 0, this);
         gun = new Gun();
         addGuns();
         checkSelectedGun();
         // when finished implement the Mouse and Key input
-        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level02.png");
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level0"+ levelDecision +".png");
         InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
         level = ImageIO.read(path);
         tutorialLevel = ImageIO.read(pathToTutorial);
@@ -562,6 +564,7 @@ public class Game extends Canvas implements Runnable {
                 /*for(int i = 0; i < 3; i++) {
                     System.out.println(i + ": " + randomUpgrades[i] + " " + upgrades.drawUpgrades(randomUpgrades[i]));
                 }*/
+                Enemy.spawnWaveAfterUpgrades();
             }
             case GAME_OVER -> {
                 lastScore = score.showScore();

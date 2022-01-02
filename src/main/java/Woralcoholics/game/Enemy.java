@@ -86,22 +86,8 @@ public class Enemy<privare> extends GameObject {
                     else if(this.getId() == ID.GunnerEnemy){score.addScore(10);}
                     //System.out.println(score.showScore());
 
-                    removeWithObject(tmpObject);
-                    if(!Game.inTutorial){
-                        if (enemysAlive <= 0) {
-                            waves++;
-                            if ((waves - 1) % upgradeAfterWave == 0) {
-                                Game.TimerValue = 0;    //0 secs (actually just to unrender the last enemy and bullet)
-                                Game.shouldTime = true; //activate Timer
-                                Game.timerAction = 2;   //execute timerAction 2 -> wait a bit
-                            } else {
-                                Game.TimerValue = 5;    //5 secs to spawn next wave
-                                Game.shouldTime = true; //activate Timer
-                                Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
-                            }
-                    }
+                    //removeWithObject(tmpObject);
 
-                    }
                     //System.out.println("es sind " + enemysAlive +" enemys am leben");
                 }
 
@@ -239,7 +225,22 @@ public class Enemy<privare> extends GameObject {
     private void remove() {
         manager.removeObject(this);
         playSoundEnemy();
+        enemysAlive--;
+        if(!Game.inTutorial){
+            if (enemysAlive <= 0) {
+                waves++;
+                if ((waves - 1) % upgradeAfterWave == 0) {
+                    Game.TimerValue = 0;    //0 secs (actually just to unrender the last enemy and bullet)
+                    Game.shouldTime = true; //activate Timer
+                    Game.timerAction = 2;   //execute timerAction 2 -> wait a bit
+                } else {
+                    Game.TimerValue = 5;    //5 secs to spawn next wave
+                    Game.shouldTime = true; //activate Timer
+                    Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
+                }
+            }
 
+        }
     }
 
     /**
@@ -270,6 +271,13 @@ public class Enemy<privare> extends GameObject {
             e.printStackTrace();
         }
     }
+
+    public static void spawnWaveAfterUpgrades(){
+        Game.TimerValue = 5;    //5 secs to spawn next wave
+        Game.shouldTime = true; //activate Timer
+        Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
+    }
+
     //endregion
 }
 
