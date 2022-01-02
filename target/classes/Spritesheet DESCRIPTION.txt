@@ -1,0 +1,24 @@
+default res 32x32 (except when stated different)
+pos(spalte,zeile)
+
+01 Tile Wall 01		64x64 	pos(1,1)
+01 Tile Wall 02		64x64	pos(2,1)
+01 Tile Wall 03		64x64	pos(3,1)
+01 Tile Wall 04		64x64	pos(4,1)
+01 Tile Wall 05		64x64	pos(5,1)
+01 Tile Wall 06		64x64	pos(6,1)
+
+02 Tile Floor 		64x64	pos(1,2)
+02 Dirt1 Floor		64x64	pos(2,2)
+02 Dirt2 Floor		64x64	pos(3,2)
+02 Dirt3 Floor		64x64	pos(4,2)
+
+02 Dirt1 Wall 02 01	64x64	pos(5,2)
+02 Dirt2 Wall 02 02	64x64	pos(6,2)
+
+03 Player 		64x64	pos(1,3)
+03 Bullet			pos(2,3)
+
+04 Enemy 01      		pos(1,4)
+
+05 Enemy 02		64x64	pos(1,5)
