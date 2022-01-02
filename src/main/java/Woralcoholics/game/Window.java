@@ -6,8 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Window {
-
-
+    
     public static JFrame frame =null;
     public static JFrame GameOverFrame =null;
 
@@ -44,10 +43,4 @@ public class Window {
         //frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("jar.png")));
 
     }
-
-
-
-
-
 }
-
