@@ -83,6 +83,7 @@ public class Enemy<privare> extends GameObject {
                     //System.out.println("hit");
                     hp -= 110;
 
+
                     if(this.getId() == ID.Enemy){score.addScore(3);}
                     else if(this.getId() == ID.GunnerEnemy){score.addScore(10);}
                     //System.out.println(score.showScore());
@@ -144,11 +145,10 @@ public class Enemy<privare> extends GameObject {
             if(prob == 2){
                 Game.SpawnCreate((int)curX,(int)curY);
             }
-           Game.AddEnemyShadow((int)curX,(int)curY);
+
 
         }
     }
-
 
 
     public void update() {
@@ -163,7 +163,6 @@ public class Enemy<privare> extends GameObject {
         isDead();
 
     }
-
 
     public void render(Graphics g) {
         g.drawImage(enemy_img, (int) x, (int) y, null);
@@ -226,6 +225,9 @@ public class Enemy<privare> extends GameObject {
      */
     private void remove() {
         manager.removeObject(this);
+        float curX = x;
+        float curY = y;
+        Game.AddEnemyShadow((int)curX,(int)curY);
         playSoundEnemy();
         enemysAlive--;
         if(!Game.inTutorial){

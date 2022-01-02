@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,7 +28,7 @@ public class Game extends Canvas implements Runnable {
     private static GameState currentState;
     private GameState previousState, checkState;
     private int menuCount;
-    private int lastScore = 0;
+    public static int lastScore = 0;
 
     private boolean isRunning;
     protected static boolean paused, loaded;
@@ -60,7 +61,7 @@ public class Game extends Canvas implements Runnable {
     public int hp = 100;
     static Score score = new Score(0);
 
-    private String playerName = null;
+    public static String playerName = null;
     private String levelDecision;
 
     public int shield = 0;
@@ -87,6 +88,8 @@ public class Game extends Canvas implements Runnable {
     private static ImgaeGetter GamoverScreenImg;
     private static ImgaeGetter uiButtonAnGet;
     private static Gun gun;
+
+    private DatabeseConection databeseConection = new DatabeseConection();
 
     private Camera camera;
     private double percent;
@@ -154,6 +157,7 @@ public class Game extends Canvas implements Runnable {
         loadPlayerSprites();
         loadEnemyDeadSprites();
 
+
         fontLoader();
     }
 
@@ -187,7 +191,11 @@ public class Game extends Canvas implements Runnable {
 
             if (System.currentTimeMillis() - timer > 1000) {
                 if (shouldTime && !paused) {
-                    timer();
+                    try {
+                        timer();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
                 timer += 1000;
                 //System.out.println(updates + " Ticks, Fps " + frames);
@@ -651,7 +659,7 @@ public class Game extends Canvas implements Runnable {
     /**
      * just a counter that gets decreased thanks to our game loop
      */
-    private void timer() {
+    private void timer() throws SQLException {
         if (TimerValue > 0) {     //if the time is not over, decrease TimerValue
             TimerValue--;
         } else {   //if the waiting time is over...
@@ -668,6 +676,8 @@ public class Game extends Canvas implements Runnable {
                                 null, JOptionPane.INFORMATION_MESSAGE);
                         JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?",
                                 null, JOptionPane.YES_NO_OPTION);
+                        databeseConection.connectToDatabase();
+
                     }
                 }
                 shouldTime = false;  //deactivate the timer
@@ -870,6 +880,7 @@ public class Game extends Canvas implements Runnable {
         enemyDeadShadow[2] = imgaeGetter.getImage(3, 9, 64, 64);
         enemyDeadShadow[3] = imgaeGetter.getImage(4, 9, 64, 64);
         enemyDeadShadow[4] = imgaeGetter.getImage(5, 9, 64, 64);
+        enemyDeadShadow[5] = imgaeGetter.getImage(6, 9, 64, 64);
     }
 
 
