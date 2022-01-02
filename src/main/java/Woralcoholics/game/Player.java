@@ -13,7 +13,8 @@ public class Player extends GameObject {
     Upgrades upgrades; //use upgrades.method for upgrade changes in Game and Player class
 
     private final BufferedImage player_img;
-    private Animations playerWalk;
+    private Animations playerWalkLeft;
+    private Animations playerWalkRigth;
 
     private double invincibleTime = 1000;
     private double wait;
@@ -31,7 +32,8 @@ public class Player extends GameObject {
         this.cam = cam;
         this.upgrades = new Upgrades(game);
 
-        playerWalk = new Animations(5,Game.playerSprites[0],Game.playerSprites[1],Game.playerSprites[2],Game.playerSprites[3], Game.playerSprites[4], Game.playerSprites[5], Game.playerSprites[6], Game.playerSprites[7], Game.playerSprites[8], Game.playerSprites[9]);
+        playerWalkLeft = new Animations(3,Game.playerWalkingLeft[0],Game.playerWalkingLeft[1],Game.playerWalkingLeft[2],Game.playerWalkingLeft[3], Game.playerWalkingLeft[4], Game.playerWalkingLeft[5], Game.playerWalkingLeft[6], Game.playerWalkingLeft[7], Game.playerWalkingLeft[8], Game.playerWalkingLeft[9]);
+        playerWalkRigth = new Animations(3,Game.playerWalkingRight[0],Game.playerWalkingRight[1],Game.playerWalkingRight[2],Game.playerWalkingRight[3], Game.playerWalkingRight[4], Game.playerWalkingRight[5], Game.playerWalkingRight[6], Game.playerWalkingRight[7], Game.playerWalkingRight[8], Game.playerWalkingRight[9]);
 
         player_img = an.getImage(1, 3, 64, 64);
 
@@ -42,7 +44,8 @@ public class Player extends GameObject {
         x += velX;
         y += velY;
 
-        playerWalk.runAnimations();
+        playerWalkLeft.runAnimations();
+        playerWalkRigth.runAnimations();
 
         checkIfGone();
 
@@ -110,9 +113,12 @@ public class Player extends GameObject {
         /*Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
         g2d.draw(getBounds());*/
-        if(velX != 0 || velY != 0){
-            playerWalk.renderAnimation(g,(int) x, (int)y,64,64);
-        }else {
+        if(velX < 0 ){
+            playerWalkLeft.renderAnimation(g,(int) x, (int)y,64,64);
+        }else if (velX > 0){
+            playerWalkRigth.renderAnimation(g,(int) x, (int)y,64,64);
+        }
+        else {
             g.drawImage(player_img, (int) x, (int) y, null);
         }
         // draw other colliders

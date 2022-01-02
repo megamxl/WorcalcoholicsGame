@@ -5,6 +5,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -48,7 +50,8 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage currGun = null;
     private Upgrades upgrades;
 
-    public static BufferedImage[] playerSprites = new BufferedImage[10];
+    public static BufferedImage[] playerWalkingLeft = new BufferedImage[10];
+    public static BufferedImage[] playerWalkingRight = new BufferedImage[10];
 
     public static List<int[]> wallCords = new ArrayList();
 
@@ -121,18 +124,6 @@ public class Game extends Canvas implements Runnable {
         playerWalkCycle = loader.loadImage("/Character Running Spritesheet.png");
         getImagesPlayer = new ImgaeGetter(playerWalkCycle);
 
-        playerSprites[0] = getImagesPlayer.getImage32(1,1,32,32);
-        playerSprites[1] = getImagesPlayer.getImage32(2,1,32,32);
-        playerSprites[2] = getImagesPlayer.getImage32(3,1,32,32);
-        playerSprites[3] = getImagesPlayer.getImage32(4,1,32,32);
-        playerSprites[4] = getImagesPlayer.getImage32(5,1,32,32);
-        playerSprites[5] = getImagesPlayer.getImage32(6,1,32,32);
-        playerSprites[6] = getImagesPlayer.getImage32(7,1,32,32);
-        playerSprites[7] = getImagesPlayer.getImage32(8,1,32,32);
-        playerSprites[8] = getImagesPlayer.getImage32(9,1,32,32);
-        playerSprites[9] = getImagesPlayer.getImage32(10,1,32,32);
-
-
         BufferedImage GamoverScreen = loader.loadImage("/gameOverPicture.png");
         GamoverScreenImg = new ImgaeGetter(GamoverScreen);
         imgOver = GamoverScreen.getSubimage(1, 1, 720, 480);
@@ -155,6 +146,8 @@ public class Game extends Canvas implements Runnable {
         shouldTime = true;
         timerAction = 3;
         this.upgrades = new Upgrades(this); //use upgrades.method for upgrade changes in Game and Player class
+
+        loadPlayerSprites();
 
         fontLoader();
     }
@@ -837,6 +830,31 @@ public class Game extends Canvas implements Runnable {
             handler.del = 1000;
         else //Machine Gun
             handler.del = 0;
+    }
+
+    private void loadPlayerSprites(){
+        playerWalkingLeft[0] = getImagesPlayer.getImage32(1,1,32,32);
+        playerWalkingLeft[1] = getImagesPlayer.getImage32(2,1,32,32);
+        playerWalkingLeft[2] = getImagesPlayer.getImage32(3,1,32,32);
+        playerWalkingLeft[3] = getImagesPlayer.getImage32(4,1,32,32);
+        playerWalkingLeft[4] = getImagesPlayer.getImage32(5,1,32,32);
+        playerWalkingLeft[5] = getImagesPlayer.getImage32(6,1,32,32);
+        playerWalkingLeft[6] = getImagesPlayer.getImage32(7,1,32,32);
+        playerWalkingLeft[7] = getImagesPlayer.getImage32(8,1,32,32);
+        playerWalkingLeft[8] = getImagesPlayer.getImage32(9,1,32,32);
+        playerWalkingLeft[9] = getImagesPlayer.getImage32(10,1,32,32);
+
+
+
+        for (int i = 0; i < playerWalkingLeft.length ; i++) {
+            AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+            tx.translate(-playerWalkingLeft[i].getWidth(null), 0);
+            AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            playerWalkingRight[i] = op.filter(playerWalkingLeft[i], null);
+
+        }
+
+
     }
 
 
