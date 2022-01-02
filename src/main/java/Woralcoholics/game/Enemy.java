@@ -15,6 +15,7 @@ public class Enemy<privare> extends GameObject {
     private final BufferedImage enemy_img;
     public static float velocity = 0;
     private GameManager manager;
+    private EnemyShadow es;
     int choose = 0;
     int hp = 100;
     Random r = new Random();
@@ -143,6 +144,7 @@ public class Enemy<privare> extends GameObject {
             if(prob == 2){
                 Game.SpawnCreate((int)curX,(int)curY);
             }
+           Game.AddEnemyShadow((int)curX,(int)curY);
 
         }
     }

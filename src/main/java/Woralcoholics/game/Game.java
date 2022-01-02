@@ -52,6 +52,7 @@ public class Game extends Canvas implements Runnable {
 
     public static BufferedImage[] playerWalkingLeft = new BufferedImage[10];
     public static BufferedImage[] playerWalkingRight = new BufferedImage[10];
+    public static BufferedImage[] enemyDeadShadow = new BufferedImage[10];
 
     public static List<int[]> wallCords = new ArrayList();
 
@@ -82,6 +83,7 @@ public class Game extends Canvas implements Runnable {
     private static ImgaeGetter imgaeGetter;
     private static ImgaeGetter upgradeBoarderGet;
     private static ImgaeGetter getImagesPlayer;
+    private static ImgaeGetter getImagesEnemy;
     private static ImgaeGetter GamoverScreenImg;
     private static ImgaeGetter uiButtonAnGet;
     private static Gun gun;
@@ -150,6 +152,7 @@ public class Game extends Canvas implements Runnable {
         this.upgrades = new Upgrades(this); //use upgrades.method for upgrade changes in Game and Player class
 
         loadPlayerSprites();
+        loadEnemyDeadSprites();
 
         fontLoader();
     }
@@ -263,7 +266,7 @@ public class Game extends Canvas implements Runnable {
         } else {
             renderMenu(g);
             handler.enemy.removeAll(handler.enemy);
-            //System.out.println("SPAWN" + handler.enemy.size());
+            //System.out.printlfn("SPAWN" + handler.enemy.size());
         }
         // between this it can be drawn to the screen
 
@@ -749,6 +752,10 @@ public class Game extends Canvas implements Runnable {
         handler.addObject(new Crate(x, y, ID.Create, imgaeGetter));
     }
 
+    public static void AddEnemyShadow(int x, int y) {
+        handler.addObject(new EnemyShadow(x, y, ID.EnemyShadow, imgaeGetter));
+    }
+
     /***
      * Function to get the current GameState
      */
@@ -835,29 +842,34 @@ public class Game extends Canvas implements Runnable {
             handler.del = 0;
     }
 
-    private void loadPlayerSprites(){
-        playerWalkingLeft[0] = getImagesPlayer.getImage32(1,1,32,32);
-        playerWalkingLeft[1] = getImagesPlayer.getImage32(2,1,32,32);
-        playerWalkingLeft[2] = getImagesPlayer.getImage32(3,1,32,32);
-        playerWalkingLeft[3] = getImagesPlayer.getImage32(4,1,32,32);
-        playerWalkingLeft[4] = getImagesPlayer.getImage32(5,1,32,32);
-        playerWalkingLeft[5] = getImagesPlayer.getImage32(6,1,32,32);
-        playerWalkingLeft[6] = getImagesPlayer.getImage32(7,1,32,32);
-        playerWalkingLeft[7] = getImagesPlayer.getImage32(8,1,32,32);
-        playerWalkingLeft[8] = getImagesPlayer.getImage32(9,1,32,32);
-        playerWalkingLeft[9] = getImagesPlayer.getImage32(10,1,32,32);
+    private void loadPlayerSprites() {
+        playerWalkingLeft[0] = getImagesPlayer.getImage32(1, 1, 32, 32);
+        playerWalkingLeft[1] = getImagesPlayer.getImage32(2, 1, 32, 32);
+        playerWalkingLeft[2] = getImagesPlayer.getImage32(3, 1, 32, 32);
+        playerWalkingLeft[3] = getImagesPlayer.getImage32(4, 1, 32, 32);
+        playerWalkingLeft[4] = getImagesPlayer.getImage32(5, 1, 32, 32);
+        playerWalkingLeft[5] = getImagesPlayer.getImage32(6, 1, 32, 32);
+        playerWalkingLeft[6] = getImagesPlayer.getImage32(7, 1, 32, 32);
+        playerWalkingLeft[7] = getImagesPlayer.getImage32(8, 1, 32, 32);
+        playerWalkingLeft[8] = getImagesPlayer.getImage32(9, 1, 32, 32);
+        playerWalkingLeft[9] = getImagesPlayer.getImage32(10, 1, 32, 32);
 
 
-
-        for (int i = 0; i < playerWalkingLeft.length ; i++) {
+        for (int i = 0; i < playerWalkingLeft.length; i++) {
             AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
             tx.translate(-playerWalkingLeft[i].getWidth(null), 0);
             AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
             playerWalkingRight[i] = op.filter(playerWalkingLeft[i], null);
 
         }
+    }
 
-
+    private void loadEnemyDeadSprites() {
+        enemyDeadShadow[0] = imgaeGetter.getImage(1, 9, 64, 64);
+        enemyDeadShadow[1] = imgaeGetter.getImage(2, 9, 64, 64);
+        enemyDeadShadow[2] = imgaeGetter.getImage(3, 9, 64, 64);
+        enemyDeadShadow[3] = imgaeGetter.getImage(4, 9, 64, 64);
+        enemyDeadShadow[4] = imgaeGetter.getImage(5, 9, 64, 64);
     }
 
 

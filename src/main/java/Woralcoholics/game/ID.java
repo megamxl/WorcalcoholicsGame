@@ -8,6 +8,7 @@ public enum ID {
     Player(),
     Block(),
     Enemy(),
+    EnemyShadow(),
     GunnerEnemy(),
     Bullet(),
     EnemyBullet(),
