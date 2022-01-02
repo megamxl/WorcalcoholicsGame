@@ -41,7 +41,7 @@ public class Window {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("jar.png")));
+        //frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("jar.png")));
 
     }
 
