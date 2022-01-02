@@ -228,6 +228,7 @@ public class Enemy<privare> extends GameObject {
         float curX = x;
         float curY = y;
         Game.AddEnemyShadow((int)curX,(int)curY);
+
         playSoundEnemy();
         enemysAlive--;
         if(!Game.inTutorial){

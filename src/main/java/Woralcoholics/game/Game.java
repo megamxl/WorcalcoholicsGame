@@ -99,7 +99,7 @@ public class Game extends Canvas implements Runnable {
 
     /* ------------- Constructor for Game Class -------------- */
 
-    public Game() throws IOException {
+    public Game() throws IOException, SQLException {
         currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
         //new ScoerSaveWindow(SCREEN_WIDTH,SCREEN_HEIGHT,"");
@@ -182,7 +182,11 @@ public class Game extends Canvas implements Runnable {
             delta += (now - lastTime) / ns;
             lastTime = now;
             if (delta >= 1) {
-                update();
+                try {
+                    update();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 updates++;
                 delta--;
             }
@@ -209,7 +213,7 @@ public class Game extends Canvas implements Runnable {
     /***
      * in every frame check where player is and update camera position
      */
-    public void update() {
+    public void update() throws SQLException {
         if (currentState != checkState) {     //if there was a state change...
             stateChange();
         }
@@ -287,7 +291,7 @@ public class Game extends Canvas implements Runnable {
 
     /* ---------- Private functions for game Class ----------- */
 
-    private void stateChange() {
+    private void stateChange() throws SQLException {
         //System.out.println("is " + currentState + " equal to " + checkState + "?");
         previousState = checkState;      //save the state before the state change
         checkState = currentState;       //the checkState becomes the current state, to again detect a state change
@@ -350,6 +354,14 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderHighScores(Graphics g) {
+        if(DatabeseConection.finishedFillingArray) {
+            g.setColor(Color.black);
+            g.drawString(DatabeseConection.scoresArray[0], 200, 200);
+            g.drawString(DatabeseConection.scoresArray[1], 200, 220);
+            g.drawString(DatabeseConection.scoresArray[2], 200, 240);
+            g.drawString(DatabeseConection.scoresArray[3], 200, 260);
+            //g.drawString(DatabeseConection.scoresArray[4], 200, 200);
+        }
     }
 
     /***
@@ -499,7 +511,7 @@ public class Game extends Canvas implements Runnable {
     /***
      * as the name states loads all kinds of Menus, which is not the level
      */
-    private void loadMenu() {
+    private void loadMenu() throws SQLException {
         GameState RETURN = previousState;
         if (previousState == GameState.OPTIONS) {
             menuCount--;
@@ -535,6 +547,8 @@ public class Game extends Canvas implements Runnable {
                 //System.out.println(currentState.toString());
             }
             case HIGH_SCORES -> {
+
+                databeseConection.ReadFromDatabse();
 
                 //JOptionPane playerDataInput = new JOptionPane();
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
@@ -888,7 +902,7 @@ public class Game extends Canvas implements Runnable {
     public static void main(String[] args) throws IOException {
         try {
             new Game();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }

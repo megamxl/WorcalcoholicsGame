@@ -14,14 +14,21 @@ public class Animations {
 
     private BufferedImage[] images;
     private BufferedImage currentImages;
+    private GameManager manager;
+
+    private boolean finished;
 
     public Animations(int speed, BufferedImage... args) {
         this.speed = speed;
+        this.manager = manager;
         images = new BufferedImage[args.length];
         for (int i = 0; i < args.length; i++) {
             images[i] = args[i];
         }
         frames = args.length;
+
+        finished = false;
+
     }
 
     public void runAnimations() {
@@ -41,7 +48,9 @@ public class Animations {
                 counter++;
             }
         }
+
     }
+
 
     public void nextFrame() {
         for (int i = 0; i < frames; i++) {
