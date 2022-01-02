@@ -1,34 +1,60 @@
 package Woralcoholics.game;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
-
-/**
- * Animation Class for the sprites assigned to the objects
- */
 public class Animations {
 
-    ////region INSTANCE VARIABLES
-    private BufferedImage img;
-    //endregion
-    //region CONSTRUCTOR
-    public Animations(BufferedImage img)
-    {
-        this.img =img;
+    private int speed;
+    private int frames;
+
+    private int index= 0;
+    private int count =0;
+
+    private BufferedImage[] images;
+    private BufferedImage currentImages;
+
+    public Animations(int speed, BufferedImage... args){
+        this.speed = speed;
+        images = new BufferedImage[args.length];
+        for (int i = 0; i < args.length; i++) {
+            images[i] = args[i];
+        }
+        frames = args.length;
     }
-    //endregion
-    //region METHODS
-    /**
-     * A function to get a sub image out of a Images
-     * @param col col of the image *64
-     * @param row row of the image *64
-     * @param width the width of the sub picture
-     * @param height the height of the sub picture
-     * @return the sub image
-     */
-    public BufferedImage getImage(int col,int row,int width, int height)
-    {
-        return img.getSubimage((col*64)-64, (row*64)-64,width,height);
+
+    public void runAnimations(){
+        index++;
+        if(index > speed){
+            index = 0;
+            nextFrame();
+        }
     }
-    //endregion
+
+    public void nextFrame(){
+        for (int i = 0; i < frames ; i++) {
+            if(count == i){
+                currentImages = images[i];
+            }
+        }
+        count++;
+        if(count > frames){
+            count =0;
+        }
+    }
+
+    public void renderAnimation(Graphics g, int x, int y){
+
+        g.drawImage(currentImages,x,y,null);
+
+    }
+
+    public void renderAnimation(Graphics g, int x, int y, int scaleX, int scaleY){
+
+        g.drawImage(currentImages,x,y,scaleX,scaleY,null);
+
+    }
 }
+
+
+

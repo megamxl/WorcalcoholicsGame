@@ -13,6 +13,7 @@ public class Player extends GameObject {
     Upgrades upgrades; //use upgrades.method for upgrade changes in Game and Player class
 
     private final BufferedImage player_img;
+    private Animations playerWalk;
 
     private double invincibleTime = 1000;
     private double wait;
@@ -23,12 +24,14 @@ public class Player extends GameObject {
     private Clip sound;
     // better method would be to wait until the thread is finished and then start the new sound
 
-    public Player(int x, int y, ID id, GameManager GameManager, Game game, Camera cam, Animations an) {
+    public Player(int x, int y, ID id, GameManager GameManager, Game game, Camera cam, ImgaeGetter an) {
         super(x, y, id, an);
         this.handler = GameManager;
         this.game = game;
         this.cam = cam;
         this.upgrades = new Upgrades(game);
+
+        playerWalk = new Animations(5,Game.playerSprites[0],Game.playerSprites[1],Game.playerSprites[2],Game.playerSprites[3], Game.playerSprites[4], Game.playerSprites[5], Game.playerSprites[6], Game.playerSprites[7], Game.playerSprites[8], Game.playerSprites[9]);
 
         player_img = an.getImage(1, 3, 64, 64);
 
@@ -38,6 +41,8 @@ public class Player extends GameObject {
     public void update() {
         x += velX;
         y += velY;
+
+        playerWalk.runAnimations();
 
         checkIfGone();
 
@@ -105,7 +110,11 @@ public class Player extends GameObject {
         /*Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
         g2d.draw(getBounds());*/
-        g.drawImage(player_img, (int) x, (int) y, null);
+        if(velX != 0 || velY != 0){
+            playerWalk.renderAnimation(g,(int) x, (int)y,64,64);
+        }else {
+            g.drawImage(player_img, (int) x, (int) y, null);
+        }
         // draw other colliders
         /*g.setColor(Color.RED);
         g2d.draw(getBoundsX());

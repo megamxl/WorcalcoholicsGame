@@ -5,7 +5,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import java.awt.event.MouseWheelEvent;
 
@@ -18,14 +17,14 @@ public class MouseInput extends MouseAdapter {
     private GameObject player;
     private Camera camera;
     private Game game;
-    private Animations an;
+    private ImgaeGetter an;
     private Gun gun;
     volatile private boolean mouseDown = false; //determine if mouse1 is pressed or not
     private boolean gunequiperror = false;
     Upgrades upgrades;
 
 
-    public MouseInput(GameManager handler, Camera camera, Game game, Animations an, Gun gun) {
+    public MouseInput(GameManager handler, Camera camera, Game game, ImgaeGetter an, Gun gun) {
         this.handler = handler;
         this.camera = camera;
         this.game = game;

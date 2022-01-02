@@ -37,7 +37,7 @@ public class GunnerEnemy extends Enemy {
     private state gunnerState;
 
 
-    public GunnerEnemy(int x, int y, ID id, GameManager manager, Animations an, Score score) {  //Constructor for Gunner Enemies
+    public GunnerEnemy(int x, int y, ID id, GameManager manager, ImgaeGetter an, Score score) {  //Constructor for Gunner Enemies
         super(x, y, id, manager, an, score);
         handler = manager;
         gx = getX();    //get Position of Gunner

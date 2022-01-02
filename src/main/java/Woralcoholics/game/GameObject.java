@@ -11,17 +11,17 @@ public abstract class GameObject {
     protected float velX =0, velY = 0;
     protected GameState nextState;
     protected ID id;
-    protected Animations an;
+    protected ImgaeGetter an;
     protected GameManager handler;
 
-    public GameObject(float x, float y, ID id, Animations an) {
+    public GameObject(float x, float y, ID id, ImgaeGetter an) {
         this.x = x;
         this.y = y;
         this.id = id;
         this.an = an;
     }
 
-    public GameObject(int x, int y, GameState nextState, ID id, Animations an) {
+    public GameObject(int x, int y, GameState nextState, ID id, ImgaeGetter an) {
         this.x = x;
         this.y = y;
         this.nextState = nextState;

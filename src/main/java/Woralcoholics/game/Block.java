@@ -1,11 +1,7 @@
 package Woralcoholics.game;
 
-import Woralcoholics.game.GameObject;
-import Woralcoholics.game.ID;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 public class Block extends GameObject {
 
@@ -20,7 +16,7 @@ public class Block extends GameObject {
      * @param col
      * @param row
      */
-    public Block(float x, float y, ID id, Animations an, Integer col, Integer row) {
+    public Block(float x, float y, ID id, ImgaeGetter an, Integer col, Integer row) {
 
         super(x, y, id, an);
 

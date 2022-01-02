@@ -4,7 +4,6 @@ import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -32,7 +31,7 @@ public class Enemy<privare> extends GameObject {
     //endregion
 
     //region CONSTRUCTOR
-    public Enemy(int x, int y, ID id, GameManager manager, Animations an, Score score) {
+    public Enemy(int x, int y, ID id, GameManager manager, ImgaeGetter an, Score score) {
         super(x, y, id, an);
         this.manager = manager;
         this.score = score;
@@ -150,7 +149,7 @@ public class Enemy<privare> extends GameObject {
 
     public void isDead() {
         if (hp <= 0) {
-            int prob = Game.randomNumber(1,4);
+            int prob = Game.randomNumber(1,5);
             remove();
             float curX = x;
             float curY = y;
@@ -161,6 +160,8 @@ public class Enemy<privare> extends GameObject {
 
         }
     }
+
+
 
     public void update() {
         move();
@@ -223,7 +224,7 @@ public class Enemy<privare> extends GameObject {
      * if an enemy gets out of bounce delete it and respawn it random
      */
     public void checkIfGone() {
-        if ((y > 1054 || y < 64) || (x > 1900 || x < 0)) {
+        if ((y > 1054 || y < 64) || (x > 2000 || x < 0)) {
             removeWithObject(this);
             Spawner(1, true, r);
         }

@@ -1,12 +1,10 @@
 package Woralcoholics.game;
 
-import java.awt.*;
-
 /**
  * constructs a bullet
  */
 public class EnemyBullet extends Bullet{
-    public EnemyBullet(int x, int y, ID id, GameManager handler, Animations an) {
+    public EnemyBullet(int x, int y, ID id, GameManager handler, ImgaeGetter an) {
         super(x, y, id, handler, an);
     }
 
