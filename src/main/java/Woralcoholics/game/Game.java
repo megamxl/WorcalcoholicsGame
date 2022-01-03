@@ -106,7 +106,7 @@ public class Game extends Canvas implements Runnable {
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
         start();
 
-        levelDecision = String.valueOf(randomNumber(1, 4));
+        levelDecision = String.valueOf(randomNumber(1, 3));
         handler = new GameManager();
         camera = new Camera(0, 0, this);
         gun = new Gun();
@@ -654,11 +654,13 @@ public class Game extends Canvas implements Runnable {
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, imageGetter, randomNumber(1, 7), 1));
                     wallCords.add(new int[]{xx, yy});
                 }
+                /*
                 if (red == 155) {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, imageGetter, randomNumber(5, 7), 2));
                     wallCords.add(new int[]{xx, yy});
                 }
+                 */
                 if (blue == 255 && green == 0 && red == 0) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, imageGetter));
                     PlayerX = xx * 32;
