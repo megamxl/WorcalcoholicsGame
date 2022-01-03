@@ -7,11 +7,12 @@ public enum GameState {
     STUDIO,
     TITLE,
     MAIN_MENU,
-    TUTORIAL,
     HIGH_SCORES,
     OPTIONS,
-    PAUSE_MENU,
+    TUTORIAL,
     LEVEL,
+    PAUSE_MENU,
     UPGRADE_MENU,
-    GAME_OVER
+    GAME_OVER,
+    CREDITS
 }

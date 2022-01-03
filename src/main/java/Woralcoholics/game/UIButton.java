@@ -30,7 +30,7 @@ public class UIButton extends GameObject{
      * @param an
      */
     public UIButton(int x, int y, int width, int height, String name, GameState nextState, ID id, Game game,
-                    int action, int upgradeNr, ImgaeGetter an, int col, int row, int stringWidth, int stringHeight,
+                    int action, int upgradeNr, ImageGetter an, int col, int row, int stringWidth, int stringHeight,
                     int fontsize) {
         super(x, y, nextState, id, an);
         this.width = width;

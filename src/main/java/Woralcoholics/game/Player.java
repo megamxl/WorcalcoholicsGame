@@ -25,7 +25,7 @@ public class Player extends GameObject {
     private Clip sound;
     // better method would be to wait until the thread is finished and then start the new sound
 
-    public Player(int x, int y, ID id, GameManager GameManager, Game game, Camera cam, ImgaeGetter an) {
+    public Player(int x, int y, ID id, GameManager GameManager, Game game, Camera cam, ImageGetter an) {
         super(x, y, id, an);
         this.handler = GameManager;
         this.game = game;

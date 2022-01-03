@@ -81,12 +81,12 @@ public class Game extends Canvas implements Runnable {
 
     public static GameManager handler;
 
-    private static ImgaeGetter imgaeGetter;
-    private static ImgaeGetter upgradeBoarderGet;
-    private static ImgaeGetter getImagesPlayer;
-    private static ImgaeGetter getImagesEnemy;
-    private static ImgaeGetter GamoverScreenImg;
-    private static ImgaeGetter uiButtonAnGet;
+    private static ImageGetter imageGetter;
+    private static ImageGetter upgradeBoarderGet;
+    private static ImageGetter getImagesPlayer;
+    private static ImageGetter getImagesEnemy;
+    private static ImageGetter GamoverScreenImg;
+    private static ImageGetter uiButtonAnGet;
     private static Gun gun;
 
     private DatabeseConection databeseConection = new DatabeseConection();
@@ -120,33 +120,33 @@ public class Game extends Canvas implements Runnable {
 
         BufferedImageLoader loader = new BufferedImageLoader();
         spritesheet = loader.loadImage("/Spritesheet.png");
-        imgaeGetter = new ImgaeGetter(spritesheet);
+        imageGetter = new ImageGetter(spritesheet);
 
         upgradBoarder = loader.loadImage("/UpgradeBorder.png");
-        upgradeBoarderGet = new ImgaeGetter(upgradBoarder);
+        upgradeBoarderGet = new ImageGetter(upgradBoarder);
 
         uiButtonAn = loader.loadImage("/UIButton_352x102.png");
-        uiButtonAnGet = new ImgaeGetter(uiButtonAn);
+        uiButtonAnGet = new ImageGetter(uiButtonAn);
 
         playerWalkCycle = loader.loadImage("/Character Running Spritesheet.png");
-        getImagesPlayer = new ImgaeGetter(playerWalkCycle);
+        getImagesPlayer = new ImageGetter(playerWalkCycle);
 
         BufferedImage GamoverScreen = loader.loadImage("/gameOverPicture.png");
-        GamoverScreenImg = new ImgaeGetter(GamoverScreen);
+        GamoverScreenImg = new ImageGetter(GamoverScreen);
         imgOver = GamoverScreen.getSubimage(1, 1, 720, 480);
 
 
         //Adding Mouse and Keyboard Input
-        MouseInput mouse = new MouseInput(handler, camera, this, imgaeGetter, gun);
+        MouseInput mouse = new MouseInput(handler, camera, this, imageGetter, gun);
         this.addMouseListener(mouse);
         this.addMouseWheelListener(mouse);
         KeyInput keys = new KeyInput(handler, this);
         this.addKeyListener(keys);
 
-        floor = imgaeGetter.getImage(1, 2, 64, 64);
-        floorDirt1 = imgaeGetter.getImage(2, 2, 64, 64);
-        floorDirt2 = imgaeGetter.getImage(3, 2, 64, 64);
-        floorDirt3 = imgaeGetter.getImage(4, 2, 64, 64);
+        floor = imageGetter.getImage(1, 2, 64, 64);
+        floorDirt1 = imageGetter.getImage(2, 2, 64, 64);
+        floorDirt2 = imageGetter.getImage(3, 2, 64, 64);
+        floorDirt3 = imageGetter.getImage(4, 2, 64, 64);
         loadMenu();
         //activate the timer, to show the Studio for 1 sec
         TimerValue = 0;
@@ -276,7 +276,7 @@ public class Game extends Canvas implements Runnable {
             renderUi(g);
 
         } else {
-            renderMenu(g);
+            renderScreen(g);
             handler.enemy.removeAll(handler.enemy);
             //System.out.printlfn("SPAWN" + handler.enemy.size());
         }
@@ -414,7 +414,7 @@ public class Game extends Canvas implements Runnable {
      * A switch case functions for determining what screen to render
      * @param g Graphics object
      */
-    private void renderMenu(Graphics g) {
+    private void renderScreen(Graphics g) {
         g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         switch (currentState) {
@@ -465,15 +465,15 @@ public class Game extends Canvas implements Runnable {
         if (handler.del == 0) {
             g.setColor(Color.cyan);
             //g.drawString("MACHINE GUN", 210, 95);
-            currGun = imgaeGetter.getImage(2, 10, 64, 64);
+            currGun = imageGetter.getImage(2, 10, 64, 64);
         } else if (handler.del == 200) {
             g.setColor(Color.cyan);
             //g.drawString("PISTOL", 210, 95);
-            currGun = imgaeGetter.getImage(3, 10, 64, 64);
+            currGun = imageGetter.getImage(3, 10, 64, 64);
         } else if (handler.del == 1000) {
             g.setColor(Color.cyan);
             //g.drawString("SHOTGUN", 210, 95);
-            currGun = imgaeGetter.getImage(1, 10, 64, 64);
+            currGun = imageGetter.getImage(1, 10, 64, 64);
         }
 
         if (hp >= 70)
@@ -537,10 +537,18 @@ public class Game extends Canvas implements Runnable {
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, 320, 352, 102, "Scores",
                         GameState.HIGH_SCORES, ID.UIButton, this, 1, 0, uiButtonAnGet, 1,
                         1, 397, 337, 35));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2, 445, 352, 102, "Options",
-                        GameState.OPTIONS, ID.UIButton, this, 1, 0, uiButtonAnGet, 1, 1,
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, 445, 352, 102, "Credits",
+                        GameState.CREDITS, ID.UIButton, this, 1, 0, uiButtonAnGet, 1, 1,
                         400, 460, 32));
+                handler.addObject(new UIButton(SCREEN_WIDTH-46, 34, 64, 64,
+                        "Options", GameState.OPTIONS, ID.UIButton, this, 1, 0, imageGetter,
+                        1, 2, 0, 0, 0));
 
+            }
+            case CREDITS -> {
+                handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 2, 0, 0,
+                        40));
             }
             case TUTORIAL -> {
                 //handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
@@ -552,22 +560,22 @@ public class Game extends Canvas implements Runnable {
 
                 //JOptionPane playerDataInput = new JOptionPane();
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
-                        ID.UIButton, this, 1, 0, imgaeGetter, 1, 2, 0, 0,
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 2, 0, 0,
                         40));
             }
             case OPTIONS -> {
                 menuCount++;
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
-                        ID.UIButton, this, 1, 0, imgaeGetter, 1, 2, 0, 0,
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 2, 0, 0,
                         40));
             }
             case PAUSE_MENU -> {
                 menuCount = 10;
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", GameState.LEVEL,
-                        ID.UIButton, this, 1, 0, imgaeGetter, 1, 2, 0, 0,
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 2, 0, 0,
                         40));
                 handler.addObject(new UIButton(96, 32, 64, 64, "Options", GameState.OPTIONS,
-                        ID.UIButton, this, 1, 0, imgaeGetter, 1, 2, 0, 0,
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 2, 0, 0,
                         40));
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
@@ -643,28 +651,28 @@ public class Game extends Canvas implements Runnable {
 
                 if (red == 255) {
                     // Creates the new blocks which function as the walls
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, imgaeGetter, randomNumber(1, 7), 1));
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, imageGetter, randomNumber(1, 7), 1));
                     wallCords.add(new int[]{xx, yy});
                 }
                 if (red == 155) {
                     // Creates the new blocks which function as the walls
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, imgaeGetter, randomNumber(5, 7), 2));
+                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, imageGetter, randomNumber(5, 7), 2));
                     wallCords.add(new int[]{xx, yy});
                 }
                 if (blue == 255 && green == 0 && red == 0) {
-                    handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, imgaeGetter));
+                    handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, imageGetter));
                     PlayerX = xx * 32;
                     PlayerY = yy * 32;
                 }
                 if (green == 255) {
-                    handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, imgaeGetter, score));
+                    handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, imageGetter, score));
                 }
                 if (green == 255 && blue == 255) {
 
                 }
             }
         }
-        handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, imgaeGetter, score)); //Test Gunner
+        handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, imageGetter, score)); //Test Gunner
         loaded = true;
         playBackgroundSound();
         //System.out.println("NEW GAME");
@@ -765,19 +773,19 @@ public class Game extends Canvas implements Runnable {
      * @param y Y value
      */
     public static void SpawnEnemy(int x, int y) {
-        handler.addObject(new Enemy(x, y, ID.Enemy, handler, imgaeGetter, score));
+        handler.addObject(new Enemy(x, y, ID.Enemy, handler, imageGetter, score));
     }
 
     public static void SpawnGunnerEnemy() {
-        handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, imgaeGetter, score));
+        handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, imageGetter, score));
     }
 
     public static void SpawnCreate(int x, int y) {
-        handler.addObject(new Crate(x, y, ID.Create, imgaeGetter));
+        handler.addObject(new Crate(x, y, ID.Create, imageGetter));
     }
 
     public static void AddEnemyShadow(int x, int y) {
-        handler.addObject(new EnemyShadow(x, y, ID.EnemyShadow, imgaeGetter));
+        handler.addObject(new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
     }
 
     /***
@@ -891,12 +899,12 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void loadEnemyDeadSprites() {
-        enemyDeadShadow[0] = imgaeGetter.getImage(1, 9, 64, 64);
-        enemyDeadShadow[1] = imgaeGetter.getImage(2, 9, 64, 64);
-        enemyDeadShadow[2] = imgaeGetter.getImage(3, 9, 64, 64);
-        enemyDeadShadow[3] = imgaeGetter.getImage(4, 9, 64, 64);
-        enemyDeadShadow[4] = imgaeGetter.getImage(5, 9, 64, 64);
-        enemyDeadShadow[5] = imgaeGetter.getImage(6, 9, 64, 64);
+        enemyDeadShadow[0] = imageGetter.getImage(1, 9, 64, 64);
+        enemyDeadShadow[1] = imageGetter.getImage(2, 9, 64, 64);
+        enemyDeadShadow[2] = imageGetter.getImage(3, 9, 64, 64);
+        enemyDeadShadow[3] = imageGetter.getImage(4, 9, 64, 64);
+        enemyDeadShadow[4] = imageGetter.getImage(5, 9, 64, 64);
+        enemyDeadShadow[5] = imageGetter.getImage(6, 9, 64, 64);
     }
 
 

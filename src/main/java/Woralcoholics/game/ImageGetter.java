@@ -6,13 +6,13 @@ import java.awt.image.BufferedImage;
 /**
  * Animation Class for the sprites assigned to the objects
  */
-public class ImgaeGetter {
+public class ImageGetter {
 
     ////region INSTANCE VARIABLES
     private BufferedImage img;
     //endregion
     //region CONSTRUCTOR
-    public ImgaeGetter(BufferedImage img)
+    public ImageGetter(BufferedImage img)
     {
         this.img =img;
     }

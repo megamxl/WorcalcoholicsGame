@@ -16,7 +16,7 @@ public class Block extends GameObject {
      * @param col
      * @param row
      */
-    public Block(float x, float y, ID id, ImgaeGetter an, Integer col, Integer row) {
+    public Block(float x, float y, ID id, ImageGetter an, Integer col, Integer row) {
 
         super(x, y, id, an);
 

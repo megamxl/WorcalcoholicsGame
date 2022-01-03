@@ -7,7 +7,7 @@ public class Crate extends GameObject{
 
     private BufferedImage crate_image = null;
 
-    public Crate(int x, int y, ID id, ImgaeGetter an){
+    public Crate(int x, int y, ID id, ImageGetter an){
         super(x, y, id, an);
         crate_image = an.getImage(4,10,64,64);
     }

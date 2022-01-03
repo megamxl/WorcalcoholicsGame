@@ -11,7 +11,7 @@ public class Bullet extends GameObject {
 
     GameManager handler;
 
-    public Bullet(int x, int y, ID id, GameManager handler, ImgaeGetter an) {
+    public Bullet(int x, int y, ID id, GameManager handler, ImageGetter an) {
         super(x, y, id, an);
         this.handler = handler;
 

@@ -32,7 +32,7 @@ public class Enemy<privare> extends GameObject {
     //endregion
 
     //region CONSTRUCTOR
-    public Enemy(int x, int y, ID id, GameManager manager, ImgaeGetter an, Score score) {
+    public Enemy(int x, int y, ID id, GameManager manager, ImageGetter an, Score score) {
         super(x, y, id, an);
         this.manager = manager;
         this.score = score;

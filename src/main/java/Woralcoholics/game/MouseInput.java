@@ -17,14 +17,14 @@ public class MouseInput extends MouseAdapter {
     private GameObject player;
     private Camera camera;
     private Game game;
-    private ImgaeGetter an;
+    private ImageGetter an;
     private Gun gun;
     volatile private boolean mouseDown = false; //determine if mouse1 is pressed or not
     private boolean gunequiperror = false;
     Upgrades upgrades;
 
 
-    public MouseInput(GameManager handler, Camera camera, Game game, ImgaeGetter an, Gun gun) {
+    public MouseInput(GameManager handler, Camera camera, Game game, ImageGetter an, Gun gun) {
         this.handler = handler;
         this.camera = camera;
         this.game = game;
@@ -48,7 +48,7 @@ public class MouseInput extends MouseAdapter {
         Point currentPos = e.getPoint();    //Grab current cursor position
         int button = e.getButton(); //Grab pressed button
         switch (Game.getState()) {  //depending on currentState, execute the following...
-            case TITLE, MAIN_MENU, HIGH_SCORES, OPTIONS, PAUSE_MENU, UPGRADE_MENU -> {
+            case TITLE, MAIN_MENU, HIGH_SCORES, OPTIONS, PAUSE_MENU, UPGRADE_MENU, CREDITS -> {
                 if (button == 1) {
                     for (int i = 0; i < handler.object.size(); i++) {
                         GameObject temp = handler.object.get(i);
