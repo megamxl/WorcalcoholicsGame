@@ -119,19 +119,19 @@ public class Game extends Canvas implements Runnable {
         tutorialLevel = ImageIO.read(pathToTutorial);
 
         BufferedImageLoader loader = new BufferedImageLoader();
-        spritesheet = loader.loadImage("/Spritesheet.png");
+        spritesheet = loader.loadImage("/Graphics/Spritesheet.png");
         imageGetter = new ImageGetter(spritesheet);
 
-        upgradBoarder = loader.loadImage("/UpgradeBorder.png");
+        upgradBoarder = loader.loadImage("/Graphics/UpgradeBorder.png");
         upgradeBoarderGet = new ImageGetter(upgradBoarder);
 
-        uiButtonAn = loader.loadImage("/UIButton_352x102.png");
+        uiButtonAn = loader.loadImage("/Graphics/UIButton_352x102.png");
         uiButtonAnGet = new ImageGetter(uiButtonAn);
 
-        playerWalkCycle = loader.loadImage("/Character Running Spritesheet.png");
+        playerWalkCycle = loader.loadImage("/Graphics/Animations/Character Running Spritesheet.png");
         getImagesPlayer = new ImageGetter(playerWalkCycle);
 
-        BufferedImage GamoverScreen = loader.loadImage("/gameOverPicture.png");
+        BufferedImage GamoverScreen = loader.loadImage("/Graphics/gameOverPicture.png");
         GamoverScreenImg = new ImageGetter(GamoverScreen);
         imgOver = GamoverScreen.getSubimage(1, 1, 720, 480);
 
