@@ -19,7 +19,7 @@ public class DatabeseConection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(
-                    "jdbc:mysql://sql4.freesqldatabase.com:3306/sql4462776", "sql4462776", "TNqVfZS4pW");
+                    "jdbc:mysql://sql4.freesqldatabase.com/sql4462776", "sql4462776", "TNqVfZS4pW");
             //here sonoo is database name, root is username and password
 
             System.out.println("should have inserted");

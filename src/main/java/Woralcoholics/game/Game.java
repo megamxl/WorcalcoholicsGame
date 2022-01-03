@@ -360,7 +360,7 @@ public class Game extends Canvas implements Runnable {
             g.drawString(DatabeseConection.scoresArray[1], 200, 220);
             g.drawString(DatabeseConection.scoresArray[2], 200, 240);
             g.drawString(DatabeseConection.scoresArray[3], 200, 260);
-            //g.drawString(DatabeseConection.scoresArray[4], 200, 200);
+            g.drawString(DatabeseConection.scoresArray[4], 200, 280);
         }
     }
 
@@ -701,7 +701,7 @@ public class Game extends Canvas implements Runnable {
                         JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?",
                                 null, JOptionPane.YES_NO_OPTION);
                         databeseConection.connectToDatabase();
-
+                        System.out.println("over Con");
                     }
                 }
                 shouldTime = false;  //deactivate the timer

@@ -64,8 +64,8 @@ public class Enemy<privare> extends GameObject {
             if (tmpObject.getId() == ID.Block) {
                 if (getBoundsAround().intersects(tmpObject.getBounds())) {
                     // if it is colliding with wall it goes in the opposite direction
-                    x += (velX * 5) * -1;
-                    y += (velY * 5) * -1;
+                    x += (velX *3) * -1;
+                    y += (velY *3) * -1;
                     velX *= -1;
                     velY *= -1;
                     //enemy cant aim player anymore -> prevents stucking at the wall
@@ -162,6 +162,7 @@ public class Enemy<privare> extends GameObject {
 
         isDead();
 
+
     }
 
     public void render(Graphics g) {
@@ -238,7 +239,7 @@ public class Enemy<privare> extends GameObject {
             if (enemysAlive <= 0) {
                 waves++;
                 if ((waves - 1) % upgradeAfterWave == 0) {
-                    Game.TimerValue = 0;    //0 secs (actually just to unrender the last enemy and bullet)
+                    Game.TimerValue = 2;    //0 secs (actually just to unrender the last enemy and bullet)
                     Game.shouldTime = true; //activate Timer
                     Game.timerAction = 2;   //execute timerAction 2 -> wait a bit
                 } else {

@@ -1,3 +1,5 @@
+03.01.2022 - as of right now, the spritesheet description won't be updated, since changes happen to frequently
+
 default res 32x32 (except when stated different)
 pos(spalte,zeile)
 
