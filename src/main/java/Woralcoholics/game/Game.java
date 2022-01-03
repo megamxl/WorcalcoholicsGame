@@ -814,7 +814,7 @@ public class Game extends Canvas implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
         });

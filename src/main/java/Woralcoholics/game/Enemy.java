@@ -215,8 +215,8 @@ public class Enemy<privare> extends GameObject {
         if ((y > 1000 || y < 30) || (x > 2000 || x < 30)) {
             removeWithObject(this);
             Spawner(1, true, r);
-            System.out.println("GONE");
-            System.out.println("x:"+ x +" " + "y" + y);
+           // System.out.println("GONE");
+            //System.out.println("x:"+ x +" " + "y" + y);
         }
     }
 
@@ -275,7 +275,8 @@ public class Enemy<privare> extends GameObject {
                     e.printStackTrace();
                 }
                 catch (IllegalArgumentException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    //System.out.println("ILLEGAL");
                 }
             }).start();
         } catch (Exception e) {

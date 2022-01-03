@@ -199,7 +199,8 @@ public class MouseInput extends MouseAdapter {
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 } catch (IllegalArgumentException ex) {
-                    ex.printStackTrace();
+                   // ex.printStackTrace();
+                    //System.out.println("ILLEGAL");
                 }
             }).start();
         } catch (Exception exception) {

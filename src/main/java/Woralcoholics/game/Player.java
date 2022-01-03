@@ -269,7 +269,7 @@ public class Player extends GameObject {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
+                   // e.printStackTrace();
                 }
             }).start();
         } catch (Exception e) {
@@ -293,7 +293,7 @@ public class Player extends GameObject {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }).start();
         } catch (Exception e) {
@@ -339,7 +339,7 @@ public class Player extends GameObject {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
+                   // e.printStackTrace();
                 }
             }).start();
         } catch (Exception e) {
