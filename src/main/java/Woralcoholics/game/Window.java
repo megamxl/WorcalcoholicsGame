@@ -41,7 +41,7 @@ public class Window {
         frame.setVisible(true);
 
         //...\WorcalcoholicsGame\target\classes\Woralcoholics\game\jar.png
-        frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("jar.png")));
+        frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("Icon.png")));
 
     }
 }
