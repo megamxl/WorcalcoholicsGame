@@ -499,7 +499,7 @@ public class Game extends Canvas implements Runnable {
 
         if (shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...
             g.setColor(Color.ORANGE);
-            //g.setFont(new Font("Future Blood",Font.PLAIN,80));
+            //g.setFont(new Font("/Fonts/Future Blood",Font.PLAIN,80));
             g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 45));
             g.drawString("Next Wave spawns in " + TimerValue, 50, 250);
 
@@ -617,8 +617,8 @@ public class Game extends Canvas implements Runnable {
 
     private void fontLoader() {
         try {
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Masked Hero.ttf")).deriveFont(12f);
-            Font customFont1 = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/DebugFreeTrial-MVdYB.otf")).deriveFont(12f);
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Fonts/Masked Hero.ttf")).deriveFont(12f);
+            Font customFont1 = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Fonts/DebugFreeTrial-MVdYB.otf")).deriveFont(12f);
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font
