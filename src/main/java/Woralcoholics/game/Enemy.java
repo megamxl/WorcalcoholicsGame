@@ -211,9 +211,12 @@ public class Enemy<privare> extends GameObject {
      * if an enemy gets out of bounce delete it and respawn it random
      */
     public void checkIfGone() {
-        if ((y > 1054 || y < 64) || (x > 2000 || x < 0)) {
+        // previous ->  if ((y > 1054 || y < 64) || (x > 2000 || x < 0)) {
+        if ((y > 1000 || y < 30) || (x > 2000 || x < 30)) {
             removeWithObject(this);
             Spawner(1, true, r);
+            System.out.println("GONE");
+            System.out.println("x:"+ x +" " + "y" + y);
         }
     }
 

@@ -13,7 +13,7 @@ public class EnemyShadow extends GameObject {
 
     public EnemyShadow(int x, int y, ID id, ImgaeGetter an) {
         super(x, y, id, an);
-        enemyDead = new Animations(15, Game.enemyDeadShadow[0], Game.enemyDeadShadow[1], Game.enemyDeadShadow[2], Game.enemyDeadShadow[3], Game.enemyDeadShadow[4]);
+        enemyDead = new Animations(1, Game.enemyDeadShadow[0], Game.enemyDeadShadow[1], Game.enemyDeadShadow[2], Game.enemyDeadShadow[3], Game.enemyDeadShadow[4]);
         //shadow_image = an.getImage(1, 9, 64, 64);
     }
 

@@ -106,14 +106,14 @@ public class Game extends Canvas implements Runnable {
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
         start();
 
-        levelDecision = String.valueOf(randomNumber(1,4));
+        levelDecision = String.valueOf(randomNumber(1, 4));
         handler = new GameManager();
         camera = new Camera(0, 0, this);
         gun = new Gun();
         addGuns();
         checkSelectedGun();
         // when finished implement the Mouse and Key input
-        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level0"+ levelDecision +".png");
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level0" + levelDecision + ".png");
         InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
         level = ImageIO.read(path);
         tutorialLevel = ImageIO.read(pathToTutorial);
@@ -354,7 +354,7 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderHighScores(Graphics g) {
-        if(DatabeseConection.finishedFillingArray) {
+        if (DatabeseConection.finishedFillingArray) {
             g.setColor(Color.black);
             g.drawString(DatabeseConection.scoresArray[0], 200, 200);
             g.drawString(DatabeseConection.scoresArray[1], 200, 220);

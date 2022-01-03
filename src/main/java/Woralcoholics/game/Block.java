@@ -37,7 +37,11 @@ public class Block extends GameObject {
         g.drawImage(block_img, (int)x, (int)y,null);
         /*Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
-        g2d.draw(getBounds());*/
+        //g2d.draw(getBounds());*/
+
+        //f ((y > 1054 || y < 60) || (x > 2000 || x < 0)) {
+        //g2d.draw(new Rectangle(30,30,2000,1000));
+
     }
 
     @Override
