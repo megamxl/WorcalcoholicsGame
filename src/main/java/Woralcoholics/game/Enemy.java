@@ -274,6 +274,9 @@ public class Enemy<privare> extends GameObject {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
             }).start();
         } catch (Exception e) {
             e.printStackTrace();

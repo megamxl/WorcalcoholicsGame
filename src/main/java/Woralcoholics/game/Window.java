@@ -40,7 +40,8 @@ public class Window {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        //frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("jar.png")));
+        //...\WorcalcoholicsGame\target\classes\Woralcoholics\game\jar.png
+        frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("jar.png")));
 
     }
 }

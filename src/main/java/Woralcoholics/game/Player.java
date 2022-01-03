@@ -32,8 +32,8 @@ public class Player extends GameObject {
         this.cam = cam;
         this.upgrades = new Upgrades(game);
 
-        playerWalkLeft = new Animations(3,Game.playerWalkingLeft[0],Game.playerWalkingLeft[1],Game.playerWalkingLeft[2],Game.playerWalkingLeft[3], Game.playerWalkingLeft[4], Game.playerWalkingLeft[5], Game.playerWalkingLeft[6], Game.playerWalkingLeft[7], Game.playerWalkingLeft[8], Game.playerWalkingLeft[9]);
-        playerWalkRigth = new Animations(3,Game.playerWalkingRight[0],Game.playerWalkingRight[1],Game.playerWalkingRight[2],Game.playerWalkingRight[3], Game.playerWalkingRight[4], Game.playerWalkingRight[5], Game.playerWalkingRight[6], Game.playerWalkingRight[7], Game.playerWalkingRight[8], Game.playerWalkingRight[9]);
+        playerWalkLeft = new Animations(3, Game.playerWalkingLeft[0], Game.playerWalkingLeft[1], Game.playerWalkingLeft[2], Game.playerWalkingLeft[3], Game.playerWalkingLeft[4], Game.playerWalkingLeft[5], Game.playerWalkingLeft[6], Game.playerWalkingLeft[7], Game.playerWalkingLeft[8], Game.playerWalkingLeft[9]);
+        playerWalkRigth = new Animations(3, Game.playerWalkingRight[0], Game.playerWalkingRight[1], Game.playerWalkingRight[2], Game.playerWalkingRight[3], Game.playerWalkingRight[4], Game.playerWalkingRight[5], Game.playerWalkingRight[6], Game.playerWalkingRight[7], Game.playerWalkingRight[8], Game.playerWalkingRight[9]);
 
         player_img = an.getImage(1, 3, 64, 64);
 
@@ -113,12 +113,11 @@ public class Player extends GameObject {
         /*Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
         g2d.draw(getBounds());*/
-        if(velX < 0 ){
-            playerWalkLeft.renderAnimation(g,(int) x, (int)y,64,64);
-        }else if (velX > 0){
-            playerWalkRigth.renderAnimation(g,(int) x, (int)y,64,64);
-        }
-        else {
+        if (velX < 0) {
+            playerWalkLeft.renderAnimation(g, (int) x, (int) y, 64, 64);
+        } else if (velX > 0) {
+            playerWalkRigth.renderAnimation(g, (int) x, (int) y, 64, 64);
+        } else {
             g.drawImage(player_img, (int) x, (int) y, null);
         }
         // draw other colliders
@@ -269,6 +268,8 @@ public class Player extends GameObject {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
                 }
             }).start();
         } catch (Exception e) {
@@ -291,6 +292,8 @@ public class Player extends GameObject {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
                 }
             }).start();
         } catch (Exception e) {
@@ -308,6 +311,8 @@ public class Player extends GameObject {
                 } catch (UnsupportedAudioFileException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 }
             }).start();
@@ -332,6 +337,8 @@ public class Player extends GameObject {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 }
             }).start();
