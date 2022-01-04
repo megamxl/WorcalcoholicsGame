@@ -1,0 +1,9 @@
+Button 1, red = (row 1, col 1, 320, 128)
+Button 2, blue = (row 3, col 1, 320, 128)
+Button 3, blue = (row 5, col 1, 320, 128)
+Button 4, green = (row 7, col 1, 320, 128)
+
+Button start = (row 1, col 7, 320, 128)
+Button scores, blue = (row 3, col 7, 320, 128)
+Button tutorial, blue = (row 5, col 7, 320, 128)
+Button options, green = (row 7, col 7, 320, 128)
