@@ -243,6 +243,7 @@ public class Player extends GameObject {
                     handler.enemy.remove(tempobject);
                     //System.out.println(handler.enemy.size() + String.valueOf(tempobject));
                 } else {
+
                 }
             }
         }
