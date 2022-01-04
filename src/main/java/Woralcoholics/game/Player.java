@@ -192,8 +192,8 @@ public class Player extends GameObject {
                     case Block -> {
                         // check for block coordinate to see where it is located in relation to the player
                         // or make it dependent on key pressed?
-                        //x += velX * -1;
-                        //y += velY * -1;
+                        x += velX * -1;
+                        y += velY * -1;
                     }
                     case Create -> {
                         upgrades.setMunition(upgrades.getMunition() + 10);

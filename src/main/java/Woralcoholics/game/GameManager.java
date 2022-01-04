@@ -168,7 +168,7 @@ public class GameManager {
      */
     public void playSoundEnemy() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         sound = AudioSystem.getClip();
-        Path relativePath = Paths.get("Resource/enemyhurt2.wav");
+        Path relativePath = Paths.get("Resource/Sound/enemyhurt2.wav");
         Path absolutePath = relativePath.toAbsolutePath();
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
@@ -197,7 +197,7 @@ public class GameManager {
      */
     public void playSoundGunnerEnemy() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         sound = AudioSystem.getClip();
-        Path relativePath = Paths.get("Resource/gunnerenemyfire2.wav");
+        Path relativePath = Paths.get("Resource/Sound/gunnerenemyfire2.wav");
         Path absolutePath = relativePath.toAbsolutePath();
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
@@ -225,7 +225,7 @@ public class GameManager {
      */
     public void playBackgroundSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         backgroundsound = AudioSystem.getClip();
-        Path relativePath = Paths.get("Resource/backgroundsound.wav");
+        Path relativePath = Paths.get("Resource/Sound/backgroundsound.wav");
         Path absolutePath = relativePath.toAbsolutePath();
         backgroundsound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) backgroundsound.getControl(FloatControl.Type.MASTER_GAIN);
@@ -251,7 +251,7 @@ public class GameManager {
         if (IsSoundPlayingPlayerHurt == false) {
             IsSoundPlayingPlayerHurt = true;
             Clip sound = AudioSystem.getClip();
-            Path relativePath = Paths.get("Resource/playerhurt.wav");
+            Path relativePath = Paths.get("Resource/Sound/playerhurt.wav");
             Path absolutePath = relativePath.toAbsolutePath();
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
             FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
@@ -286,7 +286,7 @@ public class GameManager {
         if (IsSoundPlayingMove == false) {
             IsSoundPlayingMove = true;
             Clip sound = AudioSystem.getClip();
-            Path relativePath = Paths.get("Resource/move2.wav");
+            Path relativePath = Paths.get("Resource/Sound/move2.wav");
             Path absolutePath = relativePath.toAbsolutePath();
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
             FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
@@ -315,25 +315,21 @@ public class GameManager {
             Clip sound = AudioSystem.getClip();
             Path relativePath;
             if (error == true) {
-                relativePath = Paths.get("Resource/gunequiperror.wav");
+                relativePath = Paths.get("Resource/Sound/gunequiperror.wav");
             } else {
-                relativePath = Paths.get("Resource/gunequip.wav");
+                relativePath = Paths.get("Resource/Sound/gunequip.wav");
             }
             Path absolutePath = relativePath.toAbsolutePath();
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
             FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
             if (soundv == 0) {
                 volume.setValue(-80f); // MUTE
-                //System.out.println("VOLUME MUTE + " +volume.toString());
             } else if (soundv == 1 && error == false) {
                 volume.setValue(-15f); // DEFAULT -> balanced default sound
-                //System.out.println("VOLUME DEFAULT + " +volume.toString());
             } else if (soundv == 1 && error == true) {
                 volume.setValue(-5f); // DEFAULT -> balanced default sound
-                //System.out.println("VOLUME DEFAULT + " +volume.toString());
             } else if (soundv == 2) {
                 volume.setValue(6.0206f); // Maximum
-                //System.out.println("VOLUME UP + " +volume.toString());
             }
             sound.start();
             Thread.sleep(100);
@@ -347,7 +343,7 @@ public class GameManager {
 
     public void playSoundGameOver() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         Clip sound = AudioSystem.getClip();
-        Path relativePath = Paths.get("Resource/gameover2.wav");
+        Path relativePath = Paths.get("Resource/Sound/gameover2.wav");
         Path absolutePath = relativePath.toAbsolutePath();
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
@@ -374,21 +370,21 @@ public class GameManager {
     public void playSoundGun(int ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException, IllegalArgumentException {
         if (GunType.Pistol.equals(selectedgun.getType())) {
             if (ammo <= 0) {
-                relativePath = Paths.get("Resource/pistolempty.wav");
+                relativePath = Paths.get("Resource/Sound/pistolempty.wav");
             } else {
-                relativePath = Paths.get("Resource/pistolfire3.wav");
+                relativePath = Paths.get("Resource/Sound/pistolfire3.wav");
             }
         } else if (GunType.Shotgun.equals(selectedgun.getType())) {
             if (ammo <= 0) {
-                relativePath = Paths.get("Resource/shotgunempty.wav");
+                relativePath = Paths.get("Resource/Sound/shotgunempty.wav");
             } else {
-                relativePath = Paths.get("Resource/shotgunfire.wav");
+                relativePath = Paths.get("Resource/Sound/shotgunfire.wav");
             }
         } else if (GunType.MachineGun.equals(selectedgun.getType())) {
             if (ammo <= 0) {
-                relativePath = Paths.get("Resource/machinegunempty.wav");
+                relativePath = Paths.get("Resource/Sound/machinegunempty.wav");
             } else {
-                relativePath = Paths.get("Resource/machinegunfire.wav");
+                relativePath = Paths.get("Resource/Sound/machinegunfire.wav");
             }
         }
 
@@ -419,11 +415,11 @@ public class GameManager {
 
     public void playSoundAmmoReload() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         if (GunType.Pistol.equals(selectedgun.getType())) {
-            relativePath = Paths.get("Resource/pistolreload.wav");
+            relativePath = Paths.get("Resource/Sound/pistolreload.wav");
         } else if (GunType.Shotgun.equals(selectedgun.getType())) {
-            relativePath = Paths.get("Resource/shotgunreload.wav");
+            relativePath = Paths.get("Resource/Sound/shotgunreload.wav");
         } else if (GunType.MachineGun.equals(selectedgun.getType())) {
-            relativePath = Paths.get("Resource/machinegunreload.wav");
+            relativePath = Paths.get("Resource/Sound/machinegunreload.wav");
         }
         volume = getClip();
         if (soundv == 0) {
