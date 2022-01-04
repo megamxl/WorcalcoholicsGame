@@ -542,7 +542,7 @@ public class Game extends Canvas implements Runnable {
                         400, 460, 32));
                 handler.addObject(new UIButton(SCREEN_WIDTH-46, 34, 64, 64,
                         "Options", GameState.OPTIONS, ID.UIButton, this, 1, 0, imageGetter,
-                        1, 2, 0, 0, 0));
+                        2, 6, 0, 0, 0));
 
             }
             case CREDITS -> {
@@ -566,16 +566,16 @@ public class Game extends Canvas implements Runnable {
             case OPTIONS -> {
                 menuCount++;
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
-                        ID.UIButton, this, 1, 0, imageGetter, 1, 2, 0, 0,
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, 0, 0,
                         40));
             }
             case PAUSE_MENU -> {
                 menuCount = 10;
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", GameState.LEVEL,
-                        ID.UIButton, this, 1, 0, imageGetter, 1, 2, 0, 0,
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, 0, 0,
                         40));
                 handler.addObject(new UIButton(96, 32, 64, 64, "Options", GameState.OPTIONS,
-                        ID.UIButton, this, 1, 0, imageGetter, 1, 2, 0, 0,
+                        ID.UIButton, this, 1, 0, imageGetter, 2, 6, 0, 0,
                         40));
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
