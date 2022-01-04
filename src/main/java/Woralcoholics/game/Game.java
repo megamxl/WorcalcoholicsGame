@@ -42,6 +42,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage tutorialLevel = null;
     private BufferedImage spritesheet = null;
     private BufferedImage playerWalkCycle = null;
+    private BufferedImage enemyBlood = null;
     private BufferedImage upgradBoarder = null;
     private BufferedImage upgradBoard = null;
     private BufferedImage uiButtonAn = null;
@@ -135,6 +136,9 @@ public class Game extends Canvas implements Runnable {
 
         playerWalkCycle = loader.loadImage("/Graphics/Animations/Character Running Spritesheet.png");
         getImagesPlayer = new ImageGetter(playerWalkCycle);
+
+        enemyBlood = loader.loadImage("/Graphics/Animations/Bloodparticle.png");
+        getImagesEnemy = new ImageGetter(enemyBlood);
 
         BufferedImage GamoverScreen = loader.loadImage("/Graphics/gameOverPicture.png");
         GamoverScreenImg = new ImageGetter(GamoverScreen);
@@ -912,12 +916,12 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void loadEnemyDeadSprites() {
-        enemyDeadShadow[0] = imageGetter.getImage(1, 9, 64, 64);
-        enemyDeadShadow[1] = imageGetter.getImage(2, 9, 64, 64);
-        enemyDeadShadow[2] = imageGetter.getImage(3, 9, 64, 64);
-        enemyDeadShadow[3] = imageGetter.getImage(4, 9, 64, 64);
-        enemyDeadShadow[4] = imageGetter.getImage(5, 9, 64, 64);
-        enemyDeadShadow[5] = imageGetter.getImage(6, 9, 64, 64);
+        enemyDeadShadow[0] = getImagesEnemy.getImage32(1, 1, 32, 32);
+        enemyDeadShadow[1] = getImagesEnemy.getImage32(2, 1, 32, 32);
+        enemyDeadShadow[2] = getImagesEnemy.getImage32(3, 1, 32, 32);
+        enemyDeadShadow[3] = getImagesEnemy.getImage32(4, 1, 32, 32);
+        enemyDeadShadow[4] = getImagesEnemy.getImage32(5, 1, 32, 32);
+        enemyDeadShadow[5] = getImagesEnemy.getImage32(6, 1, 32, 32);
     }
 
 
