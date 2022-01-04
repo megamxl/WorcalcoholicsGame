@@ -4,9 +4,11 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Window;
 import java.awt.event.*;
 import java.io.IOException;
 import java.awt.event.MouseWheelEvent;
+import java.awt.Robot;
 
 /***
  * in this class the mouse input  happens
@@ -22,7 +24,6 @@ public class MouseInput extends MouseAdapter {
     volatile private boolean mouseDown = false; //determine if mouse1 is pressed or not
     private boolean gunequiperror = false;
     Upgrades upgrades;
-
 
     public MouseInput(GameManager handler, Camera camera, Game game, ImageGetter an, Gun gun) {
         this.handler = handler;
@@ -157,12 +158,49 @@ public class MouseInput extends MouseAdapter {
 
     public void mouseEntered(MouseEvent e) {
         //System.out.println("MOUSE ENTERED");
+        //checkIfExited(e.getPoint());
     }
 
     public void mouseExited(MouseEvent e) {
         //System.out.println("MOUSE EXITED");
         if (Game.getState() == GameState.LEVEL) {
-            Game.setState(GameState.PAUSE_MENU);
+            //Game.setState(GameState.PAUSE_MENU);
+            //checkIfExited(e.getPoint());
+        }
+    }
+
+    public void checkIfExited(Point mousePos) {
+        try {
+            Robot robot = new Robot();
+            int offset = 5;
+
+            // mouse pointer is below window
+            if(mousePos.y >= game.getLocationOnScreen().y + game.getHeight() - offset) {
+                //System.out.println("BELOW");
+                robot.mouseMove( mousePos.x, game.getLocationOnScreen().y + game.getHeight() - offset);
+            }
+
+            // mouse pointer is above window
+            if(mousePos.y <= game.getLocationOnScreen().y + offset) {
+                //System.out.println("ABOVE");
+                robot.mouseMove( mousePos.x, game.getLocationOnScreen().y + offset);
+            }
+
+            // mouse pointer is right of window
+            if(mousePos.x >= game.getLocationOnScreen().x + game.getWidth() - offset) {
+                //System.out.println("RIGHT");
+                robot.mouseMove( game.getLocationOnScreen().x + game.getWidth() - offset, mousePos.y);
+            }
+
+            //mouse pointer is left of window
+            if(mousePos.x <= game.getLocationOnScreen().x + offset) {
+                //System.out.println("LEFT");
+                robot.mouseMove( game.getLocationOnScreen().x + offset, mousePos.y);
+            }
+        }
+        catch (AWTException ex)
+        {
+            ex.printStackTrace();
         }
     }
 

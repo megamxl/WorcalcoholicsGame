@@ -5,6 +5,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferStrategy;
@@ -24,6 +25,7 @@ public class Game extends Canvas implements Runnable {
     // Variables
     final int SCREEN_WIDTH = 1024;
     final int SCREEN_HEIGHT = 576;
+    //public static Window window;
 
     private static GameState currentState;
     private GameState previousState, checkState;
@@ -97,12 +99,15 @@ public class Game extends Canvas implements Runnable {
     Random r = new Random();
     Thread t1;
 
+    MouseInput mouse;
+
     /* ------------- Constructor for Game Class -------------- */
 
     public Game() throws IOException, SQLException {
         currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
         //new ScoerSaveWindow(SCREEN_WIDTH,SCREEN_HEIGHT,"");
+        //window =
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
         start();
 
@@ -137,7 +142,7 @@ public class Game extends Canvas implements Runnable {
 
 
         //Adding Mouse and Keyboard Input
-        MouseInput mouse = new MouseInput(handler, camera, this, imageGetter, gun);
+        mouse = new MouseInput(handler, camera, this, imageGetter, gun);
         this.addMouseListener(mouse);
         this.addMouseWheelListener(mouse);
         KeyInput keys = new KeyInput(handler, this);
@@ -178,6 +183,13 @@ public class Game extends Canvas implements Runnable {
         long timer = System.currentTimeMillis();
 
         while (isRunning) {
+            /*
+            if(getState() == GameState.LEVEL)
+            {
+                if(mouse != null) mouse.checkIfExited(MouseInfo.getPointerInfo().getLocation());
+            }
+            */
+
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
