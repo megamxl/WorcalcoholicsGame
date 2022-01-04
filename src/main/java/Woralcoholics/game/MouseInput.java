@@ -188,8 +188,7 @@ public class MouseInput extends MouseAdapter {
         try {
             // declares and initializes new robot
             Robot robot = new Robot();
-            // offset of minimum 5 is strongly advised
-            int offset = 5;
+            int offset = 10;
             // saves the window borders as ints for better readability
             // game.getLocationOnScreen() = the position of the top-left corner of the game window on the whole screen
             // game.getHeight() = the height of the game window
