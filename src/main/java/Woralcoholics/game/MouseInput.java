@@ -162,40 +162,84 @@ public class MouseInput extends MouseAdapter {
     }
 
     public void mouseExited(MouseEvent e) {
+        /*
         //System.out.println("MOUSE EXITED");
         if (Game.getState() == GameState.LEVEL) {
-            //Game.setState(GameState.PAUSE_MENU);
-            //checkIfExited(e.getPoint());
+            Game.setState(GameState.PAUSE_MENU);
         }
+        */
     }
 
+    /*
+    This function checks, if the mouse cursor is outside the window minus the offset and sets the cursors position
+    back into the window if previously mentioned event occurs.
+    The offset is needed, as in the millisecond the cursor may be outside the window, a click could be input by
+    the user, which would result in the loss of focus on the game window.
+    This means that the offset minimizes the area of the window, in which the mouse can operate, but only by a few pixels.
+    The repositioning of the mouse gets executed via the Robot class, which is mainly used for "user simulations", meaning
+    that it is used to simulate key or mouse inputs or even to take screenshots.
+    As of right now, the mouse gets checked for eight possible locations:
+        ONLY right of window, below window AND right of window, ONLY below window, ...
+    (think of the directions like East, South-East, South, ...)
+    Further info can be found in the comments in the function
+     */
     public void checkIfExited(Point mousePos) {
+        // Robot class can apparently throw some errors, so a try and catch is necessary
         try {
+            // declares and initializes new robot
             Robot robot = new Robot();
+            // offset of minimum 5 is strongly advised
             int offset = 5;
+            // saves the window borders as ints for better readability
+            // game.getLocationOnScreen() = the position of the top-left corner of the game window on the whole screen
+            // game.getHeight() = the height of the game window
+            // game.getWidth() = the width of the game window
+            int bottomSide = game.getLocationOnScreen().y + game.getHeight() - offset;
+            int topSide = game.getLocationOnScreen().y + offset;
+            int rightSide = game.getLocationOnScreen().x + game.getWidth() - offset;
+            int leftSide = game.getLocationOnScreen().x + offset;
 
             // mouse pointer is below window
-            if(mousePos.y >= game.getLocationOnScreen().y + game.getHeight() - offset) {
-                //System.out.println("BELOW");
-                robot.mouseMove( mousePos.x, game.getLocationOnScreen().y + game.getHeight() - offset);
+            if (mousePos.y >= bottomSide && (mousePos.x < rightSide && mousePos.x > leftSide)) {
+                robot.mouseMove(mousePos.x, bottomSide);
             }
 
             // mouse pointer is above window
-            if(mousePos.y <= game.getLocationOnScreen().y + offset) {
-                //System.out.println("ABOVE");
-                robot.mouseMove( mousePos.x, game.getLocationOnScreen().y + offset);
+            if (mousePos.y <= topSide && (mousePos.x < rightSide && mousePos.x > leftSide)) {
+                robot.mouseMove(mousePos.x, topSide);
             }
 
             // mouse pointer is right of window
-            if(mousePos.x >= game.getLocationOnScreen().x + game.getWidth() - offset) {
-                //System.out.println("RIGHT");
-                robot.mouseMove( game.getLocationOnScreen().x + game.getWidth() - offset, mousePos.y);
+            if (mousePos.x >= rightSide && (mousePos.y < bottomSide && mousePos.y > topSide)) {
+                robot.mouseMove(rightSide, mousePos.y);
             }
 
-            //mouse pointer is left of window
-            if(mousePos.x <= game.getLocationOnScreen().x + offset) {
-                //System.out.println("LEFT");
-                robot.mouseMove( game.getLocationOnScreen().x + offset, mousePos.y);
+            // mouse pointer is left of window
+            if (mousePos.x <= leftSide && (mousePos.y < bottomSide && mousePos.y > topSide)) {
+                robot.mouseMove(leftSide, mousePos.y);
+            }
+
+            // ---
+            // diagonal
+
+            // is below and right of window
+            if (mousePos.y >= bottomSide && mousePos.x >= rightSide) {
+                robot.mouseMove(rightSide, bottomSide);
+            }
+
+            // is below and left of window
+            if (mousePos.y >= bottomSide && mousePos.x <= leftSide) {
+                robot.mouseMove(leftSide, bottomSide);
+            }
+
+            // is above and right of window
+            if (mousePos.y <= topSide && mousePos.x >= rightSide) {
+                robot.mouseMove(rightSide, topSide);
+            }
+
+            // is above and left of window
+            if (mousePos.y <= topSide && mousePos.x <= leftSide) {
+                robot.mouseMove(leftSide, topSide);
             }
         }
         catch (AWTException ex)

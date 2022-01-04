@@ -183,12 +183,10 @@ public class Game extends Canvas implements Runnable {
         long timer = System.currentTimeMillis();
 
         while (isRunning) {
-            /*
             if(getState() == GameState.LEVEL)
             {
                 if(mouse != null) mouse.checkIfExited(MouseInfo.getPointerInfo().getLocation());
             }
-            */
 
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
