@@ -369,13 +369,17 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderHighScores(Graphics g) {
+        g.setColor(Color.black);
+        g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 40));
+        g.drawString("Higscores from Databse",100,100);
+        g.setFont(new Font("Arial Black", Font.PLAIN, 40));
         if (DatabeseConection.finishedFillingArray) {
             g.setColor(Color.black);
-            g.drawString(DatabeseConection.scoresArray[0], 200, 200);
-            g.drawString(DatabeseConection.scoresArray[1], 200, 220);
-            g.drawString(DatabeseConection.scoresArray[2], 200, 240);
-            g.drawString(DatabeseConection.scoresArray[3], 200, 260);
-            g.drawString(DatabeseConection.scoresArray[4], 200, 280);
+            g.drawString(DatabeseConection.scoresArray[0], 300, 210);
+            g.drawString(DatabeseConection.scoresArray[1], 300, 250);
+            g.drawString(DatabeseConection.scoresArray[2], 300, 290);
+            g.drawString(DatabeseConection.scoresArray[3], 300, 330);
+            g.drawString(DatabeseConection.scoresArray[4], 300, 370);
         }
     }
 
