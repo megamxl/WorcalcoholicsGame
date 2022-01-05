@@ -120,6 +120,8 @@ public class GunnerEnemy extends Enemy {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                    //e.printStackTrace();
                 }
             }).start();
         } catch (Exception e) {
