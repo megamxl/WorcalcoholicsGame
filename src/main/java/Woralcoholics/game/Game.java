@@ -825,22 +825,19 @@ public class Game extends Canvas implements Runnable {
      * Function to run backgroundsound
      */
     private void playBackgroundSound() {
-        t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    handler.playBackgroundSound();
-                } catch (LineUnavailableException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedAudioFileException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (IllegalArgumentException e) {
-                    //e.printStackTrace();
-                }
+        t1 = new Thread(() -> {
+            try {
+                handler.playBackgroundSound();
+            } catch (LineUnavailableException e) {
+                e.printStackTrace();
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                //e.printStackTrace();
             }
         });
         t1.start();

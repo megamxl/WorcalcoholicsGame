@@ -17,12 +17,11 @@ public class Player extends GameObject {
     private Animations playerWalkRigth;
 
     private double invincibleTime = 1000;
-    private double wait;
 
     private float diagonalMultiplier = 1;
     private Boolean movingVertical = false;
     private Boolean movingHorizontal = false;
-    private Clip sound;
+    Thread backgroundThread;
     // better method would be to wait until the thread is finished and then start the new sound
 
     public Player(int x, int y, ID id, GameManager GameManager, Game game, Camera cam, ImageGetter an) {
@@ -53,19 +52,24 @@ public class Player extends GameObject {
         if (handler.isL()) {
             try {
                 handler.soundv = 2;
+                handler.backgroundsound.close();
+                playBackgroundSound();
             } catch (Exception ex) {
-
             }
         }
         if (handler.isK()) {
             try {
                 handler.soundv = 1;
+                handler.backgroundsound.close();
+                playBackgroundSound();
             } catch (Exception ex) {
             }
         }
         if (handler.isM()) {
             try {
                 handler.soundv = 0;
+                //handler.backgroundsound.close(); -> just Sound Effects get muted
+                //playBackgroundSound();
             } catch (Exception ex) {
             }
         }
@@ -270,7 +274,7 @@ public class Player extends GameObject {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (IllegalArgumentException e) {
-                   // e.printStackTrace();
+                    // e.printStackTrace();
                 }
             }).start();
         } catch (Exception e) {
@@ -340,12 +344,34 @@ public class Player extends GameObject {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (IllegalArgumentException e) {
-                   // e.printStackTrace();
+                    // e.printStackTrace();
                 }
             }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /***
+     * Function to run backgroundsound
+     */
+    private void playBackgroundSound() {
+        backgroundThread = new Thread(() -> {
+            try {
+                handler.playBackgroundSound();
+            } catch (LineUnavailableException e) {
+                e.printStackTrace();
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                //e.printStackTrace();
+            }
+        });
+        backgroundThread.start();
     }
     //endregion
 }

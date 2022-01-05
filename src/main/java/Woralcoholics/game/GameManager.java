@@ -23,7 +23,7 @@ public class GameManager {
     Path relativePath;
     Path absolutePath;
     FloatControl volume;
-    public int soundv = 1; //default value for -20f sound
+    public int soundv = 1; //default value for -40f sound | MUTE (Without Sound Effects just background music) -> -80f | MAX -> 6.0206f
     protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip = false;
     protected double wait;
     //machine gun - del=0 | normal gun - del=200 | slowgun - del=1000
@@ -176,10 +176,10 @@ public class GameManager {
             volume.setValue(-80f); // MUTE
             //System.out.println("VOLUME MUTE + " +volume.toString());
         } else if (soundv == 1) {
-            volume.setValue(-10f); // DEFAULT -> more than -20 because the sound is per default very quietly
+            volume.setValue(-30f); // DEFAULT
             //System.out.println("VOLUME DEFAULT + " +volume.toString());
         } else if (soundv == 2) {
-            volume.setValue(6.0206f); // Maximum
+            volume.setValue(-8f); // Maximum
             //System.out.println("VOLUME UP + " +volume.toString());
         }
         sound.start();
@@ -202,14 +202,12 @@ public class GameManager {
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
         if (soundv == 0) {
-            volume.setValue(-80f); // MUTE
-            //System.out.println("VOLUME MUTE + " +volume.toString());
+            volume.setValue(-80f);
         } else if (soundv == 1) {
-            volume.setValue(-20f); // DEFAULT -> more than -20 because the sound is per default very quietly
-            //System.out.println("VOLUME DEFAULT + " +volume.toString());
+            volume.setValue(-40f);
         } else if (soundv == 2) {
-            volume.setValue(6.0206f); // Maximum
-            //System.out.println("VOLUME UP + " +volume.toString());
+            volume.setValue(-18f);
+
         }
         sound.start();
         Thread.sleep(100000);
@@ -230,11 +228,11 @@ public class GameManager {
         backgroundsound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) backgroundsound.getControl(FloatControl.Type.MASTER_GAIN);
         if (soundv == 0) {
-            volume.setValue(-80f); // MUTE
+            volume.setValue(-80f);
         } else if (soundv == 1) {
-            volume.setValue(-35f); // DEFAULT -> less than -20 because the sound is per default very loud
+            volume.setValue(-55f);
         } else if (soundv == 2) {
-            volume.setValue(6.0206f); // Maximum
+            volume.setValue(-33f);
         }
         backgroundsound.start();
     }
@@ -256,21 +254,16 @@ public class GameManager {
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
             FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
             if (soundv == 0) {
-                volume.setValue(-80f); // NormalSound
-                //System.out.println("VOLUME MUTE + " +volume.toString());
+                volume.setValue(-80f);
             } else if (soundv == 1) {
-                volume.setValue(-20f); // DEFAULT
-                //System.out.println("VOLUME DEFAULT + " +volume.toString());
+                volume.setValue(-40f);
             } else if (soundv == 2) {
-                volume.setValue(6.0206f); // Maximum
-                //System.out.println("VOLUME UP + " +volume.toString());
+                volume.setValue(-18f);
             }
             sound.start();
             Thread.sleep(1000);
             sound.stop();
             IsSoundPlayingPlayerHurt = false;
-        } else {
-            //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
         }
     }
 
@@ -291,21 +284,16 @@ public class GameManager {
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
             FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
             if (soundv == 0) {
-                volume.setValue(-80f); // MUTE
-                //System.out.println("VOLUME MUTE + " +volume.toString());
+                volume.setValue(-80f);
             } else if (soundv == 1) {
-                volume.setValue(-15f); // DEFAULT -> balanced default sound
-                //System.out.println("VOLUME DEFAULT + " +volume.toString());
+                volume.setValue(-37f);
             } else if (soundv == 2) {
-                volume.setValue(6.0206f); // Maximum
-                //System.out.println("VOLUME UP + " +volume.toString());
+                volume.setValue(-15f);
             }
             sound.start();
             Thread.sleep(100);
             sound.stop();
             IsSoundPlayingMove = false;
-        } else {
-            //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
         }
     }
 
@@ -323,21 +311,21 @@ public class GameManager {
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
             FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
             if (soundv == 0) {
-                volume.setValue(-80f); // MUTE
-            } else if (soundv == 1 && error == false) {
-                volume.setValue(-15f); // DEFAULT -> balanced default sound
-            } else if (soundv == 1 && error == true) {
-                volume.setValue(-5f); // DEFAULT -> balanced default sound
-            } else if (soundv == 2) {
-                volume.setValue(6.0206f); // Maximum
+                volume.setValue(-80f);
+            } else if (soundv == 1 && !error) {
+                volume.setValue(-40f);
+            } else if (soundv == 1 && error) {
+                volume.setValue(-23f);
+            } else if (soundv == 2 && !error) {
+                volume.setValue(-18f);
+            } else if (soundv == 2 && error) {
+                volume.setValue(-1f);
             }
             sound.start();
             Thread.sleep(100);
             isSoundPlayingEquip = false;
             Thread.sleep(220);
             sound.stop();
-        } else {
-            //waiting till the sound is finished, otherwise there would be more than 1 sound playing at once
         }
     }
 
@@ -348,11 +336,11 @@ public class GameManager {
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
         if (soundv == 0) {
-            volume.setValue(-80f); // MUTE
+            volume.setValue(-80f);
         } else if (soundv == 1) {
-            volume.setValue(-15f); // DEFAULT -> less than -20 because the sound is per default very loud
+            volume.setValue(-40f);
         } else if (soundv == 2) {
-            volume.setValue(6.0206f); // Maximum
+            volume.setValue(-18f);
         }
         sound.start();
     }
@@ -390,15 +378,39 @@ public class GameManager {
 
         volume = getClip();
         if (soundv == 0) {
-            volume.setValue(-80f); // MUTE
+            volume.setValue(-80f);
         } else if (soundv == 1) {
             if (ammo <= 0) {
-                volume.setValue(-5f); //Default adjusted
+                if (GunType.Pistol.equals(selectedgun.getType())) {
+                    volume.setValue(-30f);
+                } else if (GunType.Shotgun.equals(selectedgun.getType())) {
+                    volume.setValue(-25f);
+                } else if (GunType.MachineGun.equals(selectedgun.getType())) {
+                    volume.setValue(-22f);
+                }
             } else {
-                volume.setValue(-20f); // Default
+                if (GunType.Shotgun.equals(selectedgun.getType()) || GunType.MachineGun.equals(selectedgun.getType())) {
+                    volume.setValue(-40f);
+                } else {
+                    volume.setValue(-45f);
+                }
             }
         } else if (soundv == 2) {
-            volume.setValue(6.0206f); // Maximum
+            if (ammo <= 0) {
+                if (GunType.Pistol.equals(selectedgun.getType())) {
+                    volume.setValue(-8f);
+                } else if (GunType.Shotgun.equals(selectedgun.getType())) {
+                    volume.setValue(-3f);
+                } else if (GunType.MachineGun.equals(selectedgun.getType())) {
+                    volume.setValue(0f);
+                }
+            } else {
+                if (GunType.Shotgun.equals(selectedgun.getType()) || GunType.MachineGun.equals(selectedgun.getType())) {
+                    volume.setValue(-18f);
+                } else {
+                    volume.setValue(-23f);
+                }
+            }
         }
         sound.start();
         Thread.sleep(1000);
@@ -423,11 +435,19 @@ public class GameManager {
         }
         volume = getClip();
         if (soundv == 0) {
-            volume.setValue(-80f); // MUTE
+            volume.setValue(-80f);
         } else if (soundv == 1) {
-            volume.setValue(-5f); // DEFAULT -> less than -20 because the sound is per default very loud
+            if (GunType.Pistol.equals(selectedgun.getType()) || GunType.Shotgun.equals(selectedgun.getType())) {
+                volume.setValue(-30f);
+            } else {
+                volume.setValue(-28f);
+            }
         } else if (soundv == 2) {
-            volume.setValue(6.0206f); // Maximum
+            if (GunType.Pistol.equals(selectedgun.getType()) || GunType.Shotgun.equals(selectedgun.getType())) {
+                volume.setValue(-8);
+            } else {
+                volume.setValue(-6f);
+            }
         }
         sound.start();
 
