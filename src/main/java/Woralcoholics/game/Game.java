@@ -51,6 +51,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage floorDirt2 = null;
     private BufferedImage floorDirt3 = null;
     private BufferedImage imgOver = null;
+    private BufferedImage imgTitle = null;
     private BufferedImage currGun = null;
     private Upgrades upgrades;
 
@@ -89,6 +90,7 @@ public class Game extends Canvas implements Runnable {
     private static ImageGetter getImagesPlayer;
     private static ImageGetter getImagesEnemy;
     private static ImageGetter GamoverScreenImg;
+    private static ImageGetter TitleScreenImg;
     private static ImageGetter uiButtonAnGet;
     private static Gun gun;
 
@@ -144,6 +146,7 @@ public class Game extends Canvas implements Runnable {
         GamoverScreenImg = new ImageGetter(GamoverScreen);
         imgOver = GamoverScreen.getSubimage(1, 1, 720, 480);
 
+        imgTitle = loader.loadImage("/Graphics/Titlescreen.png");
 
         //Adding Mouse and Keyboard Input
         mouse = new MouseInput(handler, camera, this, imageGetter, gun);
@@ -348,6 +351,9 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderTitle(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        g.drawImage(imgTitle, 0, 0, null);
     }
 
     /***
@@ -539,9 +545,12 @@ public class Game extends Canvas implements Runnable {
             case STUDIO -> {
             }
             case TITLE -> {
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT - 25) / 2, 352, 102,
+                /*handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT - 25) / 2, 352, 102,
                         "START", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
-                        uiButtonAnGet, 1, 1, 400, (SCREEN_HEIGHT - 25) / 2 + 20, 40));
+                        uiButtonAnGet, 1, 1, 400, (SCREEN_HEIGHT - 25) / 2 + 20, 40));*/
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT + 350) / 2, 352, 102,
+                        "START", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
+                        uiButtonAnGet, 1, 1, 400, (SCREEN_HEIGHT + 350) / 2 + 17, 40));
             }
             case MAIN_MENU -> {
                 menuCount = 0;
