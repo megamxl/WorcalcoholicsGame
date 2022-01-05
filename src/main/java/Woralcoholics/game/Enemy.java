@@ -195,6 +195,10 @@ public class Enemy<privare> extends GameObject {
             Wavesize = (Wavesize * 2) + 1;
         }
 
+        if(Wavesize > 20){
+            Wavesize = 20;
+        }
+
         for (int i = 0; i < Wavesize; i++) {                // spawner script
             // reset and declare x and y for every iteration
             int x = 0;
