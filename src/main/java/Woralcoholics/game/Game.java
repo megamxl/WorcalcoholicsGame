@@ -919,6 +919,7 @@ public class Game extends Canvas implements Runnable {
         enemyDeadShadow[3] = getImagesEnemy.getImage32(4, 1, 32, 32);
         enemyDeadShadow[4] = getImagesEnemy.getImage32(5, 1, 32, 32);
         enemyDeadShadow[5] = getImagesEnemy.getImage32(6, 1, 32, 32);
+        enemyDeadShadow[6] = getImagesEnemy.getImage32(7, 1, 32, 32);
     }
 
 
