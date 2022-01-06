@@ -18,7 +18,7 @@ public class GameManager {
     //In this script we define the 4 ways somebody can walk and set and get them
     private boolean up = false, down = false, right = false, left = false;
     private boolean ll = false, kk = false, mm = false;
-    Clip sound;
+    Clip sound, soundenemy, soundplayer;
     public Clip backgroundsound;
     Path relativePath;
     Path absolutePath;
@@ -31,7 +31,7 @@ public class GameManager {
     protected double now;
     protected boolean ammo = true;
     protected boolean reloaded = true;
-    protected int gunindex = 1;
+    protected int gunindex = 0;
     protected Gun selectedgun;
 
 
@@ -420,7 +420,7 @@ public class GameManager {
 
     }
 
-    private FloatControl getClip() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+    private FloatControl getClip() throws LineUnavailableException, UnsupportedAudioFileException, IOException, IllegalStateException {
         sound = AudioSystem.getClip();
         absolutePath = relativePath.toAbsolutePath();
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));

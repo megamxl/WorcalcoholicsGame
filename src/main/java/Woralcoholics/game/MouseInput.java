@@ -240,9 +240,7 @@ public class MouseInput extends MouseAdapter {
             if (mousePos.y <= topSide && mousePos.x <= leftSide) {
                 robot.mouseMove(leftSide, topSide);
             }
-        }
-        catch (AWTException ex)
-        {
+        } catch (AWTException ex) {
             ex.printStackTrace();
         }
     }
@@ -280,7 +278,7 @@ public class MouseInput extends MouseAdapter {
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 } catch (IllegalArgumentException ex) {
-                   // ex.printStackTrace();
+                    // ex.printStackTrace();
                     //System.out.println("ILLEGAL");
                 }
             }).start();
@@ -390,19 +388,18 @@ public class MouseInput extends MouseAdapter {
     }
 
     private boolean MouseWheelUp() {
-        if (handler.gunindex == gun.guns.size() - 1) { // 3 values -> 0 to 2
+        if (handler.gunindex == gun.guns.size() - 1 || checkNextGunLocked()) {
             return gunequiperror = true;
 
         } else {
             handler.gunindex++;
         }
-        //gun.guns.indexOf(handler.gunindex);
         handler.selectedgun = gun.guns.get(handler.gunindex);
         return gunequiperror = false;
     }
 
     private boolean MouseWheelDown() {
-        if (handler.gunindex == 0) {
+        if (handler.gunindex == 0 || checkPreviousGunLocked()) {
             return gunequiperror = true;
 
         } else {
@@ -410,6 +407,26 @@ public class MouseInput extends MouseAdapter {
         }
         handler.selectedgun = gun.guns.get(handler.gunindex);
         return gunequiperror = false;
+    }
+
+    private boolean checkNextGunLocked() {
+        int index = handler.gunindex + 1;
+        Gun nextGun = gun.guns.get(index);
+        if (nextGun.isLocked()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean checkPreviousGunLocked() {
+        int index = handler.gunindex - 1;
+        Gun previousGun = gun.guns.get(index);
+        if (previousGun.isLocked()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 //endregion
 }

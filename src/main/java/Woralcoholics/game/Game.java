@@ -103,6 +103,7 @@ public class Game extends Canvas implements Runnable {
 
     private Camera camera;
     private double percent;
+    private int index;
 
     Random r = new Random();
     Thread t1;
@@ -151,9 +152,9 @@ public class Game extends Canvas implements Runnable {
         GamoverScreenImg = new ImageGetter(GamoverScreen);
         imgOver = GamoverScreen.getSubimage(1, 1, 720, 480);
 
-        BufferedImage tutorial= loader.loadImage("/Graphics/TutorialBorder.png");
+        BufferedImage tutorial = loader.loadImage("/Graphics/TutorialBorder.png");
         gettutorialBorder = new ImageGetter(tutorial);
-        tutorialBoarder = gettutorialBorder.getImage(1,1,SCREEN_WIDTH-2,SCREEN_HEIGHT-2);
+        tutorialBoarder = gettutorialBorder.getImage(1, 1, SCREEN_WIDTH - 2, SCREEN_HEIGHT - 2);
 
         imgTitle = loader.loadImage("/Graphics/Titlescreen.png");
 
@@ -200,11 +201,9 @@ public class Game extends Canvas implements Runnable {
 
         while (isRunning) {
             // checks if mouse exits the game window during level and corrects its position
-            if(getState() == GameState.LEVEL || getState() == GameState.TUTORIAL)
-            {
-                if(mouse != null) mouse.checkIfExited(MouseInfo.getPointerInfo().getLocation());
+            if (getState() == GameState.LEVEL || getState() == GameState.TUTORIAL) {
+                if (mouse != null) mouse.checkIfExited(MouseInfo.getPointerInfo().getLocation());
             }
-            
 
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
@@ -271,6 +270,7 @@ public class Game extends Canvas implements Runnable {
         checkReloaded();
         checkGunStatus();
         checkSelectedGun();
+        updateLockStatus();
 
     }
 
@@ -320,21 +320,21 @@ public class Game extends Canvas implements Runnable {
 
     /* ---------- Private functions for game Class ----------- */
 
-    private void renderTutorialBorders(Graphics g){
-        g.drawImage(tutorialBoarder,60,235, 900,300,null);
+    private void renderTutorialBorders(Graphics g) {
+        g.drawImage(tutorialBoarder, 60, 235, 900, 300, null);
         g.setColor(Color.black);
         g.setFont(new Font("SansSerif", Font.PLAIN, 30));
         //tutorialTexts[0][0]= "dasdadsadadsadadadasdsadadaadasdsdas";
-        tutorialTexts[0][0]= "Willkommen zu Workalcoholics Game";
-        tutorialTexts[0][1]= "um mehr Text zu sehen drücke Space";
+        tutorialTexts[0][0] = "Willkommen zu Workalcoholics Game";
+        tutorialTexts[0][1] = "um mehr Text zu sehen drücke Space";
 
-        tutorialTexts[1][0]= "Bewegen kannst du dich durch ";
-        tutorialTexts[1][1]= "w = up, s = down, a = links, d = rechts";
+        tutorialTexts[1][0] = "Bewegen kannst du dich durch ";
+        tutorialTexts[1][1] = "w = up, s = down, a = links, d = rechts";
 
-        if(curentTutorialscore < tutorialTexts.length) {
+        if (curentTutorialscore < tutorialTexts.length) {
             g.drawString(tutorialTexts[curentTutorialscore][0], 262, 465);
             g.drawString(tutorialTexts[curentTutorialscore][1], 262, 495);
-        }else{
+        } else {
             curentTutorialscore = 0;
         }
     }
@@ -386,7 +386,7 @@ public class Game extends Canvas implements Runnable {
      */
     private void renderTitle(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         g.drawImage(imgTitle, 0, 0, null);
     }
 
@@ -412,7 +412,7 @@ public class Game extends Canvas implements Runnable {
     private void renderHighScores(Graphics g) {
         g.setColor(Color.black);
         g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 40));
-        g.drawString("Higscores from Databse",100,100);
+        g.drawString("Higscores from Databse", 100, 100);
         g.setFont(new Font("Arial Black", Font.PLAIN, 40));
         if (DatabeseConection.finishedFillingArray) {
             g.setColor(Color.black);
@@ -566,7 +566,7 @@ public class Game extends Canvas implements Runnable {
         }
         g.drawImage(currGun, 10, 470, null);
 
-        if(currentState == GameState.TUTORIAL){
+        if (currentState == GameState.TUTORIAL) {
             renderTutorialBorders(g);
         }
 
@@ -607,7 +607,7 @@ public class Game extends Canvas implements Runnable {
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, 445, 352, 102, "Credits",
                         GameState.CREDITS, ID.UIButton, this, 1, 0, uiButtonAnGet, 1, 1,
                         400, 460, 32));
-                handler.addObject(new UIButton(SCREEN_WIDTH-46, 34, 64, 64,
+                handler.addObject(new UIButton(SCREEN_WIDTH - 46, 34, 64, 64,
                         "Options", GameState.OPTIONS, ID.UIButton, this, 1, 0, imageGetter,
                         2, 6, 0, 0, 0));
 
@@ -941,6 +941,17 @@ public class Game extends Canvas implements Runnable {
         else //Machine Gun
             handler.del = 0;
     }
+
+    private void updateLockStatus() {
+        if (Enemy.waves == 2) { //for test purposes on wave 2
+            index = gun.getIndex(GunType.Shotgun);
+            gun.manipulteList(index, new Gun(), GunType.Shotgun, false);
+        } else if (Enemy.waves == 3) { //for test purposes on wave 3
+            index = gun.getIndex(GunType.MachineGun);
+            gun.manipulteList(index, new Gun(), GunType.MachineGun, false);
+        }
+    }
+
 
     private void loadPlayerSprites() {
         playerWalkingLeft[0] = getImagesPlayer.getImage32(1, 1, 32, 32);
