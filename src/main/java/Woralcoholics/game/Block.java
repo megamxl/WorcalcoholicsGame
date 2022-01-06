@@ -27,6 +27,8 @@ public class Block extends GameObject {
         // block_img = an.getImage(1,1,64,64);
     }
 
+
+
     @Override
     public void update() {
 

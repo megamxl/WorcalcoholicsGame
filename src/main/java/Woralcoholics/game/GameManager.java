@@ -78,12 +78,14 @@ public class GameManager {
 
     public void removeObject(GameObject tempObject) {
         object.remove(tempObject);
+        tempObject = null;
     }
 
     /***
      * A function to clear all objects in the handler
      */
     public void clearHandler() {
+        int i = 0;
         while (this.object.size() > 0) {
             this.object.remove(0);
         }
@@ -97,6 +99,7 @@ public class GameManager {
             GameObject temp = this.object.get(i);
             if (temp.getId() == toClear) {
                 this.object.remove(temp);
+                temp = null;
             }
         }
     }

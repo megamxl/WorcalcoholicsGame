@@ -251,6 +251,13 @@ public class Enemy<privare> extends GameObject {
                     Game.TimerValue = 5;    //5 secs to spawn next wave
                     Game.shouldTime = true; //activate Timer
                     Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
+                    for (int i = 0; i < manager.object.size(); i++) {
+                        if (manager.object.get(i).getId() == ID.Enemy || manager.object.get(i).getId() == ID.GunnerEnemy || manager.object.get(i).getId() == ID.EnemyBullet) {
+
+                            GameObject tempObject = manager.object.get(i);   //update the camera position to stay focused on the player
+                            tempObject = null;
+                        }
+                    }
                 }
             }
 
@@ -263,6 +270,7 @@ public class Enemy<privare> extends GameObject {
      */
     private void removeWithObject(GameObject tempobject) {
         manager.removeObject(tempobject);
+        tempobject = null;
         enemysAlive--;
     }
     private void playSoundEnemy() {

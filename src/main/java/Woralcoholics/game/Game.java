@@ -200,10 +200,11 @@ public class Game extends Canvas implements Runnable {
 
         while (isRunning) {
             // checks if mouse exits the game window during level and corrects its position
-            if(getState() == GameState.LEVEL)
+            if(getState() == GameState.LEVEL || getState() == GameState.TUTORIAL)
             {
                 if(mouse != null) mouse.checkIfExited(MouseInfo.getPointerInfo().getLocation());
             }
+            
 
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;

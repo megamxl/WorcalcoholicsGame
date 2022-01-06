@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="UseThisConfigToRun" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="Woralcoholics.game.Game" />
+    <module name="2d Topdown game" />
+    <option name="VM_PARAMETERS" value="-XX:+UseZGC" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
