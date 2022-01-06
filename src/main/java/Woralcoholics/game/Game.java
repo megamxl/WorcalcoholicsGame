@@ -119,7 +119,7 @@ public class Game extends Canvas implements Runnable {
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
         start();
 
-        levelDecision = String.valueOf(randomNumber(1, 3));
+        levelDecision = String.valueOf(randomNumber(1, 6));
         handler = new GameManager();
         camera = new Camera(0, 0, this);
         gun = new Gun();
