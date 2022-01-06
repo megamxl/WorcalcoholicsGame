@@ -133,7 +133,7 @@ public class Game extends Canvas implements Runnable {
         upgradBoarder = loader.loadImage("/Graphics/UpgradeBorder.png");
         upgradeBoarderGet = new ImageGetter(upgradBoarder);
 
-        uiButtonAn = loader.loadImage("/Graphics/UIButton_352x102.png");
+        uiButtonAn = loader.loadImage("/Graphics/UIButton_352x102 NEW.png");
         uiButtonAnGet = new ImageGetter(uiButtonAn);
 
         playerWalkCycle = loader.loadImage("/Graphics/Animations/Character Running Spritesheet.png");
