@@ -103,6 +103,16 @@ public class GunnerEnemy extends Enemy {
         playSoundGunnerEnemy();
     }
 
+    @Override
+    public void checkIfGone() {
+        if ((y > 1000 || y < 30) || (x > 2000 || x < 30)) {
+            removeWithObject(this);
+            Game.SpawnGunnerEnemy();
+            // System.out.println("GONE");
+            //System.out.println("x:"+ x +" " + "y" + y);
+        }
+    }
+
     private void checkIfFree() {
     }
 

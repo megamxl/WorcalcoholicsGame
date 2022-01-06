@@ -169,9 +169,29 @@ public class GameManager {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void playSoundEnemy() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+    public void playSoundEnemyDead() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         sound = AudioSystem.getClip();
         Path relativePath = Paths.get("Resource/Sound/enemyhurt2.wav");
+        Path absolutePath = relativePath.toAbsolutePath();
+        sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+        FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+        if (soundv == 0) {
+            volume.setValue(-80f); // MUTE
+            //System.out.println("VOLUME MUTE + " +volume.toString());
+        } else if (soundv == 1) {
+            volume.setValue(-30f); // DEFAULT
+            //System.out.println("VOLUME DEFAULT + " +volume.toString());
+        } else if (soundv == 2) {
+            volume.setValue(-8f); // Maximum
+            //System.out.println("VOLUME UP + " +volume.toString());
+        }
+        sound.start();
+        Thread.sleep(100000);
+    }
+
+    public void playSoundEnemyHit() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        sound = AudioSystem.getClip();
+        Path relativePath = Paths.get("Resource/Sound/enemyhurt3.wav");
         Path absolutePath = relativePath.toAbsolutePath();
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);

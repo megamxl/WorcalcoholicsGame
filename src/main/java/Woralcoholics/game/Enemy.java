@@ -17,7 +17,8 @@ public class Enemy<privare> extends GameObject {
     private GameManager manager;
     private EnemyShadow es;
     int choose = 0;
-    int hp = 100;
+    int hp =100;
+    private static int maxHp =100;
     Random r = new Random();
     Score score;
     int low = -4; //low and high values for different variations of enemy behaviour
@@ -39,6 +40,11 @@ public class Enemy<privare> extends GameObject {
 
         enemy_img = an.getImage(1, 4, 32, 32);
         enemysAlive++;
+
+        hp = maxHp;
+        //System.out.println("enemy " + enemysAlive + "hat  " + hp);
+
+
         //System.out.println("enemy created "+ enemysAlive );
     }
     //endregion
@@ -82,13 +88,11 @@ public class Enemy<privare> extends GameObject {
                 if (getBounds().intersects(tmpObject.getBounds())) {
                     //System.out.println("hit");
                     hp -= 110;
-
+                    if(hp > 50) playSoundEnemyHit();
+                    //System.out.println("einem enemy leben abgezogen " + hp);
 
                     if(this.getId() == ID.Enemy){score.addScore(3);}
                     else if(this.getId() == ID.GunnerEnemy){score.addScore(10);}
-                    //System.out.println(score.showScore());
-
-                    //removeWithObject(tmpObject);
 
                     //System.out.println("es sind " + enemysAlive +" enemys am leben");
                 }
@@ -190,11 +194,12 @@ public class Enemy<privare> extends GameObject {
     public static void Spawner(int Wavesize, boolean solo, Random r) {
         if (solo) {                                         // if function gets passed false just spawn one enemy
             Wavesize = 1;
-        } else {                                            // else increase the amount of the wave and calculate the amount of enemies
+        } else { // else increase the amount of the wave and calculate the amount of enemies
             Game.SpawnGunnerEnemy();
             Wavesize = (Wavesize * 2) + 1;
         }
 
+        // currently, capping ant 20 because of performance
         if(Wavesize > 20){
             Wavesize = 20;
         }
@@ -251,6 +256,7 @@ public class Enemy<privare> extends GameObject {
                     Game.TimerValue = 5;    //5 secs to spawn next wave
                     Game.shouldTime = true; //activate Timer
                     Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
+                    maxHp += 50;
                     for (int i = 0; i < manager.object.size(); i++) {
                         if (manager.object.get(i).getId() == ID.Enemy || manager.object.get(i).getId() == ID.GunnerEnemy || manager.object.get(i).getId() == ID.EnemyBullet) {
 
@@ -268,7 +274,7 @@ public class Enemy<privare> extends GameObject {
      * needed if a specific enemy should get removed
      * @param tempobject
      */
-    private void removeWithObject(GameObject tempobject) {
+    public void removeWithObject(GameObject tempobject) {
         manager.removeObject(tempobject);
         tempobject = null;
         enemysAlive--;
@@ -278,7 +284,7 @@ public class Enemy<privare> extends GameObject {
             new Thread(() -> {
 
                 try {
-                    manager.playSoundEnemy();
+                    manager.playSoundEnemyDead();
                 } catch (LineUnavailableException e) {
                     e.printStackTrace();
                 } catch (UnsupportedAudioFileException e) {
@@ -297,6 +303,32 @@ public class Enemy<privare> extends GameObject {
             e.printStackTrace();
         }
     }
+
+    private void playSoundEnemyHit() {
+        try {
+            new Thread(() -> {
+
+                try {
+                    manager.playSoundEnemyHit();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                catch (IllegalArgumentException e) {
+                    //e.printStackTrace();
+                    //System.out.println("ILLEGAL");
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static void spawnWaveAfterUpgrades(){
         Game.TimerValue = 5;    //5 secs to spawn next wave
