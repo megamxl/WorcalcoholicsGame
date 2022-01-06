@@ -44,6 +44,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage playerWalkCycle = null;
     private BufferedImage enemyBlood = null;
     private BufferedImage upgradBoarder = null;
+    private BufferedImage tutorialBoarder = null;
     private BufferedImage upgradBoard = null;
     private BufferedImage uiButtonAn = null;
     private BufferedImage floor = null;
@@ -51,12 +52,15 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage floorDirt2 = null;
     private BufferedImage floorDirt3 = null;
     private BufferedImage imgOver = null;
+    private BufferedImage imgTitle = null;
     private BufferedImage currGun = null;
     private Upgrades upgrades;
 
     public static BufferedImage[] playerWalkingLeft = new BufferedImage[10];
     public static BufferedImage[] playerWalkingRight = new BufferedImage[10];
     public static BufferedImage[] enemyDeadShadow = new BufferedImage[10];
+
+    private String[][] tutorialTexts = new String[2][2];
 
     public static List<int[]> wallCords = new ArrayList();
 
@@ -74,6 +78,7 @@ public class Game extends Canvas implements Runnable {
     public static int PlayerY = 0;
     public static int TimerValue;
     public static int timerAction;
+    public static int curentTutorialscore = 0;
     public static boolean isDead = false;
     private boolean wasstopped = false;
     private boolean triggeredonce = false;
@@ -89,6 +94,8 @@ public class Game extends Canvas implements Runnable {
     private static ImageGetter getImagesPlayer;
     private static ImageGetter getImagesEnemy;
     private static ImageGetter GamoverScreenImg;
+    private static ImageGetter gettutorialBorder;
+    private static ImageGetter TitleScreenImg;
     private static ImageGetter uiButtonAnGet;
     private static Gun gun;
 
@@ -112,7 +119,7 @@ public class Game extends Canvas implements Runnable {
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
         start();
 
-        levelDecision = String.valueOf(randomNumber(1, 3));
+        levelDecision = String.valueOf(randomNumber(1, 6));
         handler = new GameManager();
         camera = new Camera(0, 0, this);
         gun = new Gun();
@@ -131,7 +138,7 @@ public class Game extends Canvas implements Runnable {
         upgradBoarder = loader.loadImage("/Graphics/UpgradeBorder.png");
         upgradeBoarderGet = new ImageGetter(upgradBoarder);
 
-        uiButtonAn = loader.loadImage("/Graphics/UIButton_352x102.png");
+        uiButtonAn = loader.loadImage("/Graphics/UIButton_352x102 NEW.png");
         uiButtonAnGet = new ImageGetter(uiButtonAn);
 
         playerWalkCycle = loader.loadImage("/Graphics/Animations/Character Running Spritesheet.png");
@@ -144,6 +151,11 @@ public class Game extends Canvas implements Runnable {
         GamoverScreenImg = new ImageGetter(GamoverScreen);
         imgOver = GamoverScreen.getSubimage(1, 1, 720, 480);
 
+        BufferedImage tutorial= loader.loadImage("/Graphics/TutorialBorder.png");
+        gettutorialBorder = new ImageGetter(tutorial);
+        tutorialBoarder = gettutorialBorder.getImage(1,1,SCREEN_WIDTH-2,SCREEN_HEIGHT-2);
+
+        imgTitle = loader.loadImage("/Graphics/Titlescreen.png");
 
         //Adding Mouse and Keyboard Input
         mouse = new MouseInput(handler, camera, this, imageGetter, gun);
@@ -290,6 +302,7 @@ public class Game extends Canvas implements Runnable {
 
             renderUi(g);
 
+
         } else {
             renderScreen(g);
             handler.enemy.removeAll(handler.enemy);
@@ -305,6 +318,26 @@ public class Game extends Canvas implements Runnable {
     }
 
     /* ---------- Private functions for game Class ----------- */
+
+    private void renderTutorialBorders(Graphics g){
+        g.drawImage(tutorialBoarder,60,235, 900,300,null);
+        g.setColor(Color.black);
+        g.setFont(new Font("SansSerif", Font.PLAIN, 30));
+        //tutorialTexts[0][0]= "dasdadsadadsadadadasdsadadaadasdsdas";
+        tutorialTexts[0][0]= "Willkommen zu Workalcoholics Game";
+        tutorialTexts[0][1]= "um mehr Text zu sehen drücke Space";
+
+        tutorialTexts[1][0]= "Bewegen kannst du dich durch ";
+        tutorialTexts[1][1]= "w = up, s = down, a = links, d = rechts";
+
+        if(curentTutorialscore < tutorialTexts.length) {
+            g.drawString(tutorialTexts[curentTutorialscore][0], 262, 465);
+            g.drawString(tutorialTexts[curentTutorialscore][1], 262, 495);
+        }else{
+            curentTutorialscore = 0;
+        }
+    }
+
 
     private void stateChange() throws SQLException {
         //System.out.println("is " + currentState + " equal to " + checkState + "?");
@@ -325,7 +358,10 @@ public class Game extends Canvas implements Runnable {
                 camera.shake = false;   //camera should not shake
                 switch (currentState) {
                     case LEVEL -> loadLevel(level); //load the level
-                    case TUTORIAL -> loadLevel(tutorialLevel);
+                    case TUTORIAL -> {
+                        loadLevel(tutorialLevel);
+                        inTutorial = true;
+                    }
                 }
             }
             handler.clearObjects(ID.UIButton);      //clear the handler from all buttons, when we are in the level
@@ -348,6 +384,9 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderTitle(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        g.drawImage(imgTitle, 0, 0, null);
     }
 
     /***
@@ -355,6 +394,7 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderMainMenu(Graphics g) {
+
     }
 
     /***
@@ -369,13 +409,17 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderHighScores(Graphics g) {
+        g.setColor(Color.black);
+        g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 40));
+        g.drawString("Higscores from Databse",100,100);
+        g.setFont(new Font("Arial Black", Font.PLAIN, 40));
         if (DatabeseConection.finishedFillingArray) {
             g.setColor(Color.black);
-            g.drawString(DatabeseConection.scoresArray[0], 200, 200);
-            g.drawString(DatabeseConection.scoresArray[1], 200, 220);
-            g.drawString(DatabeseConection.scoresArray[2], 200, 240);
-            g.drawString(DatabeseConection.scoresArray[3], 200, 260);
-            g.drawString(DatabeseConection.scoresArray[4], 200, 280);
+            g.drawString(DatabeseConection.scoresArray[0], 300, 210);
+            g.drawString(DatabeseConection.scoresArray[1], 300, 250);
+            g.drawString(DatabeseConection.scoresArray[2], 300, 290);
+            g.drawString(DatabeseConection.scoresArray[3], 300, 330);
+            g.drawString(DatabeseConection.scoresArray[4], 300, 370);
         }
     }
 
@@ -521,6 +565,10 @@ public class Game extends Canvas implements Runnable {
         }
         g.drawImage(currGun, 10, 470, null);
 
+        if(currentState == GameState.TUTORIAL){
+            renderTutorialBorders(g);
+        }
+
     }
 
     /***
@@ -535,9 +583,12 @@ public class Game extends Canvas implements Runnable {
             case STUDIO -> {
             }
             case TITLE -> {
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT - 25) / 2, 352, 102,
+                /*handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT - 25) / 2, 352, 102,
                         "START", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
-                        uiButtonAnGet, 1, 1, 400, (SCREEN_HEIGHT - 25) / 2 + 20, 40));
+                        uiButtonAnGet, 1, 1, 400, (SCREEN_HEIGHT - 25) / 2 + 20, 40));*/
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT + 350) / 2, 352, 102,
+                        "START", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
+                        uiButtonAnGet, 1, 1, 400, (SCREEN_HEIGHT + 350) / 2 + 17, 40));
             }
             case MAIN_MENU -> {
                 menuCount = 0;
