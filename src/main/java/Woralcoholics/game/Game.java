@@ -44,6 +44,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage playerWalkCycle = null;
     private BufferedImage enemyBlood = null;
     private BufferedImage upgradBoarder = null;
+    private BufferedImage tutorialBoarder = null;
     private BufferedImage upgradBoard = null;
     private BufferedImage uiButtonAn = null;
     private BufferedImage floor = null;
@@ -58,6 +59,8 @@ public class Game extends Canvas implements Runnable {
     public static BufferedImage[] playerWalkingLeft = new BufferedImage[10];
     public static BufferedImage[] playerWalkingRight = new BufferedImage[10];
     public static BufferedImage[] enemyDeadShadow = new BufferedImage[10];
+
+    private String[][] tutorialTexts = new String[2][2];
 
     public static List<int[]> wallCords = new ArrayList();
 
@@ -75,6 +78,7 @@ public class Game extends Canvas implements Runnable {
     public static int PlayerY = 0;
     public static int TimerValue;
     public static int timerAction;
+    public static int curentTutorialscore = 0;
     public static boolean isDead = false;
     private boolean wasstopped = false;
     private boolean triggeredonce = false;
@@ -90,6 +94,7 @@ public class Game extends Canvas implements Runnable {
     private static ImageGetter getImagesPlayer;
     private static ImageGetter getImagesEnemy;
     private static ImageGetter GamoverScreenImg;
+    private static ImageGetter gettutorialBorder;
     private static ImageGetter TitleScreenImg;
     private static ImageGetter uiButtonAnGet;
     private static Gun gun;
@@ -145,6 +150,10 @@ public class Game extends Canvas implements Runnable {
         BufferedImage GamoverScreen = loader.loadImage("/Graphics/gameOverPicture.png");
         GamoverScreenImg = new ImageGetter(GamoverScreen);
         imgOver = GamoverScreen.getSubimage(1, 1, 720, 480);
+
+        BufferedImage tutorial= loader.loadImage("/Graphics/TutorialBorder.png");
+        gettutorialBorder = new ImageGetter(tutorial);
+        tutorialBoarder = gettutorialBorder.getImage(1,1,SCREEN_WIDTH-2,SCREEN_HEIGHT-2);
 
         imgTitle = loader.loadImage("/Graphics/Titlescreen.png");
 
@@ -293,6 +302,7 @@ public class Game extends Canvas implements Runnable {
 
             renderUi(g);
 
+
         } else {
             renderScreen(g);
             handler.enemy.removeAll(handler.enemy);
@@ -308,6 +318,26 @@ public class Game extends Canvas implements Runnable {
     }
 
     /* ---------- Private functions for game Class ----------- */
+
+    private void renderTutorialBorders(Graphics g){
+        g.drawImage(tutorialBoarder,60,235, 900,300,null);
+        g.setColor(Color.black);
+        g.setFont(new Font("SansSerif", Font.PLAIN, 30));
+        //tutorialTexts[0][0]= "dasdadsadadsadadadasdsadadaadasdsdas";
+        tutorialTexts[0][0]= "Willkommen zu Workalcoholics Game";
+        tutorialTexts[0][1]= "um mehr Text zu sehen drücke Space";
+
+        tutorialTexts[1][0]= "Bewegen kannst du dich durch ";
+        tutorialTexts[1][1]= "w = up, s = down, a = links, d = rechts";
+
+        if(curentTutorialscore < tutorialTexts.length) {
+            g.drawString(tutorialTexts[curentTutorialscore][0], 262, 465);
+            g.drawString(tutorialTexts[curentTutorialscore][1], 262, 495);
+        }else{
+            curentTutorialscore = 0;
+        }
+    }
+
 
     private void stateChange() throws SQLException {
         //System.out.println("is " + currentState + " equal to " + checkState + "?");
@@ -328,7 +358,10 @@ public class Game extends Canvas implements Runnable {
                 camera.shake = false;   //camera should not shake
                 switch (currentState) {
                     case LEVEL -> loadLevel(level); //load the level
-                    case TUTORIAL -> loadLevel(tutorialLevel);
+                    case TUTORIAL -> {
+                        loadLevel(tutorialLevel);
+                        inTutorial = true;
+                    }
                 }
             }
             handler.clearObjects(ID.UIButton);      //clear the handler from all buttons, when we are in the level
@@ -361,6 +394,7 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderMainMenu(Graphics g) {
+
     }
 
     /***
@@ -530,6 +564,10 @@ public class Game extends Canvas implements Runnable {
 
         }
         g.drawImage(currGun, 10, 470, null);
+
+        if(currentState == GameState.TUTORIAL){
+            renderTutorialBorders(g);
+        }
 
     }
 

@@ -42,6 +42,7 @@ public class KeyInput extends KeyAdapter {
                     case KeyEvent.VK_L -> gameManager.setL(true);
                     case KeyEvent.VK_M -> gameManager.setM(true);
                     case KeyEvent.VK_K -> gameManager.setK(true);
+                    case KeyEvent.VK_SPACE -> Game.curentTutorialscore ++;
                 }
             }
         }
