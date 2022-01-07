@@ -10,8 +10,11 @@ public class UIButton extends GameObject{
 
     private final int width, height, action;
     private int col, row;
-    private final int stringWidth, stringHeight, fontsize;
+    private final int fontsize;
+    private double stringX, stringY;
     private String name;
+    private Font font;
+    private Graphics g;
     private BufferedImage sprite = null;
 
     Upgrades upgrades;
@@ -30,8 +33,7 @@ public class UIButton extends GameObject{
      * @param an
      */
     public UIButton(int x, int y, int width, int height, String name, GameState nextState, ID id, Game game,
-                    int action, int upgradeNr, ImageGetter an, int col, int row, int stringWidth, int stringHeight,
-                    int fontsize) {
+                    int action, int upgradeNr, ImageGetter an, int col, int row, Graphics g, int fontsize) {
         super(x, y, nextState, id, an);
         this.width = width;
         this.height = height;
@@ -42,12 +44,16 @@ public class UIButton extends GameObject{
         this.upgradeNr = upgradeNr;
         this.col = col;
         this.row = row;
-        this.stringWidth = stringWidth;
-        this.stringHeight = stringHeight;
+        this.g = g;
+
         this.fontsize = fontsize;
+        font = new Font("Masked Hero Demo", Font.PLAIN, fontsize);
+        this.stringX = x - g.getFontMetrics(font).stringWidth(name) / 2.0;
+        this.stringY = y + g.getFontMetrics(font).getHeight() / 4.0;
         this.x -= width / 2.0;
         this.y -= height / 2.0;
         sprite = an.getImage(col, row, width, height);
+
     }
 
     @Override
@@ -59,8 +65,8 @@ public class UIButton extends GameObject{
     public void render(Graphics g) {
         g.drawImage(sprite, (int)x, (int)y,null);
         g.setColor(Color.WHITE);
-        g.setFont(new Font("Masked Hero Demo", Font.PLAIN, fontsize));
-        g.drawString(name, stringWidth, stringHeight);
+        g.setFont(font);
+        g.drawString(name, (int)stringX, (int)stringY);
     }
 
     public void action() {
