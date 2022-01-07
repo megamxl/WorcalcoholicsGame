@@ -22,7 +22,6 @@ public class EnemyShadow extends GameObject {
 
     }
 
-
     public void render(Graphics g) {
         g.drawImage(shadow_image, (int) x, (int) y, null);
         enemyDead.renderAnimation(g, (int) x, (int) y, 64, 64);

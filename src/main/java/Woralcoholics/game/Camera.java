@@ -2,7 +2,6 @@ package Woralcoholics.game;
 
 // the class that makes the Playercamera
 public class Camera {
-
     float x, y;
     Game game;
     protected boolean shake = false;
@@ -32,7 +31,6 @@ public class Camera {
         if(shake) {
             screenShake();
         }
-
     }
 
     private void screenShake(){

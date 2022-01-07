@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class BufferedImageLoader {
-
     // gets the image as bufferd Image type
     private BufferedImage image;
 

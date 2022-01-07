@@ -1,7 +1,7 @@
 package Woralcoholics.game;
 
 /**
- * constructs a bullet
+ * constructs the enemy bullet
  */
 public class EnemyBullet extends Bullet{
     public EnemyBullet(int x, int y, ID id, GameManager handler, ImageGetter an) {

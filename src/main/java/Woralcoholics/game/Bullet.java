@@ -14,7 +14,7 @@ public class Bullet extends GameObject {
     public Bullet(int x, int y, ID id, GameManager handler, ImageGetter an) {
         super(x, y, id, an);
         this.handler = handler;
-
+        //selecting the sprite for the bullet
         bullet_img = an.getImage(2, 3, 64, 64);
     }
 
@@ -108,9 +108,9 @@ public class Bullet extends GameObject {
 
     @Override
     public void render(Graphics g) {
+        // out comment part is the collider, still inside for debugging
         /*g.setColor(Color.WHITE);
-        g.fillOval((int) x, (int) y, 8, 8);
-        */
+        g.fillOval((int) x, (int) y, 8, 8);   */
         g.drawImage(bullet_img, (int) x, (int) y, null);
     }
 
@@ -123,8 +123,6 @@ public class Bullet extends GameObject {
         return bulletSpeed;
     }
 
-    public void setBulletSpeed(float bs) {
-        bulletSpeed = bs;
-    }
+    public void setBulletSpeed(float bs) {bulletSpeed = bs;}
 }
 

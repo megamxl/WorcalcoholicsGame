@@ -17,22 +17,14 @@ public class Block extends GameObject {
      * @param row
      */
     public Block(float x, float y, ID id, ImageGetter an, Integer col, Integer row) {
-
         super(x, y, id, an);
-
         // gets the image from the specified column and row from the spritesheet
         block_img = an.getImage(col, row,64,64);
-
         // default
-        // block_img = an.getImage(1,1,64,64);
     }
-
-
 
     @Override
-    public void update() {
-
-    }
+    public void update() {}
 
     @Override
     public void render(Graphics g) {
@@ -43,7 +35,6 @@ public class Block extends GameObject {
 
         //f ((y > 1054 || y < 60) || (x > 2000 || x < 0)) {
         //g2d.draw(new Rectangle(30,30,2000,1000));
-
     }
 
     @Override

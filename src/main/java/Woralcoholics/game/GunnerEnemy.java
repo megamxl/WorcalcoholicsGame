@@ -146,6 +146,7 @@ public class GunnerEnemy extends Enemy {
         gx = getX();
         gy = getY();
         calcDistanceToPlayer();
+        checkIfGone();
         behaviour();
         move();
         collision();    //Check if it's colliding with a Bullet or Block (Enemy.collision())
@@ -185,27 +186,15 @@ public class GunnerEnemy extends Enemy {
     /***
      * Some getter and setter functions
      */
-    public float getMinDistanceToPlayer() {
-        return minDistanceToPlayer;
-    }
+    public float getMinDistanceToPlayer() {return minDistanceToPlayer;}
 
-    public void setMinDistanceToPlayer(float d) {
-        minDistanceToPlayer = d;
-    }
+    public void setMinDistanceToPlayer(float d) {minDistanceToPlayer = d;}
 
-    public float getMaxDistanceToPlayer() {
-        return maxDistanceToPlayer;
-    }
+    public float getMaxDistanceToPlayer() {return maxDistanceToPlayer;}
 
-    public void setMaxDistanceToPlayer(float d) {
-        maxDistanceToPlayer = d;
-    }
+    public void setMaxDistanceToPlayer(float d) {maxDistanceToPlayer = d;}
 
-    public float getMovementSpeed() {
-        return movementSpeed;
-    }
+    public float getMovementSpeed() {return movementSpeed;}
 
-    public void setMovementSpeed(float m) {
-        movementSpeed = m;
-    }
+    public void setMovementSpeed(float m) {movementSpeed = m;}
 }

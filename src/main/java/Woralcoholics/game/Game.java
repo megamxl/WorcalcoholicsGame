@@ -5,7 +5,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferStrategy;
@@ -113,19 +112,21 @@ public class Game extends Canvas implements Runnable {
     /* ------------- Constructor for Game Class -------------- */
 
     public Game() throws IOException, SQLException {
+        handler = new GameManager();
         currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
         //new ScoerSaveWindow(SCREEN_WIDTH,SCREEN_HEIGHT,"");
         //window =
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
         start();
+        gun = new Gun();
 
         levelDecision = String.valueOf(randomNumber(1, 6));
-        handler = new GameManager();
         camera = new Camera(0, 0, this);
-        gun = new Gun();
+
         addGuns();
         checkSelectedGun();
+
         // when finished implement the Mouse and Key input
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level0" + levelDecision + ".png");
         InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
@@ -157,6 +158,7 @@ public class Game extends Canvas implements Runnable {
         tutorialBoarder = gettutorialBorder.getImage(1, 1, SCREEN_WIDTH - 2, SCREEN_HEIGHT - 2);
 
         imgTitle = loader.loadImage("/Graphics/Titlescreen.png");
+
 
         //Adding Mouse and Keyboard Input
         mouse = new MouseInput(handler, camera, this, imageGetter, gun);
@@ -767,7 +769,7 @@ public class Game extends Canvas implements Runnable {
                                 null, JOptionPane.INFORMATION_MESSAGE);
                         JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?",
                                 null, JOptionPane.YES_NO_OPTION);
-                        databeseConection.connectToDatabase();
+                        databeseConection.insertSoreAndNameInToDatabase();
                         System.out.println("over Con");
                     }
                 }

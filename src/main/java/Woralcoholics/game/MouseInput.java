@@ -65,27 +65,6 @@ public class MouseInput extends MouseAdapter {
                     }
                 }
             }
-            /*case UPGRADE_MENU -> {
-                int[] randomUpgrades = upgrades.getUpgrades();
-                if (button == 1) {
-                    if (e.getX() >= 137 && e.getX() <= 457 && e.getY() >= 30 && e.getY() <= 630) { //button 1
-                        upgrades.getUpgrade(randomUpgrades[0]);
-                        Upgrades.drawRandomUpgrades(); //draw random 3 upgrades for 2nd, 3rd... time buying them
-                        Game.setState(GameState.LEVEL);
-                    } else if (e.getX() >= 377 && e.getX() <= 697 && e.getY() >= 30 && e.getY() <= 630) { //button 2
-                        upgrades.getUpgrade(randomUpgrades[1]);
-                        Upgrades.drawRandomUpgrades();
-                        Game.setState(GameState.LEVEL);
-                    } else if (e.getX() >= 617 && e.getX() <= 937 && e.getY() >= 30 && e.getY() <= 630) { //button 3
-                        upgrades.getUpgrade(randomUpgrades[2]);
-                        Upgrades.drawRandomUpgrades();
-                        Game.setState(GameState.LEVEL);
-                    }
-                }
-                Game.TimerValue = 5;    //5 secs wait time
-                Game.shouldTime = true; //activate Timer
-                Game.timerAction = 1;   //execute timerAction 1 -> countdown till next wave
-            }*/
             case LEVEL, TUTORIAL -> {
                 /* 1 = LEFT MOUSE BUTTON
                  * 2 = MOUSE WHEEL

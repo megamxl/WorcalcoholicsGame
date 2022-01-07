@@ -16,5 +16,15 @@ A = left \
 S = down \
 D = rigth 
 
+Curently the Game is using way to much ram, so please add a run configutation \
+This is next to your green hammer
+
+Select Game.java as class as main class
+Then press Alt + V for vm Parameters and add -XX:+UseZGC 
+
+This is just a garbage collector for helping out a bit with ram usage
+
+
+
 Shooting is handeld just by having the mouse in the game window and pressing left Mose button
  

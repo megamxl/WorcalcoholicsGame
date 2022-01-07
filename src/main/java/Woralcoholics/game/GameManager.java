@@ -100,6 +100,7 @@ public class GameManager {
             if (temp.getId() == toClear) {
                 this.object.remove(temp);
                 temp = null;
+
             }
         }
     }

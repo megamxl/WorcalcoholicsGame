@@ -12,44 +12,76 @@ import java.util.Random;
 public class Enemy<privare> extends GameObject {
 
     //region INSTANCE VARIABLES
-    private final BufferedImage enemy_img;
+    public final int upgradeAfterWave = 3;                  //After how many Waves an Upgrade should be granted
     public static float velocity = 0;
-    private GameManager manager;
-    private EnemyShadow es;
+    public static int enemysAlive = 0;
+    public static int waves = 1;
+    private static int maxHp =100;
+
     int choose = 0;
     int hp =100;
-    private static int maxHp =100;
+    int low = -4;                                           //low and high values for different variations of enemy behaviour
+    int high = 4;
+    int booleanValue = 0;                                   //booleanvalue is for determining if enemy should charge player again or just running aimless around
+
+    public boolean hittedWall = false;                      //hittedWall is for changing the aiming target of player to nothing
+
+    private final BufferedImage enemy_img;
+    private GameManager manager;
+    private EnemyShadow es;
     Random r = new Random();
     Score score;
-    int low = -4; //low and high values for different variations of enemy behaviour
-    int high = 4;
-    int booleanvalue = 0; //booleanvalue is for determining if enemy should charge player again or just running aimless around
-
-
-    boolean hittedwall = false; //hittedwall is for changing the aiming target of player to nothing
-    static int enemysAlive = 0;
-    static int waves = 1;
-    final int upgradeAfterWave = 3;     //After how many Waves an Upgrade should be granted
     //endregion
 
     //region CONSTRUCTOR
+
     public Enemy(int x, int y, ID id, GameManager manager, ImageGetter an, Score score) {
         super(x, y, id, an);
         this.manager = manager;
         this.score = score;
-
         enemy_img = an.getImage(1, 4, 32, 32);
         enemysAlive++;
-
         hp = maxHp;
-        //System.out.println("enemy " + enemysAlive + "hat  " + hp);
-
-
-        //System.out.println("enemy created "+ enemysAlive );
     }
+
     //endregion
 
     //region PUBLIC METHODS
+
+    public void update() {
+        move();
+
+        choose = r.nextInt(10);
+
+        checkIfGone();
+
+        collision();
+
+        isDead();
+    }
+
+    public void render(Graphics g) {
+        g.drawImage(enemy_img, (int) x, (int) y, null);
+    }
+
+    /**
+     * check if enemy bounds with an Rectangle
+     *
+     * @return
+     */
+    public Rectangle getBounds() {
+        return new Rectangle((int) x, (int) y, 32, 32);
+    }
+
+    /**
+     * check if enemy bounds with an Rectangle bigger than the actual enemy
+     *
+     * @return
+     */
+    public Rectangle getBoundsAround() {
+        return new Rectangle((int) x, (int) y, 32, 32);
+    }
+
     /***
      * x value of enemy gets changed by vel Values
      */
@@ -75,7 +107,7 @@ public class Enemy<privare> extends GameObject {
                     velX *= -1;
                     velY *= -1;
                     //enemy cant aim player anymore -> prevents stucking at the wall
-                    hittedwall = true;
+                    hittedWall = true;
 
                     //moving between 4 and -4 per iterate
                     velX = r.nextInt(high - low) + low;
@@ -102,7 +134,7 @@ public class Enemy<privare> extends GameObject {
             // collision enemy with player
             if (tmpObject.getId() == ID.Player) {
 
-                if (hittedwall == false) {
+                if (hittedWall == false) {
                     // enemy behaviour
                     if (tmpObject.getX() + 6 >= x && tmpObject.getX() - 6 <= x) {
                         velX = 0;
@@ -127,11 +159,11 @@ public class Enemy<privare> extends GameObject {
 
                 } else {
                     // if hitted the wall enemy runs different like before
-                    booleanvalue = r.nextInt(100 - 1) + 1; //maybe change
+                    booleanValue = r.nextInt(100 - 1) + 1; //maybe change
 
-                    if (booleanvalue == 10) {
+                    if (booleanValue == 10) {
                         // now enemy aims to player
-                        hittedwall = false;
+                        hittedWall = false;
                     }
                 }
             }
@@ -154,58 +186,21 @@ public class Enemy<privare> extends GameObject {
         }
     }
 
-
-    public void update() {
-        move();
-
-        choose = r.nextInt(10);
-
-        checkIfGone();
-
-        collision();
-
-        isDead();
-
-
-    }
-
-    public void render(Graphics g) {
-        g.drawImage(enemy_img, (int) x, (int) y, null);
-    }
-
-    /**
-     * check if enemy bounds with an Rectangle
-     *
-     * @return
-     */
-    public Rectangle getBounds() {
-        return new Rectangle((int) x, (int) y, 32, 32);
-    }
-
-    /**
-     * check if enemy bounds with an Rectangle bigger than the actual enemy
-     *
-     * @return
-     */
-    public Rectangle getBoundsAround() {
-        return new Rectangle((int) x, (int) y, 32, 32);
-    }
-
-    public static void Spawner(int Wavesize, boolean solo, Random r) {
+    public static void Spawner(int waveSize, boolean solo, Random r) {
         if (solo) {                                         // if function gets passed false just spawn one enemy
-            Wavesize = 1;
+            waveSize = 1;
         } else { // else increase the amount of the wave and calculate the amount of enemies
             Game.SpawnGunnerEnemy();
-            Wavesize = (Wavesize * 2) + 1;
+            waveSize = (waveSize * 2) + 1;
         }
 
         // currently, capping ant 20 because of performance
-        if(Wavesize > 20){
-            Wavesize = 20;
+        if(waveSize > 20){
+            waveSize = 20;
         }
 
 
-        for (int i = 0; i < Wavesize; i++) {                // spawner script
+        for (int i = 0; i < waveSize; i++) {                // spawner script
             // reset and declare x and y for every iteration
             int x = 0;
             int y = 0;
@@ -237,7 +232,7 @@ public class Enemy<privare> extends GameObject {
     /**
      * Enemy gets removed
      */
-    private void remove() {
+    public void remove() {
         manager.removeObject(this);
         float curX = x;
         float curY = y;
@@ -279,6 +274,7 @@ public class Enemy<privare> extends GameObject {
         tempobject = null;
         enemysAlive--;
     }
+
     private void playSoundEnemy() {
         try {
             new Thread(() -> {

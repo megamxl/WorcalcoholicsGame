@@ -26,14 +26,8 @@ public class ImageGetter {
      * @param height the height of the sub picture
      * @return the sub image
      */
-    public BufferedImage getImage(int col,int row,int width, int height)
-    {
-        return img.getSubimage((col*64)-64, (row*64)-64,width,height);
-    }
+    public BufferedImage getImage(int col,int row,int width, int height) {return img.getSubimage((col*64)-64, (row*64)-64,width,height);}
 
-    public BufferedImage getImage32(int col,int row,int width, int height)
-    {
-        return img.getSubimage((col*32)-32, (row*32)-32,width,height);
-    }
+    public BufferedImage getImage32(int col,int row,int width, int height) {return img.getSubimage((col * 32) - 32, (row * 32) - 32, width, height);}
     //endregion
 }
