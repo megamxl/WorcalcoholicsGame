@@ -350,6 +350,9 @@ public class Game extends Canvas implements Runnable {
         if (!loaded) {   //if nothing is loaded...
             handler.clearHandler(); //clear everything in the handler
         }
+        else {
+            handler.clearObjects(ID.UIButton);      //clear the handler from all buttons, when a level is loaded
+        }
         if (currentState == GameState.LEVEL || currentState == GameState.TUTORIAL) {   //if we have changed to LEVEL...
             if (!loaded) {                   //...if no level is loaded, load the level
                 Enemy.waves = 1;            //reset Enemy waves
@@ -367,7 +370,6 @@ public class Game extends Canvas implements Runnable {
                     }
                 }
             }
-            handler.clearObjects(ID.UIButton);      //clear the handler from all buttons, when we are in the level
             paused = false;  //level is running and not paused (when coming from e.g. PAUSE_MENU or UPGRADE_MENU, where a level is already loaded)
         } else {
             loadMenu();                     //load the menu of currentState
