@@ -647,9 +647,9 @@ public class Game extends Canvas implements Runnable {
             case PAUSE_MENU -> {
                 menuCount = 10;
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", GameState.LEVEL,
-                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 40));
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 0));
                 handler.addObject(new UIButton(96, 32, 64, 64, "Options", GameState.OPTIONS,
-                        ID.UIButton, this, 1, 0, imageGetter, 2, 6, g, 40));
+                        ID.UIButton, this, 1, 0, imageGetter, 2, 6, g, 0));
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
