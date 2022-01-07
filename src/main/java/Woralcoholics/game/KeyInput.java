@@ -30,7 +30,7 @@ public class KeyInput extends KeyAdapter {
             }
         }
         int key = e.getKeyCode();
-        DEVELOPER_SCREEN_CHANGER(key);
+        //DEVELOPER_SCREEN_CHANGER(key);
 
         switch(Game.getState()) {
             case LEVEL, TUTORIAL -> {
@@ -43,6 +43,7 @@ public class KeyInput extends KeyAdapter {
                     case KeyEvent.VK_M -> gameManager.setM(true);
                     case KeyEvent.VK_K -> gameManager.setK(true);
                     case KeyEvent.VK_SPACE -> Game.curentTutorialscore ++;
+                    case KeyEvent.VK_NUMPAD9 -> game.hp = 0;     //DEV FUNCTION TO KILL PLAYER
                 }
             }
         }
@@ -66,7 +67,7 @@ public class KeyInput extends KeyAdapter {
         }
     }
 
-    private void DEVELOPER_SCREEN_CHANGER(int key) {
+    /*private void DEVELOPER_SCREEN_CHANGER(int key) {
         switch(key) {
             case KeyEvent.VK_NUMPAD0 -> {
                 Game.setState(GameState.STUDIO);
@@ -130,5 +131,5 @@ public class KeyInput extends KeyAdapter {
                 gameManager.backgroundsound.close();
             }
         }
-    }
+    }*/
 }

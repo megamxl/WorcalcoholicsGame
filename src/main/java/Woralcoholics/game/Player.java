@@ -49,67 +49,9 @@ public class Player extends GameObject {
         checkIfGone();
 
         collision();
-        if (handler.isL()) {
-            try {
-                handler.soundv = 2;
-                handler.backgroundsound.close();
-                playBackgroundSound();
-            } catch (Exception ex) {
-            }
-        }
-        if (handler.isK()) {
-            try {
-                handler.soundv = 1;
-                handler.backgroundsound.close();
-                playBackgroundSound();
-            } catch (Exception ex) {
-            }
-        }
-        if (handler.isM()) {
-            try {
-                handler.soundv = 0;
-                //handler.backgroundsound.close(); -> just Sound Effects get muted
-                //playBackgroundSound();
-            } catch (Exception ex) {
-            }
-        }
-
-        if (movingVertical && movingHorizontal) {
-            diagonalMultiplier = 0.75f;
-        } else {
-            diagonalMultiplier = 1;
-        }
-
-        // Vertical Movement
-        if (handler.isUp() && !handler.isDown()) {
-            velY = -5 * diagonalMultiplier;
-            movingVertical = true;
-            playerMovementSound();
-        }
-        if (handler.isDown() && !handler.isUp()) {
-            velY = 5 * diagonalMultiplier;
-            movingVertical = true;
-            playerMovementSound();
-        }
-        if ((handler.isUp() && handler.isDown()) || !handler.isUp() && !handler.isDown()) {
-            velY = 0;
-            movingVertical = false;
-        }
-        // Horizontal Movement
-        if (handler.isRight() && !handler.isLeft()) {
-            velX = 5 * diagonalMultiplier;
-            movingHorizontal = true;
-            playerMovementSound();
-        }
-        if (handler.isLeft() && !handler.isRight()) {
-            velX = -5 * diagonalMultiplier;
-            movingHorizontal = true;
-            playerMovementSound();
-        }
-        if ((handler.isLeft() && handler.isRight()) || (!handler.isLeft() && !handler.isRight())) {
-            velX = 0;
-            movingHorizontal = false;
-        }
+        isDead();
+        keySounds();
+        movement();
     }
 
     @Override
@@ -235,11 +177,6 @@ public class Player extends GameObject {
                             //wait = now + invincibleTime;
                             // sound
                         }
-                        if (game.hp <= 0) {
-                            playSoundGameOver();
-                            Game.setState(GameState.GAME_OVER);         //if the player has no HP left, its GAME OVER
-                            Game.loaded = false;
-                        }
                     }
                 }
             } else {
@@ -250,6 +187,80 @@ public class Player extends GameObject {
 
                 }
             }
+        }
+    }
+
+    private void isDead() {
+        if (game.hp <= 0) {
+            playSoundGameOver();
+            Game.setState(GameState.GAME_OVER);         //if the player has no HP left, its GAME OVER
+            Game.loaded = false;
+        }
+    }
+
+    private void keySounds() {
+        if (handler.isL()) {
+            try {
+                handler.soundv = 2;
+                handler.backgroundsound.close();
+                playBackgroundSound();
+            } catch (Exception ex) {
+            }
+        }
+        if (handler.isK()) {
+            try {
+                handler.soundv = 1;
+                handler.backgroundsound.close();
+                playBackgroundSound();
+            } catch (Exception ex) {
+            }
+        }
+        if (handler.isM()) {
+            try {
+                handler.soundv = 0;
+                //handler.backgroundsound.close(); -> just Sound Effects get muted
+                //playBackgroundSound();
+            } catch (Exception ex) {
+            }
+        }
+    }
+
+    private void movement() {
+        if (movingVertical && movingHorizontal) {
+            diagonalMultiplier = 0.75f;
+        } else {
+            diagonalMultiplier = 1;
+        }
+
+        // Vertical Movement
+        if (handler.isUp() && !handler.isDown()) {
+            velY = -5 * diagonalMultiplier;
+            movingVertical = true;
+            playerMovementSound();
+        }
+        if (handler.isDown() && !handler.isUp()) {
+            velY = 5 * diagonalMultiplier;
+            movingVertical = true;
+            playerMovementSound();
+        }
+        if ((handler.isUp() && handler.isDown()) || !handler.isUp() && !handler.isDown()) {
+            velY = 0;
+            movingVertical = false;
+        }
+        // Horizontal Movement
+        if (handler.isRight() && !handler.isLeft()) {
+            velX = 5 * diagonalMultiplier;
+            movingHorizontal = true;
+            playerMovementSound();
+        }
+        if (handler.isLeft() && !handler.isRight()) {
+            velX = -5 * diagonalMultiplier;
+            movingHorizontal = true;
+            playerMovementSound();
+        }
+        if ((handler.isLeft() && handler.isRight()) || (!handler.isLeft() && !handler.isRight())) {
+            velX = 0;
+            movingHorizontal = false;
         }
     }
 

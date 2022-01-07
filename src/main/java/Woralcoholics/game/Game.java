@@ -149,9 +149,9 @@ public class Game extends Canvas implements Runnable {
         enemyBlood = loader.loadImage("/Graphics/Animations/Bloodparticle.png");
         getImagesEnemy = new ImageGetter(enemyBlood);
 
-        BufferedImage GamoverScreen = loader.loadImage("/Graphics/gameOverPicture.png");
+        BufferedImage GamoverScreen = loader.loadImage("/Graphics/gameOverPictureV2.png");
         GamoverScreenImg = new ImageGetter(GamoverScreen);
-        imgOver = GamoverScreen.getSubimage(1, 1, 720, 480);
+        imgOver = GamoverScreen.getSubimage(1, 1, 860/*720*/, 410/*480*/);
 
         BufferedImage tutorial = loader.loadImage("/Graphics/TutorialBorder.png");
         gettutorialBorder = new ImageGetter(tutorial);
@@ -466,12 +466,14 @@ public class Game extends Canvas implements Runnable {
      * @param g the current Buffered image as Graphics object
      */
     private void renderGameOver(Graphics g) {
-        g.setColor(Color.DARK_GRAY);
-        //g.drawString("GAME OVER", 200, 200);
-        g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 75));
         g.drawImage(imgOver, 1, 1, null);
-        g.drawString("your Score is " + lastScore, 300, SCREEN_HEIGHT - 65);
-        //g.drawString("Press LMB to Start again", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4);
+        g.setColor(Color.DARK_GRAY);
+        g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 75));
+        g.drawString("Waves", SCREEN_WIDTH / 5, SCREEN_HEIGHT / 4);
+        g.drawString("Score", SCREEN_WIDTH * 4 / 5, SCREEN_HEIGHT / 4);
+        //g.drawString("your Score is" + lastScore, 300, SCREEN_HEIGHT - 65);
+        g.drawString(String.valueOf(Enemy.waves), SCREEN_WIDTH / 4, SCREEN_HEIGHT / 3);
+        g.drawString(String.valueOf(lastScore), SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT / 3);
     }
 
     /***
@@ -599,6 +601,9 @@ public class Game extends Canvas implements Runnable {
                 menuCount = 0;
                 //JMenu mainMenu = new JMenu("Main Menu");
                 //mainMenu.add(new JMenuItem("test"));
+                handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, 0, 0,
+                        40));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, 70, 352, 102, "Level",
                         GameState.LEVEL, ID.UIButton, this, 1, 0, uiButtonAnGet, 1, 1,
                         410, 90, 40));
@@ -618,7 +623,7 @@ public class Game extends Canvas implements Runnable {
             }
             case CREDITS -> {
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
-                        ID.UIButton, this, 1, 0, imageGetter, 1, 2, 0, 0,
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, 0, 0,
                         40));
             }
             case TUTORIAL -> {
@@ -631,7 +636,7 @@ public class Game extends Canvas implements Runnable {
 
                 //JOptionPane playerDataInput = new JOptionPane();
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
-                        ID.UIButton, this, 1, 0, imageGetter, 1, 2, 0, 0,
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, 0, 0,
                         40));
             }
             case OPTIONS -> {
@@ -678,6 +683,14 @@ public class Game extends Canvas implements Runnable {
                 //Window.frame.setVisible(false);
                 //System.out.println("SOUND CLOSE");
                 System.out.println(playerName);
+                handler.addObject(new UIButton(SCREEN_WIDTH / 3, SCREEN_HEIGHT * 3 / 4, 352, 102,
+                        "Play Again?", GameState.LEVEL, ID.UIButton, this, 1, 0,
+                        uiButtonAnGet, 1, 1, SCREEN_WIDTH / 3, SCREEN_HEIGHT * 3 / 4,
+                        40));
+                handler.addObject(new UIButton(SCREEN_WIDTH * 2 / 3, SCREEN_HEIGHT * 3 / 4, 352, 102,
+                        "Stop Playing", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
+                        uiButtonAnGet, 1, 1, SCREEN_WIDTH * 2 / 3, SCREEN_HEIGHT * 3 / 4,
+                        40));
                 Game.TimerValue = 0;    //5 secs wait time
                 Game.shouldTime = true; //activate Timer
                 Game.timerAction = 4;   //execute timerAction 4 -> enter name and upload score dialogs

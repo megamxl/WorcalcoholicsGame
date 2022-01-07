@@ -49,7 +49,7 @@ public class MouseInput extends MouseAdapter {
         Point currentPos = e.getPoint();    //Grab current cursor position
         int button = e.getButton(); //Grab pressed button
         switch (Game.getState()) {  //depending on currentState, execute the following...
-            case TITLE, MAIN_MENU, HIGH_SCORES, OPTIONS, PAUSE_MENU, UPGRADE_MENU, CREDITS -> {
+            case TITLE, MAIN_MENU, HIGH_SCORES, OPTIONS, PAUSE_MENU, UPGRADE_MENU, CREDITS, GAME_OVER -> {
                 if (button == 1) {
                     for (int i = 0; i < handler.object.size(); i++) {
                         GameObject temp = handler.object.get(i);
@@ -66,9 +66,9 @@ public class MouseInput extends MouseAdapter {
                 }
             }
             case LEVEL, TUTORIAL -> {
-                /* 1 = LEFT MOUSE BUTTON
+                /** 1 = LEFT MOUSE BUTTON
                  * 2 = MOUSE WHEEL
-                 * 3 = RIGHT MOUSE BUTTON */
+                 * 3 = RIGHT MOUSE BUTTON **/
                 switch (button) {
                     case 1 -> {
                         if (handler.del == 0) {
@@ -118,14 +118,7 @@ public class MouseInput extends MouseAdapter {
                     }
                 }
             }
-            case GAME_OVER -> {
-                if (button == 1) {
-                    Game.setState(GameState.LEVEL);
-                }
-            }
         }
-
-
     }
 
     public void mouseReleased(MouseEvent e) {
