@@ -242,6 +242,7 @@ public class Enemy<privare> extends GameObject {
         enemysAlive--;
         if(!Game.inTutorial){
             if (enemysAlive <= 0) {
+                maxHp += 50;
                 waves++;
                 if ((waves - 1) % upgradeAfterWave == 0) {
                     Game.TimerValue = 2;    //0 secs (actually just to unrender the last enemy and bullet)
@@ -251,7 +252,6 @@ public class Enemy<privare> extends GameObject {
                     Game.TimerValue = 5;    //5 secs to spawn next wave
                     Game.shouldTime = true; //activate Timer
                     Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
-                    maxHp += 50;
                     for (int i = 0; i < manager.object.size(); i++) {
                         if (manager.object.get(i).getId() == ID.Enemy || manager.object.get(i).getId() == ID.GunnerEnemy || manager.object.get(i).getId() == ID.EnemyBullet) {
 

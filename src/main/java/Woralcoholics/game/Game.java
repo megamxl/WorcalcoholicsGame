@@ -184,7 +184,7 @@ public class Game extends Canvas implements Runnable {
         loadEnemyDeadSprites();
 
 
-        fontLoader();
+        FontLoader fontLoader =new FontLoader();
     }
 
 
@@ -691,21 +691,6 @@ public class Game extends Canvas implements Runnable {
     }
 
 
-    private void fontLoader() {
-        try {
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Fonts/Masked Hero.ttf")).deriveFont(12f);
-            Font customFont1 = Font.createFont(Font.TRUETYPE_FONT, new File("Resource/Fonts/DebugFreeTrial-MVdYB.otf")).deriveFont(12f);
-
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            //register the font
-            ge.registerFont(customFont);
-            ge.registerFont(customFont1);
-        } catch (FontFormatException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     /***
@@ -885,24 +870,7 @@ public class Game extends Canvas implements Runnable {
     /***
      * Function to run backgroundsound
      */
-    private void playBackgroundSound() {
-        t1 = new Thread(() -> {
-            try {
-                handler.playBackgroundSound();
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-            } catch (UnsupportedAudioFileException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (IllegalArgumentException e) {
-                //e.printStackTrace();
-            }
-        });
-        t1.start();
-    }
+
 
     private void calculateReloadingRectangle(double wait, int del) {
 
@@ -994,6 +962,25 @@ public class Game extends Canvas implements Runnable {
         enemyDeadShadow[6] = getImagesEnemy.getImage32(7, 1, 32, 32);
     }
 
+
+    private void playBackgroundSound() {
+        t1 = new Thread(() -> {
+            try {
+                handler.playBackgroundSound();
+            } catch (LineUnavailableException e) {
+                e.printStackTrace();
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                //e.printStackTrace();
+            }
+        });
+        t1.start();
+    }
 
     // the main function that runs everything
     public static void main(String[] args) throws IOException {
