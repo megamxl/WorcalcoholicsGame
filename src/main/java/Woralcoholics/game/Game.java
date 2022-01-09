@@ -19,6 +19,7 @@ import java.util.Random;
 /**
  * First Inspiration for Game class
  * https://www.youtube.com/watch?v=e9jRfgjV4FQ&t=1s
+ *
  * @author Maximilian Nowak
  * @author Christoph Oprawill
  */
@@ -140,6 +141,7 @@ public class Game extends Canvas implements Runnable {
         checkSelectedGun();
 
         // when finished implement the Mouse and Key input
+        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_level01" + ".png");  -> testing for destroyableboxes level
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level0" + levelDecision + ".png");
         InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
         level = ImageIO.read(path);
@@ -195,7 +197,7 @@ public class Game extends Canvas implements Runnable {
         loadEnemyDeadSprites();
 
 
-        FontLoader fontLoader =new FontLoader();
+        FontLoader fontLoader = new FontLoader();
     }
 
 
@@ -360,13 +362,12 @@ public class Game extends Canvas implements Runnable {
         previousState = checkState;      //save the state before the state change
         checkState = currentState;       //the checkState becomes the current state, to again detect a state change
         //System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
-        if(currentState == GameState.MAIN_MENU) {
+        if (currentState == GameState.MAIN_MENU) {
             loaded = false;
         }
         if (!loaded) {   //if nothing is loaded...
             handler.clearHandler(); //clear everything in the handler
-        }
-        else {
+        } else {
             handler.clearObjects(ID.UIButton);      //clear the handler from all buttons, when a level is loaded
         }
         if (currentState == GameState.LEVEL || currentState == GameState.TUTORIAL) {   //if we have changed to LEVEL...
@@ -415,8 +416,10 @@ public class Game extends Canvas implements Runnable {
                 g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);*/
                 g.drawImage(imgTitle, 0, 0, null);
             }
-            case MAIN_MENU -> {}
-            case TUTORIAL -> {}
+            case MAIN_MENU -> {
+            }
+            case TUTORIAL -> {
+            }
             case HIGH_SCORES -> {
                 g.setColor(Color.black);
                 g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 36));
@@ -432,9 +435,12 @@ public class Game extends Canvas implements Runnable {
                     g.drawString(DatabaseConnection.scoresArray[4], 300, 370);
                 }
             }
-            case OPTIONS -> {}
-            case PAUSE_MENU -> {}
-            case UPGRADE_MENU -> {}
+            case OPTIONS -> {
+            }
+            case PAUSE_MENU -> {
+            }
+            case UPGRADE_MENU -> {
+            }
             case GAME_OVER -> {
                 g.drawImage(imgOver, 1, 1, null);
                 g.setColor(Color.DARK_GRAY);
@@ -443,7 +449,7 @@ public class Game extends Canvas implements Runnable {
                 g.drawString("Score", SCREEN_WIDTH * 3 / 4 - 65, SCREEN_HEIGHT / 4);
                 //g.drawString("your Score is" + lastScore, 300, SCREEN_HEIGHT - 65);
                 g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 175));
-                g.drawString(String.valueOf(Enemy.waves-1), SCREEN_WIDTH / 4, SCREEN_HEIGHT * 7 / 16);
+                g.drawString(String.valueOf(Enemy.waves - 1), SCREEN_WIDTH / 4, SCREEN_HEIGHT * 7 / 16);
                 g.drawString(String.valueOf(lastScore), SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 7 / 16);
             }
         }
@@ -520,7 +526,7 @@ public class Game extends Canvas implements Runnable {
             g.setColor(Color.ORANGE);
             //g.setFont(new Font("/Fonts/Future Blood",Font.PLAIN,80));
             g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 45));
-            g.drawString("Next Wave spawns in " + (TimerValue+1), 50, 250);
+            g.drawString("Next Wave spawns in " + (TimerValue + 1), 50, 250);
 
         }
         g.drawImage(currGun, 10, 470, null);
@@ -584,7 +590,7 @@ public class Game extends Canvas implements Runnable {
             case HIGH_SCORES -> {
                 try {
                     databeseConection.ReadFromDatabase();
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("Could not connect to Database");
                 }
                 //JOptionPane playerDataInput = new JOptionPane();
@@ -654,8 +660,6 @@ public class Game extends Canvas implements Runnable {
     }
 
 
-
-
     /***
      * The function to maka a playable level out of a Buffered Image
      * @param image The level Png
@@ -677,6 +681,13 @@ public class Game extends Canvas implements Runnable {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, imageGetter, randomNumber(1, 7), 1));
                     wallCords.add(new int[]{xx, yy});
+                }
+
+                if (red == 255 && green == 255) {
+                    // Creates the new destroyable blocks which function as the walls
+                    //add also more variations like blocks
+                    handler.addObject(new DestroyableBoxes(xx * 32, yy * 32, ID.DestroyableBoxes, imageGetter, 3, 3));
+                   // wallCords.add(new int[]{xx, yy});
                 }
                 /*
                 if (red == 155) {
@@ -724,15 +735,14 @@ public class Game extends Canvas implements Runnable {
                                 null, JOptionPane.INFORMATION_MESSAGE);
                         int reply = JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?",
                                 null, JOptionPane.YES_NO_OPTION);
-                        if(reply == JOptionPane.YES_OPTION) {
+                        if (reply == JOptionPane.YES_OPTION) {
                             try {
                                 databeseConection.insertScoreAndNameIntoDatabase();
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 System.out.println("could not connect to Database");
                             }
                             System.out.println("YES");
-                        }
-                        else {
+                        } else {
                             System.out.println("NO");
                         }
 
@@ -750,7 +760,7 @@ public class Game extends Canvas implements Runnable {
      * @param action which action to make after timer
      */
     public static void startTimer(int secs, int action) {
-        TimerValue = secs-1;
+        TimerValue = secs - 1;
         shouldTime = true;
         timerAction = action;
     }
