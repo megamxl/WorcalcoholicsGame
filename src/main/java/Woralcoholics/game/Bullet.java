@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 /**
  * inspiration
  * @author Christoph Oprawill
+ * @author  Maximilian Nowak
  */
 
 public class Bullet extends GameObject {
@@ -50,6 +51,15 @@ public class Bullet extends GameObject {
 
             if (tmpObject.getId() == ID.Block) {
                 if (this.getBounds().intersects(tmpObject.getBounds())) {
+                    handler.removeObject(this);
+                    //System.out.println("Collision");
+                }
+            }
+
+            if (tmpObject.getId() == ID.DestroyableBoxes) {
+                if (this.getBounds().intersects(tmpObject.getBounds())) {
+                    System.out.println("we made it");
+                    DestroyableBoxes.destroyBox(handler, tmpObject);
                     handler.removeObject(this);
                     //System.out.println("Collision");
                 }

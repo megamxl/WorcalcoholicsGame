@@ -11,6 +11,7 @@ public class DestroyableBoxes extends GameObject {
 
     private final BufferedImage destroyable_boxes;
 
+
     /**
      * Creates the Wall tile
      *
@@ -45,4 +46,9 @@ public class DestroyableBoxes extends GameObject {
     public Rectangle getBounds() {
         return new Rectangle((int) x, (int) y, 64, 64);
     }
+
+    public static void destroyBox(GameManager handler, GameObject tmp){
+        handler.removeObject(tmp);
+    }
+
 }
