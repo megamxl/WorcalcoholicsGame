@@ -12,6 +12,7 @@ import java.util.LinkedList;
  * first Idea
  * https://www.youtube.com/watch?v=nXzTp61FKR4
  *  @author Maxlimilian Nowak
+ * @author Christoph Oprawill
  */
 
 public class GameManager {

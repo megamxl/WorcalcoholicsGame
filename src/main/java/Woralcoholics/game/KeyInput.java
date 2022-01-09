@@ -1,28 +1,31 @@
 package Woralcoholics.game;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.nio.FloatBuffer;
 
-// in this class the input management will happen through KeyAdapter
+/**
+ * in this class the input management will happen through KeyAdapter
+ *
+ * @author Christoph Oprawill
+ */
 
 public class KeyInput extends KeyAdapter {
     GameManager gameManager;
     private Game game;
     GameObject player;
 
-    public KeyInput(GameManager gameManager, Game game)
-    {
+    public KeyInput(GameManager gameManager, Game game) {
         this.gameManager = gameManager;
         this.game = game;
     }
 
     @Override
     /**
-    Checks if the A, D, W or S keys are getting pressed and sets the according boolean value of
-    the gameManager Class to true.
+     Checks if the A, D, W or S keys are getting pressed and sets the according boolean value of
+     the gameManager Class to true.
      */
-    public void keyPressed(KeyEvent e)
-    {
+    public void keyPressed(KeyEvent e) {
         for (int i = 0; i < gameManager.object.size(); i++) {
             if (gameManager.object.get(i).getId() == ID.Player) {
                 player = gameManager.object.get(i);
@@ -32,7 +35,7 @@ public class KeyInput extends KeyAdapter {
         int key = e.getKeyCode();
         //DEVELOPER_SCREEN_CHANGER(key);
 
-        switch(Game.getState()) {
+        switch (Game.getState()) {
             case LEVEL, TUTORIAL -> {
                 switch (key) {
                     case KeyEvent.VK_A -> gameManager.setLeft(true);
@@ -42,7 +45,7 @@ public class KeyInput extends KeyAdapter {
                     case KeyEvent.VK_L -> gameManager.setL(true);
                     case KeyEvent.VK_M -> gameManager.setM(true);
                     case KeyEvent.VK_K -> gameManager.setK(true);
-                    case KeyEvent.VK_SPACE -> Game.curentTutorialscore ++;
+                    case KeyEvent.VK_SPACE -> Game.curentTutorialscore++;
                     case KeyEvent.VK_NUMPAD9 -> game.hp = 0;     //DEV FUNCTION TO KILL PLAYER
                 }
             }
@@ -51,11 +54,10 @@ public class KeyInput extends KeyAdapter {
 
     @Override
     /**
-    Checks if the A, D, W or S keys are getting released and sets the according boolean value of
-    the gameManager Class to false.
+     Checks if the A, D, W or S keys are getting released and sets the according boolean value of
+     the gameManager Class to false.
      */
-    public void keyReleased(KeyEvent e)
-    {
+    public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_A -> gameManager.setLeft(false);
             case KeyEvent.VK_D -> gameManager.setRight(false);

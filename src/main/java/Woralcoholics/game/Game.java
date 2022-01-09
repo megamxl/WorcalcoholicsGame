@@ -20,6 +20,7 @@ import java.util.Random;
  * First Inspiration for Game class
  * https://www.youtube.com/watch?v=e9jRfgjV4FQ&t=1s
  * @author Maximilian Nowak
+ * @author Christoph Oprawill
  */
 
 public class Game extends Canvas implements Runnable {

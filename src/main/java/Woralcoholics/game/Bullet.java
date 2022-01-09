@@ -3,6 +3,11 @@ package Woralcoholics.game;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * inspiration
+ * @author Christoph Oprawill
+ */
+
 public class Bullet extends GameObject {
 
     public static float bulletSpeed = 30;// 8;

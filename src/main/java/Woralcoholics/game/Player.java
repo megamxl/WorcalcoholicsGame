@@ -7,6 +7,7 @@ import java.io.IOException;
 /**
  * Inspiration https://www.youtube.com/watch?v=vKomghrsniU
  * @author Maxlimilian Nowak
+ * @author Christoph Oprawill
  */
 
 public class Player extends GameObject {

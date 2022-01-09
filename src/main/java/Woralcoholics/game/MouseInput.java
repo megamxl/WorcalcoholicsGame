@@ -10,9 +10,12 @@ import java.io.IOException;
 import java.awt.event.MouseWheelEvent;
 import java.awt.Robot;
 
-/***
+/**
  * in this class the mouse input  happens
+ *
+ * @author Christoph Oprawill
  */
+
 public class MouseInput extends MouseAdapter {
 
     private GameManager handler;

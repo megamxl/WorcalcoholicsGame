@@ -8,6 +8,7 @@ import java.io.IOException;
 
 /**
  *  @author Maxlimilian Nowak
+ * @author Christoph Oprawill
  */
 
 public class GunnerEnemy extends Enemy {

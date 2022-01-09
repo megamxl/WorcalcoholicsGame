@@ -3,9 +3,13 @@ package Woralcoholics.game;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-/***
+/**
  * The shadow of the enemy if he is dead
+ *
+ * @author Christoph Oprawill
  */
+
+
 public class EnemyShadow extends GameObject {
 
     private BufferedImage shadow_image = null;

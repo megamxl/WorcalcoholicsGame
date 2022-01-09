@@ -7,20 +7,22 @@ import java.io.IOException;
 import java.util.Random;
 
 /**
- *Enemy Class
+ * Enemy Class
+ *
  * @author Maxlimilian Nowak
+ * @author Christoph Oprawill
  */
-public class Enemy<privare> extends GameObject {
+public class Enemy extends GameObject {
 
     //region INSTANCE VARIABLES
     public final int upgradeAfterWave = 3;                  //After how many Waves an Upgrade should be granted
     public static float velocity = 0;
     public static int enemysAlive = 0;
     public static int waves = 1;
-    private static int maxHp =100;
+    private static int maxHp = 100;
 
     int choose = 0;
-    int hp =100;
+    int hp = 100;
     int low = -4;                                           //low and high values for different variations of enemy behaviour
     int high = 4;
     int booleanValue = 0;                                   //booleanvalue is for determining if enemy should charge player again or just running aimless around
@@ -104,8 +106,8 @@ public class Enemy<privare> extends GameObject {
             if (tmpObject.getId() == ID.Block) {
                 if (getBoundsAround().intersects(tmpObject.getBounds())) {
                     // if it is colliding with wall it goes in the opposite direction
-                    x += (velX *3) * -1;
-                    y += (velY *3) * -1;
+                    x += (velX * 3) * -1;
+                    y += (velY * 3) * -1;
                     velX *= -1;
                     velY *= -1;
                     //enemy cant aim player anymore -> prevents stucking at the wall
@@ -122,11 +124,14 @@ public class Enemy<privare> extends GameObject {
                 if (getBounds().intersects(tmpObject.getBounds())) {
                     //System.out.println("hit");
                     hp -= 110;
-                    if(hp > 50) playSoundEnemyHit();
+                    if (hp > 50) playSoundEnemyHit();
                     //System.out.println("einem enemy leben abgezogen " + hp);
 
-                    if(this.getId() == ID.Enemy){score.addScore(3);}
-                    else if(this.getId() == ID.GunnerEnemy){score.addScore(10);}
+                    if (this.getId() == ID.Enemy) {
+                        score.addScore(3);
+                    } else if (this.getId() == ID.GunnerEnemy) {
+                        score.addScore(10);
+                    }
 
                     //System.out.println("es sind " + enemysAlive +" enemys am leben");
                 }
@@ -175,13 +180,13 @@ public class Enemy<privare> extends GameObject {
 
     public void isDead() {
         if (hp <= 0) {
-            int prob = Game.randomNumber(1,5);
+            int prob = Game.randomNumber(1, 5);
             remove();
             float curX = x;
             float curY = y;
             //int prob = 2;
-            if(prob == 2){
-                Game.SpawnCreate((int)curX,(int)curY);
+            if (prob == 2) {
+                Game.SpawnCreate((int) curX, (int) curY);
             }
 
 
@@ -197,7 +202,7 @@ public class Enemy<privare> extends GameObject {
         }
 
         // currently, capping ant 20 because of performance
-        if(waveSize > 20){
+        if (waveSize > 20) {
             waveSize = 20;
         }
 
@@ -223,7 +228,7 @@ public class Enemy<privare> extends GameObject {
         if ((y > 1000 || y < 30) || (x > 2000 || x < 30)) {
             removeWithObject(this);
             Spawner(1, true, r);
-           // System.out.println("GONE");
+            // System.out.println("GONE");
             //System.out.println("x:"+ x +" " + "y" + y);
         }
     }
@@ -231,6 +236,7 @@ public class Enemy<privare> extends GameObject {
     //endregion
 
     //region PRIVATE METHODS
+
     /**
      * Enemy gets removed
      */
@@ -238,11 +244,11 @@ public class Enemy<privare> extends GameObject {
         manager.removeObject(this);
         float curX = x;
         float curY = y;
-        Game.AddEnemyShadow((int)curX,(int)curY);
+        Game.AddEnemyShadow((int) curX, (int) curY);
 
         playSoundEnemy();
         enemysAlive--;
-        if(!Game.inTutorial){
+        if (!Game.inTutorial) {
             if (enemysAlive <= 0) {
                 maxHp += 50;
                 waves++;
@@ -265,6 +271,7 @@ public class Enemy<privare> extends GameObject {
 
     /**
      * needed if a specific enemy should get removed
+     *
      * @param tempobject
      */
     public void removeWithObject(GameObject tempobject) {
@@ -287,8 +294,7 @@ public class Enemy<privare> extends GameObject {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
-                catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     //e.printStackTrace();
                     //System.out.println("ILLEGAL");
                 }
@@ -312,8 +318,7 @@ public class Enemy<privare> extends GameObject {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
-                catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     //e.printStackTrace();
                     //System.out.println("ILLEGAL");
                 }
@@ -324,7 +329,7 @@ public class Enemy<privare> extends GameObject {
     }
 
 
-    public static void spawnWaveAfterUpgrades(){
+    public static void spawnWaveAfterUpgrades() {
         Game.TimerValue = 5;    //5 secs to spawn next wave
         Game.shouldTime = true; //activate Timer
         Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave

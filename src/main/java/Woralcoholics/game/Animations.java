@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 /**
  * inspiration
  * @author Maxlimilian Nowak
+ * @author Christoph Oprawill
  */
 
 public class Animations {

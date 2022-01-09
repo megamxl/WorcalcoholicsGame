@@ -2,6 +2,12 @@ package Woralcoholics.game;
 
 import java.util.LinkedList;
 
+/**
+ * The Gun Class
+ *
+ * @author Christoph Oprawill
+ */
+
 public class Gun {
 
     //region INSTANCE VARIABLES
