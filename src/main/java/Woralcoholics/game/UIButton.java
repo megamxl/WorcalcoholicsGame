@@ -15,8 +15,8 @@ public class UIButton extends GameObject{
     private final int width, height, action;
     private int col, row;
     private final int fontsize;
-    private double stringX, stringY;
-    private String name;
+    private double stringX, stringY, string2X, string2Y;
+    private String name, name1 = null, name2 = null;
     private Font font;
     private Graphics g;
     private BufferedImage sprite = null;
@@ -52,8 +52,20 @@ public class UIButton extends GameObject{
 
         this.fontsize = fontsize;
         font = new Font("Masked Hero Demo", Font.PLAIN, fontsize);
-        this.stringX = x - g.getFontMetrics(font).stringWidth(name) / 2.0;
-        this.stringY = y + g.getFontMetrics(font).getHeight() / 4.0;
+        if(fontsize < 30 && name.length() > 10 && name.contains(" ")) {
+            String[] temp = name.split(" ");
+            name1 = temp[0];
+            name2 = temp[1];
+            this.stringX = x - g.getFontMetrics(font).stringWidth(name1) / 2.0;
+            this.stringY = y - g.getFontMetrics(font).getHeight() / 8.0;
+            string2X = x - g.getFontMetrics(font).stringWidth(name2) / 2.0;
+            string2Y = y + g.getFontMetrics(font).getHeight() * 5 / 8.0;
+        }
+        else {
+            this.stringX = x - g.getFontMetrics(font).stringWidth(name) / 2.0;
+            this.stringY = y + g.getFontMetrics(font).getHeight() / 4.0;
+        }
+
         this.x -= width / 2.0;
         this.y -= height / 2.0;
         sprite = an.getImage(col, row, width, height);
@@ -70,7 +82,13 @@ public class UIButton extends GameObject{
         g.drawImage(sprite, (int)x, (int)y,null);
         g.setColor(Color.WHITE);
         g.setFont(font);
-        g.drawString(name, (int)stringX, (int)stringY);
+        if(name2 != null) {
+            g.drawString(name1, (int)stringX, (int)stringY);
+            g.drawString(name2, (int)string2X, (int)string2Y);
+        }
+        else {
+            g.drawString(name, (int)stringX, (int)stringY);
+        }
     }
 
     public void action() {

@@ -6,11 +6,11 @@ import java.sql.*;
  *  @author Maxlimilian Nowak
  */
 
-public class DatabeseConection {
+public class DatabaseConnection {
 
     Connection con = null;
     String insertQuery =null;
-    String selectQurey =null;
+    String selectQuery =null;
     public static String[] scoresArray = {"","","","",""};
     public static boolean finishedFillingArray = false;
 
@@ -19,7 +19,7 @@ public class DatabeseConection {
      * connects and inserts ito Database
      * @throws SQLException
      */
-    public void insertSoreAndNameInToDatabase() throws SQLException {
+    public void insertScoreAndNameIntoDatabase() throws SQLException {
         // The query for inserting ito the database
         if (Game.playerName != null) {
              insertQuery = "INSERT INTO `Scores` (`name`, `score`) VALUES ( '" + Game.playerName + "', '" + Game.lastScore + "')";
@@ -47,8 +47,8 @@ public class DatabeseConection {
      * Reads back form Database
      * @throws SQLException
      */
-    public void ReadFromDatabse() throws SQLException {
-        selectQurey = "SELECT * FROM `Scores` ORDER BY `score` DESC limit 5";
+    public void ReadFromDatabase() throws SQLException {
+        selectQuery = "SELECT * FROM `Scores` ORDER BY `score` DESC limit 5";
         try {
             // Method to try to connect. Database is completely unsafe at the moment but is just a free mysql Database at the moment without any privileges to create different users
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -58,7 +58,7 @@ public class DatabeseConection {
             System.out.println(e);
         }
         try (Statement stmt = con.createStatement()) {
-            ResultSet rs = stmt.executeQuery(selectQurey);
+            ResultSet rs = stmt.executeQuery(selectQuery);
             int i = 0;
             // now iterating over the complete result and storing it in the Array
             while (rs.next()){

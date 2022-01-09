@@ -9,7 +9,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -48,12 +47,13 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage level = null;
     private BufferedImage tutorialLevel = null;
     private BufferedImage spritesheet = null;
-    private BufferedImage playerWalkCycle = null;
-    private BufferedImage enemyBlood = null;
-    private BufferedImage upgradBoarder = null;
+    private BufferedImage playerWalkCycleImg = null;
+    private BufferedImage enemyBloodImg = null;
+    private BufferedImage upgradeButtonImg = null;
     private BufferedImage tutorialBoarder = null;
     private BufferedImage upgradBoard = null;
-    private BufferedImage uiButtonAn = null;
+    private BufferedImage UIButtonImg = null;
+    private BufferedImage gameOverUIButtonImg = null;
     private BufferedImage floor = null;
     private BufferedImage floorDirt1 = null;
     private BufferedImage floorDirt2 = null;
@@ -97,16 +97,17 @@ public class Game extends Canvas implements Runnable {
     public static GameManager handler;
 
     private static ImageGetter imageGetter;
-    private static ImageGetter upgradeBoarderGet;
-    private static ImageGetter getImagesPlayer;
-    private static ImageGetter getImagesEnemy;
-    private static ImageGetter GamoverScreenImg;
-    private static ImageGetter gettutorialBorder;
+    private static ImageGetter getUpgradeButton;
+    private static ImageGetter getPlayerWalkCycle;
+    private static ImageGetter getEnemyBlood;
+    private static ImageGetter GameOverScreenImg;
+    private static ImageGetter getTutorialDialogWindowBorder;
     private static ImageGetter TitleScreenImg;
-    private static ImageGetter uiButtonAnGet;
+    private static ImageGetter getUIButton;
+    private static ImageGetter getGameOverUIButton;
     private static Gun gun;
 
-    private DatabeseConection databeseConection = new DatabeseConection();
+    private DatabaseConnection databeseConection = new DatabaseConnection();
 
     private Camera camera;
     private double percent;
@@ -145,25 +146,28 @@ public class Game extends Canvas implements Runnable {
         spritesheet = loader.loadImage("/Graphics/Spritesheet.png");
         imageGetter = new ImageGetter(spritesheet);
 
-        upgradBoarder = loader.loadImage("/Graphics/UpgradeBorder.png");
-        upgradeBoarderGet = new ImageGetter(upgradBoarder);
+        upgradeButtonImg = loader.loadImage("/Graphics/UpgradeBorder.png");
+        getUpgradeButton = new ImageGetter(upgradeButtonImg);
 
-        uiButtonAn = loader.loadImage("/Graphics/UIButton_352x102 NEW.png");
-        uiButtonAnGet = new ImageGetter(uiButtonAn);
+        UIButtonImg = loader.loadImage("/Graphics/UIButton_352x102.png");
+        getUIButton = new ImageGetter(UIButtonImg);
 
-        playerWalkCycle = loader.loadImage("/Graphics/Animations/Character Running Spritesheet.png");
-        getImagesPlayer = new ImageGetter(playerWalkCycle);
+        gameOverUIButtonImg = loader.loadImage("/Graphics/GameOverUIButton.png");
+        getGameOverUIButton = new ImageGetter(gameOverUIButtonImg);
 
-        enemyBlood = loader.loadImage("/Graphics/Animations/Bloodparticle.png");
-        getImagesEnemy = new ImageGetter(enemyBlood);
+        playerWalkCycleImg = loader.loadImage("/Graphics/Animations/Character Running Spritesheet.png");
+        getPlayerWalkCycle = new ImageGetter(playerWalkCycleImg);
 
-        BufferedImage GamoverScreen = loader.loadImage("/Graphics/gameOverPictureV2.png");
-        GamoverScreenImg = new ImageGetter(GamoverScreen);
-        imgOver = GamoverScreen.getSubimage(1, 1, 860/*720*/, 410/*480*/);
+        enemyBloodImg = loader.loadImage("/Graphics/Animations/Bloodparticle.png");
+        getEnemyBlood = new ImageGetter(enemyBloodImg);
 
-        BufferedImage tutorial = loader.loadImage("/Graphics/TutorialBorder.png");
-        gettutorialBorder = new ImageGetter(tutorial);
-        tutorialBoarder = gettutorialBorder.getImage(1, 1, SCREEN_WIDTH - 2, SCREEN_HEIGHT - 2);
+        BufferedImage GameOverScreen = loader.loadImage("/Graphics/gameOverPictureV2.png");
+        GameOverScreenImg = new ImageGetter(GameOverScreen);
+        imgOver = GameOverScreen.getSubimage(1, 1, 860/*720*/, 410/*480*/);
+
+        BufferedImage tutorialDialogWindowBorderImg = loader.loadImage("/Graphics/TutorialBorder.png");
+        getTutorialDialogWindowBorder = new ImageGetter(tutorialDialogWindowBorderImg);
+        tutorialBoarder = getTutorialDialogWindowBorder.getImage(1, 1, SCREEN_WIDTH - 2, SCREEN_HEIGHT - 2);
 
         imgTitle = loader.loadImage("/Graphics/Titlescreen.png");
 
@@ -423,16 +427,17 @@ public class Game extends Canvas implements Runnable {
      */
     private void renderHighScores(Graphics g) {
         g.setColor(Color.black);
-        g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 40));
-        g.drawString("Higscores from Databse", 100, 100);
+        g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 36));
+        int x = SCREEN_WIDTH / 2 - g.getFontMetrics(new Font("Masked Hero Demo", Font.PLAIN, 36)).stringWidth("Highscores from Database") / 2;
+        g.drawString("Highscores from Database", x, 100);
         g.setFont(new Font("Arial Black", Font.PLAIN, 40));
-        if (DatabeseConection.finishedFillingArray) {
+        if (DatabaseConnection.finishedFillingArray) {
             g.setColor(Color.black);
-            g.drawString(DatabeseConection.scoresArray[0], 300, 210);
-            g.drawString(DatabeseConection.scoresArray[1], 300, 250);
-            g.drawString(DatabeseConection.scoresArray[2], 300, 290);
-            g.drawString(DatabeseConection.scoresArray[3], 300, 330);
-            g.drawString(DatabeseConection.scoresArray[4], 300, 370);
+            g.drawString(DatabaseConnection.scoresArray[0], 300, 210);
+            g.drawString(DatabaseConnection.scoresArray[1], 300, 250);
+            g.drawString(DatabaseConnection.scoresArray[2], 300, 290);
+            g.drawString(DatabaseConnection.scoresArray[3], 300, 330);
+            g.drawString(DatabaseConnection.scoresArray[4], 300, 370);
         }
     }
 
@@ -603,7 +608,7 @@ public class Game extends Canvas implements Runnable {
                         "START", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
                         uiButtonAnGet, 1, 1, 400, (SCREEN_HEIGHT - 25) / 2 + 20, 40));*/
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT + 350) / 2, 352, 102,
-                        "START", GameState.MAIN_MENU, ID.UIButton, this, 1, 0, uiButtonAnGet,
+                        "START", GameState.MAIN_MENU, ID.UIButton, this, 1, 0, getUIButton,
                         1, 1, g, 40));
             }
             case MAIN_MENU -> {
@@ -613,16 +618,16 @@ public class Game extends Canvas implements Runnable {
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN, ID.UIButton,
                         this, 1, 0, imageGetter, 1, 6, g, 0));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, 70, 352, 102, "Level",
-                        GameState.LEVEL, ID.UIButton, this, 1, 0, uiButtonAnGet, 1, 1,
+                        GameState.LEVEL, ID.UIButton, this, 1, 0, getUIButton, 1, 1,
                         g, 40));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, 195, 352, 102, "Tutorial",
-                        GameState.TUTORIAL, ID.UIButton, this, 1, 0, uiButtonAnGet, 1, 1,
+                        GameState.TUTORIAL, ID.UIButton, this, 1, 0, getUIButton, 1, 1,
                         g, 30));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, 320, 352, 102, "Scores",
-                        GameState.HIGH_SCORES, ID.UIButton, this, 1, 0, uiButtonAnGet, 1,
+                        GameState.HIGH_SCORES, ID.UIButton, this, 1, 0, getUIButton, 1,
                         1, g, 35));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, 445, 352, 102, "Credits",
-                        GameState.CREDITS, ID.UIButton, this, 1, 0, uiButtonAnGet, 1, 1,
+                        GameState.CREDITS, ID.UIButton, this, 1, 0, getUIButton, 1, 1,
                         g, 32));
                 handler.addObject(new UIButton(SCREEN_WIDTH - 46, 34, 64, 64, "Options",
                         GameState.OPTIONS, ID.UIButton, this, 1, 0, imageGetter, 2, 6, g,
@@ -639,7 +644,7 @@ public class Game extends Canvas implements Runnable {
             }
             case HIGH_SCORES -> {
                 try {
-                    databeseConection.ReadFromDatabse();
+                    databeseConection.ReadFromDatabase();
                 }catch (Exception e){
                     System.out.println("Could not connect to Database");
                 }
@@ -664,13 +669,13 @@ public class Game extends Canvas implements Runnable {
                 int[] randomUpgrades = upgrades.getUpgrades();
                 handler.addObject(new UIButton(SCREEN_WIDTH / 4, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[0]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[0], upgradeBoarderGet, 1, 1, g, 20));
+                        randomUpgrades[0], getUpgradeButton, 1, 1, g, 20));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[1]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[1], upgradeBoarderGet, 1, 1, g, 20));
+                        randomUpgrades[1], getUpgradeButton, 1, 1, g, 20));
                 handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[2]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[2], upgradeBoarderGet, 1, 1, g, 20));
+                        randomUpgrades[2], getUpgradeButton, 1, 1, g, 20));
                 paused = true;      //Pause the game until Player chose an Upgrade
                 /*for(int i = 0; i < 3; i++) {
                     System.out.println(i + ": " + randomUpgrades[i] + " " + upgrades.drawUpgrades(randomUpgrades[i]));
@@ -687,10 +692,10 @@ public class Game extends Canvas implements Runnable {
                 System.out.println(playerName);
                 handler.addObject(new UIButton(SCREEN_WIDTH / 4, SCREEN_HEIGHT * 4 / 5, 352, 102,
                         "Play Again?", GameState.LEVEL, ID.UIButton, this, 1, 0,
-                        uiButtonAnGet, 1, 1, g, 24));
+                        getGameOverUIButton, 1, 1, g, 27));
                 handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 4 / 5, 352, 102,
                         "Stop Playing", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
-                        uiButtonAnGet, 1, 1, g, 23));
+                        getGameOverUIButton, 1, 1, g, 27));
                 Game.TimerValue = 0;    //5 secs wait time
                 Game.shouldTime = true; //activate Timer
                 Game.timerAction = 4;   //execute timerAction 4 -> enter name and upload score dialogs
@@ -770,7 +775,7 @@ public class Game extends Canvas implements Runnable {
                         JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?",
                                 null, JOptionPane.YES_NO_OPTION);
                         try {
-                            databeseConection.insertSoreAndNameInToDatabase();
+                            databeseConection.insertScoreAndNameIntoDatabase();
                         }catch (Exception e){
                             System.out.println("could not connect to Database");
                         }
@@ -943,16 +948,16 @@ public class Game extends Canvas implements Runnable {
 
 
     private void loadPlayerSprites() {
-        playerWalkingLeft[0] = getImagesPlayer.getImage32(1, 1, 32, 32);
-        playerWalkingLeft[1] = getImagesPlayer.getImage32(2, 1, 32, 32);
-        playerWalkingLeft[2] = getImagesPlayer.getImage32(3, 1, 32, 32);
-        playerWalkingLeft[3] = getImagesPlayer.getImage32(4, 1, 32, 32);
-        playerWalkingLeft[4] = getImagesPlayer.getImage32(5, 1, 32, 32);
-        playerWalkingLeft[5] = getImagesPlayer.getImage32(6, 1, 32, 32);
-        playerWalkingLeft[6] = getImagesPlayer.getImage32(7, 1, 32, 32);
-        playerWalkingLeft[7] = getImagesPlayer.getImage32(8, 1, 32, 32);
-        playerWalkingLeft[8] = getImagesPlayer.getImage32(9, 1, 32, 32);
-        playerWalkingLeft[9] = getImagesPlayer.getImage32(10, 1, 32, 32);
+        playerWalkingLeft[0] = getPlayerWalkCycle.getImage32(1, 1, 32, 32);
+        playerWalkingLeft[1] = getPlayerWalkCycle.getImage32(2, 1, 32, 32);
+        playerWalkingLeft[2] = getPlayerWalkCycle.getImage32(3, 1, 32, 32);
+        playerWalkingLeft[3] = getPlayerWalkCycle.getImage32(4, 1, 32, 32);
+        playerWalkingLeft[4] = getPlayerWalkCycle.getImage32(5, 1, 32, 32);
+        playerWalkingLeft[5] = getPlayerWalkCycle.getImage32(6, 1, 32, 32);
+        playerWalkingLeft[6] = getPlayerWalkCycle.getImage32(7, 1, 32, 32);
+        playerWalkingLeft[7] = getPlayerWalkCycle.getImage32(8, 1, 32, 32);
+        playerWalkingLeft[8] = getPlayerWalkCycle.getImage32(9, 1, 32, 32);
+        playerWalkingLeft[9] = getPlayerWalkCycle.getImage32(10, 1, 32, 32);
 
 
         for (int i = 0; i < playerWalkingLeft.length; i++) {
@@ -965,13 +970,13 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void loadEnemyDeadSprites() {
-        enemyDeadShadow[0] = getImagesEnemy.getImage32(1, 1, 32, 32);
-        enemyDeadShadow[1] = getImagesEnemy.getImage32(2, 1, 32, 32);
-        enemyDeadShadow[2] = getImagesEnemy.getImage32(3, 1, 32, 32);
-        enemyDeadShadow[3] = getImagesEnemy.getImage32(4, 1, 32, 32);
-        enemyDeadShadow[4] = getImagesEnemy.getImage32(5, 1, 32, 32);
-        enemyDeadShadow[5] = getImagesEnemy.getImage32(6, 1, 32, 32);
-        enemyDeadShadow[6] = getImagesEnemy.getImage32(7, 1, 32, 32);
+        enemyDeadShadow[0] = getEnemyBlood.getImage32(1, 1, 32, 32);
+        enemyDeadShadow[1] = getEnemyBlood.getImage32(2, 1, 32, 32);
+        enemyDeadShadow[2] = getEnemyBlood.getImage32(3, 1, 32, 32);
+        enemyDeadShadow[3] = getEnemyBlood.getImage32(4, 1, 32, 32);
+        enemyDeadShadow[4] = getEnemyBlood.getImage32(5, 1, 32, 32);
+        enemyDeadShadow[5] = getEnemyBlood.getImage32(6, 1, 32, 32);
+        enemyDeadShadow[6] = getEnemyBlood.getImage32(7, 1, 32, 32);
     }
 
 
