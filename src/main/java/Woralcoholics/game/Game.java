@@ -359,6 +359,9 @@ public class Game extends Canvas implements Runnable {
         previousState = checkState;      //save the state before the state change
         checkState = currentState;       //the checkState becomes the current state, to again detect a state change
         //System.out.println(previousState + " -> " + currentState + ", check current against: " + checkState);
+        if(currentState == GameState.MAIN_MENU) {
+            loaded = false;
+        }
         if (!loaded) {   //if nothing is loaded...
             handler.clearHandler(); //clear everything in the handler
         }
@@ -609,34 +612,34 @@ public class Game extends Canvas implements Runnable {
                         uiButtonAnGet, 1, 1, 400, (SCREEN_HEIGHT - 25) / 2 + 20, 40));*/
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT + 350) / 2, 352, 102,
                         "START", GameState.MAIN_MENU, ID.UIButton, this, 1, 0, getUIButton,
-                        1, 1, g, 40));
+                        1, 1, g, 1, 40));
             }
             case MAIN_MENU -> {
                 menuCount = 0;
                 //JMenu mainMenu = new JMenu("Main Menu");
                 //mainMenu.add(new JMenuItem("test"));
-                handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN, ID.UIButton,
-                        this, 1, 0, imageGetter, 1, 6, g, 0));
+                handler.addObject(new UIButton(32, 32, 64, 64, "Title", GameState.TITLE, ID.UIButton,
+                        this, 1, 0, imageGetter, 1, 6, g, 1, 0));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, 70, 352, 102, "Level",
                         GameState.LEVEL, ID.UIButton, this, 1, 0, getUIButton, 1, 1,
-                        g, 40));
+                        g, 1, 40));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, 195, 352, 102, "Tutorial",
                         GameState.TUTORIAL, ID.UIButton, this, 1, 0, getUIButton, 1, 1,
-                        g, 30));
+                        g, 1, 30));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, 320, 352, 102, "Scores",
                         GameState.HIGH_SCORES, ID.UIButton, this, 1, 0, getUIButton, 1,
-                        1, g, 35));
+                        1, g, 1, 35));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, 445, 352, 102, "Credits",
                         GameState.CREDITS, ID.UIButton, this, 1, 0, getUIButton, 1, 1,
-                        g, 32));
+                        g, 1, 32));
                 handler.addObject(new UIButton(SCREEN_WIDTH - 46, 34, 64, 64, "Options",
                         GameState.OPTIONS, ID.UIButton, this, 1, 0, imageGetter, 2, 6, g,
-                        0));
+                        1, 0));
 
             }
             case CREDITS -> {
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
-                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 0));
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 1, 0));
             }
             case TUTORIAL -> {
                 //handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
@@ -650,32 +653,45 @@ public class Game extends Canvas implements Runnable {
                 }
                 //JOptionPane playerDataInput = new JOptionPane();
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
-                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 0));
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 1, 0));
             }
             case OPTIONS -> {
                 menuCount++;
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
-                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 0));
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 1, 0));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, 64, 64, "M",
+                        GameState.OPTIONS, ID.UIButton, this, 3, 0, imageGetter, 1, 2, g,
+                        3, 40));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 64, 64, "K",
+                        GameState.OPTIONS, ID.UIButton, this, 3, 0, imageGetter, 1, 2, g,
+                        3, 40));
+                handler.addObject(new UIButton(SCREEN_WIDTH * 2 / 3, SCREEN_HEIGHT / 2, 64, 64, "L",
+                        GameState.OPTIONS, ID.UIButton, this, 3, 0, imageGetter, 1, 2, g,
+                        3, 40));
             }
             case PAUSE_MENU -> {
                 menuCount = 10;
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", GameState.LEVEL,
-                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 0));
-                handler.addObject(new UIButton(96, 32, 64, 64, "Options", GameState.OPTIONS,
-                        ID.UIButton, this, 1, 0, imageGetter, 2, 6, g, 0));
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 1, 0));
+                handler.addObject(new UIButton(SCREEN_WIDTH - 46, 34, 64, 64, "Options",
+                        GameState.OPTIONS, ID.UIButton, this, 1, 0, imageGetter, 2, 6, g,
+                        1, 0));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 352, 102,
+                        "Stop Playing", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
+                        getGameOverUIButton, 1, 1, g, 1, 27));
                 paused = true;                  //we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
                 int[] randomUpgrades = upgrades.getUpgrades();
                 handler.addObject(new UIButton(SCREEN_WIDTH / 4, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[0]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[0], getUpgradeButton, 1, 1, g, 20));
+                        randomUpgrades[0], getUpgradeButton, 1, 1, g, 1, 20));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[1]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[1], getUpgradeButton, 1, 1, g, 20));
+                        randomUpgrades[1], getUpgradeButton, 1, 1, g, 1, 20));
                 handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[2]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[2], getUpgradeButton, 1, 1, g, 20));
+                        randomUpgrades[2], getUpgradeButton, 1, 1, g, 1, 20));
                 paused = true;      //Pause the game until Player chose an Upgrade
                 /*for(int i = 0; i < 3; i++) {
                     System.out.println(i + ": " + randomUpgrades[i] + " " + upgrades.drawUpgrades(randomUpgrades[i]));
@@ -692,10 +708,10 @@ public class Game extends Canvas implements Runnable {
                 System.out.println(playerName);
                 handler.addObject(new UIButton(SCREEN_WIDTH / 4, SCREEN_HEIGHT * 4 / 5, 352, 102,
                         "Play Again?", GameState.LEVEL, ID.UIButton, this, 1, 0,
-                        getGameOverUIButton, 1, 1, g, 27));
+                        getGameOverUIButton, 1, 1, g, 1, 27));
                 handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 4 / 5, 352, 102,
                         "Stop Playing", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
-                        getGameOverUIButton, 1, 1, g, 27));
+                        getGameOverUIButton, 1, 1, g, 1, 27));
                 Game.TimerValue = 0;    //5 secs wait time
                 Game.shouldTime = true; //activate Timer
                 Game.timerAction = 4;   //execute timerAction 4 -> enter name and upload score dialogs

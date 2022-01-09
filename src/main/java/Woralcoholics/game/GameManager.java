@@ -29,7 +29,7 @@ public class GameManager {
     Path relativePath;
     Path absolutePath;
     FloatControl volume;
-    public int soundv = 1; //default value for -40f sound | MUTE (Without Sound Effects just background music) -> -80f | MAX -> 6.0206f
+    public static int soundv = 1; //default value for -40f sound | MUTE (Without Sound Effects just background music) -> -80f | MAX -> 6.0206f
     protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip = false;
     protected double wait;
     //machine gun - del=0 | normal gun - del=200 | slowgun - del=1000

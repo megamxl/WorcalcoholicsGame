@@ -37,7 +37,7 @@ public class UIButton extends GameObject{
      * @param an
      */
     public UIButton(int x, int y, int width, int height, String name, GameState nextState, ID id, Game game,
-                    int action, int upgradeNr, ImageGetter an, int col, int row, Graphics g, int fontsize) {
+                    int action, int upgradeNr, ImageGetter an, int col, int row, Graphics g, int fontNr, int fontsize) {
         super(x, y, nextState, id, an);
         this.width = width;
         this.height = height;
@@ -51,7 +51,12 @@ public class UIButton extends GameObject{
         this.g = g;
 
         this.fontsize = fontsize;
-        font = new Font("Masked Hero Demo", Font.PLAIN, fontsize);
+        switch(fontNr) {
+            case 1 -> font = new Font("Masked Hero Demo", Font.PLAIN, fontsize);
+            case 2 -> font = new Font("DEBUG FREE TRIAL", Font.PLAIN, fontsize);
+            case 3 -> font = new Font("Cyberpunk", Font.PLAIN, fontsize);
+        }
+        //font = new Font("Masked Hero Demo", Font.PLAIN, fontsize);
         if(fontsize < 30 && name.length() > 10 && name.contains(" ")) {
             String[] temp = name.split(" ");
             name1 = temp[0];
@@ -96,11 +101,18 @@ public class UIButton extends GameObject{
             case 1 -> {
                 Game.setState(this.nextState);    //switch to next state
             }
-            case 2 -> {
+            case 2 -> {     //Get an Upgrade
                 upgrades.getUpgrade(upgradeNr);
                 Upgrades.drawRandomUpgrades();
                 Game.setState(this.nextState);
                 System.out.println("Got this Upgrade: " + name);
+            }
+            case 3 -> {     //Change Sound Level
+                switch(name) {
+                    case "M" -> GameManager.soundv = 0;
+                    case "K" -> GameManager.soundv = 1;
+                    case "L" -> GameManager.soundv = 2;
+                }
             }
         }
     }
