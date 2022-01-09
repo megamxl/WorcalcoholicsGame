@@ -222,10 +222,16 @@ public class MouseInput extends MouseAdapter {
     public void mouseWheelMoved(MouseWheelEvent e) {
         if (e.getWheelRotation() < 0) {
             gunequiperror = MouseWheelUp();
-            playSoundEquip(gunequiperror);
+            if (game.getState() == GameState.GAME_OVER || game.getState() == GameState.PAUSE_MENU) {
+            } else {
+                playSoundEquip(gunequiperror);
+            }
         } else {
             gunequiperror = MouseWheelDown();
-            playSoundEquip(gunequiperror);
+            if (game.getState() == GameState.GAME_OVER || game.getState() == GameState.PAUSE_MENU) {
+            } else {
+                playSoundEquip(gunequiperror);
+            }
         }
     }
     //endregion
