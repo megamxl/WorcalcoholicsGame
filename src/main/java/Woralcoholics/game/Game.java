@@ -44,22 +44,23 @@ public class Game extends Canvas implements Runnable {
 
     private Graphics g;
 
-    private BufferedImage level = null;
-    private BufferedImage tutorialLevel = null;
-    private BufferedImage spritesheet = null;
-    private BufferedImage playerWalkCycleImg = null;
-    private BufferedImage enemyBloodImg = null;
-    private BufferedImage upgradeButtonImg = null;
-    private BufferedImage tutorialBoarder = null;
+    private BufferedImage level;
+    private BufferedImage tutorialLevel;
+    private BufferedImage spritesheet;
+    private BufferedImage playerWalkCycleImg;
+    private BufferedImage enemyBloodImg;
+    private BufferedImage upgradeButtonImg;
+    private BufferedImage tutorialBoarder;
     private BufferedImage upgradBoard = null;
-    private BufferedImage UIButtonImg = null;
-    private BufferedImage gameOverUIButtonImg = null;
-    private BufferedImage floor = null;
-    private BufferedImage floorDirt1 = null;
-    private BufferedImage floorDirt2 = null;
-    private BufferedImage floorDirt3 = null;
-    private BufferedImage imgOver = null;
-    private BufferedImage imgTitle = null;
+    private BufferedImage UIButtonImg;
+    private BufferedImage gameOverUIButtonImg;
+    private BufferedImage floor;
+    private BufferedImage floorDirt1;
+    private BufferedImage floorDirt2;
+    private BufferedImage floorDirt3;
+    private BufferedImage imgOver;
+    private BufferedImage imgStudio;
+    private BufferedImage imgTitle;
     private BufferedImage currGun = null;
     private Upgrades upgrades;
 
@@ -102,7 +103,8 @@ public class Game extends Canvas implements Runnable {
     private static ImageGetter getEnemyBlood;
     private static ImageGetter GameOverScreenImg;
     private static ImageGetter getTutorialDialogWindowBorder;
-    private static ImageGetter TitleScreenImg;
+
+    //private static ImageGetter TitleScreenImg;
     private static ImageGetter getUIButton;
     private static ImageGetter getGameOverUIButton;
     private static Gun gun;
@@ -169,6 +171,7 @@ public class Game extends Canvas implements Runnable {
         getTutorialDialogWindowBorder = new ImageGetter(tutorialDialogWindowBorderImg);
         tutorialBoarder = getTutorialDialogWindowBorder.getImage(1, 1, SCREEN_WIDTH - 2, SCREEN_HEIGHT - 2);
 
+        imgStudio = loader.loadImage("/Graphics/StudioImg.png");
         imgTitle = loader.loadImage("/Graphics/Titlescreen.png");
 
 
@@ -184,10 +187,7 @@ public class Game extends Canvas implements Runnable {
         floorDirt2 = imageGetter.getImage(3, 2, 64, 64);
         floorDirt3 = imageGetter.getImage(4, 2, 64, 64);
         loadMenu();
-        //activate the timer, to show the Studio for 1 sec
-        TimerValue = 0;
-        shouldTime = true;
-        timerAction = 3;
+        startTimer(2, 3);   //activate the timer, to show the Studio for 3 sec
         this.upgrades = new Upgrades(this); //use upgrades.method for upgrade changes in Game and Player class
 
         loadPlayerSprites();
@@ -389,108 +389,7 @@ public class Game extends Canvas implements Runnable {
         } else {
             loadMenu();                     //load the menu of currentState
         }
-        System.out.println(currentState + ": " + handler.object.size());
-    }
-
-    /***
-     * Instructions to render the studio screen
-     * @param g the current Buffered image as Graphics object
-     */
-    private void renderStudio(Graphics g) {
-    }
-
-    /***
-     * Instructions to render the title screen
-     * @param g the current Buffered image as Graphics object
-     */
-    private void renderTitle(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        g.drawImage(imgTitle, 0, 0, null);
-    }
-
-    /***
-     * Instructions to render the Main Menu screen
-     * @param g the current Buffered image as Graphics object
-     */
-    private void renderMainMenu(Graphics g) {
-
-    }
-
-    /***
-     * Instructions to render the Main Menu screen
-     * @param g the current Buffered image as Graphics object
-     */
-    private void renderTutorial(Graphics g) {
-    }
-
-    /***
-     * Instructions to render the Main Menu screen
-     * @param g the current Buffered image as Graphics object
-     */
-    private void renderHighScores(Graphics g) {
-        g.setColor(Color.black);
-        g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 36));
-        int x = SCREEN_WIDTH / 2 - g.getFontMetrics(new Font("Masked Hero Demo", Font.PLAIN, 36)).stringWidth("Highscores from Database") / 2;
-        g.drawString("Highscores from Database", x, 100);
-        g.setFont(new Font("Arial Black", Font.PLAIN, 40));
-        if (DatabaseConnection.finishedFillingArray) {
-            g.setColor(Color.black);
-            g.drawString(DatabaseConnection.scoresArray[0], 300, 210);
-            g.drawString(DatabaseConnection.scoresArray[1], 300, 250);
-            g.drawString(DatabaseConnection.scoresArray[2], 300, 290);
-            g.drawString(DatabaseConnection.scoresArray[3], 300, 330);
-            g.drawString(DatabaseConnection.scoresArray[4], 300, 370);
-        }
-    }
-
-    /***
-     * Instructions to render the Options screen
-     * @param g the current Buffered image as Graphics object
-     */
-    private void renderOptions(Graphics g) {
-    }
-
-    /***
-     * Instructions to render the Pause menu screen
-     * @param g the current Buffered image as Graphics object
-     */
-    private void renderPauseMenu(Graphics g) {
-
-    }
-
-    /***
-     * Instructions to render the Upgrade Menu screen
-     * @param g the current Buffered image as Graphics object
-     */
-    private void renderUpgradeMenu(Graphics g) {
-        //g.setColor(Color(0, 0, 0, 127));
-        //g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        /*upgradBoard = upgradeBoarderGet.getImage(1, 1, 320, 600);
-        g.drawImage(upgradBoard, 137, 30, null);
-        g.drawImage(upgradBoard, 377, 30, null);
-        g.drawImage(upgradBoard, 617, 30, null);
-        g.setColor(Color.WHITE);
-        int[] randomUpgrades = upgrades.getUpgrades();
-        g.drawString(upgrades.drawUpgrades(randomUpgrades[0]), 300, 315);
-        g.drawString(upgrades.drawUpgrades(randomUpgrades[1]), 500, 315);
-        g.drawString(upgrades.drawUpgrades(randomUpgrades[2]), 700, 315);*/
-    }
-
-    /***
-     * Instructions to render the Game over screen
-     * @param g the current Buffered image as Graphics object
-     */
-    private void renderGameOver(Graphics g) {
-        g.drawImage(imgOver, 1, 1, null);
-        g.setColor(Color.DARK_GRAY);
-        g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 75));
-        g.drawString("Waves", SCREEN_WIDTH / 4 - 80, SCREEN_HEIGHT / 4);
-        g.drawString("Score", SCREEN_WIDTH * 3 / 4 - 65, SCREEN_HEIGHT / 4);
-        //g.drawString("your Score is" + lastScore, 300, SCREEN_HEIGHT - 65);
-        g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 175));
-        g.drawString(String.valueOf(Enemy.waves-1), SCREEN_WIDTH / 4, SCREEN_HEIGHT * 7 / 16);
-        g.drawString(String.valueOf(lastScore), SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 7 / 16);
+        //System.out.println(currentState + ": " + handler.object.size());
     }
 
     /***
@@ -501,15 +400,51 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.lightGray);
         g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         switch (currentState) {
-            case STUDIO -> renderStudio(g);
-            case TITLE -> renderTitle(g);
-            case MAIN_MENU -> renderMainMenu(g);
-            case TUTORIAL -> renderTutorial(g);
-            case HIGH_SCORES -> renderHighScores(g);
-            case OPTIONS -> renderOptions(g);
-            case PAUSE_MENU -> renderPauseMenu(g);
-            case UPGRADE_MENU -> renderUpgradeMenu(g);
-            case GAME_OVER -> renderGameOver(g);
+            case STUDIO -> {
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                g.drawImage(imgStudio, SCREEN_WIDTH / 2 - 280, SCREEN_HEIGHT / 3, null);
+                g.setColor(Color.WHITE);
+                g.setFont(new Font("Cyberpunk", Font.PLAIN, 70));
+                int stringx = g.getFontMetrics(new Font("Cyberpunk", Font.PLAIN, 70)).stringWidth("presents");
+                g.drawString("presents", SCREEN_WIDTH / 2 - stringx / 2 - 60, SCREEN_HEIGHT * 2 / 3);
+            }
+            case TITLE -> {
+                /*g.setColor(Color.BLACK);
+                g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);*/
+                g.drawImage(imgTitle, 0, 0, null);
+            }
+            case MAIN_MENU -> {}
+            case TUTORIAL -> {}
+            case HIGH_SCORES -> {
+                g.setColor(Color.black);
+                g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 36));
+                int x = SCREEN_WIDTH / 2 - g.getFontMetrics(new Font("Masked Hero Demo", Font.PLAIN, 36)).stringWidth("Highscores from Database") / 2;
+                g.drawString("Highscores from Database", x, 100);
+                g.setFont(new Font("Arial Black", Font.PLAIN, 40));
+                if (DatabaseConnection.finishedFillingArray) {
+                    g.setColor(Color.black);
+                    g.drawString(DatabaseConnection.scoresArray[0], 300, 210);
+                    g.drawString(DatabaseConnection.scoresArray[1], 300, 250);
+                    g.drawString(DatabaseConnection.scoresArray[2], 300, 290);
+                    g.drawString(DatabaseConnection.scoresArray[3], 300, 330);
+                    g.drawString(DatabaseConnection.scoresArray[4], 300, 370);
+                }
+            }
+            case OPTIONS -> {}
+            case PAUSE_MENU -> {}
+            case UPGRADE_MENU -> {}
+            case GAME_OVER -> {
+                g.drawImage(imgOver, 1, 1, null);
+                g.setColor(Color.DARK_GRAY);
+                g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 75));
+                g.drawString("Waves", SCREEN_WIDTH / 4 - 80, SCREEN_HEIGHT / 4);
+                g.drawString("Score", SCREEN_WIDTH * 3 / 4 - 65, SCREEN_HEIGHT / 4);
+                //g.drawString("your Score is" + lastScore, 300, SCREEN_HEIGHT - 65);
+                g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 175));
+                g.drawString(String.valueOf(Enemy.waves-1), SCREEN_WIDTH / 4, SCREEN_HEIGHT * 7 / 16);
+                g.drawString(String.valueOf(lastScore), SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 7 / 16);
+            }
         }
         //handler.render(g, ID.UIButton);
         if (!loaded) {
@@ -584,7 +519,7 @@ public class Game extends Canvas implements Runnable {
             g.setColor(Color.ORANGE);
             //g.setFont(new Font("/Fonts/Future Blood",Font.PLAIN,80));
             g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 45));
-            g.drawString("Next Wave spawns in " + TimerValue, 50, 250);
+            g.drawString("Next Wave spawns in " + (TimerValue+1), 50, 250);
 
         }
         g.drawImage(currGun, 10, 470, null);
@@ -712,9 +647,7 @@ public class Game extends Canvas implements Runnable {
                 handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 4 / 5, 352, 102,
                         "Stop Playing", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
                         getGameOverUIButton, 1, 1, g, 1, 27));
-                Game.TimerValue = 0;    //5 secs wait time
-                Game.shouldTime = true; //activate Timer
-                Game.timerAction = 4;   //execute timerAction 4 -> enter name and upload score dialogs
+                startTimer(0, 4);   //after 1 sec, execute timerAction 4 -> enter name and upload score dialogs
             }
         }
     }
@@ -784,23 +717,41 @@ public class Game extends Canvas implements Runnable {
                         //upgrades.addMunition(20);
                     }
                     case 2 -> currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
-                    case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, 1 sec wait time)
+                    case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, few sec wait time)
                     case 4 -> { //enter your name and choose whether to upload your score
                         playerName = JOptionPane.showInputDialog(null, "Please enter your name",
                                 null, JOptionPane.INFORMATION_MESSAGE);
-                        JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?",
+                        int reply = JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?",
                                 null, JOptionPane.YES_NO_OPTION);
-                        try {
-                            databeseConection.insertScoreAndNameIntoDatabase();
-                        }catch (Exception e){
-                            System.out.println("could not connect to Database");
+                        if(reply == JOptionPane.YES_OPTION) {
+                            try {
+                                databeseConection.insertScoreAndNameIntoDatabase();
+                            }catch (Exception e){
+                                System.out.println("could not connect to Database");
+                            }
+                            System.out.println("YES");
                         }
+                        else {
+                            System.out.println("NO");
+                        }
+
                         System.out.println("over Con");
                     }
                 }
                 shouldTime = false;  //deactivate the timer
             }
         }//System.out.println(TimerValue);
+    }
+
+    /***
+     * Function to start the timer
+     * @param secs Seconds to wait before the action
+     * @param action which action to make after timer
+     */
+    public static void startTimer(int secs, int action) {
+        TimerValue = secs-1;
+        shouldTime = true;
+        timerAction = action;
     }
 
     /***

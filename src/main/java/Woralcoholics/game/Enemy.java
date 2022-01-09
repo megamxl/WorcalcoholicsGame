@@ -247,13 +247,9 @@ public class Enemy<privare> extends GameObject {
                 maxHp += 50;
                 waves++;
                 if ((waves - 1) % upgradeAfterWave == 0) {
-                    Game.TimerValue = 2;    //0 secs (actually just to unrender the last enemy and bullet)
-                    Game.shouldTime = true; //activate Timer
-                    Game.timerAction = 2;   //execute timerAction 2 -> wait a bit
+                    Game.startTimer(3, 2);  //after 3 secs, execute timerAction 2 -> change to UPGRADE_MENU
                 } else {
-                    Game.TimerValue = 5;    //5 secs to spawn next wave
-                    Game.shouldTime = true; //activate Timer
-                    Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
+                    Game.startTimer(5, 1);  //after 5 secs, execute timerAction 1 -> spawn next Wave
                     for (int i = 0; i < manager.object.size(); i++) {
                         if (manager.object.get(i).getId() == ID.Enemy || manager.object.get(i).getId() == ID.GunnerEnemy || manager.object.get(i).getId() == ID.EnemyBullet) {
 
