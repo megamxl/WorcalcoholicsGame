@@ -8,6 +8,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 
+/**
+ * first Idea
+ * https://www.youtube.com/watch?v=nXzTp61FKR4
+ *  @author Maxlimilian Nowak
+ */
+
 public class GameManager {
 
     // making a linked list for storing all our GameObjects, so we can iterate threw ist every frame when we want to compare

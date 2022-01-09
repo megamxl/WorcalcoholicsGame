@@ -6,6 +6,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+/**
+ *  @author Maxlimilian Nowak
+ */
+
 public class GunnerEnemy extends Enemy {
 
     GameManager handler;

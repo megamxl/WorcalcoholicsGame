@@ -3,6 +3,11 @@ package Woralcoholics.game;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * inspiration
+ * @author Maxlimilian Nowak
+ */
+
 public class Animations {
 
     private int speed;

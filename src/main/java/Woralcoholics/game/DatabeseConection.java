@@ -1,7 +1,10 @@
 package Woralcoholics.game;
 
 import java.sql.*;
-import java.util.Arrays;
+
+/**
+ *  @author Maxlimilian Nowak
+ */
 
 public class DatabeseConection {
 

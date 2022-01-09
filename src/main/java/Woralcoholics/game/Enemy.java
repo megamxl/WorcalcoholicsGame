@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.util.Random;
 
 /**
- * Enemy Class
+ *Enemy Class
+ * @author Maxlimilian Nowak
  */
 public class Enemy<privare> extends GameObject {
 
@@ -23,6 +24,7 @@ public class Enemy<privare> extends GameObject {
     int low = -4;                                           //low and high values for different variations of enemy behaviour
     int high = 4;
     int booleanValue = 0;                                   //booleanvalue is for determining if enemy should charge player again or just running aimless around
+    private boolean isAlive;
 
     public boolean hittedWall = false;                      //hittedWall is for changing the aiming target of player to nothing
 

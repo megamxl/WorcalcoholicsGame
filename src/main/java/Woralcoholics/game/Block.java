@@ -3,6 +3,10 @@ package Woralcoholics.game;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ *  @author Maxlimilian Nowak
+ */
+
 public class Block extends GameObject {
 
     private final BufferedImage block_img;

@@ -4,6 +4,10 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ *  @author Maxlimilian Nowak
+ */
+
 public class FontLoader {
     public FontLoader() {
             try {

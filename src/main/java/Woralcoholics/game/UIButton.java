@@ -3,6 +3,10 @@ package Woralcoholics.game;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ *  @author Maxlimilian Nowak
+ */
+
 public class UIButton extends GameObject{
 
 

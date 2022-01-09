@@ -2,6 +2,12 @@ package Woralcoholics.game;
 
 import java.awt.*;
 
+/**
+ * First inspiration for GameObjectClass
+ * https://www.youtube.com/watch?v=Px6d_i46GbA
+ *  @author Maxlimilian Nowak
+ */
+
 // we made this class abstract, so that it can only be extended but not initialized
 public abstract class GameObject {
 

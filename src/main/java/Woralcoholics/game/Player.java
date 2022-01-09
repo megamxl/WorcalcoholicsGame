@@ -4,6 +4,10 @@ import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+/**
+ * Inspiration https://www.youtube.com/watch?v=vKomghrsniU
+ * @author Maxlimilian Nowak
+ */
 
 public class Player extends GameObject {
 

@@ -17,6 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * First Inspiration for Game class
+ * https://www.youtube.com/watch?v=e9jRfgjV4FQ&t=1s
+ * @author Maximilian Nowak
+ */
+
 public class Game extends Canvas implements Runnable {
     /* ------------ Local variables for main game ------------ */
     private static final long serialVersionUID = 1L;
@@ -632,9 +638,11 @@ public class Game extends Canvas implements Runnable {
                 //System.out.println(currentState.toString());
             }
             case HIGH_SCORES -> {
-
-                databeseConection.ReadFromDatabse();
-
+                try {
+                    databeseConection.ReadFromDatabse();
+                }catch (Exception e){
+                    System.out.println("Could not connect to Database");
+                }
                 //JOptionPane playerDataInput = new JOptionPane();
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
                         ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 0));
@@ -761,7 +769,11 @@ public class Game extends Canvas implements Runnable {
                                 null, JOptionPane.INFORMATION_MESSAGE);
                         JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?",
                                 null, JOptionPane.YES_NO_OPTION);
-                        databeseConection.insertSoreAndNameInToDatabase();
+                        try {
+                            databeseConection.insertSoreAndNameInToDatabase();
+                        }catch (Exception e){
+                            System.out.println("could not connect to Database");
+                        }
                         System.out.println("over Con");
                     }
                 }
