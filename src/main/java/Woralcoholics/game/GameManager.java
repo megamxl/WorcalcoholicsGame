@@ -217,9 +217,9 @@ public class GameManager {
         Thread.sleep(100000);
     }
 
-    public void playSoundBoxDestroyed() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+    public void playSoundDestroyedBox() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         sound = AudioSystem.getClip();
-        Path relativePath = Paths.get("Resource/Sound/boxdestroyed.wav");
+        Path relativePath = Paths.get("Resource/Sound/boxhitted.wav");
         Path absolutePath = relativePath.toAbsolutePath();
         sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
         FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
@@ -235,6 +235,8 @@ public class GameManager {
         }
         sound.start();
         Thread.sleep(100000);
+        //Thread.sleep(100);  -> if the box gets damage and is not fully destroyed use this Value
+        sound.stop();
     }
 
 

@@ -124,7 +124,7 @@ public class Bullet extends GameObject {
             new Thread(() -> {
 
                 try {
-                    handler.playSoundBoxDestroyed();
+                    handler.playSoundDestroyedBox();
                 } catch (LineUnavailableException e) {
                     e.printStackTrace();
                 } catch (UnsupportedAudioFileException e) {
