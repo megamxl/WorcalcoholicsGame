@@ -103,7 +103,7 @@ public class Enemy extends GameObject {
             GameObject tmpObject = manager.object.get(i);
 
             //if it's colliding with a block
-            if (tmpObject.getId() == ID.Block) {
+            if (tmpObject.getId() == ID.Block || tmpObject.getId() == ID.DestroyableBoxes ) {
                 if (getBoundsAround().intersects(tmpObject.getBounds())) {
                     // if it is colliding with wall it goes in the opposite direction
                     x += (velX * 3) * -1;

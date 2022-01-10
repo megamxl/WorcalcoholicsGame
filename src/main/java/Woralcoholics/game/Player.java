@@ -120,7 +120,7 @@ public class Player extends GameObject {
             if (getBoundsX().intersects((tempobject.getBounds()))) {
                 ID tempID = tempobject.getId();
                 switch (tempID) {
-                    case Block -> {
+                    case Block ,DestroyableBoxes -> {
                         //System.out.println("X");
                         x += velX * -1;
                     }
@@ -130,7 +130,7 @@ public class Player extends GameObject {
             if (getBoundsY().intersects((tempobject.getBounds()))) {
                 ID tempID = tempobject.getId();
                 switch (tempID) {
-                    case Block -> {
+                    case Block, DestroyableBoxes -> {
                         //System.out.println("Y");
                         y += velY * -1;
                     }
@@ -140,7 +140,7 @@ public class Player extends GameObject {
             if (getBounds().intersects((tempobject.getBounds()))) {  //If player collides with another object...
                 ID tempID = tempobject.getId();     //...get ID of said object...
                 switch (tempID) {         //...and determine what should happen
-                    case Block -> {
+                    case Block, DestroyableBoxes -> {
                         // check for block coordinate to see where it is located in relation to the player
                         // or make it dependent on key pressed?
                         x += velX * -1;
