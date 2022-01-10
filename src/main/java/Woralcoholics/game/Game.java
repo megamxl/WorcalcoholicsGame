@@ -143,8 +143,8 @@ public class Game extends Canvas implements Runnable {
         checkSelectedGun();
 
         // when finished implement the Mouse and Key input
-        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_level01" + ".png");  //-> testing for destroyableboxes level
-        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level0" + levelDecision + ".png");
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_leveltest" + ".png");  //-> testing for destroyableboxes level
+        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level0" + levelDecision + ".png");
         InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
         level = ImageIO.read(path);
         tutorialLevel = ImageIO.read(pathToTutorial);
