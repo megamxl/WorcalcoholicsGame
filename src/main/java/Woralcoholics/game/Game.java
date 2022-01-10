@@ -375,7 +375,12 @@ public class Game extends Canvas implements Runnable {
         }
         if (currentState == GameState.LEVEL || currentState == GameState.TUTORIAL) {   //if we have changed to LEVEL...
             if (!loaded) {                   //...if no level is loaded, load the level
-                Enemy.waves = 1;            //reset Enemy waves
+                Enemy.waves = 1;//reset Enemy waves
+                for (Gun gun: Gun.guns) {
+                    if(gun.getType() != GunType.Pistol){
+                        gun.setLocked(true);
+                    }
+                }
                 Enemy.enemysAlive = 0;
                 hp = 100;                   //reset player specific values
                 ammo = 50;                  // max hp = 100, max ammo = 50, max shield = 40, max armor = ...
@@ -650,7 +655,6 @@ public class Game extends Canvas implements Runnable {
                 //ScoerSaveWindow.frame.setVisible(true);
                 //Window.frame.setVisible(false);
                 //System.out.println("SOUND CLOSE");
-                System.out.println(playerName);
                 handler.addObject(new UIButton(SCREEN_WIDTH / 4, SCREEN_HEIGHT * 4 / 5, 352, 102,
                         "Play Again?", GameState.LEVEL, ID.UIButton, this, 1, 0,
                         getGameOverUIButton, 1, 1, g, 1, 27));
@@ -678,32 +682,23 @@ public class Game extends Canvas implements Runnable {
                 int pixel = image.getRGB(xx, yy);
                 Color currColor = new Color(pixel, true);
 
-
                 if (currColor.getRed() == 255 && currColor.getGreen() == 0 && currColor.getBlue() == 0) {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, imageGetter, randomNumber(1, 7), 1));
                     wallCords.add(new int[]{xx, yy});
                 }
-
-                if (currColor.getRed() == 255 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
+                else if (currColor.getRed() == 255 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
                     // Creates the new destroyable blocks which function as the walls
                     //add also more variations like blocks
                     handler.addObject(new DestroyableBoxes(xx * 32, yy * 32, ID.DestroyableBoxes, imageGetter, 3, 3));
                     // wallCords.add(new int[]{xx, yy});
                 }
-                /*
-                if (red == 155) {
-                    // Creates the new blocks which function as the walls
-                    handler.addObject(new Block(xx * 32, yy * 32, ID.Block, imageGetter, randomNumber(5, 7), 2));
-                    wallCords.add(new int[]{xx, yy});
-                }
-                 */
-                if (currColor.getRed() == 0 && currColor.getGreen() == 0 && currColor.getBlue() == 255) {
+                else if (currColor.getRed() == 0 && currColor.getGreen() == 0 && currColor.getBlue() == 255) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, imageGetter));
                     PlayerX = xx * 32;
                     PlayerY = yy * 32;
                 }
-                if (currColor.getRed() == 0 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
+                else if (currColor.getRed() == 0 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, imageGetter, score));
                 }
                 /*if (green == 255 && blue == 255) {
@@ -901,6 +896,7 @@ public class Game extends Canvas implements Runnable {
         gun.addObject(new Gun(), GunType.Shotgun, true); // second shotgun
         gun.addObject(new Gun(), GunType.MachineGun, true); //third machine gun  -> weakest to strongest
         // if crate is collected, set locked to false so it can be displayed and choosen in UI
+
     }
 
     private void checkSelectedGun() {

@@ -11,7 +11,7 @@ import java.util.LinkedList;
 public class Gun {
 
     //region INSTANCE VARIABLES
-    LinkedList<Gun> guns = new LinkedList<>();
+    public static LinkedList<Gun> guns = new LinkedList<>();
     private Enum type;
     private boolean locked;
 

@@ -41,7 +41,6 @@ public class Window {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-
         try {
             BufferedImageLoader loader = new BufferedImageLoader();
             icon= loader.loadImage("/Graphics/Icon (1).png");
