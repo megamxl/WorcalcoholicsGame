@@ -64,7 +64,7 @@ public class Player extends GameObject {
         if(Game.inTutorial){
             tutorial();
         }
-        //System.out.println(x + " " + y);
+        System.out.println(x + " " + y);
     }
 
     @Override
@@ -288,28 +288,21 @@ public class Player extends GameObject {
                 doOnceForZoneOne =true;
             }
         }
-        if(x > 960 && x < 1055 && y > 68 && y < 93){
+        if(x > 920 && x < 1105 && y > 50 && y < 105){
             Game.inSecondTutorialZone =true;
         }
         if(Game.inSecondTutorialZone){
             if(!doOnceForZoneTow){
+                System.out.println("in second");
                 Game.SpawnGunnerEnemyWithCords(1293,534);
+                Game.SpawnCreate(1809,329);
                 doOnceForZoneTow = true;
             }
         }
-        if(x > 1505 && x < 1600 && y > 580 && y < 795){
-            Game.inThirdTutorialZone =true;
+        if(x > 1624 && x < 1959 && y < 123){
+            game.changeStateToMenu();
         }
-        if(Game.inThirdTutorialZone){
-            if(doOnceForZoneThree){
-                doOnceForZoneThree = true;
-                Game.SpawnCreate(1809,329);
-            }
-        }
-
-
     }
-
 
     // region SOUND
 

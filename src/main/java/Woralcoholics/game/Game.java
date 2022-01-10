@@ -75,7 +75,7 @@ public class Game extends Canvas implements Runnable {
     public static BufferedImage[] playerWalkingRight = new BufferedImage[10];
     public static BufferedImage[] enemyDeadShadow = new BufferedImage[10];
 
-    private String[][] tutorialTexts = new String[2][2];
+    private String[][] tutorialTexts = new String[10][2];
 
     public static List<int[]> wallCords = new ArrayList();
 
@@ -348,11 +348,36 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.black);
         g.setFont(new Font("SansSerif", Font.PLAIN, 30));
         //tutorialTexts[0][0]= "dasdadsadadsadadadasdsadadaadasdsdas";
-        tutorialTexts[0][0] = "Willkommen zu Workalcoholics Game";
+        tutorialTexts[0][0] = "Willkommen zu Aliens vs Chad";
         tutorialTexts[0][1] = "um mehr Text zu sehen drücke Space";
 
         tutorialTexts[1][0] = "Bewegen kannst du dich durch ";
         tutorialTexts[1][1] = "w = up, s = down, a = links, d = rechts";
+
+        tutorialTexts[2][0] = "mit dem Mausrad kannst du zwischen den";
+        tutorialTexts[2][1] = "Waffen wechseln.  ";
+
+        tutorialTexts[3][0] = "im level sind diese erst freizuschalten";
+        tutorialTexts[3][1] = "Schießen kannst du mit Linker maus Taste";
+
+        tutorialTexts[4][0] = "wenn du gegener tötest geben sie dir ";
+        tutorialTexts[4][1] = "zufällig Munition zurück, vergiss nicht";
+
+        tutorialTexts[5][0] = "du hast nicht unendlich viel Munition ";
+        tutorialTexts[5][1] = "";
+
+        tutorialTexts[6][0] = "Wenn dir Boxen den Weg versperren ";
+        tutorialTexts[6][1] = "schau ob du sie zerstörren kannst";
+
+        tutorialTexts[7][0] = "Nun folge dem Weg, Am Ende wartet ";
+        tutorialTexts[7][1] = "Der Teleport ins Menu auf dich";
+
+        tutorialTexts[8][0] = "mit der rechten Maus Taste kommst  ";
+        tutorialTexts[8][1] = "du ins Pause Menu";
+
+        tutorialTexts[9][0] = "Viel Glück, denn die Gegner werden";
+        tutorialTexts[9][1] = "Jede runde Stärker";
+
 
         if (curentTutorialscore < tutorialTexts.length) {
             g.drawString(tutorialTexts[curentTutorialscore][0], 262, 465);
@@ -379,12 +404,6 @@ public class Game extends Canvas implements Runnable {
         if (currentState == GameState.LEVEL || currentState == GameState.TUTORIAL) {   //if we have changed to LEVEL...
             if (!loaded) {                   //...if no level is loaded, load the level
                 Enemy.waves = 1;//reset Enemy waves
-                for (Gun gun: Gun.guns) {
-                    if(gun.getType() != GunType.Pistol){
-                        gun.setLocked(true);
-                    }
-                }
-                setGunToPistolAgain();
                 Enemy.enemysAlive = 0;
                 Enemy.maxHp = 100;
                 hp = 100;                   //reset player specific values
@@ -393,17 +412,23 @@ public class Game extends Canvas implements Runnable {
                 armor = 0;
                 camera.shake = false;   //camera should not shake
                 switch (currentState) {
-                    case LEVEL -> loadLevel(level); //load the level
+                    case LEVEL ->{
+                        loadLevel(level); //load the level
+                        for (Gun gun: Gun.guns) {
+                            if(gun.getType() != GunType.Pistol){
+                                gun.setLocked(true);
+                            }
+                        }
+                        setGunToPistolAgain();
+                    }
                     case TUTORIAL -> {
                         loadLevel(tutorialLevel);
                         inTutorial = true;
                         inFirstTutorialZone = false;
                         inSecondTutorialZone = false;
                         inThirdTutorialZone = false;
-                      /*  for (Gun gun: Gun.guns) {
-                            if(gun.getType() != GunType.Pistol){
-                                gun.setLocked(false);
-                            }
+                        /*for (Gun g : Gun.guns) {
+                            g.setLocked(false);
                         }*/
                     }
                 }
@@ -835,6 +860,9 @@ public class Game extends Canvas implements Runnable {
         return new Random().ints(start, end).findFirst().getAsInt();
     }
 
+    public void changeStateToMenu(){
+        currentState = GameState.MAIN_MENU;
+    }
     /***
      * A function inside the game calls to spawn the enemy's. it is static that i can be called in other classes
      * @param x X value

@@ -153,7 +153,9 @@ public class GunnerEnemy extends Enemy {
         calcDistanceToPlayer();
         checkIfGone();
         behaviour();
-        move();
+        if(!Game.inTutorial){
+            move();
+        }
         collision();    //Check if it's colliding with a Bullet or Block (Enemy.collision())
         //checkIfFree();
         //Shoot after a delay
