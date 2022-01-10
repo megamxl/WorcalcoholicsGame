@@ -43,6 +43,9 @@ public class Game extends Canvas implements Runnable {
     private boolean isRunning;
     protected static boolean paused, loaded;
     public static boolean inTutorial = false;
+    public static boolean inFirstTutorialZone = false;
+    public static boolean inSecondTutorialZone = false;
+    public static boolean inThirdTutorialZone = false;
     public static boolean shouldTime = false;
     public static boolean spawn = false;
 
@@ -143,8 +146,8 @@ public class Game extends Canvas implements Runnable {
         checkSelectedGun();
 
         // when finished implement the Mouse and Key input
-        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_leveltest" + ".png");  //-> testing for destroyableboxes level
-        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level0" + levelDecision + ".png");
+        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_leveltest" + ".png");  //-> testing for destroyableboxes level
+        InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_level0" + levelDecision + ".png");
         InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
         level = ImageIO.read(path);
         tutorialLevel = ImageIO.read(pathToTutorial);
@@ -394,6 +397,14 @@ public class Game extends Canvas implements Runnable {
                     case TUTORIAL -> {
                         loadLevel(tutorialLevel);
                         inTutorial = true;
+                        inFirstTutorialZone = false;
+                        inSecondTutorialZone = false;
+                        inThirdTutorialZone = false;
+                      /*  for (Gun gun: Gun.guns) {
+                            if(gun.getType() != GunType.Pistol){
+                                gun.setLocked(false);
+                            }
+                        }*/
                     }
                 }
             }
@@ -708,7 +719,7 @@ public class Game extends Canvas implements Runnable {
                 }*/
             }
         }
-        handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, imageGetter, score)); //Test Gunner
+        //handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, imageGetter, score)); //Test Gunner
         loaded = true;
         playBackgroundSound();
         //System.out.println("NEW GAME");
@@ -835,6 +846,10 @@ public class Game extends Canvas implements Runnable {
 
     public static void SpawnGunnerEnemy() {
         handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, imageGetter, score));
+    }
+
+    public static void SpawnGunnerEnemyWithCords(int x, int y) {
+        handler.addObject(new GunnerEnemy(x, y, ID.Enemy, handler, imageGetter, score));
     }
 
     public static void SpawnCreate(int x, int y) {

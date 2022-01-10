@@ -26,6 +26,9 @@ public class Player extends GameObject {
     private float diagonalMultiplier = 1;
     private Boolean movingVertical = false;
     private Boolean movingHorizontal = false;
+    private Boolean doOnceForZoneOne = false;
+    private Boolean doOnceForZoneTow = false;
+    private Boolean doOnceForZoneThree = false;
     Thread backgroundThread;
     // better method would be to wait until the thread is finished and then start the new sound
 
@@ -57,6 +60,11 @@ public class Player extends GameObject {
         isDead();
         keySounds();
         movement();
+
+        if(Game.inTutorial){
+            tutorial();
+        }
+        //System.out.println(x + " " + y);
     }
 
     @Override
@@ -66,7 +74,7 @@ public class Player extends GameObject {
         g2d.draw(getBounds());*/
         if (velX < 0) {
             playerWalkLeft.renderAnimation(g, (int) x, (int) y, 64, 64);
-        } else if (velX > 0) {
+        } else if (velX > 0 || velY >0 || velY <0 ) {
             playerWalkRigth.renderAnimation(g, (int) x, (int) y, 64, 64);
         } else {
             g.drawImage(player_img, (int) x, (int) y, null);
@@ -267,6 +275,39 @@ public class Player extends GameObject {
             velX = 0;
             movingHorizontal = false;
         }
+    }
+
+    private void tutorial(){
+        if(x > 450 && x < 548 && y > 615 && y < 798){
+            Game.inFirstTutorialZone =true;
+        }
+        if(Game.inFirstTutorialZone){
+            if(!doOnceForZoneOne){
+                Game.SpawnEnemy(647,208);
+                Game.SpawnEnemy(900,325);
+                doOnceForZoneOne =true;
+            }
+        }
+        if(x > 960 && x < 1055 && y > 68 && y < 93){
+            Game.inSecondTutorialZone =true;
+        }
+        if(Game.inSecondTutorialZone){
+            if(!doOnceForZoneTow){
+                Game.SpawnGunnerEnemyWithCords(1293,534);
+                doOnceForZoneTow = true;
+            }
+        }
+        if(x > 1505 && x < 1600 && y > 580 && y < 795){
+            Game.inThirdTutorialZone =true;
+        }
+        if(Game.inThirdTutorialZone){
+            if(doOnceForZoneThree){
+                doOnceForZoneThree = true;
+                Game.SpawnCreate(1809,329);
+            }
+        }
+
+
     }
 
 
