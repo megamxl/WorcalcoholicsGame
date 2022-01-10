@@ -217,6 +217,26 @@ public class GameManager {
         Thread.sleep(100000);
     }
 
+    public void playSoundBoxDestroyed() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        sound = AudioSystem.getClip();
+        Path relativePath = Paths.get("Resource/Sound/boxdestroyed.wav");
+        Path absolutePath = relativePath.toAbsolutePath();
+        sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+        FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+        if (soundv == 0) {
+            volume.setValue(-80f); // MUTE
+            //System.out.println("VOLUME MUTE + " +volume.toString());
+        } else if (soundv == 1) {
+            volume.setValue(-25f); // DEFAULT
+            //System.out.println("VOLUME DEFAULT + " +volume.toString());
+        } else if (soundv == 2) {
+            volume.setValue(-13f); // Maximum
+            //System.out.println("VOLUME UP + " +volume.toString());
+        }
+        sound.start();
+        Thread.sleep(100000);
+    }
+
 
     /**
      * plays the sound for the gunnerenemy

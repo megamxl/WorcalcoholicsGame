@@ -1,7 +1,10 @@
 package Woralcoholics.game;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * inspiration
@@ -59,6 +62,7 @@ public class Bullet extends GameObject {
             if (tmpObject.getId() == ID.DestroyableBoxes) {
                 if (this.getBounds().intersects(tmpObject.getBounds())) {
                     System.out.println("we made it");
+                    boxDestroyedSound();
                     DestroyableBoxes.destroyBox(handler, tmpObject);
                     handler.removeObject(this);
                     //System.out.println("Collision");
@@ -110,6 +114,32 @@ public class Bullet extends GameObject {
 
         velX = (float) (Math.cos(alpha) * bulletSpeed);
         velY = (float) (Math.sin(alpha) * bulletSpeed);
+    }
+
+    /***
+     * Runs the sound if player moves
+     */
+    private void boxDestroyedSound() {
+        try {
+            new Thread(() -> {
+
+                try {
+                    handler.playSoundBoxDestroyed();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                    // e.printStackTrace();
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
