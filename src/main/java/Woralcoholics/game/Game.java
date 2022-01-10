@@ -11,8 +11,10 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -141,7 +143,7 @@ public class Game extends Canvas implements Runnable {
         checkSelectedGun();
 
         // when finished implement the Mouse and Key input
-        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_level01" + ".png");  -> testing for destroyableboxes level
+        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_level01" + ".png");  //-> testing for destroyableboxes level
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/level0" + levelDecision + ".png");
         InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
         level = ImageIO.read(path);
@@ -219,7 +221,8 @@ public class Game extends Canvas implements Runnable {
         while (isRunning) {
             // checks if mouse exits the game window during level and corrects its position
             if (getState() == GameState.LEVEL || getState() == GameState.TUTORIAL) {
-                if (mouse != null) mouse.checkIfExited(MouseInfo.getPointerInfo().getLocation());
+                if (mouse != null)
+                    mouse.checkIfExited(MouseInfo.getPointerInfo().getLocation());
             }
 
             long now = System.nanoTime();
@@ -673,21 +676,20 @@ public class Game extends Canvas implements Runnable {
         for (int xx = 0; xx < w; xx++) {
             for (int yy = 0; yy < h; yy++) {
                 int pixel = image.getRGB(xx, yy);
-                int red = (pixel >> 16) & 0xff;
-                int green = (pixel >> 8) & 0xff;
-                int blue = (pixel) & 0xff;
+                Color currColor = new Color(pixel, true);
 
-                if (red == 255) {
+
+                if (currColor.getRed() == 255 && currColor.getGreen() == 0 && currColor.getBlue() == 0) {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, imageGetter, randomNumber(1, 7), 1));
                     wallCords.add(new int[]{xx, yy});
                 }
 
-                if (red == 255 && green == 255) {
+                if (currColor.getRed() == 255 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
                     // Creates the new destroyable blocks which function as the walls
                     //add also more variations like blocks
                     handler.addObject(new DestroyableBoxes(xx * 32, yy * 32, ID.DestroyableBoxes, imageGetter, 3, 3));
-                   // wallCords.add(new int[]{xx, yy});
+                    // wallCords.add(new int[]{xx, yy});
                 }
                 /*
                 if (red == 155) {
@@ -696,17 +698,17 @@ public class Game extends Canvas implements Runnable {
                     wallCords.add(new int[]{xx, yy});
                 }
                  */
-                if (blue == 255 && green == 0 && red == 0) {
+                if (currColor.getRed() == 0 && currColor.getGreen() == 0 && currColor.getBlue() == 255) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, imageGetter));
                     PlayerX = xx * 32;
                     PlayerY = yy * 32;
                 }
-                if (green == 255) {
+                if (currColor.getRed() == 0 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, imageGetter, score));
                 }
-                if (green == 255 && blue == 255) {
+                /*if (green == 255 && blue == 255) {
 
-                }
+                }*/
             }
         }
         handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, imageGetter, score)); //Test Gunner

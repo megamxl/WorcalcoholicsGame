@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 public class Window {
 
@@ -12,14 +13,8 @@ public class Window {
      */
 
     public static JFrame frame =null;
-    public static JFrame GameOverFrame =null;
 
-    private static JLabel txtUser;
-
-    private static JLabel l1, l2, l3;
-    private static JTextField tf1;
-    private static JButton btn1;
-    private static JPasswordField p1;
+    private BufferedImage icon = null;
 
     /***
      * The Window creation class
@@ -46,9 +41,11 @@ public class Window {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        //...\WorcalcoholicsGame\target\classes\Woralcoholics\game\jar.png
+
         try {
-            frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("Icon.png")));
+            BufferedImageLoader loader = new BufferedImageLoader();
+            icon= loader.loadImage("/Graphics/Icon (1).png");
+            frame.setIconImage((icon));
         }catch (Exception e){
             System.out.println("Icon was not cloned");
         }
