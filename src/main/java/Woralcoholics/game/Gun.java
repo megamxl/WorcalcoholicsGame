@@ -39,6 +39,7 @@ public class Gun {
     public int getIndex(GunType gunType) {
         int indexGun = 0;
         int i = 0;
+
         //boolean breakOut=false;
         for (Gun g : guns) {
             if (g.getType() == gunType) {

@@ -19,7 +19,7 @@ public class Enemy extends GameObject {
     public static float velocity = 0;
     public static int enemysAlive = 0;
     public static int waves = 1;
-    private static int maxHp = 100;
+    public static int maxHp = 100;
 
     int choose = 0;
     int hp = 100;

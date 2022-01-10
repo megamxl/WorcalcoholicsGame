@@ -381,7 +381,9 @@ public class Game extends Canvas implements Runnable {
                         gun.setLocked(true);
                     }
                 }
+                setGunToPistolAgain();
                 Enemy.enemysAlive = 0;
+                Enemy.maxHp = 100;
                 hp = 100;                   //reset player specific values
                 ammo = 50;                  // max hp = 100, max ammo = 50, max shield = 40, max armor = ...
                 shield = 0;
@@ -899,8 +901,13 @@ public class Game extends Canvas implements Runnable {
 
     }
 
+    private void setGunToPistolAgain(){
+        handler.selectedgun = Gun.guns.get(0);
+        handler.gunindex = 0;
+    }
+
     private void checkSelectedGun() {
-        handler.selectedgun = gun.guns.get(handler.gunindex);
+        handler.selectedgun = Gun.guns.get(handler.gunindex);
     }
 
     private void checkGunStatus() {
