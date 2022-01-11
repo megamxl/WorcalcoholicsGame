@@ -27,8 +27,8 @@ public class Upgrades {
         return game.ammo;
     }
 
-    public void addMunition(int ammo){
-        if(game.ammo + ammo > 50)
+    public void addMunition(int ammo) {
+        if (game.ammo + ammo > 50)
             game.ammo = 50;
         else
             game.ammo += ammo;
@@ -61,8 +61,8 @@ public class Upgrades {
         game.armor = armor;
     }
 
-    public void addArmor(int armor){
-        if(game.armor + armor > 40)
+    public void addArmor(int armor) {
+        if (game.armor + armor > 40)
             game.armor = 40;
         else
             game.armor += armor;
@@ -92,60 +92,72 @@ public class Upgrades {
 
     //1 - maxAmmo, 2 - maxHP, 3 - maxShield, 4 - 15% armor, 5 - bullets get faster, 6 enemies slowed down
 
-    public static void drawRandomUpgrades(){
+    public static void drawRandomUpgrades() {
         boolean duplicate = false;
         Random random = new Random();
         int pick;
         int[] upgrades = new int[3];
-        for(int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             pick = random.nextInt(6) + 1;
-            for(int j = 0; j < 3; j++)
+            for (int j = 0; j < 3; j++)
                 if (upgrades[j] == pick) {
                     i--;
                     duplicate = true;
                     break;
                 }
-            if(!duplicate) {
+            if (!duplicate) {
                 upgrades[i] = pick;
                 duplicate = false;
-            }
-            else
+            } else
                 duplicate = false;
         }
         randomUpgrades = upgrades;
     }
 
-    public int[] getUpgrades(){
+    public int[] getUpgrades() {
         return this.randomUpgrades;
     }
 
-    public void getUpgrade(int input){
-        switch (input){
-            case 1: this.maxMunition();
+    public void getUpgrade(int input) {
+        switch (input) {
+            case 1:
+                this.maxMunition();
                 break;
-            case 2: this.maxHP();
+            case 2:
+                this.maxHP();
                 break;
-            case 3: this.maxShield();
+            case 3:
+                this.maxShield();
                 break;
-            case 4: this.addArmor(15);
+            case 4:
+                this.addBulletSpeed(10);
                 break;
-            case 5: this.addBulletSpeed(10);
+            case 5:
+                this.addGunnerEnemySpeed(-1);
+                this.setEnemySpeed(-2);
                 break;
-            case 6: this.addGunnerEnemySpeed(-1);
-                    this.setEnemySpeed(-2);
+            case 6:
+                this.addArmor(15);
                 break;
         }
     }
 
-    public String drawUpgrades(int input){
-        switch(input){
-            case 1: return "MAX AMMO";
-            case 2: return "MAX HP";
-            case 3: return "MAX SHIELD";
-            case 4: return "+15% ARMOR";
-            case 5: return "BULLETS GO BRR";
-            case 6: return "Enemies slowed down";
-            default: return "";
+    public String drawUpgrades(int input) {
+        switch (input) {
+            case 1:
+                return "MAX AMMO";
+            case 2:
+                return "MAX HP";
+            case 3:
+                return "MAX SHIELD";
+            case 4:
+                return "BULLETS GO BRR";
+            case 5:
+                return "Enemies slowed down";
+            case 6:
+                return "+15% ARMOR";
+            default:
+                return "";
         }
     }
 }

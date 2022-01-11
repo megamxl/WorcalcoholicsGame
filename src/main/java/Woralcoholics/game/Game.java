@@ -685,12 +685,22 @@ public class Game extends Canvas implements Runnable {
                 handler.addObject(new UIButton(SCREEN_WIDTH / 4, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[0]), GameState.LEVEL, ID.UIButton, this, 2,
                         randomUpgrades[0], getUpgradeButton, 1, 1, g, 1, 20));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 4 - 30, (SCREEN_HEIGHT + 125) / 2, 64, 64,
+                        "", GameState.LEVEL, ID.UIButton, this, 2,
+                        randomUpgrades[0], imageGetter, randomUpgrades[0], 8, g, 1, 20));
+
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[1]), GameState.LEVEL, ID.UIButton, this, 2,
                         randomUpgrades[1], getUpgradeButton, 1, 1, g, 1, 20));
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 30, (SCREEN_HEIGHT + 125) / 2, 64, 64,
+                        "", GameState.LEVEL, ID.UIButton, this, 2,
+                        randomUpgrades[0], imageGetter, randomUpgrades[1], 8, g, 1, 20));
+
                 handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, (SCREEN_HEIGHT + 25) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[2]), GameState.LEVEL, ID.UIButton, this, 2,
                         randomUpgrades[2], getUpgradeButton, 1, 1, g, 1, 20));
+                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4 - 30, (SCREEN_HEIGHT + 125) / 2, 64, 64, "", GameState.LEVEL, ID.UIButton, this, 2,
+                        randomUpgrades[0], imageGetter, randomUpgrades[2], 8, g, 1, 20));
                 paused = true;      //Pause the game until Player chose an Upgrade
                 /*for(int i = 0; i < 3; i++) {
                     System.out.println(i + ": " + randomUpgrades[i] + " " + upgrades.drawUpgrades(randomUpgrades[i]));
@@ -771,6 +781,7 @@ public class Game extends Canvas implements Runnable {
             if (shouldTime) {    //...execute the previously set timerAction
                 switch (timerAction) {
                     case 1 -> {
+                        //currentState = GameState.UPGRADE_MENU;
                         Enemy.Spawner(Enemy.waves, false, r); //Spawn the next wave of enemies
                         //upgrades.addMunition(20);
                     }
