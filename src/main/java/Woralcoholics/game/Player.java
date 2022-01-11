@@ -166,6 +166,7 @@ public class Player extends GameObject {
 
                     case Enemy, EnemyBullet -> {
                         playerSoundHurt();
+                        // Implement Bloodscreen
                         if (game.hp > 0) {    //if player has health and is not invincible
                             switch (tempID) {
                                 case EnemyBullet -> {
