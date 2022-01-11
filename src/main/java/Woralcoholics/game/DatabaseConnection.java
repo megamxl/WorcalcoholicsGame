@@ -20,7 +20,7 @@ public class DatabaseConnection {
      * @throws SQLException
      */
     public void insertScoreAndNameIntoDatabase() throws SQLException {
-        // The query for inserting ito the database
+        // The query for inserting ito the database-
         if (Game.playerName != null) {
              insertQuery = "INSERT INTO `Scores` (`name`, `score`) VALUES ( '" + Game.playerName + "', '" + Game.lastScore + "')";
         }

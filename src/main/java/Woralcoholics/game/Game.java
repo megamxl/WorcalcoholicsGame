@@ -35,7 +35,7 @@ public class Game extends Canvas implements Runnable {
     final int SCREEN_HEIGHT = 576;
     //public static Window window;
 
-    private static GameState currentState;
+    public static GameState currentState;
     private GameState previousState, checkState;
     private int menuCount;
     public static int lastScore = 0;
@@ -422,6 +422,7 @@ public class Game extends Canvas implements Runnable {
                 camera.shake = false;   //camera should not shake
                 switch (currentState) {
                     case LEVEL ->{
+                        inTutorial = false;
                         loadLevel(level); //load the level
                         for (Gun gun: Gun.guns) {
                             if(gun.getType() != GunType.Pistol){
@@ -677,7 +678,7 @@ public class Game extends Canvas implements Runnable {
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 352, 102,
                         "Stop Playing", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
                         getGameOverUIButton, 1, 1, g, 1, 27));
-                paused = true;                  //we are in PAUSE_MENU, so set paused true
+                paused = true;//we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
                 int[] randomUpgrades = upgrades.getUpgrades();

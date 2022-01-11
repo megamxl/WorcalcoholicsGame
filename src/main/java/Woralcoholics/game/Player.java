@@ -64,7 +64,7 @@ public class Player extends GameObject {
         if(Game.inTutorial){
             tutorial();
         }
-        System.out.println(x + " " + y);
+        //System.out.println(x + " " + y);
     }
 
     @Override
@@ -301,7 +301,8 @@ public class Player extends GameObject {
             }
         }
         if(x > 1624 && x < 1959 && y < 123){
-            game.changeStateToMenu();
+            Game.currentState = GameState.MAIN_MENU;
+            Game.inTutorial = false;
         }
     }
 
