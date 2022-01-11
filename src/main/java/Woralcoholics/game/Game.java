@@ -739,7 +739,7 @@ public class Game extends Canvas implements Runnable {
                 else if (currColor.getRed() == 255 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
                     // Creates the new destroyable blocks which function as the walls
                     //add also more variations like blocks
-                    handler.addObject(new DestroyableBoxes(xx * 32, yy * 32, ID.DestroyableBoxes, imageGetter, 3, 3));
+                    handler.addObject(new DestroyableBoxes(xx * 32, yy * 32, ID.DestroyableBoxes, handler,imageGetter, 3, 3));
                     // wallCords.add(new int[]{xx, yy});
                 }
                 else if (currColor.getRed() == 0 && currColor.getGreen() == 0 && currColor.getBlue() == 255) {

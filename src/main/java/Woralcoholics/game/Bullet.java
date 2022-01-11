@@ -59,7 +59,7 @@ public class Bullet extends GameObject {
                 }
             }
 
-            if (tmpObject.getId() == ID.DestroyableBoxes) {
+           /*if (tmpObject.getId() == ID.DestroyableBoxes) {
                 if (this.getBounds().intersects(tmpObject.getBounds())) {
                     System.out.println("we made it");
                     boxDestroyedSound();
@@ -67,7 +67,7 @@ public class Bullet extends GameObject {
                     handler.removeObject(this);
                     //System.out.println("Collision");
                 }
-            }
+            }*/
         }
     }
 
@@ -116,31 +116,6 @@ public class Bullet extends GameObject {
         velY = (float) (Math.sin(alpha) * bulletSpeed);
     }
 
-    /***
-     * Runs the sound if player moves
-     */
-    private void boxDestroyedSound() {
-        try {
-            new Thread(() -> {
-
-                try {
-                    handler.playSoundDestroyedBox();
-                } catch (LineUnavailableException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedAudioFileException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (IllegalArgumentException e) {
-                    // e.printStackTrace();
-                }
-            }).start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void update() {
