@@ -190,6 +190,15 @@ public class Game extends Canvas implements Runnable {
         KeyInput keys = new KeyInput(handler, this);
         this.addKeyListener(keys);
 
+        // Sets mouse cursor image to a custom image
+        // this can furthermore be used for the hitmarker, by changing the mouse cursor image, when it
+        // is located over an enemy
+        // Toolkit can be seen like a real life toolkit, it is a class used for smaller special operations
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Cursor cursorNEW = toolkit.createCustomCursor(loader.loadImage("/Graphics/Mouse Cursor.png")
+                , new Point(this.getX(), this.getY()), "mouseCursorImage");
+        this.setCursor(cursorNEW);
+
         floor = imageGetter.getImage(1, 2, 64, 64);
         floorDirt1 = imageGetter.getImage(2, 2, 64, 64);
         floorDirt2 = imageGetter.getImage(3, 2, 64, 64);
