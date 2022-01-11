@@ -227,10 +227,10 @@ public class GameManager {
             volume.setValue(-80f); // MUTE
             //System.out.println("VOLUME MUTE + " +volume.toString());
         } else if (soundv == 1) {
-            volume.setValue(-25f); // DEFAULT
+            volume.setValue(-22f); // DEFAULT
             //System.out.println("VOLUME DEFAULT + " +volume.toString());
         } else if (soundv == 2) {
-            volume.setValue(-13f); // Maximum
+            volume.setValue(0f); // Maximum
             //System.out.println("VOLUME UP + " +volume.toString());
         }
         sound.start();

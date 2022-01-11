@@ -13,11 +13,10 @@ import java.io.IOException;
 public class DestroyableBoxes extends GameObject {
 
     private BufferedImage destroyable_boxes;
-    public static int maxHp = 100;
+    private int maxHp = 100;
     private int hp = 100;
     private GameManager manager;
-    private boolean fullycracked =false;
-
+    private boolean fullycracked = false;
 
 
     /**
@@ -36,8 +35,8 @@ public class DestroyableBoxes extends GameObject {
         // gets the image from the specified column and row from the spritesheet
         destroyable_boxes = an.getImage(col, row, 64, 64);
         hp = maxHp;
-        // default
     }
+
     public void update() {
         collision();
         isCracked();
@@ -61,10 +60,9 @@ public class DestroyableBoxes extends GameObject {
     }
 
 
-    public Rectangle getBoundsAround() {
-        return new Rectangle((int) x, (int) y, 32, 32);
-    }
-
+    /***
+     * If a Object in our List collides with the Box
+     */
     public void collision() {
         for (int i = 0; i < manager.object.size(); i++) {
 
@@ -75,14 +73,23 @@ public class DestroyableBoxes extends GameObject {
                 if (getBounds().intersects(tmpObject.getBounds())) {
                     manager.removeObject(tmpObject);
                     boxDestroyedSound();
-                    if(manager.selectedgun.getType()==GunType.Pistol)
+                    if (manager.selectedgun.getType() == GunType.Pistol)
                         hp -= 40; //could be also random in a specific range
-                    else if(manager.selectedgun.getType()==GunType.Shotgun)
-                        hp -=30;
-                    else
-                        hp -=20;
+                    else if (manager.selectedgun.getType() == GunType.Shotgun)
+                        hp -= 30;
+                    else //
+                        hp -= 20;
                     crackedState();
-                    System.out.println(hp);
+                    //System.out.println(hp);
+                }
+            }
+            if (tmpObject.getId() == ID.EnemyBullet) {
+                if (getBounds().intersects(tmpObject.getBounds())) {
+                    manager.removeObject(tmpObject);
+                    boxDestroyedSound();
+                    hp -= 20;
+                    crackedState();
+                    //System.out.println(hp);
                 }
             }
         }
@@ -100,28 +107,27 @@ public class DestroyableBoxes extends GameObject {
     }
 
     // 5 Cracksprites -> 100/5 = 20 (100,80,60,40,20)
-    private void crackedState()
-    {
+    private void crackedState() {
         //100 standard setted in game
-        if(hp<=80)
+        if (hp <= 80)
             destroyable_boxes = an.getImage(4, 3, 64, 64);
-        if(hp<=60)
+        if (hp <= 60)
             destroyable_boxes = an.getImage(5, 3, 64, 64);
-        if(hp<=40)
+        if (hp <= 40)
             destroyable_boxes = an.getImage(6, 3, 64, 64);
-        if(hp<=20)
+        if (hp <= 20)
             destroyable_boxes = an.getImage(7, 3, 64, 64);
 
     }
 
 
+    /***
+     * Remove the Box
+     */
     public void remove() {
         manager.removeObject(this);
     }
 
-    public void removeWithObject(GameObject tempobject) {
-        manager.removeObject(tempobject);
-    }
 
     /***
      * Runs the sound if box cracks
