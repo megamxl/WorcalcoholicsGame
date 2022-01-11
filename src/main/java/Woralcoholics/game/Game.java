@@ -461,7 +461,7 @@ public class Game extends Canvas implements Runnable {
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 g.drawImage(imgStudio, SCREEN_WIDTH / 2 - 280, SCREEN_HEIGHT / 3, null);
-                g.setColor(Color.WHITE);
+                g.setColor(Color.YELLOW);
                 g.setFont(new Font("Cyberpunk", Font.PLAIN, 70));
                 int stringx = g.getFontMetrics(new Font("Cyberpunk", Font.PLAIN, 70)).stringWidth("presents");
                 g.drawString("presents", SCREEN_WIDTH / 2 - stringx / 2 - 60, SCREEN_HEIGHT * 2 / 3);
@@ -471,10 +471,8 @@ public class Game extends Canvas implements Runnable {
                 g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);*/
                 g.drawImage(imgTitle, 0, 0, null);
             }
-            case MAIN_MENU -> {
-            }
-            case TUTORIAL -> {
-            }
+            case MAIN_MENU -> {}
+            case TUTORIAL -> {}
             case HIGH_SCORES -> {
                 g.setColor(Color.black);
                 g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 36));
@@ -490,11 +488,14 @@ public class Game extends Canvas implements Runnable {
                     g.drawString(DatabaseConnection.scoresArray[4], 300, 370);
                 }
             }
-            case OPTIONS -> {
-            }
-            case PAUSE_MENU -> {
-            }
-            case UPGRADE_MENU -> {
+            case OPTIONS -> {}
+            case PAUSE_MENU -> {}
+            case UPGRADE_MENU -> {}
+            case CREDITS -> {
+                g.setColor(Color.black);
+                g.setFont(new Font("Arial Black", Font.PLAIN, 40));
+                //System.out.println(g.getFontMetrics(new Font("Arial Black", Font.PLAIN, 40)).getHeight());
+                g.drawString("Credits go here brrr", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
             }
             case GAME_OVER -> {
                 g.drawImage(imgOver, 1, 1, null);
@@ -869,9 +870,9 @@ public class Game extends Canvas implements Runnable {
         return new Random().ints(start, end).findFirst().getAsInt();
     }
 
-    public void changeStateToMenu(){
-        currentState = GameState.MAIN_MENU;
-    }
+    /*public void changeStateToMenu(){
+        currentState = GameState.MAIN_MENU;             Unnötige Funktion? siehe weiter unten setState()
+    }*/
     /***
      * A function inside the game calls to spawn the enemy's. it is static that i can be called in other classes
      * @param x X value
