@@ -21,7 +21,7 @@ public class DestroyableBoxes extends GameObject {
 
 
     /**
-     * Creates the Wall tile
+     * Creates the Destroyablebox
      *
      * @param x
      * @param y
@@ -61,33 +61,26 @@ public class DestroyableBoxes extends GameObject {
     }
 
 
-
-
-    /**
-     * check if enemy bounds with an Rectangle bigger than the actual enemy
-     *
-     * @return
-     */
     public Rectangle getBoundsAround() {
         return new Rectangle((int) x, (int) y, 32, 32);
     }
 
-    /**
-     * Collision enemy with a block | Collision enemy with player
-     */
     public void collision() {
         for (int i = 0; i < manager.object.size(); i++) {
 
             GameObject tmpObject = manager.object.get(i);
 
 
-            //if our bullet is colliding with the enemy hp get's -50
             if (tmpObject.getId() == ID.Bullet) {
                 if (getBounds().intersects(tmpObject.getBounds())) {
-                    //System.out.println("hit");
                     manager.removeObject(tmpObject);
                     boxDestroyedSound();
-                    hp -= 20; // multipliziert immer auf 0 kommen
+                    if(manager.selectedgun.getType()==GunType.Pistol)
+                        hp -= 40; //could be also random in a specific range
+                    else if(manager.selectedgun.getType()==GunType.Shotgun)
+                        hp -=30;
+                    else
+                        hp -=20;
                     crackedState();
                     System.out.println(hp);
                 }
@@ -96,6 +89,9 @@ public class DestroyableBoxes extends GameObject {
     }
 
 
+    /***
+     * Check if Box is Cracked
+     */
     private void isCracked() {
         if (hp <= 0) {
             remove();
@@ -128,7 +124,7 @@ public class DestroyableBoxes extends GameObject {
     }
 
     /***
-     * Runs the sound if player moves
+     * Runs the sound if box cracks
      */
     private void boxDestroyedSound() {
         try {
