@@ -217,7 +217,7 @@ public class GameManager {
         Thread.sleep(100000);
     }
 
-    public void playSoundDestroyedBox() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+    public void playSoundDestroyedBox(boolean fullycracked) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
         sound = AudioSystem.getClip();
         Path relativePath = Paths.get("Resource/Sound/boxhitted.wav");
         Path absolutePath = relativePath.toAbsolutePath();
@@ -234,8 +234,10 @@ public class GameManager {
             //System.out.println("VOLUME UP + " +volume.toString());
         }
         sound.start();
-        Thread.sleep(100000);
-        //Thread.sleep(100);  -> if the box gets damage and is not fully destroyed use this Value
+        if(fullycracked)
+            Thread.sleep(100000);
+        else
+            Thread.sleep(100);  //-> if the box gets damage and is not fully destroyed use this Value
         sound.stop();
     }
 

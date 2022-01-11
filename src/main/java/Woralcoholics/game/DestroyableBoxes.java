@@ -14,8 +14,9 @@ public class DestroyableBoxes extends GameObject {
 
     private final BufferedImage destroyable_boxes;
     public static int maxHp = 100;
-    int hp = 100;
+    private int hp = 100;
     private GameManager manager;
+    private boolean fullycracked =false;
 
 
 
@@ -87,9 +88,6 @@ public class DestroyableBoxes extends GameObject {
                     manager.removeObject(tmpObject);
                     boxDestroyedSound();
                     hp -= 50;
-                    if (hp <= 0) {
-                        System.out.println("removed dbox");
-                    }
                     System.out.println(hp);
                 }
             }
@@ -100,6 +98,7 @@ public class DestroyableBoxes extends GameObject {
     public void isCracked() {
         if (hp <= 0) {
             remove();
+            fullycracked = true;
         }
     }
 
@@ -120,7 +119,7 @@ public class DestroyableBoxes extends GameObject {
             new Thread(() -> {
 
                 try {
-                    manager.playSoundDestroyedBox();
+                    manager.playSoundDestroyedBox(fullycracked);
                 } catch (LineUnavailableException e) {
                     e.printStackTrace();
                 } catch (UnsupportedAudioFileException e) {
