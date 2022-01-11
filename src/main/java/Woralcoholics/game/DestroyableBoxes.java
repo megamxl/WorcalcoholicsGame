@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class DestroyableBoxes extends GameObject {
 
-    private final BufferedImage destroyable_boxes;
+    private BufferedImage destroyable_boxes;
     public static int maxHp = 100;
     private int hp = 100;
     private GameManager manager;
@@ -87,7 +87,8 @@ public class DestroyableBoxes extends GameObject {
                     //System.out.println("hit");
                     manager.removeObject(tmpObject);
                     boxDestroyedSound();
-                    hp -= 50;
+                    hp -= 20; // multipliziert immer auf 0 kommen
+                    crackedState();
                     System.out.println(hp);
                 }
             }
@@ -95,11 +96,26 @@ public class DestroyableBoxes extends GameObject {
     }
 
 
-    public void isCracked() {
+    private void isCracked() {
         if (hp <= 0) {
             remove();
             fullycracked = true;
         }
+    }
+
+    // 5 Cracksprites -> 100/5 = 20 (100,80,60,40,20)
+    private void crackedState()
+    {
+        //100 standard setted in game
+        if(hp<=80)
+            destroyable_boxes = an.getImage(4, 3, 64, 64);
+        if(hp<=60)
+            destroyable_boxes = an.getImage(5, 3, 64, 64);
+        if(hp<=40)
+            destroyable_boxes = an.getImage(6, 3, 64, 64);
+        if(hp<=20)
+            destroyable_boxes = an.getImage(7, 3, 64, 64);
+
     }
 
 
