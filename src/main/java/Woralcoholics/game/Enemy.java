@@ -125,7 +125,7 @@ public class Enemy extends GameObject {
             if (tmpObject.getId() == ID.Bullet) {
                 if (getBounds().intersects(tmpObject.getBounds())) {
                     //System.out.println("hit");
-                    hp -= 16;
+                    hp -= 110;
                     hpPercent = hp/(float)maxHp;
                     if (hp > 50) playSoundEnemyHit();
                     //System.out.println("einem enemy leben abgezogen " + hp);
