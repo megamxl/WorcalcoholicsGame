@@ -22,7 +22,8 @@ public class Enemy extends GameObject {
     public static int maxHp = 100;
 
     int choose = 0;
-    int hp = 100;
+    int hp;
+    private float hpPercent = 1.0f;
     int low = -4;                                           //low and high values for different variations of enemy behaviour
     int high = 4;
     int booleanValue = 0;                                   //booleanvalue is for determining if enemy should charge player again or just running aimless around
@@ -70,26 +71,15 @@ public class Enemy extends GameObject {
 
     public void render(Graphics g) {
         enemyAnimation.renderAnimation(g,(int) x, (int)y);
+        g.setColor(Color.BLACK);
+        g.fillRect((int) x - 8, (int) y - 12, 48, 6);
+        g.setColor(Color.RED);
+        g.fillRect((int) x - 6, (int) y - 10, 44, 2);
+        g.setColor(Color.WHITE);
+        //g.drawString(hpPercent*100 + "%", (int) (x), (int) (y));
         //g.drawImage(enemy_img, (int) x, (int) y, null);
     }
 
-    /**
-     * check if enemy bounds with an Rectangle
-     *
-     * @return
-     */
-    public Rectangle getBounds() {
-        return new Rectangle((int) x, (int) y, 32, 32);
-    }
-
-    /**
-     * check if enemy bounds with an Rectangle bigger than the actual enemy
-     *
-     * @return
-     */
-    public Rectangle getBoundsAround() {
-        return new Rectangle((int) x, (int) y, 32, 32);
-    }
 
     /***
      * x value of enemy gets changed by vel Values
@@ -128,24 +118,18 @@ public class Enemy extends GameObject {
             if (tmpObject.getId() == ID.Bullet) {
                 if (getBounds().intersects(tmpObject.getBounds())) {
                     //System.out.println("hit");
-                    hp -= 110;
+                    hp -= 50;
+                    hpPercent = hp/(float)maxHp;
                     if (hp > 50) playSoundEnemyHit();
                     //System.out.println("einem enemy leben abgezogen " + hp);
 
-                    if (this.getId() == ID.Enemy) {
-                        score.addScore(3);
-                    } else if (this.getId() == ID.GunnerEnemy) {
-                        score.addScore(10);
-                    }
 
                     //System.out.println("es sind " + enemysAlive +" enemys am leben");
                 }
-
             }
 
             // collision enemy with player
             if (tmpObject.getId() == ID.Player) {
-
                 if (hittedWall == false) {
                     // enemy behaviour
                     if (tmpObject.getX() + 6 >= x && tmpObject.getX() - 6 <= x) {
@@ -185,6 +169,13 @@ public class Enemy extends GameObject {
 
     public void isDead() {
         if (hp <= 0) {
+            if (this.getId() == ID.Enemy) {
+                score.addScore(3);
+            } else if (this.getId() == ID.GunnerEnemy) {
+                score.addScore(10);
+            }
+            System.out.println(score.showScore());
+
             int prob = Game.randomNumber(1, 5);
             remove();
             float curX = x;
@@ -193,8 +184,6 @@ public class Enemy extends GameObject {
             if (prob == 2) {
                 Game.SpawnCreate((int) curX, (int) curY);
             }
-
-
         }
     }
 
@@ -338,6 +327,24 @@ public class Enemy extends GameObject {
         Game.TimerValue = 5;    //5 secs to spawn next wave
         Game.shouldTime = true; //activate Timer
         Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
+    }
+
+    /**
+     * check if enemy bounds with an Rectangle
+     *
+     * @return
+     */
+    public Rectangle getBounds() {
+        return new Rectangle((int) x, (int) y, 32, 32);
+    }
+
+    /**
+     * check if enemy bounds with an Rectangle bigger than the actual enemy
+     *
+     * @return
+     */
+    public Rectangle getBoundsAround() {
+        return new Rectangle((int) x, (int) y, 32, 32);
     }
 
     //endregion

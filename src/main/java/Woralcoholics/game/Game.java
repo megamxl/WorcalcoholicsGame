@@ -145,7 +145,7 @@ public class Game extends Canvas implements Runnable {
         // make the window threw out own window class
         //new ScoerSaveWindow(SCREEN_WIDTH,SCREEN_HEIGHT,"");
         //window =
-        new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Workalcoholics Work In Progress", this);
+        new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Chad vs. Aliens", this);
         start();
         gun = new Gun();
 
@@ -377,35 +377,35 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.black);
         g.setFont(new Font("SansSerif", Font.PLAIN, 30));
         //tutorialTexts[0][0]= "dasdadsadadsadadadasdsadadaadasdsdas";
-        tutorialTexts[0][0] = "Willkommen zu Aliens vs Chad";
-        tutorialTexts[0][1] = "um mehr Text zu sehen drücke Space";
+        tutorialTexts[0][0] = "Willkommen zu Aliens vs. Chad";
+        tutorialTexts[0][1] = "Um mehr Text zu sehen drücke Space";
 
         tutorialTexts[1][0] = "Bewegen kannst du dich durch ";
         tutorialTexts[1][1] = "w = up, s = down, a = links, d = rechts";
 
-        tutorialTexts[2][0] = "mit dem Mausrad kannst du zwischen den";
+        tutorialTexts[2][0] = "Mit dem Mausrad kannst du zwischen den";
         tutorialTexts[2][1] = "Waffen wechseln.  ";
 
-        tutorialTexts[3][0] = "im level sind diese erst freizuschalten";
-        tutorialTexts[3][1] = "Schießen kannst du mit Linker maus Taste";
+        tutorialTexts[3][0] = "Im level sind diese erst freizuschalten";
+        tutorialTexts[3][1] = "Schießen kannst du mit Linker Maus Taste";
 
-        tutorialTexts[4][0] = "wenn du gegener tötest geben sie dir ";
+        tutorialTexts[4][0] = "Wenn du Gegner tötest geben sie dir ";
         tutorialTexts[4][1] = "zufällig Munition zurück, vergiss nicht";
 
         tutorialTexts[5][0] = "du hast nicht unendlich viel Munition ";
         tutorialTexts[5][1] = "";
 
         tutorialTexts[6][0] = "Wenn dir Boxen den Weg versperren ";
-        tutorialTexts[6][1] = "schau ob du sie zerstörren kannst";
+        tutorialTexts[6][1] = "schau, ob du sie zerstören kannst";
 
-        tutorialTexts[7][0] = "Nun folge dem Weg, Am Ende wartet ";
-        tutorialTexts[7][1] = "Der Teleport ins Menu auf dich";
+        tutorialTexts[7][0] = "Nun folge dem Weg, am Ende wartet ";
+        tutorialTexts[7][1] = "der Teleporter ins Menu auf dich";
 
-        tutorialTexts[8][0] = "mit der rechten Maus Taste kommst  ";
+        tutorialTexts[8][0] = "Mit der rechten Maus Taste kommst  ";
         tutorialTexts[8][1] = "du ins Pause Menu";
 
         tutorialTexts[9][0] = "Viel Glück, denn die Gegner werden";
-        tutorialTexts[9][1] = "Jede runde Stärker";
+        tutorialTexts[9][1] = "jede Runde stärker";
 
 
         if (curentTutorialscore < tutorialTexts.length) {
