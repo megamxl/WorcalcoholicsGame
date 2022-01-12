@@ -97,7 +97,7 @@ public class Game extends Canvas implements Runnable {
     public static int TimerValue;
     public static int timerAction;
     public static int curentTutorialscore = 0;
-    public static int curentAmmo= 0;
+    public static int curentAmmo = 0;
     public static boolean isDead = false;
     public static boolean takesDamage = false;
     private boolean wasstopped = false;
@@ -442,11 +442,11 @@ public class Game extends Canvas implements Runnable {
                 armor = 0;
                 camera.shake = false;   //camera should not shake
                 switch (currentState) {
-                    case LEVEL ->{
+                    case LEVEL -> {
                         inTutorial = false;
                         loadLevel(level); //load the level
-                        for (Gun gun: Gun.guns) {
-                            if(gun.getType() != GunType.Pistol){
+                        for (Gun gun : Gun.guns) {
+                            if (gun.getType() != GunType.Pistol) {
                                 gun.setLocked(true);
                             }
                         }
@@ -493,8 +493,10 @@ public class Game extends Canvas implements Runnable {
                 g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);*/
                 g.drawImage(imgTitle, 0, 0, null);
             }
-            case MAIN_MENU -> {}
-            case TUTORIAL -> {}
+            case MAIN_MENU -> {
+            }
+            case TUTORIAL -> {
+            }
             case HIGH_SCORES -> {
                 g.setColor(Color.black);
                 g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 36));
@@ -510,9 +512,12 @@ public class Game extends Canvas implements Runnable {
                     g.drawString(DatabaseConnection.scoresArray[4], 300, 370);
                 }
             }
-            case OPTIONS -> {}
-            case PAUSE_MENU -> {}
-            case UPGRADE_MENU -> {}
+            case OPTIONS -> {
+            }
+            case PAUSE_MENU -> {
+            }
+            case UPGRADE_MENU -> {
+            }
             case CREDITS -> {
                 g.setColor(Color.black);
                 g.setFont(new Font("Arial Black", Font.PLAIN, 40));
@@ -545,8 +550,8 @@ public class Game extends Canvas implements Runnable {
      */
     private void renderUi(Graphics g) {
 
-        if(takesDamage){
-            g.drawImage(bloodScreen,1,1,null);
+        if (takesDamage) {
+            g.drawImage(bloodScreen, 1, 1, null);
         }
 
         g.setColor(Color.gray);
@@ -770,19 +775,16 @@ public class Game extends Canvas implements Runnable {
                     // Creates the new blocks which function as the walls
                     handler.addObject(new Block(xx * 32, yy * 32, ID.Block, imageGetter, randomNumber(1, 7), 1));
                     wallCords.add(new int[]{xx, yy});
-                }
-                else if (currColor.getRed() == 255 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
+                } else if (currColor.getRed() == 255 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
                     // Creates the new destroyable blocks which function as the walls
                     //add also more variations like blocks
-                    handler.addObject(new DestroyableBoxes(xx * 32, yy * 32, ID.DestroyableBoxes, handler,imageGetter, 3, 3)); // col 3 - 7
+                    handler.addObject(new DestroyableBoxes(xx * 32, yy * 32, ID.DestroyableBoxes, handler, imageGetter, 3, 3)); // col 3 - 7
                     // wallCords.add(new int[]{xx, yy});
-                }
-                else if (currColor.getRed() == 0 && currColor.getGreen() == 0 && currColor.getBlue() == 255) {
+                } else if (currColor.getRed() == 0 && currColor.getGreen() == 0 && currColor.getBlue() == 255) {
                     handler.addObject(new Player(xx * 32, yy * 32, ID.Player, handler, this, camera, imageGetter));
                     PlayerX = xx * 32;
                     PlayerY = yy * 32;
-                }
-                else if (currColor.getRed() == 0 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
+                } else if (currColor.getRed() == 0 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
                     handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, imageGetter, score));
                 }
                 /*if (green == 255 && blue == 255) {
@@ -831,7 +833,7 @@ public class Game extends Canvas implements Runnable {
                         System.out.println("over Con");
                     }
                     case 5 -> {
-                        takesDamage =false;
+                        takesDamage = false;
                     }
                 }
                 shouldTime = false;  //deactivate the timer
@@ -913,6 +915,7 @@ public class Game extends Canvas implements Runnable {
     /*public void changeStateToMenu(){
         currentState = GameState.MAIN_MENU;             Unnötige Funktion? siehe weiter unten setState()
     }*/
+
     /***
      * A function inside the game calls to spawn the enemy's. it is static that i can be called in other classes
      * @param x X value
@@ -994,7 +997,7 @@ public class Game extends Canvas implements Runnable {
 
     }
 
-    private void setGunToPistolAgain(){
+    private void setGunToPistolAgain() {
         handler.selectedgun = Gun.guns.get(0);
         handler.gunindex = 0;
     }
@@ -1013,17 +1016,24 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void updateLockStatus() {
-        if (Enemy.waves == 2) { //for test purposes on wave 2
+        if (getState() == GameState.TUTORIAL) {
             index = gun.getIndex(GunType.Shotgun);
             gun.manipulteList(index, new Gun(), GunType.Shotgun, false);
-        } else if (Enemy.waves == 3) { //for test purposes on wave 3
             index = gun.getIndex(GunType.MachineGun);
             gun.manipulteList(index, new Gun(), GunType.MachineGun, false);
+        } else {
+            if (Enemy.waves == 2) { //for test purposes on wave 2
+                index = gun.getIndex(GunType.Shotgun);
+                gun.manipulteList(index, new Gun(), GunType.Shotgun, false);
+            } else if (Enemy.waves == 3) { //for test purposes on wave 3
+                index = gun.getIndex(GunType.MachineGun);
+                gun.manipulteList(index, new Gun(), GunType.MachineGun, false);
+            }
         }
     }
 
     private void loadBullets() {
-        for(int i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             handler.bullets.add(new Bullet(0, 0, ID.Bullet, handler, imageGetter));
         }
     }
@@ -1061,27 +1071,27 @@ public class Game extends Canvas implements Runnable {
         enemyDeadShadow[6] = getEnemyBlood.getImage32(7, 1, 32, 32);
     }
 
-    private void loadPlayerIdle(){
-        playerIdle[0] = getPlayerIdleCycle.getImage32(1,1,32,32);
-        playerIdle[1] = getPlayerIdleCycle.getImage32(2,1,32,32);
-        playerIdle[2] = getPlayerIdleCycle.getImage32(3,1,32,32);
-        playerIdle[3] = getPlayerIdleCycle.getImage32(4,1,32,32);
+    private void loadPlayerIdle() {
+        playerIdle[0] = getPlayerIdleCycle.getImage32(1, 1, 32, 32);
+        playerIdle[1] = getPlayerIdleCycle.getImage32(2, 1, 32, 32);
+        playerIdle[2] = getPlayerIdleCycle.getImage32(3, 1, 32, 32);
+        playerIdle[3] = getPlayerIdleCycle.getImage32(4, 1, 32, 32);
     }
 
-    private void loadEnenemySprites(){
-        enemy[0] = getEnemySprite.getImage32(1,1,32,32);
-        enemy[1] = getEnemySprite.getImage32(2,1,32,32);
-        enemy[2] = getEnemySprite.getImage32(3,1,32,32);
-        enemy[3] = getEnemySprite.getImage32(4,1,32,32);
-        enemy[4] = getEnemySprite.getImage32(5,1,32,32);
-        enemy[5] = getEnemySprite.getImage32(6,1,32,32);
-        enemy[6] = getEnemySprite.getImage32(7,1,32,32);
-        enemy[7] = getEnemySprite.getImage32(8,1,32,32);
-        enemy[8] = getEnemySprite.getImage32(9,1,32,32);
-        enemy[9] = getEnemySprite.getImage32(10,1,32,32);
-        enemy[10] = getEnemySprite.getImage32(11,1,32,32);
-        enemy[11] = getEnemySprite.getImage32(12,1,32,32);
-        enemy[12] = getEnemySprite.getImage32(13,1,32,32);
+    private void loadEnenemySprites() {
+        enemy[0] = getEnemySprite.getImage32(1, 1, 32, 32);
+        enemy[1] = getEnemySprite.getImage32(2, 1, 32, 32);
+        enemy[2] = getEnemySprite.getImage32(3, 1, 32, 32);
+        enemy[3] = getEnemySprite.getImage32(4, 1, 32, 32);
+        enemy[4] = getEnemySprite.getImage32(5, 1, 32, 32);
+        enemy[5] = getEnemySprite.getImage32(6, 1, 32, 32);
+        enemy[6] = getEnemySprite.getImage32(7, 1, 32, 32);
+        enemy[7] = getEnemySprite.getImage32(8, 1, 32, 32);
+        enemy[8] = getEnemySprite.getImage32(9, 1, 32, 32);
+        enemy[9] = getEnemySprite.getImage32(10, 1, 32, 32);
+        enemy[10] = getEnemySprite.getImage32(11, 1, 32, 32);
+        enemy[11] = getEnemySprite.getImage32(12, 1, 32, 32);
+        enemy[12] = getEnemySprite.getImage32(13, 1, 32, 32);
     }
 
 
