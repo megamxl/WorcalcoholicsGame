@@ -353,7 +353,7 @@ public class MouseInput extends MouseAdapter {
     private void shotgun(MouseEvent e) {
         handler.now = System.currentTimeMillis();
         //IF waiting time is over AND player has ammo -> shoot a bullet
-        if (handler.now > handler.wait && game.ammo >= 1) {
+        if (handler.now > handler.wait && game.ammo >= 1 && game.getState() != GameState.GAME_OVER) {
             PointerInfo a = MouseInfo.getPointerInfo();
             Point point = new Point(a.getLocation());
             SwingUtilities.convertPointFromScreen(point, e.getComponent());
