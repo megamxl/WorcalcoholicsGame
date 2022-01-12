@@ -741,6 +741,7 @@ public class Game extends Canvas implements Runnable {
                 lastScore = score.showScore();
                 score.resetSore();
                 handler.backgroundsound.close();
+                takesDamage = false;
                 //ScoerSaveWindow.frame.setVisible(true);
                 //Window.frame.setVisible(false);
                 //System.out.println("SOUND CLOSE");
