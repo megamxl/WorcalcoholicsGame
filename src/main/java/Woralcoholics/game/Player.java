@@ -17,6 +17,8 @@ public class Player extends GameObject {
     Camera cam;
     Upgrades upgrades; //use upgrades.method for upgrade changes in Game and Player class
 
+    public static Boolean takesDamage;
+
     private final BufferedImage player_img;
     private Animations playerWalkLeft;
     private Animations playerWalkRigth;
@@ -189,6 +191,10 @@ public class Player extends GameObject {
                                         //System.out.println(handler.enemy.size() + String.valueOf(tempobject));
                                     }
                                 }
+                            }
+                            if(!Game.takesDamage){
+                                Game.takesDamage = true;
+                                Game.startTimer(1,5);
                             }
                             cam.shake = true;
                             //wait = now + invincibleTime;

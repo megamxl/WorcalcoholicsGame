@@ -60,6 +60,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage enemyBloodImg;
     private BufferedImage upgradeButtonImg;
     private BufferedImage tutorialBoarder;
+    private BufferedImage bloodScreen;
     private BufferedImage upgradBoard = null;
     private BufferedImage UIButtonImg;
     private BufferedImage gameOverUIButtonImg;
@@ -100,6 +101,7 @@ public class Game extends Canvas implements Runnable {
     public static int curentTutorialscore = 0;
     public static int curentAmmo= 0;
     public static boolean isDead = false;
+    public static boolean takesDamage = false;
     private boolean wasstopped = false;
     private boolean triggeredonce = false;
 
@@ -115,6 +117,7 @@ public class Game extends Canvas implements Runnable {
     private static ImageGetter getPlayerIdleCycle;
     private static ImageGetter getEnemyBlood;
     private static ImageGetter getEnemySprite;
+    private static ImageGetter getBloodScreen;
     private static ImageGetter GameOverScreenImg;
     private static ImageGetter getTutorialDialogWindowBorder;
 
@@ -171,6 +174,9 @@ public class Game extends Canvas implements Runnable {
 
         gameOverUIButtonImg = loader.loadImage("/Graphics/GameOverUIButton.png");
         getGameOverUIButton = new ImageGetter(gameOverUIButtonImg);
+
+        bloodScreen = loader.loadImage("/Graphics/Bloodscreen.png");
+        getBloodScreen = new ImageGetter(bloodScreen);
 
         playerWalkCycleImg = loader.loadImage("/Graphics/Animations/Character Running Spritesheet.png");
         getPlayerWalkCycle = new ImageGetter(playerWalkCycleImg);
@@ -538,6 +544,10 @@ public class Game extends Canvas implements Runnable {
      */
     private void renderUi(Graphics g) {
 
+        if(takesDamage){
+            g.drawImage(bloodScreen,1,1,null);
+        }
+
         g.setColor(Color.gray);
         g.fillRect(5, 5, 200, 16); //hp
         g.fillRect(5, 30, 200, 16); //ammo
@@ -818,6 +828,9 @@ public class Game extends Canvas implements Runnable {
                         }
 
                         System.out.println("over Con");
+                    }
+                    case 5 -> {
+                        takesDamage =false;
                     }
                 }
                 shouldTime = false;  //deactivate the timer
