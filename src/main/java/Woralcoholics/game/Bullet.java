@@ -17,7 +17,6 @@ public class Bullet extends GameObject {
     public static float bulletSpeed = 30;// 8;
 
     private final BufferedImage bullet_img;
-    protected boolean inGame = false;
 
     GameManager handler;
 

@@ -4,6 +4,7 @@ import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Random;
 
 /**
@@ -88,7 +89,7 @@ public class Enemy extends GameObject {
         else {g.setColor(Color.RED);}
         g.fillRect((int) x - 6, (int) y - 10, (int)(44.0*hpPercent), 2);
         g.setColor(Color.WHITE);
-        g.drawString(hpPercent*100 + "%", (int) (x-2), (int) (y-16));
+        g.drawString(String.format("%.2f", hpPercent * 100) + "%", (int) (x-2), (int) (y-16));
     }
 
 

@@ -20,6 +20,8 @@ public abstract class GameObject {
     protected ImageGetter an;
     protected GameManager handler;
 
+    protected boolean inGame = false;
+
     public GameObject(float x, float y, ID id, ImageGetter an) {
         this.x = x;
         this.y = y;

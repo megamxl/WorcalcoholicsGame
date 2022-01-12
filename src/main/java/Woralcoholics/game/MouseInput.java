@@ -323,18 +323,24 @@ public class MouseInput extends MouseAdapter {
             SwingUtilities.convertPointFromScreen(point, e.getComponent());
             int x = (int) point.getX();
             int y = (int) point.getY();
-            //Add camera pos, as bullets don't aim correctly otherwise
-            double mx = x + camera.getX();
-            double my = y + camera.getY();
-            //Middle of player coordinates
-            double px = player.getX() + 32;
-            double py = player.getY() + 32;
-            //Create a new bullet in the middle of player sprite (minus the bullet radius)
-            Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-            temp.direction(mx, my, px, py, false, 0); //Calculate the direction of this bullet
-            handler.addObject(temp);    //Add the Bullet to the ObjectList
-            playSoundGun(game.ammo);
-            game.ammo--;    //Subtract 1 from ammo (bullet was shot)
+            for(int i = 0; i < handler.bullets.size(); i++) {
+                Bullet temp = handler.bullets.get(i);
+                if(!temp.inGame) {
+                    //Add camera pos, as bullets don't aim correctly otherwise
+                    double mx = x + camera.getX();
+                    double my = y + camera.getY();
+                    //Middle of player coordinates
+                    double px = player.getX() + 32 - 4;
+                    double py = player.getY() + 32 - 4;
+                    temp.setPos(px, py);
+                    temp.direction(mx, my, px, py, false, 0);
+                    temp.inGame = true;
+                    //System.out.println(handler.bullets.get(i));
+                    playSoundGun(game.ammo);
+                    game.ammo--;    //Subtract 1 from ammo (bullet was shot)
+                    break;
+                }
+            }
             handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
             try {
                 Thread.sleep(100);
@@ -353,25 +359,28 @@ public class MouseInput extends MouseAdapter {
             SwingUtilities.convertPointFromScreen(point, e.getComponent());
             int x = (int) point.getX();
             int y = (int) point.getY();
-            //Add camera pos, as bullets don't aim correctly otherwise
-            double mx = x + camera.getX();
-            double my = y + camera.getY();
-            //Middle of player coordinates
-            double px = player.getX() + 32;
-            double py = player.getY() + 32;
-            //Create a new bullet in the middle of player sprite (minus the bullet radius)
-
-            Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-            temp.direction(mx, my, px, py, true, 0); //Calculate the direction of this bullet
-            handler.addObject(temp);    //Add the Bullet to the ObjectList
-
-            Bullet temp2 = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-            temp2.direction(mx, my, px, py, true, 10); //Calculate the direction of this bullet
-            handler.addObject(temp2);    //Add the Bullet to the ObjectList
-
-            Bullet temp3 = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-            temp3.direction(mx, my, px, py, true, -10); //Calculate the direction of this bullet
-            handler.addObject(temp3);    //Add the Bullet to the ObjectList
+            int shells = 0;
+            for(int i = 0; i < handler.bullets.size(); i++) {
+                Bullet temp = handler.bullets.get(i);
+                if(!temp.inGame) {
+                    //Add camera pos, as bullets don't aim correctly otherwise
+                    double mx = x + camera.getX();
+                    double my = y + camera.getY();
+                    //Middle of player coordinates
+                    double px = player.getX() + 32 - 4;
+                    double py = player.getY() + 32 - 4;
+                    temp.setPos(px, py);
+                    switch(shells) {
+                        case 0 -> temp.direction(mx, my, px, py, true, 0);
+                        case 1 -> temp.direction(mx, my, px, py, true, 10);
+                        case 2 -> temp.direction(mx, my, px, py, true, -10);
+                    }
+                    temp.inGame = true;
+                    game.ammo--;    //Subtract 1 from ammo (bullet was shot)
+                    shells++;
+                    if(shells == 3) break;
+                }
+            }
             playSoundGun(game.ammo);
             if (game.ammo <= 3) {
                 game.ammo = 0;
