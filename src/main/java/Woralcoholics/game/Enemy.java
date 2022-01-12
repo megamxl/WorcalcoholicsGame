@@ -71,13 +71,20 @@ public class Enemy extends GameObject {
 
     public void render(Graphics g) {
         enemyAnimation.renderAnimation(g,(int) x, (int)y);
+        renderHPBar(g);
+
+        //g.drawImage(enemy_img, (int) x, (int) y, null);
+    }
+
+    private void renderHPBar(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect((int) x - 8, (int) y - 12, 48, 6);
-        g.setColor(Color.RED);
-        g.fillRect((int) x - 6, (int) y - 10, 44, 2);
+        if(hpPercent > 0.5) {g.setColor(Color.green);}
+        else if(hpPercent > 0.25) {g.setColor(Color.YELLOW);}
+        else {g.setColor(Color.RED);}
+        g.fillRect((int) x - 6, (int) y - 10, (int)(44.0*hpPercent), 2);
         g.setColor(Color.WHITE);
-        //g.drawString(hpPercent*100 + "%", (int) (x), (int) (y));
-        //g.drawImage(enemy_img, (int) x, (int) y, null);
+        g.drawString(hpPercent*100 + "%", (int) (x-2), (int) (y-16));
     }
 
 
@@ -118,7 +125,7 @@ public class Enemy extends GameObject {
             if (tmpObject.getId() == ID.Bullet) {
                 if (getBounds().intersects(tmpObject.getBounds())) {
                     //System.out.println("hit");
-                    hp -= 50;
+                    hp -= 16;
                     hpPercent = hp/(float)maxHp;
                     if (hp > 50) playSoundEnemyHit();
                     //System.out.println("einem enemy leben abgezogen " + hp);
