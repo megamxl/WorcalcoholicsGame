@@ -805,6 +805,12 @@ public class Game extends Canvas implements Runnable {
     private void timer() throws SQLException {
         if (TimerValue > 0) {     //if the time is not over, decrease TimerValue
             TimerValue--;
+            // takesDamage has to be set to false here, because else, the blood screen will not disappear
+            // as the timerAction is 1 when the new wave spawns and the timer action for removing the blood screen
+            // is 5 and will not be invoked until further damage would be taken
+            if (timerAction == 1) {
+                takesDamage = false;
+            }
         } else {   //if the waiting time is over...
             if (shouldTime) {    //...execute the previously set timerAction
                 switch (timerAction) {
