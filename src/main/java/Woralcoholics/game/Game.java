@@ -707,7 +707,7 @@ public class Game extends Canvas implements Runnable {
                         1, 0));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 352, 102,
                         "Stop Playing", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
-                        getGameOverUIButton, 1, 1, g, 1, 27));
+                        getUIButton, 1, 1, g, 1, 20));
                 paused = true;//we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
