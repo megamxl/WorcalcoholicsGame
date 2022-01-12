@@ -188,7 +188,7 @@ public class Game extends Canvas implements Runnable {
         enemyBloodImg = loader.loadImage("/Graphics/Animations/Bloodparticle.png");
         getEnemyBlood = new ImageGetter(enemyBloodImg);
 
-        BufferedImage GameOverScreen = loader.loadImage("/Graphics/gameOverPictureV2.png");
+        BufferedImage GameOverScreen = loader.loadImage("/Graphics/gameOverPictureV3.png");
         GameOverScreenImg = new ImageGetter(GameOverScreen);
         imgOver = GameOverScreen.getSubimage(1, 1, 860/*720*/, 410/*480*/);
 
