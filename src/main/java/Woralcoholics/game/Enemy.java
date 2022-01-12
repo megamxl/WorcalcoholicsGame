@@ -27,6 +27,7 @@ public class Enemy extends GameObject {
     int high = 4;
     int booleanValue = 0;                                   //booleanvalue is for determining if enemy should charge player again or just running aimless around
     private boolean isAlive;
+    private Animations enemyAnimation;
 
     public boolean hittedWall = false;                      //hittedWall is for changing the aiming target of player to nothing
 
@@ -46,6 +47,7 @@ public class Enemy extends GameObject {
         enemy_img = an.getImage(1, 4, 32, 32);
         enemysAlive++;
         hp = maxHp;
+        enemyAnimation = new Animations(6,Game.enemy[0],Game.enemy[1],Game.enemy[2],Game.enemy[3],Game.enemy[4],Game.enemy[5],Game.enemy[6],Game.enemy[7],Game.enemy[8],Game.enemy[9],Game.enemy[10],Game.enemy[11],Game.enemy[12]);
     }
 
     //endregion
@@ -54,6 +56,8 @@ public class Enemy extends GameObject {
 
     public void update() {
         move();
+
+        enemyAnimation.runAnimations();
 
         choose = r.nextInt(10);
 
@@ -65,7 +69,8 @@ public class Enemy extends GameObject {
     }
 
     public void render(Graphics g) {
-        g.drawImage(enemy_img, (int) x, (int) y, null);
+        enemyAnimation.renderAnimation(g,(int) x, (int)y);
+        //g.drawImage(enemy_img, (int) x, (int) y, null);
     }
 
     /**

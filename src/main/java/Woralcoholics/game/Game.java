@@ -55,6 +55,8 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage tutorialLevel;
     private BufferedImage spritesheet;
     private BufferedImage playerWalkCycleImg;
+    private BufferedImage playerIdleCycleImg;
+    private BufferedImage enemyCycleImg;
     private BufferedImage enemyBloodImg;
     private BufferedImage upgradeButtonImg;
     private BufferedImage tutorialBoarder;
@@ -73,7 +75,9 @@ public class Game extends Canvas implements Runnable {
 
     public static BufferedImage[] playerWalkingLeft = new BufferedImage[10];
     public static BufferedImage[] playerWalkingRight = new BufferedImage[10];
+    public static BufferedImage[] playerIdle = new BufferedImage[4];
     public static BufferedImage[] enemyDeadShadow = new BufferedImage[10];
+    public static BufferedImage[] enemy = new BufferedImage[13];
 
     private String[][] tutorialTexts = new String[10][2];
 
@@ -94,6 +98,7 @@ public class Game extends Canvas implements Runnable {
     public static int TimerValue;
     public static int timerAction;
     public static int curentTutorialscore = 0;
+    public static int curentAmmo= 0;
     public static boolean isDead = false;
     private boolean wasstopped = false;
     private boolean triggeredonce = false;
@@ -107,7 +112,9 @@ public class Game extends Canvas implements Runnable {
     private static ImageGetter imageGetter;
     private static ImageGetter getUpgradeButton;
     private static ImageGetter getPlayerWalkCycle;
+    private static ImageGetter getPlayerIdleCycle;
     private static ImageGetter getEnemyBlood;
+    private static ImageGetter getEnemySprite;
     private static ImageGetter GameOverScreenImg;
     private static ImageGetter getTutorialDialogWindowBorder;
 
@@ -168,6 +175,12 @@ public class Game extends Canvas implements Runnable {
         playerWalkCycleImg = loader.loadImage("/Graphics/Animations/Character Running Spritesheet.png");
         getPlayerWalkCycle = new ImageGetter(playerWalkCycleImg);
 
+        playerIdleCycleImg = loader.loadImage("/Graphics/Animations/Character Idle Spritesheet.png");
+        getPlayerIdleCycle = new ImageGetter(playerIdleCycleImg);
+
+        enemyCycleImg = loader.loadImage("/Graphics/Animations/Enemy 02 Spritesheet.png");
+        getEnemySprite = new ImageGetter(enemyCycleImg);
+
         enemyBloodImg = loader.loadImage("/Graphics/Animations/Bloodparticle.png");
         getEnemyBlood = new ImageGetter(enemyBloodImg);
 
@@ -209,7 +222,8 @@ public class Game extends Canvas implements Runnable {
 
         loadPlayerSprites();
         loadEnemyDeadSprites();
-
+        loadPlayerIdle();
+        loadEnenemySprites();
 
         FontLoader fontLoader = new FontLoader();
     }
@@ -1025,6 +1039,29 @@ public class Game extends Canvas implements Runnable {
         enemyDeadShadow[4] = getEnemyBlood.getImage32(5, 1, 32, 32);
         enemyDeadShadow[5] = getEnemyBlood.getImage32(6, 1, 32, 32);
         enemyDeadShadow[6] = getEnemyBlood.getImage32(7, 1, 32, 32);
+    }
+
+    private void loadPlayerIdle(){
+        playerIdle[0] = getPlayerIdleCycle.getImage32(1,1,32,32);
+        playerIdle[1] = getPlayerIdleCycle.getImage32(2,1,32,32);
+        playerIdle[2] = getPlayerIdleCycle.getImage32(3,1,32,32);
+        playerIdle[3] = getPlayerIdleCycle.getImage32(4,1,32,32);
+    }
+
+    private void loadEnenemySprites(){
+        enemy[0] = getEnemySprite.getImage32(1,1,32,32);
+        enemy[1] = getEnemySprite.getImage32(2,1,32,32);
+        enemy[2] = getEnemySprite.getImage32(3,1,32,32);
+        enemy[3] = getEnemySprite.getImage32(4,1,32,32);
+        enemy[4] = getEnemySprite.getImage32(5,1,32,32);
+        enemy[5] = getEnemySprite.getImage32(6,1,32,32);
+        enemy[6] = getEnemySprite.getImage32(7,1,32,32);
+        enemy[7] = getEnemySprite.getImage32(8,1,32,32);
+        enemy[8] = getEnemySprite.getImage32(9,1,32,32);
+        enemy[9] = getEnemySprite.getImage32(10,1,32,32);
+        enemy[10] = getEnemySprite.getImage32(11,1,32,32);
+        enemy[11] = getEnemySprite.getImage32(12,1,32,32);
+        enemy[12] = getEnemySprite.getImage32(13,1,32,32);
     }
 
 

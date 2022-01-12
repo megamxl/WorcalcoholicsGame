@@ -20,6 +20,7 @@ public class Player extends GameObject {
     private final BufferedImage player_img;
     private Animations playerWalkLeft;
     private Animations playerWalkRigth;
+    private Animations playerIdle;
 
     private double invincibleTime = 1000;
 
@@ -41,6 +42,7 @@ public class Player extends GameObject {
 
         playerWalkLeft = new Animations(3, Game.playerWalkingLeft[0], Game.playerWalkingLeft[1], Game.playerWalkingLeft[2], Game.playerWalkingLeft[3], Game.playerWalkingLeft[4], Game.playerWalkingLeft[5], Game.playerWalkingLeft[6], Game.playerWalkingLeft[7], Game.playerWalkingLeft[8], Game.playerWalkingLeft[9]);
         playerWalkRigth = new Animations(3, Game.playerWalkingRight[0], Game.playerWalkingRight[1], Game.playerWalkingRight[2], Game.playerWalkingRight[3], Game.playerWalkingRight[4], Game.playerWalkingRight[5], Game.playerWalkingRight[6], Game.playerWalkingRight[7], Game.playerWalkingRight[8], Game.playerWalkingRight[9]);
+        playerIdle = new Animations(3,Game.playerIdle[0],Game.playerIdle[1],Game.playerIdle[2],Game.playerIdle[3]);
 
         player_img = an.getImage(1, 3, 64, 64);
 
@@ -53,6 +55,7 @@ public class Player extends GameObject {
 
         playerWalkLeft.runAnimations();
         playerWalkRigth.runAnimations();
+        playerIdle.runAnimations();
 
         checkIfGone();
 
@@ -77,7 +80,7 @@ public class Player extends GameObject {
         } else if (velX > 0 || velY >0 || velY <0 ) {
             playerWalkRigth.renderAnimation(g, (int) x, (int) y, 64, 64);
         } else {
-            g.drawImage(player_img, (int) x, (int) y, null);
+            playerIdle.renderAnimation(g,(int)x,(int) y, 64,64);
         }
         // draw other colliders
         /*g.setColor(Color.RED);
