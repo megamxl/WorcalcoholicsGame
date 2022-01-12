@@ -27,7 +27,7 @@ public class DatabaseConnection {
         // Method to try to connect. Database is completely unsafe at the moment but is just a free mysql Database at the moment without any privileges to create different users
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://sql4.freesqldatabase.com/sql4462776", "sql4462776", "TNqVfZS4pW");
+            con = DriverManager.getConnection("jdbc:mysql://sql11.freesqldatabase.com/sql11465142", "sql11465142", "3EUdzq6kPX");
         } catch (Exception e) {
             System.out.println("we don't have capacities for that ");
             System.out.println(e);
@@ -52,7 +52,7 @@ public class DatabaseConnection {
         try {
             // Method to try to connect. Database is completely unsafe at the moment but is just a free mysql Database at the moment without any privileges to create different users
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://sql4.freesqldatabase.com:3306/sql4462776", "sql4462776", "TNqVfZS4pW");
+            con = DriverManager.getConnection("jdbc:mysql://sql11.freesqldatabase.com/sql11465142", "sql11465142", "3EUdzq6kPX");
         } catch (Exception e) {
             System.out.println("we don't have capacities for that ");
             System.out.println(e);
