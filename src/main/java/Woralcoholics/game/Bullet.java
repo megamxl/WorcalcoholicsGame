@@ -17,6 +17,7 @@ public class Bullet extends GameObject {
     public static float bulletSpeed = 30;// 8;
 
     private final BufferedImage bullet_img;
+    protected boolean inGame = false;
 
     GameManager handler;
 
@@ -54,7 +55,10 @@ public class Bullet extends GameObject {
 
             if (tmpObject.getId() == ID.Block) {
                 if (this.getBounds().intersects(tmpObject.getBounds())) {
-                    handler.removeObject(this);
+                    this.setId(ID.Bullet);
+                    this.inGame = false;
+                    this.setPos(0,0);
+                    //handler.removeObject(this);
                     //System.out.println("Collision");
                 }
             }
@@ -119,11 +123,11 @@ public class Bullet extends GameObject {
 
     @Override
     public void update() {
-        x += velX;
-        y += velY;
+            x += velX;
+            y += velY;
 
-        collision();
-        ooB();
+            collision();
+            ooB();
     }
 
     @Override
@@ -132,6 +136,12 @@ public class Bullet extends GameObject {
         /*g.setColor(Color.WHITE);
         g.fillOval((int) x, (int) y, 8, 8);   */
         g.drawImage(bullet_img, (int) x, (int) y, null);
+
+    }
+
+    public void setPos(double x, double y) {
+        this.x = (int)x;
+        this.y = (int)y;
     }
 
     @Override

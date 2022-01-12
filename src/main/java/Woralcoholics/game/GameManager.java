@@ -21,6 +21,7 @@ public class GameManager {
     // or render
     LinkedList<GameObject> object = new LinkedList<GameObject>();
     LinkedList<Object> enemy = new LinkedList<Object>();
+    LinkedList<Bullet> bullets = new LinkedList<Bullet>();
 
     //In this script we define the 4 ways somebody can walk and set and get them
     private boolean up = false, down = false, right = false, left = false;
@@ -56,6 +57,12 @@ public class GameManager {
                 ex.printStackTrace();
             }
         }
+        for(int i = 0; i < bullets.size(); i++) {
+            Bullet temp = bullets.get(i);
+            if(temp.inGame) {
+                temp.update();
+            }
+        }
 
     }
 
@@ -67,6 +74,12 @@ public class GameManager {
             GameObject tempObject = object.get(i);
 
             tempObject.render(g);
+        }
+        for(int i = 0; i < bullets.size(); i++) {
+            Bullet temp = bullets.get(i);
+            if(temp.inGame) {
+                temp.render(g);
+            }
         }
     }
 
@@ -95,6 +108,14 @@ public class GameManager {
         int i = 0;
         while (this.object.size() > 0) {
             this.object.remove(0);
+        }
+    }
+
+    public void hideBullets() {
+        for(int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).setId(ID.Bullet);
+            bullets.get(i).inGame = false;
+            bullets.get(i).setPos(0,0);
         }
     }
 

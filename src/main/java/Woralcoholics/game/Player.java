@@ -159,7 +159,7 @@ public class Player extends GameObject {
                         x += velX * -1;
                         y += velY * -1;
                     }
-                    case Create -> {
+                    case Crate -> {
                         upgrades.setMunition(upgrades.getMunition() + 10);
                         if (upgrades.getMunition() > 49) {
                             upgrades.setMunition(50);
@@ -169,15 +169,15 @@ public class Player extends GameObject {
                         playSoundAmmoReload();
                     }
 
-                    case Enemy, EnemyBullet -> {
+                    case Enemy/*, EnemyBullet*/ -> {
                         playerSoundHurt();
                         // Implement Bloodscreen
                         if (game.hp > 0) {    //if player has health and is not invincible
                             switch (tempID) {
-                                case EnemyBullet -> {
+                                /*case EnemyBullet -> {
                                     handler.removeObject(tempobject);   //Remove Enemy Bullet if Player is hit
                                     upgrades.damaged(20);
-                                }
+                                }*/
                                 case Enemy -> {
                                     if (handler.enemy.contains(tempobject)) { //enemy is on player
                                         invincibleTime++;
@@ -209,6 +209,15 @@ public class Player extends GameObject {
                 } else {
 
                 }
+            }
+        }
+        for(int i = 0; i < handler.bullets.size(); i++) {
+            Bullet temp = handler.bullets.get(i);
+            if(getBounds().intersects(temp.getBounds()) && temp.inGame && temp.getId() == ID.EnemyBullet) {
+                upgrades.damaged(20);
+                temp.setId(ID.Bullet);
+                temp.inGame = false;
+                temp.setPos(0,0);
             }
         }
     }

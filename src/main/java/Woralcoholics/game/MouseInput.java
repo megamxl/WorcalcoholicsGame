@@ -95,16 +95,34 @@ public class MouseInput extends MouseAdapter {
                             handler.now = System.currentTimeMillis();
                             //IF waiting time is over AND player has ammo -> shoot a bullet
                             if (handler.now > handler.wait && game.ammo >= 1) {
-                                //Add camera pos, as bullets don't aim correctly otherwise
-                                double mx = currentPos.x + camera.getX();
-                                double my = currentPos.y + camera.getY();
-                                //Middle of player coordinates
-                                double px = player.getX() + 32;
-                                double py = player.getY() + 32;
-                                //Create a new bullet in the middle of player sprite (minus the bullet radius)
-                                Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-                                temp.direction(mx, my, px, py, false, 0); //Calculate the direction of this bullet
-                                handler.addObject(temp);    //Add the Bullet to the ObjectList
+                                for(int i = 0; i < handler.bullets.size(); i++) {
+                                    Bullet temp = handler.bullets.get(i);
+                                    if(!temp.inGame) {
+                                        //Add camera pos, as bullets don't aim correctly otherwise
+                                        double mx = currentPos.x + camera.getX();
+                                        double my = currentPos.y + camera.getY();
+                                        //Middle of player coordinates
+                                        double px = player.getX() + 32 - 4;
+                                        double py = player.getY() + 32 - 4;
+                                        temp.setPos(px, py);
+                                        temp.direction(mx, my, px, py, false, 0);
+                                        temp.inGame = true;
+                                        //System.out.println(handler.bullets.get(i));
+                                        break;
+                                    }
+                                }
+                                /*int c = 0;
+                                for(int i = 0; i < handler.bullets.size(); i++) {
+                                    if(handler.bullets.get(i).inGame) {
+
+                                        c++;
+                                    }
+                                }
+                                System.out.println(c);*/
+
+                                //Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
+                                //temp.direction(mx, my, px, py, false, 0); //Calculate the direction of this bullet
+                                //handler.addObject(temp);    //Add the Bullet to the ObjectList
                                 playSoundGun(game.ammo);
                                 game.ammo--;    //Subtract 1 from ammo (bullet was shot)
                                 //System.out.println(game.ammo);

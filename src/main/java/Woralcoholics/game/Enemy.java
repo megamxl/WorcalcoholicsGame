@@ -66,17 +66,21 @@ public class Enemy extends GameObject {
 
         collision();
 
+        bulletCollision();
+
         isDead();
     }
 
     public void render(Graphics g) {
         enemyAnimation.renderAnimation(g,(int) x, (int)y);
-        renderHPBar(g);
+        if(hp != maxHp) {
+            renderHPBar(g);
+        }
 
         //g.drawImage(enemy_img, (int) x, (int) y, null);
     }
 
-    private void renderHPBar(Graphics g) {
+    protected void renderHPBar(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect((int) x - 8, (int) y - 12, 48, 6);
         if(hpPercent > 0.5) {g.setColor(Color.green);}
@@ -121,19 +125,7 @@ public class Enemy extends GameObject {
                 }
             }
 
-            //if our bullet is colliding with the enemy hp get's -50
-            if (tmpObject.getId() == ID.Bullet) {
-                if (getBounds().intersects(tmpObject.getBounds())) {
-                    //System.out.println("hit");
-                    hp -= 110;
-                    hpPercent = hp/(float)maxHp;
-                    if (hp > 50) playSoundEnemyHit();
-                    //System.out.println("einem enemy leben abgezogen " + hp);
 
-
-                    //System.out.println("es sind " + enemysAlive +" enemys am leben");
-                }
-            }
 
             // collision enemy with player
             if (tmpObject.getId() == ID.Player) {
@@ -173,6 +165,23 @@ public class Enemy extends GameObject {
         }
     }
 
+    public void bulletCollision() {
+        for(int i = 0; i < manager.bullets.size(); i++) {
+            Bullet temp = manager.bullets.get(i);
+            //if our bullet is colliding with the enemy hp get's -50
+            if (getBounds().intersects(temp.getBounds()) && temp.inGame && temp.getId() == ID.Bullet) {
+                //System.out.println("hit");
+                hp -= 110;
+                hpPercent = hp/(float)maxHp;
+                if (hp > 50) playSoundEnemyHit();
+                //System.out.println("einem enemy leben abgezogen " + hp);
+
+
+                //System.out.println("es sind " + enemysAlive +" enemys am leben");
+            }
+        }
+    }
+
 
     public void isDead() {
         if (hp <= 0) {
@@ -181,7 +190,7 @@ public class Enemy extends GameObject {
             } else if (this.getId() == ID.GunnerEnemy) {
                 score.addScore(10);
             }
-            System.out.println(score.showScore());
+            //System.out.println(score.showScore());
 
             int prob = Game.randomNumber(1, 5);
             remove();

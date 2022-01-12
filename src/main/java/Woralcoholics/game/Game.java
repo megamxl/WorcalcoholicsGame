@@ -11,10 +11,8 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -226,6 +224,8 @@ public class Game extends Canvas implements Runnable {
         startTimer(2, 3);   //activate the timer, to show the Studio for 3 sec
         this.upgrades = new Upgrades(this); //use upgrades.method for upgrade changes in Game and Player class
 
+        loadBullets();
+
         loadPlayerSprites();
         loadEnemyDeadSprites();
         loadPlayerIdle();
@@ -427,6 +427,7 @@ public class Game extends Canvas implements Runnable {
         }
         if (!loaded) {   //if nothing is loaded...
             handler.clearHandler(); //clear everything in the handler
+            handler.hideBullets();
         } else {
             handler.clearObjects(ID.UIButton);      //clear the handler from all buttons, when a level is loaded
         }
@@ -930,7 +931,7 @@ public class Game extends Canvas implements Runnable {
     }
 
     public static void SpawnCreate(int x, int y) {
-        handler.addObject(new Crate(x, y, ID.Create, imageGetter));
+        handler.addObject(new Crate(x, y, ID.Crate, imageGetter));
     }
 
     public static void AddEnemyShadow(int x, int y) {
@@ -1018,6 +1019,12 @@ public class Game extends Canvas implements Runnable {
         } else if (Enemy.waves == 3) { //for test purposes on wave 3
             index = gun.getIndex(GunType.MachineGun);
             gun.manipulteList(index, new Gun(), GunType.MachineGun, false);
+        }
+    }
+
+    private void loadBullets() {
+        for(int i = 0; i < 50; i++) {
+            handler.bullets.add(new Bullet(0, 0, ID.Bullet, handler, imageGetter));
         }
     }
 

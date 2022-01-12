@@ -100,12 +100,23 @@ public class GunnerEnemy extends Enemy {
      * Shoot a bullet
      */
     public void shoot() {
-        gx += 16;
-        gy += 16;
-        EnemyBullet temp = new EnemyBullet((int) gx - 4, (int) gy - 4, ID.EnemyBullet, handler, an);    //Create a new bullet, that can harm the player
-        temp.direction(px, py, gx, gy, false, 0);     //Set the direction
-        handler.addObject(temp);
-        playSoundGunnerEnemy();
+        gx += 16-4;
+        gy += 16-4;
+        for(int i = 0; i < handler.bullets.size(); i++) {
+            Bullet temp = handler.bullets.get(i);
+            if(!temp.inGame) {
+                temp.setId(ID.EnemyBullet);
+                temp.setPos(gx, gy);
+                temp.direction(px, py, gx, gy, false, 0);
+                playSoundGunnerEnemy();
+                temp.inGame = true;
+                break;
+            }
+        }
+        //EnemyBullet temp = new EnemyBullet((int) gx - 4, (int) gy - 4, ID.EnemyBullet, handler, an);    //Create a new bullet, that can harm the player
+        //temp.direction(px, py, gx, gy, false, 0);     //Set the direction
+        //handler.addObject(temp);
+
     }
 
     @Override
@@ -157,6 +168,7 @@ public class GunnerEnemy extends Enemy {
             move();
         }
         collision();    //Check if it's colliding with a Bullet or Block (Enemy.collision())
+        bulletCollision();
         //checkIfFree();
         //Shoot after a delay
         double now = System.currentTimeMillis();
@@ -178,6 +190,9 @@ public class GunnerEnemy extends Enemy {
         g.drawLine((int)gx+32, (int)gy+32, (int)px, (int)py);
         g.drawLine((int)gx+32, (int)gy+32, (int)(gx+Math.cos(alpha)*(distanceToPlayer-50)), (int)(gy+Math.sin(alpha)*(distanceToPlayer-50)));*/
         g.drawImage(gunner_enemy_img, (int) x, (int) y, null);
+        if(hp != maxHp) {
+            renderHPBar(g);
+        }
     }
 
     @Override
