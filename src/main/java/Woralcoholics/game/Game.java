@@ -716,10 +716,10 @@ public class Game extends Canvas implements Runnable {
                 //System.out.println("SOUND CLOSE");
                 handler.addObject(new UIButton(SCREEN_WIDTH / 4, SCREEN_HEIGHT * 4 / 5, 352, 102,
                         "Play Again?", GameState.LEVEL, ID.UIButton, this, 1, 0,
-                        getGameOverUIButton, 1, 1, g, 1, 27));
+                        getUIButton/*getGameOverUIButton*/, 1, 1, g, 1, 20/*27*/));
                 handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 4 / 5, 352, 102,
                         "Stop Playing", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
-                        getGameOverUIButton, 1, 1, g, 1, 27));
+                        getUIButton/*getGameOverUIButton*/, 1, 1, g, 1, 20/*27*/));
                 startTimer(0, 4);   //after 1 sec, execute timerAction 4 -> enter name and upload score dialogs
             }
         }
