@@ -298,7 +298,7 @@ public class MouseInput extends MouseAdapter {
         if (game.ammo <= 0) {
             playSoundGun(game.ammo); //has no ammo
         }
-        while (mouseDown && game.ammo >= 1) {
+        while (mouseDown && game.ammo >= 1 && game.getState() != GameState.GAME_OVER) {
 
             PointerInfo a = MouseInfo.getPointerInfo();
             Point point = new Point(a.getLocation());
