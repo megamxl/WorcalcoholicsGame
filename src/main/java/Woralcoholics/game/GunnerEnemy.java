@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Random;
 
 /**
+ * @author Lukas Schelepet
  * @author Maxlimilian Nowak
  * @author Christoph Oprawill
  */
@@ -18,12 +19,12 @@ public class GunnerEnemy extends Enemy {
 
     private final BufferedImage gunner_enemy_img;       //Sprite of Gunner Enemy
 
-    private float minDistanceToPlayer = 100;        //the minimal and maximum distances the Gunner should be away from the player
+    private float minDistanceToPlayer = 200;        //the minimal and maximum distances the Gunner should be away from the player
     private float maxDistanceToPlayer = 250;
     private double distanceToPlayer;
-    private double bulletAlpha;       //angle that is needed for calculating the bullet path
+    private double alpha;       //angle that is needed for calculating the bullet path
 
-    private final int checkFreeDistance = 32;
+    private final int checkFreeDistance = 32;   //base distance in which los() should check for obstacles
     public boolean inGame = false;
     public static float movementSpeed = 5;  //Movement-Speed of the Gunner
 
@@ -66,19 +67,17 @@ public class GunnerEnemy extends Enemy {
             gy = getY();
             calcDistanceToPlayer();
             checkIfGone();
-            behaviour();
             if (!Game.inTutorial) {
                 move();
             }
             //move(); //FOR TESTING!!
 
-            collision();    //Check if it's colliding with a Bullet or Block (Enemy.collision())
-            bulletCollision();
+            collision();    //Check if it's colliding with an Obstacle
+            bulletCollision();  //check if it's colliding with a bullet
             //Shoot after a delay
             double now = System.currentTimeMillis();
             if (now > wait) {
-                if(los()) shoot();
-
+                if(los()) shoot();  //if the player is in line of sight, shoot
                 wait = now + shootDel;
             }
             isDead();   //Check if he is dead (Enemy.isDead())
@@ -89,60 +88,53 @@ public class GunnerEnemy extends Enemy {
      * Render function of GunnerEnemy
      */
     public void render(Graphics g) {
-        /*g.setColor(Color.MAGENTA);
-        g.fillRect((int)x +4, (int)y +2, 52, 60);
-        g.setColor(Color.WHITE);
-
-
-        g.drawLine((int)gx+32, (int)gy+32, (int)(gx+Math.cos(alpha)*(distanceToPlayer-50)), (int)(gy+Math.sin(alpha)*(distanceToPlayer-50)));*/
-
         if (isInGame) {
             g.drawImage(gunner_enemy_img, (int) x, (int) y, null);
             if (hp != maxHp) {
-                renderHPBar(g);
+                renderHPBar(g);     //render the HP bar, if it was hit at least once
             }
-            g.drawRect((int)gx, (int)gy, 64, 64);
-            g.drawLine((int)gx+32, (int)gy+32, (int)px, (int)py);
         }
     }
 
+    /***
+     * Line of Sight calculation function
+     */
     private boolean los() {
-        for(int i = 1; i*checkFreeDistance < distanceToPlayer; i++) {
-            Point check = new Point((int) (Math.cos(bulletAlpha)*i*checkFreeDistance + gx),
-                    (int) (Math.sin(bulletAlpha)*i*checkFreeDistance + gy));
-            for(int j = 0; j < handler.object.size(); j++) {
+        for(int i = 1; i*checkFreeDistance < distanceToPlayer; i++) {   //for every tuple of the base distance until we reach the player...
+            Point checkpoint = new Point((int) (Math.cos(alpha)*i*checkFreeDistance + gx),
+                    (int) (Math.sin(alpha)*i*checkFreeDistance + gy));
+            for(int j = 0; j < handler.object.size(); j++) {    //...check if any Object...
                 GameObject temp = handler.object.get(j);
-                if(temp.getBounds().contains(check) && (temp.getId() == ID.Block || temp.getId() == ID.DestroyableBoxes)) {
-                    return false;
-                    //System.out.println("View obstructed by " + handler.object.get(j).getId());
+                //...contains the Point "checkpoint"
+                if(temp.getBounds().contains(checkpoint) && (temp.getId() == ID.Block || temp.getId() == ID.DestroyableBoxes)) {
+                    return false;   //if there is an Object at any Point in the los, return false
                 }
             }
-            //System.out.println("Object " + i + ": " + check.x + " " + check.y);
-            //System.out.println(bulletAlpha);
-            //System.out.println("Player: " + px + " " + py);
         }
-        return true;
+        return true;    //if not, return true
     }
 
+    /***
+     * StateChange function of GunnerEnemy
+     */
     private void stateChange() {
         lastState = gunnerState;
         switch(gunnerState) {
-            case TOO_FAR -> {
-                velX = (float) (Math.cos(bulletAlpha) * movementSpeed);
-                velY = (float) (Math.sin(bulletAlpha) * movementSpeed);
+            case TOO_FAR -> {   //get closer to the Player
+                velX = (float) (Math.cos(alpha) * movementSpeed);
+                velY = (float) (Math.sin(alpha) * movementSpeed);
             }
-            case TOO_CLOSE -> {
-                velX = (float) (Math.cos(bulletAlpha+Math.PI) * movementSpeed);
-                velY = (float) (Math.sin(bulletAlpha+Math.PI) * movementSpeed);
+            case TOO_CLOSE -> {     //get farther away from the Player
+                velX = (float) (Math.cos(alpha +Math.PI) * movementSpeed);
+                velY = (float) (Math.sin(alpha +Math.PI) * movementSpeed);
             }
-            case NEAR_WALL -> {
+            case NEAR_WALL -> {     //reverse from the wall
                 x += -velX * 3;
                 y += -velY * 3;
                 velX *= -1;
                 velY *= -1;
-                System.out.println("NEAR WALL");
             }
-            case WANDER -> {
+            case WANDER -> {    //wander around randomly
                 int a = new Random().nextInt(360);
                 velX = (float) (Math.cos(a*Math.PI/180) * movementSpeed/5);
                 velY = (float) (Math.sin(a*Math.PI/180) * movementSpeed/5);
@@ -154,6 +146,7 @@ public class GunnerEnemy extends Enemy {
      * Function to calculate the Distance to the player, and act accordingly
      */
     private void calcDistanceToPlayer() {
+        //get the position of the Player
         for (int i = 0; i < handler.object.size(); i++) {
             GameObject temp = handler.object.get(i);
 
@@ -163,11 +156,12 @@ public class GunnerEnemy extends Enemy {
                 break;
             }
         }
-        distanceToPlayer = Math.sqrt(Math.pow(px - gx, 2) + Math.pow(py - gy, 2));
-        bulletAlpha = Math.atan2(py - gy, px - gx);
 
-        gunnerState = state.WANDER;
-        if(los()) {
+        distanceToPlayer = Math.sqrt(Math.pow(px - gx, 2) + Math.pow(py - gy, 2));  //calculate the distance with Pythagoras
+        alpha = Math.atan2(py - gy, px - gx);
+
+        gunnerState = state.WANDER; //set state to WANDER, unless...
+        if(los()) {     //the Player is in los
             if (distanceToPlayer > maxDistanceToPlayer) {
                 gunnerState = state.TOO_FAR;
             } else if (distanceToPlayer < minDistanceToPlayer) {
@@ -177,25 +171,16 @@ public class GunnerEnemy extends Enemy {
     }
 
     /***
-     * How the Gunner should act depending on its state
-     */
-    public void behaviour() {
-        switch (gunnerState) {
-
-        }
-        //System.out.println(gunnerState);
-    }
-
-    /***
      * Shoot a bullet
      */
     public void shoot() {
-        gx += 16 - 4;
+        gx += 16 - 4;   //adjust coordinates of the bullet
         gy += 16 - 4;
+        //grab a free bullet from the bullet pool
         for (int i = 0; i < handler.bullets.size(); i++) {
             Bullet temp = handler.bullets.get(i);
             if (!temp.inGame) {
-                temp.setId(ID.EnemyBullet);
+                temp.setId(ID.EnemyBullet); //change its ID to be able to hurt the Player
                 temp.setPos(gx, gy);
                 temp.direction(px, py, gx, gy, false, 0, true);
                 playSoundGunnerEnemy();
@@ -208,11 +193,14 @@ public class GunnerEnemy extends Enemy {
 
     }
 
+    /***
+     * Collision detection function
+     */
     public void collision() {
         for (int i = 0; i < handler.object.size(); i++) {
-
             GameObject tmpObject = handler.object.get(i);
 
+            //if the GunnerEnemy collides with a Block or Box, change to the NEAR_WALL state
             if (tmpObject.getId() == ID.Block || tmpObject.getId() == ID.DestroyableBoxes) {
                 if (getBoundsAround().intersects(tmpObject.getBounds())) {
                     gunnerState = state.NEAR_WALL;
@@ -232,10 +220,12 @@ public class GunnerEnemy extends Enemy {
         }
     }
 
+    /***
+     * Playing Sounds of the GunnerEnemy
+     */
     private void playSoundGunnerEnemy() {
         try {
             new Thread(() -> {
-
                 try {
                     handler.playSoundGunnerEnemy();
                 } catch (LineUnavailableException e) {
@@ -255,8 +245,6 @@ public class GunnerEnemy extends Enemy {
         }
     }
 
-
-
     @Override
     public Rectangle getBounds() {
         return new Rectangle((int) x + 4, (int) y + 2, 52, 60);
@@ -265,32 +253,5 @@ public class GunnerEnemy extends Enemy {
     @Override
     public Rectangle getBoundsAround() {
         return new Rectangle((int) gx, (int) gy, 74, 74);
-    }
-
-    /***
-     * Some getter and setter functions
-     */
-    public float getMinDistanceToPlayer() {
-        return minDistanceToPlayer;
-    }
-
-    public void setMinDistanceToPlayer(float d) {
-        minDistanceToPlayer = d;
-    }
-
-    public float getMaxDistanceToPlayer() {
-        return maxDistanceToPlayer;
-    }
-
-    public void setMaxDistanceToPlayer(float d) {
-        maxDistanceToPlayer = d;
-    }
-
-    public float getMovementSpeed() {
-        return movementSpeed;
-    }
-
-    public void setMovementSpeed(float m) {
-        movementSpeed = m;
     }
 }
