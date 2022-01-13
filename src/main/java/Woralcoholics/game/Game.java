@@ -327,7 +327,7 @@ public class Game extends Canvas implements Runnable {
             triggeredonce = false;
             //System.out.println("START");
         }
-        calculateReloadingRectangle(handler.wait, (int) handler.del);
+        calculateReloadingRectangle((int) handler.del);
 
 
         checkReloaded();
@@ -1004,6 +1004,11 @@ public class Game extends Canvas implements Runnable {
         handler.addObject(new Crate(x, y, ID.Crate, imageGetter));
     }
 
+    /***
+     * for rendering the enemyshadow if enemy dies
+     * @param x
+     * @param y
+     */
     public static void UseEnemyShadow(int x, int y) {
         handler.addObject(new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
         //enemyShadowPool.add(0,new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
@@ -1026,13 +1031,12 @@ public class Game extends Canvas implements Runnable {
 
 
     /***
-     * Function to run backgroundsound
+     *calculate the ReloadingBar
+     * @param del
      */
+    private void calculateReloadingRectangle(int del) {
 
-
-    private void calculateReloadingRectangle(double wait, int del) {
-
-        if (handler.reloaded == true) {
+        if (handler.reloaded) {
             //System.out.println("reloaded");
             percent = 100;
         } else {
@@ -1048,6 +1052,9 @@ public class Game extends Canvas implements Runnable {
 
     }
 
+    /***
+     * check if the weapon is reloaded to shoot
+     */
     private void checkReloaded() {
         handler.now = System.currentTimeMillis();
         if (handler.now > handler.wait && handler.ammo == true) {
@@ -1057,11 +1064,13 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
+    /***
+     * add guns to list
+     */
     private void addGuns() {
         gun.addObject(new Gun(), GunType.Pistol, false); // start with pistol
         gun.addObject(new Gun(), GunType.Shotgun, true); // second shotgun
         gun.addObject(new Gun(), GunType.MachineGun, true); //third machine gun  -> weakest to strongest
-        // if crate is collected, set locked to false so it can be displayed and choosen in UI
 
     }
     private void setGunToPistolAgain() {
@@ -1069,6 +1078,10 @@ public class Game extends Canvas implements Runnable {
         handler.gunindex = 0;
     }
 
+    /***
+     * get the coloumn and row of the spritesheet for the specific gun
+     * @return
+     */
     public int[] getColRowFromIndex() {
         int[] colrow = new int[3];
         int col;
@@ -1086,6 +1099,9 @@ public class Game extends Canvas implements Runnable {
     }
 
 
+    /***
+     * change the selected gun  (when you rotate your mousewheel)
+     */
     private void checkSelectedGun() {
         handler.selectedgun = Gun.guns.get(handler.gunindex);
     }
@@ -1099,6 +1115,10 @@ public class Game extends Canvas implements Runnable {
             handler.del = 0;
     }
 
+    /***
+     * in tutorial all weapons are unlocked
+     * on different waves you unlock at first shotgun and then the machine gun
+     */
     private void updateLockStatus() {
         if (getState() == GameState.TUTORIAL) {
             index = gun.getIndex(GunType.Shotgun);
@@ -1179,6 +1199,9 @@ public class Game extends Canvas implements Runnable {
     }
 
 
+    /***
+     * play the BackgroundSound
+     */
     private void playBackgroundSound() {
         t1 = new Thread(() -> {
             try {

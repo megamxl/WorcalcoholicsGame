@@ -55,6 +55,7 @@ public class Player extends GameObject {
 
         player_img = an.getImage(1, 3, 64, 64);
         player_gun_img = an.getImage(5, 10, 64, 64);
+        // default values
         coordinatesadditive[0] = 42;
         coordinatesadditive[1] = 25;
         handler.playerIsInit = true;
@@ -85,59 +86,57 @@ public class Player extends GameObject {
         //System.out.println(x + " " + y);
     }
 
+    /***
+     * In rotation of the picture the png with the weapon on it gets out of the player hand
+     * therefore the new validation of the coordinates of the gun sprite
+     */
     private void validateCoordinates() {
-        //350° - 5°
         if (handler.angle > 0 && handler.angle <= 90) {
             int y = (int) (25 + (handler.angle *0.1)); // adding manually angle to y value
             coordinatesadditive[0] = 42;
-            coordinatesadditive[1] = y; // slow to direction +
-
-            System.out.println("0-90°");
-            // start of 90° more aggressive manipulation to x direction implement
+            coordinatesadditive[1] = y; // start value 25, slow to direction +
+            //System.out.println("0-90°");
         } else if (handler.angle > 90 && handler.angle <= 120) {
             int x = (int) (87 - (handler.angle) / 2); //  manipulating x coordinates into minus so that start value from angle before is similar
             coordinatesadditive[0] = x; //42 -> start value at angle 90°
             coordinatesadditive[1] = 34;  // 25 + (90*0,1) = 34 -> start value
-            System.out.println("90-120°");
+           // System.out.println("90-120°");
 
         }
         else if (handler.angle > 120 && handler.angle <= 180) {
             int x = (int) (47 - (handler.angle) / 6); //  manipulating x coordinates into minus
             coordinatesadditive[0] = x; //27 -> start value at angle 120°
             coordinatesadditive[1] = 34;
-            System.out.println("120-180°");
-
+            //System.out.println("120-180°");
         }
         else if (handler.angle > 180 && handler.angle <= 230) {
             int y = (int) (106 - (handler.angle) / 2.5); // manipulating y coordinates minus direction
             coordinatesadditive[0] = 17;
             coordinatesadditive[1] = y; //34 -> start value at angle 180°
-            System.out.println("180-230°");
+            //System.out.println("180-230°");
         }
         else if (handler.angle > 230 && handler.angle <= 270) {
             int x = (int) (-98 + (handler.angle) / 2);  //manipulating x coordinates + direction
             int y = (int) (25.5 - (handler.angle*0.05)); //manipulating y coordinates - direction
             coordinatesadditive[0] = x; //17 -> start value at angle 230°
             coordinatesadditive[1] = y; // 14 -> start value at angle 230°
-            System.out.println("230-270°");
+            //System.out.println("230-270°");
         }
         else if (handler.angle > 270 && handler.angle <= 330) {
             int x = (int) (-98 + (handler.angle) / 2); // manipulate x to + direction
             int y = (int) (-10.5 + (handler.angle/12)); // manipulate y to + direction
             coordinatesadditive[0] = 37; //37 -> start value at angle 270°
             coordinatesadditive[1] = y; // 12 -> start value at angle 270°
-            System.out.println("270-330°");
+            //System.out.println("270-330°");
         }
         else if (handler.angle > 330 && handler.angle <= 360) { // x and y correct
-            int x = (int) (-98 + (handler.angle) / 2);
-            coordinatesadditive[0] = 37; //37 -> start value at angle 330°
-            coordinatesadditive[1] = 17; // 17 -> start value at angle 330°
-            System.out.println("330-360°");
+            int x = (int) (-29 + (handler.angle) / 5); //manipulate to + direction
+            int y = (int) (-65.5 + (handler.angle) / 4); //manipulate to + direction
+            coordinatesadditive[0] = x; //37 -> start value at angle 330° -> target ~42 to close the cycle
+            coordinatesadditive[1] = y; // 17 -> start value at angle 330° -> target ~25 to close the cycle
+            //System.out.println("330-360°");
         }
-        else {
-            //System.out.println(handler.angle);
-            System.out.println("not implemented");
-        }
+
     }
 
     @Override
@@ -193,6 +192,9 @@ public class Player extends GameObject {
         }
     }
 
+    /***
+     * check which image should be loaded in to gun sprite (if you change weapon it changes too with different img, height, width)
+     */
     private void checkGunRenderStatus() {
         int[] colrow = new int[2];
         colrow = game.getColRowFromIndex();
@@ -212,20 +214,32 @@ public class Player extends GameObject {
             height = 19;
             player_gun_img = an.getImage(colrow[0], colrow[1], width, height); //machine gun
         }
+        rotate();
+    }
 
+    /***
+     * for rotating the gun png
+     */
+    private void rotate()
+    {
+        //the angle you want it to rotate -> handler.angle is our angle through mouse position
         final double rads = Math.toRadians(handler.angle);
+        //get variable you need for mathematic calculations
         final double sin = Math.abs(Math.sin(rads));
         final double cos = Math.abs(Math.cos(rads));
-        final int w = (int) Math.floor(player_gun_img.getWidth() * cos + player_gun_img.getHeight() * sin);
-        final int h = (int) Math.floor(player_gun_img.getHeight() * cos + player_gun_img.getWidth() * sin);
-        final BufferedImage rotatedImage = new BufferedImage(w, h, player_gun_img.getType());
+        final int width = (int) Math.floor(player_gun_img.getWidth() * cos + player_gun_img.getHeight() * sin);
+        final int height = (int) Math.floor(player_gun_img.getHeight() * cos + player_gun_img.getWidth() * sin);
+
+        // rotated image
+        final BufferedImage player_gun_img_rotated = new BufferedImage(width, height, player_gun_img.getType());
         final AffineTransform at = new AffineTransform();
-        at.translate(w / 2, h / 2);
+        at.translate(width / 2, height / 2);
         at.rotate(rads, 0, 0);
         at.translate(-player_gun_img.getWidth() / 2, -player_gun_img.getHeight() / 2);
         final AffineTransformOp rotateOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-        rotateOp.filter(player_gun_img, rotatedImage);
-        player_gun_img = rotatedImage;
+        rotateOp.filter(player_gun_img, player_gun_img_rotated);
+        //set our rotated image to our actual gun png
+        player_gun_img = player_gun_img_rotated;
     }
 
     /**
@@ -278,15 +292,11 @@ public class Player extends GameObject {
                         playSoundAmmoReload();
                     }
 
-                    case Enemy/*, EnemyBullet*/ -> {
+                    case Enemy -> {
                         playerSoundHurt();
                         // Implement Bloodscreen
                         if (game.hp > 0) {    //if player has health and is not invincible
                             switch (tempID) {
-                                /*case EnemyBullet -> {
-                                    handler.removeObject(tempobject);   //Remove Enemy Bullet if Player is hit
-                                    upgrades.damaged(20);
-                                }*/
                                 case Enemy -> {
                                     if (handler.enemy.contains(tempobject)) { //enemy is on player
                                         invincibleTime++;
@@ -339,6 +349,9 @@ public class Player extends GameObject {
         }
     }
 
+    /***
+     * the keys for the sound
+     */
     private void keySounds() {
         if (handler.isL()) {
             try {

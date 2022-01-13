@@ -8,7 +8,7 @@ public class Crate extends GameObject{
 
     public Crate(int x, int y, ID id, ImageGetter an){
         super(x, y, id, an);
-        crate_image = an.getImage(4,10,64,64);
+        crate_image = an.getImage(4,10,64,64); // gets the sprite of the ammo create
     }
 
     // create should do nothing in update is a static piece
@@ -19,10 +19,10 @@ public class Crate extends GameObject{
     public void render(Graphics g) {
 //        g.setColor(Color.cyan);
 //        g.fillRect((int)x, (int)y, 32, 32);
-        g.drawImage(crate_image,(int) x,(int) y,null);
+        g.drawImage(crate_image,(int) x,(int) y,null); // draw the create Image
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)x, (int)y, 32, 32);
+        return new Rectangle((int)x, (int)y, 32, 32); // returns HitBox
     }
 }

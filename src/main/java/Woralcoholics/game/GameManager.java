@@ -49,10 +49,10 @@ public class GameManager {
      * updates the all tempobjects in the Linked list
      */
     public void update() {
+        // loop over the complete list of GameObjects and execute the update Function from the abstract class
         for (int i = 0; i < object.size(); i++) {
             try {
                 GameObject tempObject = object.get(i);
-
                 tempObject.update();
             } catch (Exception ex) {
                 System.out.println("crash");
@@ -71,9 +71,9 @@ public class GameManager {
      * renders the all tempobjects in the Linked list
      */
     public void render(Graphics g) {
+        // loop over the complete list of GameObjects and execute the render Function from the abstract class
         for (int i = 0; i < object.size(); i++) {
             GameObject tempObject = object.get(i);
-
             tempObject.render(g);
         }
         for(int i = 0; i < bullets.size(); i++) {

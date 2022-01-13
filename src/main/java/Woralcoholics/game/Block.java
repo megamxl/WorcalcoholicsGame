@@ -42,6 +42,6 @@ public class Block extends GameObject {
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int)x,(int)y, 64,64);
+        return new Rectangle((int)x,(int)y, 64,64); // returns Hitbox
     }
 }

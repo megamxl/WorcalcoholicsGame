@@ -431,6 +431,10 @@ public class MouseInput extends MouseAdapter {
         }
     }
 
+    /***
+     * rotating the mousehweel up it goes for a different weapon or for an error
+     * @return
+     */
     private boolean MouseWheelUp() {
         if (handler.gunindex == gun.guns.size() - 1 || checkNextGunLocked()) {
             return gunequiperror = true;
@@ -442,6 +446,10 @@ public class MouseInput extends MouseAdapter {
         return gunequiperror = false;
     }
 
+    /***
+     * rotating the mousehweel up it goes for a different weapon or for an error
+     * @return
+     */
     private boolean MouseWheelDown() {
         if (handler.gunindex == 0 || checkPreviousGunLocked()) {
             return gunequiperror = true;
@@ -453,6 +461,10 @@ public class MouseInput extends MouseAdapter {
         return gunequiperror = false;
     }
 
+    /***
+     * check if the next gun is available through locked var
+     * @return
+     */
     private boolean checkNextGunLocked() {
         int index = handler.gunindex + 1;
         Gun nextGun = gun.guns.get(index);
@@ -462,6 +474,12 @@ public class MouseInput extends MouseAdapter {
             return false;
         }
     }
+
+    /***
+     * check angle to prevent minus angles
+     * @param angle
+     * @return
+     */
     private float checkAngle(float angle) {
         if (angle < 0) {
             angle += 360;
@@ -469,6 +487,10 @@ public class MouseInput extends MouseAdapter {
         return angle;
     }
 
+    /***
+     * check if the previous gun is available through locked var
+     * @return
+     */
     private boolean checkPreviousGunLocked() {
         int index = handler.gunindex - 1;
         Gun previousGun = gun.guns.get(index);
