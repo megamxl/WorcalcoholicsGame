@@ -4,7 +4,8 @@ import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 /**
  * Enemy Class
@@ -31,9 +32,10 @@ public class Enemy extends GameObject {
     public boolean isInGame;
     private Animations enemyAnimation;
 
-    public boolean hittedWall = false;                      //hittedWall is for changing the aiming target of player to nothing
+    public boolean hittedWall = false;
+    Integer[] solution = new Integer[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    //hittedWall is for changing the aiming target of player to nothing
 
-    private final BufferedImage enemy_img;
     private GameManager manager;
     private EnemyShadow es;
     Random r = new Random();
@@ -44,11 +46,13 @@ public class Enemy extends GameObject {
 
     public Enemy(int x, int y, ID id, GameManager manager, ImageGetter an, Score score) {
         super(x, y, id, an);
+        List<Integer> list = Arrays.asList(solution);
+        Collections.shuffle(list);
         this.manager = manager;
         this.score = score;
-        enemy_img = an.getImage(1, 4, 32, 32);
         hp = maxHp;
-        enemyAnimation = new Animations(6,Game.enemy[0],Game.enemy[1],Game.enemy[2],Game.enemy[3],Game.enemy[4],Game.enemy[5],Game.enemy[6],Game.enemy[7],Game.enemy[8],Game.enemy[9],Game.enemy[10],Game.enemy[11],Game.enemy[12]);
+        enemyAnimation = new Animations(9,Game.enemy[list.get(0)],Game.enemy[list.get(1)],Game.enemy[list.get(2)],Game.enemy[list.get(3)],Game.enemy[list.get(4)],Game.enemy[list.get(5)],Game.enemy[list.get(6)],Game.enemy[list.get(7)],Game.enemy[list.get(8)],Game.enemy[list.get(9)],Game.enemy[list.get(10)],Game.enemy[list.get(11)],Game.enemy[list.get(12)]);
+
     }
 
     //endregion
