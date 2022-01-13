@@ -1,7 +1,6 @@
 package Woralcoholics.game;
 // this class is for loading the sprites and getting in the game
 
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -17,5 +16,4 @@ public class BufferedImageLoader {
         image = ImageIO.read(getClass().getResource(path)); // using the imageIO class from java
         return image;
     }
-
 }

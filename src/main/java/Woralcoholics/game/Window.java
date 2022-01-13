@@ -24,7 +24,6 @@ public class Window {
      * @param game The Class which
      */
 
-
     public Window(int with, int height, String title, Game game) {
 
         frame = new JFrame(title);

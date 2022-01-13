@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 
 public class UIButton extends GameObject{
 
-
     private Game game;
 
     private final int width, height, action;
@@ -23,7 +22,6 @@ public class UIButton extends GameObject{
 
     Upgrades upgrades;
     private final int upgradeNr;
-
 
     /**
      *  Constructor for UI buttons

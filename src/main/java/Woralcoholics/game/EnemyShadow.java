@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
  * @author Christoph Oprawill
  */
 
-
 public class EnemyShadow extends GameObject {
 
     private BufferedImage shadow_image = null;
@@ -40,5 +39,4 @@ public class EnemyShadow extends GameObject {
     public Rectangle getBounds() {
         return new Rectangle((int) x, (int) y, 32, 32);
     }
-
 }

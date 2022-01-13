@@ -18,7 +18,6 @@ public class DestroyableBoxes extends GameObject {
     private GameManager manager;
     private boolean fullycracked = false;
 
-
     /**
      * Creates the Destroyablebox
      *
@@ -58,7 +57,6 @@ public class DestroyableBoxes extends GameObject {
     public static void destroyBox(GameManager handler, GameObject tmp) {
         handler.removeObject(tmp);
     }
-
 
     /***
      * If a Object in our List collides with the Box
@@ -124,7 +122,6 @@ public class DestroyableBoxes extends GameObject {
         }
     }
 
-
     /***
      * Check if Box is Cracked
      */
@@ -146,9 +143,7 @@ public class DestroyableBoxes extends GameObject {
             destroyable_boxes = an.getImage(6, 3, 64, 64);
         if (hp <= 20)
             destroyable_boxes = an.getImage(7, 3, 64, 64);
-
     }
-
 
     /***
      * Remove the Box
@@ -156,7 +151,6 @@ public class DestroyableBoxes extends GameObject {
     public void remove() {
         manager.removeObject(this);
     }
-
 
     /***
      * Runs the sound if box cracks

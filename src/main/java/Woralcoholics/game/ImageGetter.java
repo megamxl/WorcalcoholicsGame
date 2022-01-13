@@ -2,7 +2,6 @@ package Woralcoholics.game;
 
 import java.awt.image.BufferedImage;
 
-
 /**
  * Animation Class for the sprites assigned to the objects
  */

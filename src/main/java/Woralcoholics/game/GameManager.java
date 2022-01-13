@@ -65,7 +65,6 @@ public class GameManager {
                 temp.update();
             }
         }
-
     }
 
     /**
@@ -120,7 +119,6 @@ public class GameManager {
             bullets.get(i).setPos(0,0);
         }
     }
-
 
     /***
      * A function to clear all instances of one specific object in the handler
@@ -265,7 +263,6 @@ public class GameManager {
         sound.stop();
     }
 
-
     /**
      * plays the sound for the gunnerenemy
      *
@@ -286,7 +283,6 @@ public class GameManager {
             volume.setValue(-40f);
         } else if (soundv == 2) {
             volume.setValue(-18f);
-
         }
         sound.start();
         Thread.sleep(100000);
@@ -529,6 +525,5 @@ public class GameManager {
             }
         }
         sound.start();
-
     }
 }

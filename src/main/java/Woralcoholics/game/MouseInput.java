@@ -14,6 +14,7 @@ import java.awt.Robot;
  * in this class the mouse input  happens
  *
  * @author Christoph Oprawill
+ * @author Gustavo Podzuweit
  */
 
 public class MouseInput extends MouseAdapter {
@@ -45,7 +46,6 @@ public class MouseInput extends MouseAdapter {
             }
         }
     }
-
 
     //region MouseEvents
     public void mousePressed(MouseEvent e) {
@@ -158,12 +158,10 @@ public class MouseInput extends MouseAdapter {
         //checkIfExited(e.getPoint());
     }
 
-
     public void mouseDragged(MouseEvent e) {
         if (handler.playerIsInit)
             getCoordinatesOfMouse(e); //machinegun
     }
-
 
     public void mouseMoved(MouseEvent e) {
         if (handler.playerIsInit)
@@ -189,6 +187,9 @@ public class MouseInput extends MouseAdapter {
         handler.angle = checkAngle(handler.angle); // no minus angles
     }
 
+    // nothing gets executed here, since mouseExited is way too slow
+    // meaning the defined action would be carried out too late while the mouse cursor is already outside the window
+    // instead checkIfExited was implemented, which gets called every frame and is thus faster and more reliable
     public void mouseExited(MouseEvent e) {
         /*
         //System.out.println("MOUSE EXITED");

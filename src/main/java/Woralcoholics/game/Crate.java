@@ -16,7 +16,6 @@ public class Crate extends GameObject{
 
     }
 
-
     public void render(Graphics g) {
 //        g.setColor(Color.cyan);
 //        g.fillRect((int)x, (int)y, 32, 32);
