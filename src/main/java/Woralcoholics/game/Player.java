@@ -80,7 +80,6 @@ public class Player extends GameObject {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(player_gun_img, (int) x + 40, (int) y + 25, null);
         /*Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
         g2d.draw(getBounds());*/
@@ -91,6 +90,8 @@ public class Player extends GameObject {
         } else {
             playerIdle.renderAnimation(g, (int) x, (int) y, 64, 64);
         }
+        g.drawImage(player_gun_img, (int) x + 42, (int) y + 25, null); // x and y adjustable for gun position
+
         // draw other colliders
         /*g.setColor(Color.RED);
         g2d.draw(getBoundsX());
