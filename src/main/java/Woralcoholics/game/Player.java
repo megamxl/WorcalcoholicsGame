@@ -87,18 +87,53 @@ public class Player extends GameObject {
     private void validateCoordinates() {
         //350° - 5°
         if (handler.angle > 0 && handler.angle <= 90) {
+            int y = (int) (25 + (handler.angle *0.1)); // adding manually angle to y value
             coordinatesadditive[0] = 42;
-            coordinatesadditive[1] = 25;
+            coordinatesadditive[1] = y; // slow to direction +
 
             System.out.println("0-90°");
+            // start of 90° more aggressive manipulation to x direction implement
+        } else if (handler.angle > 90 && handler.angle <= 120) {
+            int x = (int) (87 - (handler.angle) / 2); //  manipulating x coordinates into minus so that start value from angle before is similar
+            coordinatesadditive[0] = x; //42 -> start value at angle 90°
+            coordinatesadditive[1] = 34;  // 25 + (90*0,1) = 34 -> start value
+            System.out.println("90-120°");
+
         }
-        else if (handler.angle > 90 && handler.angle <= 180) {
-            int x = (int) (65 - (handler.angle)/4); // trying whats the best -> manipulating x coordinates into minus
-            coordinatesadditive[0] = x; //42 -> base wert at angle 90°
-            coordinatesadditive[1] = 25;
-            System.out.println("90-180°");
+        else if (handler.angle > 120 && handler.angle <= 180) {
+            int x = (int) (47 - (handler.angle) / 6); //  manipulating x coordinates into minus
+            coordinatesadditive[0] = x; //27 -> start value at angle 120°
+            coordinatesadditive[1] = 34;
+            System.out.println("120-180°");
+
         }
-          else {
+        else if (handler.angle > 180 && handler.angle <= 230) {
+            int y = (int) (106 - (handler.angle) / 2.5); // manipulating y coordinates minus direction
+            coordinatesadditive[0] = 17;
+            coordinatesadditive[1] = y; //34 -> start value at angle 180°
+            System.out.println("180-230°");
+        }
+        else if (handler.angle > 230 && handler.angle <= 270) {
+            int x = (int) (-98 + (handler.angle) / 2);  //manipulating x coordinates + direction
+            int y = (int) (25.5 - (handler.angle*0.05)); //manipulating y coordinates - direction
+            coordinatesadditive[0] = x; //17 -> start value at angle 230°
+            coordinatesadditive[1] = y; // 14 -> start value at angle 230°
+            System.out.println("230-270°");
+        }
+        else if (handler.angle > 270 && handler.angle <= 330) {
+            int x = (int) (-98 + (handler.angle) / 2); // manipulate x to + direction
+            int y = (int) (-10.5 + (handler.angle/12)); // manipulate y to + direction
+            coordinatesadditive[0] = 37; //37 -> start value at angle 270°
+            coordinatesadditive[1] = y; // 12 -> start value at angle 270°
+            System.out.println("270-330°");
+        }
+        else if (handler.angle > 330 && handler.angle <= 360) { // x and y correct
+            int x = (int) (-98 + (handler.angle) / 2);
+            coordinatesadditive[0] = 37; //37 -> start value at angle 330°
+            coordinatesadditive[1] = 17; // 17 -> start value at angle 330°
+            System.out.println("330-360°");
+        }
+        else {
             //System.out.println(handler.angle);
             System.out.println("not implemented");
         }
