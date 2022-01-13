@@ -76,7 +76,7 @@ public class Player extends GameObject {
         keySounds();
         movement();
         checkGunRenderStatus();
-        //validateCoordinates();
+        validateCoordinates();
 
         if (Game.inTutorial) {
             tutorial();
@@ -86,33 +86,19 @@ public class Player extends GameObject {
 
     private void validateCoordinates() {
         //350° - 5°
-        if (handler.angle >= 0 && handler.angle <= 5) {
-            int x = (int) (47.5 - handler.angle * 1.1); // trying whats the best
+        if (handler.angle > 0 && handler.angle <= 90) {
             coordinatesadditive[0] = 42;
             coordinatesadditive[1] = 25;
-            System.out.println("0-5°");
+
+            System.out.println("0-90°");
         }
-        //5° - 20°
-        else if (handler.angle > 5 && handler.angle <= 10) {
-            coordinatesadditive[0] = 38;
+        else if (handler.angle > 90 && handler.angle <= 180) {
+            int x = (int) (65 - (handler.angle)/4); // trying whats the best -> manipulating x coordinates into minus
+            coordinatesadditive[0] = x; //42 -> base wert at angle 90°
             coordinatesadditive[1] = 25;
-            System.out.println("5-9°");
-        } else if (handler.angle > 10 && handler.angle <= 15) {
-            coordinatesadditive[0] = 33;
-            coordinatesadditive[1] = 25;
-            System.out.println("10-15°");
-        } else if (handler.angle > 15 && handler.angle <= 20) {
-            coordinatesadditive[0] = 28;
-            coordinatesadditive[1] = 25;
-            System.out.println("15-20°");
-
-
-        } else if (handler.angle > 340 && handler.angle <= 350) {
-            int y = (int) (-325 + handler.angle * 0.97); // trying whats the best
-            coordinatesadditive[0] = 38;
-            coordinatesadditive[1] = 15;
-            System.out.println("340-350°");
-        } else {
+            System.out.println("90-180°");
+        }
+          else {
             //System.out.println(handler.angle);
             System.out.println("not implemented");
         }
@@ -179,7 +165,6 @@ public class Player extends GameObject {
             width = 19;
             height = 19;
             player_gun_img = an.getImage(colrow[0], colrow[1], width, height); // pistol
-            System.out.println("PISOL");
         }
         if (handler.selectedgun.getType() == GunType.Shotgun) {
             width = 32;
