@@ -26,6 +26,7 @@ import static Woralcoholics.game.FillTutorialArray.tutorialTexts;
  * @author Maximilian Nowak
  * @author Christoph Oprawill
  * @author Gustavo Podzuweit
+ * @author Lukas Schelepet
  */
 
 public class Game extends Canvas implements Runnable {
@@ -38,7 +39,6 @@ public class Game extends Canvas implements Runnable {
 
     public static GameState currentState;
     private GameState previousState, checkState;
-    private int menuCount;
     public static int lastScore = 0;
 
     private boolean isRunning;
@@ -601,9 +601,6 @@ public class Game extends Canvas implements Runnable {
      */
     private void loadMenu() throws SQLException {
         GameState RETURN = previousState;
-        if (previousState == GameState.OPTIONS) {
-            menuCount--;
-        }
         switch (currentState) {
             case STUDIO -> {
             }
@@ -616,7 +613,6 @@ public class Game extends Canvas implements Runnable {
                         1, 1, g, 1, 40));
             }
             case MAIN_MENU -> {
-                menuCount = 0;
                 //JMenu mainMenu = new JMenu("Main Menu");
                 //mainMenu.add(new JMenuItem("test"));
                 handler.addObject(new UIButton(32, 32, 64, 64, "Title", GameState.TITLE, ID.UIButton,
@@ -657,7 +653,6 @@ public class Game extends Canvas implements Runnable {
                         ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 1, 0));
             }
             case OPTIONS -> {
-                menuCount++;
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
                         ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 1, 0));
                 handler.addObject(new UIButton(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, 64, 64, "M",
@@ -671,7 +666,6 @@ public class Game extends Canvas implements Runnable {
                         3, 40));
             }
             case PAUSE_MENU -> {
-                menuCount = 10;
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", GameState.LEVEL,
                         ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 1, 0));
                 handler.addObject(new UIButton(SCREEN_WIDTH - 46, 34, 64, 64, "Options",
