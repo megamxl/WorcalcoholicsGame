@@ -54,6 +54,7 @@ public class Player extends GameObject {
 
         player_img = an.getImage(1, 3, 64, 64);
         player_gun_img = an.getImage(5, 10, 64, 64);
+        // default values
         coordinatesadditive[0] = 42;
         coordinatesadditive[1] = 25;
         handler.playerIsInit = true;
@@ -84,15 +85,16 @@ public class Player extends GameObject {
         //System.out.println(x + " " + y);
     }
 
+    /***
+     * In rotation of the picture the png with the weapon on it gets out of the player hand
+     * therefore the new validation of the coordinates of the gun sprite
+     */
     private void validateCoordinates() {
-        //350° - 5°
         if (handler.angle > 0 && handler.angle <= 90) {
             int y = (int) (25 + (handler.angle *0.1)); // adding manually angle to y value
             coordinatesadditive[0] = 42;
-           coordinatesadditive[1] = y; // start value 25, slow to direction +
-
-            System.out.println("0-90°");
-            // start of 90° more aggressive manipulation to x direction implement
+            coordinatesadditive[1] = y; // start value 25, slow to direction +
+            //System.out.println("0-90°");
         } else if (handler.angle > 90 && handler.angle <= 120) {
             int x = (int) (87 - (handler.angle) / 2); //  manipulating x coordinates into minus so that start value from angle before is similar
             coordinatesadditive[0] = x; //42 -> start value at angle 90°
@@ -105,7 +107,6 @@ public class Player extends GameObject {
             coordinatesadditive[0] = x; //27 -> start value at angle 120°
             coordinatesadditive[1] = 34;
             //System.out.println("120-180°");
-
         }
         else if (handler.angle > 180 && handler.angle <= 230) {
             int y = (int) (106 - (handler.angle) / 2.5); // manipulating y coordinates minus direction
@@ -189,6 +190,9 @@ public class Player extends GameObject {
         }
     }
 
+    /***
+     * check which image should be loaded in to gun sprite (if you change weapon it changes too with different img, height, width)
+     */
     private void checkGunRenderStatus() {
         int[] colrow = new int[2];
         colrow = game.getColRowFromIndex();
@@ -208,20 +212,32 @@ public class Player extends GameObject {
             height = 19;
             player_gun_img = an.getImage(colrow[0], colrow[1], width, height); //machine gun
         }
+        rotate();
+    }
 
+    /***
+     * for rotating the gun png
+     */
+    private void rotate()
+    {
+        //the angle you want it to rotate -> handler.angle is our angle through mouse position
         final double rads = Math.toRadians(handler.angle);
+        //get variable you need for mathematic calculations
         final double sin = Math.abs(Math.sin(rads));
         final double cos = Math.abs(Math.cos(rads));
-        final int w = (int) Math.floor(player_gun_img.getWidth() * cos + player_gun_img.getHeight() * sin);
-        final int h = (int) Math.floor(player_gun_img.getHeight() * cos + player_gun_img.getWidth() * sin);
-        final BufferedImage rotatedImage = new BufferedImage(w, h, player_gun_img.getType());
+        final int width = (int) Math.floor(player_gun_img.getWidth() * cos + player_gun_img.getHeight() * sin);
+        final int height = (int) Math.floor(player_gun_img.getHeight() * cos + player_gun_img.getWidth() * sin);
+
+        // rotated image
+        final BufferedImage player_gun_img_rotated = new BufferedImage(width, height, player_gun_img.getType());
         final AffineTransform at = new AffineTransform();
-        at.translate(w / 2, h / 2);
+        at.translate(width / 2, height / 2);
         at.rotate(rads, 0, 0);
         at.translate(-player_gun_img.getWidth() / 2, -player_gun_img.getHeight() / 2);
         final AffineTransformOp rotateOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-        rotateOp.filter(player_gun_img, rotatedImage);
-        player_gun_img = rotatedImage;
+        rotateOp.filter(player_gun_img, player_gun_img_rotated);
+        //set our rotated image to our actual gun png
+        player_gun_img = player_gun_img_rotated;
     }
 
 
@@ -329,6 +345,9 @@ public class Player extends GameObject {
         }
     }
 
+    /***
+     * the keys for the sound
+     */
     private void keySounds() {
         if (handler.isL()) {
             try {

@@ -95,6 +95,11 @@ public class Bullet extends GameObject {
         }
     }
 
+    /***
+     * preventing for minus angles
+     * @param angle
+     * @return
+     */
     private float checkAngle(float angle) {
         if (angle < 0) {
             angle += 360;
@@ -106,11 +111,6 @@ public class Bullet extends GameObject {
         double dx = mx - px;
         double dy = my - py;
         double alpha = Math.atan2(dy, dx);
-        if (!gunnerenemy) {
-            handler.angle = (float) Math.toDegrees(alpha); // for gun sprite that we know where to rotate the gun
-            handler.angle = checkAngle(handler.angle);
-            System.out.println(handler.angle);
-        }
         velX = (float) (Math.cos(alpha) * bulletSpeed);
         velY = (float) (Math.sin(alpha) * bulletSpeed);
     }
