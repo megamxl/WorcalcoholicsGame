@@ -22,6 +22,7 @@ import java.util.Random;
  *
  * @author Maximilian Nowak
  * @author Christoph Oprawill
+ * @author Gustavo Podzuweit
  */
 
 public class Game extends Canvas implements Runnable {
@@ -105,7 +106,6 @@ public class Game extends Canvas implements Runnable {
     private boolean wasstopped = false;
     private boolean triggeredonce = false;
 
-
     // Classes
     private Thread thread;
 
@@ -163,6 +163,7 @@ public class Game extends Canvas implements Runnable {
         level = ImageIO.read(path);
         tutorialLevel = ImageIO.read(pathToTutorial);
 
+        // from here on, there are mostly images getting loaded
         BufferedImageLoader loader = new BufferedImageLoader();
         spritesheet = loader.loadImage("/Graphics/Spritesheet.png");
         imageGetter = new ImageGetter(spritesheet);
@@ -202,7 +203,6 @@ public class Game extends Canvas implements Runnable {
         imgStudio = loader.loadImage("/Graphics/StudioImg.png");
         imgTitle = loader.loadImage("/Graphics/Titlescreen.png");
 
-
         //Adding Mouse and Keyboard Input
         mouse = new MouseInput(handler, camera, this, imageGetter, gun);
         this.addMouseListener(mouse);
@@ -212,8 +212,6 @@ public class Game extends Canvas implements Runnable {
         this.addKeyListener(keys);
 
         // Sets mouse cursor image to a custom image
-        // this can furthermore be used for the hitmarker, by changing the mouse cursor image, when it
-        // is located over an enemy
         // Toolkit can be seen like a real life toolkit, it is a class used for smaller special operations
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Cursor cursorNEW = toolkit.createCustomCursor(loader.loadImage("/Graphics/Mouse Cursor.png")
@@ -242,7 +240,6 @@ public class Game extends Canvas implements Runnable {
         fillGunnerEnemypool();
     }
 
-
     @Override
     /**
      * this is a well-known game loop also used in minecraft for making no difference how fast or slow you computer performance
@@ -261,6 +258,7 @@ public class Game extends Canvas implements Runnable {
         while (isRunning) {
             // checks if mouse exits the game window during level and corrects its position
             if (getState() == GameState.LEVEL || getState() == GameState.TUTORIAL) {
+                // checks if the mouse is outside the game window
                 if (mouse != null)
                     mouse.checkIfExited(MouseInfo.getPointerInfo().getLocation());
             }
@@ -329,13 +327,11 @@ public class Game extends Canvas implements Runnable {
         }
         calculateReloadingRectangle((int) handler.del);
 
-
         checkReloaded();
         checkGunStatus();
         checkSelectedGun();
         updateLockStatus();
     }
-
 
     /***
      * The complete Render functions handles UI and the game rendering every frame
@@ -365,7 +361,6 @@ public class Game extends Canvas implements Runnable {
             g2d.translate(camera.getX(), camera.getY());
 
             renderUi(g);
-
 
         } else {
             renderScreen(g);
@@ -426,7 +421,6 @@ public class Game extends Canvas implements Runnable {
             curentTutorialscore = 0;
         }
     }
-
 
     private void stateChange() throws SQLException {
         //System.out.println("is " + currentState + " equal to " + checkState + "?");
@@ -560,7 +554,7 @@ public class Game extends Canvas implements Runnable {
      * @param g Graphics Object
      */
     private void renderUi(Graphics g) {
-
+        // if the player takes damage, the blood screen gets blended in for a short period of time
         if (takesDamage) {
             g.drawImage(bloodScreen, 1, 1, null);
         }
@@ -632,7 +626,6 @@ public class Game extends Canvas implements Runnable {
         if (currentState == GameState.TUTORIAL) {
             renderTutorialBorders(g);
         }
-
     }
 
     /***
@@ -767,16 +760,17 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
-
     /***
-     * The function to maka a playable level out of a Buffered Image
+     * The function to maka a playable level out of a Buffered Image by checking the rgb value of each individual pixel
+     * of the buffered image.
+     * Depending on the r, b or g value of the pixel, a different kind of game object gets instantiated on that spot.
+     * For example, a completely red pixel will instantiate a wall tile on that spot
      * @param image The level Png
      */
     private void loadLevel(BufferedImage image) {
         int h = image.getHeight();
         int w = image.getWidth();
         int i = 0;
-
 
         for (int xx = 0; xx < w; xx++) {
             for (int yy = 0; yy < h; yy++) {
@@ -1029,7 +1023,6 @@ public class Game extends Canvas implements Runnable {
         currentState = state;
     }
 
-
     /***
      *calculate the ReloadingBar
      * @param del
@@ -1049,7 +1042,6 @@ public class Game extends Canvas implements Runnable {
                 else if (del == 1000)
                     percent += 1.6;
         }
-
     }
 
     /***
@@ -1098,7 +1090,6 @@ public class Game extends Canvas implements Runnable {
         return colrow;
     }
 
-
     /***
      * change the selected gun  (when you rotate your mousewheel)
      */
@@ -1141,7 +1132,6 @@ public class Game extends Canvas implements Runnable {
             handler.bullets.add(new Bullet(0, 0, ID.Bullet, handler, imageGetter));
         }
     }
-
 
     private void loadPlayerSprites() {
         playerWalkingLeft[0] = getPlayerWalkCycle.getImage32(1, 1, 32, 32);
@@ -1198,7 +1188,6 @@ public class Game extends Canvas implements Runnable {
         enemy[12] = getEnemySprite.getImage32(13, 1, 32, 32);
     }
 
-
     /***
      * play the BackgroundSound
      */
@@ -1229,5 +1218,4 @@ public class Game extends Canvas implements Runnable {
             e.printStackTrace();
         }
     }
-
 }
