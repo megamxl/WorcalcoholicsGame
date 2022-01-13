@@ -4,7 +4,6 @@ import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Random;
 
 /**
@@ -258,7 +257,7 @@ public class Enemy extends GameObject {
         manager.removeObject(this);
         float curX = x;
         float curY = y;
-        Game.AddEnemyShadow((int) curX, (int) curY);
+        Game.UseEnemyShadow((int) curX, (int) curY);
         isInGame = false;
 
         playSoundEnemy();

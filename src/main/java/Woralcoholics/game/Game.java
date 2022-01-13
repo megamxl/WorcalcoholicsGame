@@ -982,6 +982,8 @@ public class Game extends Canvas implements Runnable {
     }
 
 
+
+
     public static void SpawnGunnerEnemy() {
         handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, imageGetter, score));
     }
@@ -994,8 +996,9 @@ public class Game extends Canvas implements Runnable {
         handler.addObject(new Crate(x, y, ID.Crate, imageGetter));
     }
 
-    public static void AddEnemyShadow(int x, int y) {
+    public static void UseEnemyShadow(int x, int y) {
         handler.addObject(new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
+        //enemyShadowPool.add(0,new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
     }
 
     /***

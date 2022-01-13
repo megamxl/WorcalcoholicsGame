@@ -66,16 +66,21 @@ public class Animations {
      * runs the animation once with the given length
      * @param length
      */
-    public void runAnimationsOnce(int length) {
+    public boolean runAnimationsOnce(int length) {
         index++;
         if (index > speed) {
             index = 0;
             if(counter<=length) {
                 nextFrame();
                 counter++;
+                return true;  // animation is not done
+            }
+            else{
+                return false;//done
             }
         }
         enemyShadow = null;
+        return true;  // animation is not done
     }
 
 
