@@ -92,7 +92,7 @@ public class Player extends GameObject {
      */
     private void validateCoordinates() {
         if (handler.angle > 0 && handler.angle <= 90) {
-            int y = (int) (25 + (handler.angle *0.1)); // adding manually angle to y value
+            int y = (int) (25 + (handler.angle * 0.1)); // adding manually angle to y value
             coordinatesadditive[0] = 42;
             coordinatesadditive[1] = y; // start value 25, slow to direction +
             //System.out.println("0-90°");
@@ -100,36 +100,31 @@ public class Player extends GameObject {
             int x = (int) (87 - (handler.angle) / 2); //  manipulating x coordinates into minus so that start value from angle before is similar
             coordinatesadditive[0] = x; //42 -> start value at angle 90°
             coordinatesadditive[1] = 34;  // 25 + (90*0,1) = 34 -> start value
-           // System.out.println("90-120°");
+            // System.out.println("90-120°");
 
-        }
-        else if (handler.angle > 120 && handler.angle <= 180) {
+        } else if (handler.angle > 120 && handler.angle <= 180) {
             int x = (int) (47 - (handler.angle) / 6); //  manipulating x coordinates into minus
             coordinatesadditive[0] = x; //27 -> start value at angle 120°
             coordinatesadditive[1] = 34;
             //System.out.println("120-180°");
-        }
-        else if (handler.angle > 180 && handler.angle <= 230) {
+        } else if (handler.angle > 180 && handler.angle <= 230) {
             int y = (int) (106 - (handler.angle) / 2.5); // manipulating y coordinates minus direction
             coordinatesadditive[0] = 17;
             coordinatesadditive[1] = y; //34 -> start value at angle 180°
             //System.out.println("180-230°");
-        }
-        else if (handler.angle > 230 && handler.angle <= 270) {
+        } else if (handler.angle > 230 && handler.angle <= 270) {
             int x = (int) (-98 + (handler.angle) / 2);  //manipulating x coordinates + direction
-            int y = (int) (25.5 - (handler.angle*0.05)); //manipulating y coordinates - direction
+            int y = (int) (25.5 - (handler.angle * 0.05)); //manipulating y coordinates - direction
             coordinatesadditive[0] = x; //17 -> start value at angle 230°
             coordinatesadditive[1] = y; // 14 -> start value at angle 230°
             //System.out.println("230-270°");
-        }
-        else if (handler.angle > 270 && handler.angle <= 330) {
+        } else if (handler.angle > 270 && handler.angle <= 330) {
             int x = (int) (-98 + (handler.angle) / 2); // manipulate x to + direction
-            int y = (int) (-10.5 + (handler.angle/12)); // manipulate y to + direction
+            int y = (int) (-10.5 + (handler.angle / 12)); // manipulate y to + direction
             coordinatesadditive[0] = 37; //37 -> start value at angle 270°
             coordinatesadditive[1] = y; // 12 -> start value at angle 270°
             //System.out.println("270-330°");
-        }
-        else if (handler.angle > 330 && handler.angle <= 360) { // x and y correct
+        } else if (handler.angle > 330 && handler.angle <= 360) { // x and y correct
             int x = (int) (-29 + (handler.angle) / 5); //manipulate to + direction
             int y = (int) (-65.5 + (handler.angle) / 4); //manipulate to + direction
             coordinatesadditive[0] = x; //37 -> start value at angle 330° -> target ~42 to close the cycle
@@ -220,8 +215,7 @@ public class Player extends GameObject {
     /***
      * for rotating the gun png
      */
-    private void rotate()
-    {
+    private void rotate() {
         //the angle you want it to rotate -> handler.angle is our angle through mouse position
         final double rads = Math.toRadians(handler.angle);
         //get variable you need for mathematic calculations
@@ -452,6 +446,7 @@ public class Player extends GameObject {
             }
         }
         if (x > 1624 && x < 1959 && y < 123) {
+            handler.backgroundsound.close();
             Game.currentState = GameState.MAIN_MENU;
             Game.inTutorial = false;
         }
