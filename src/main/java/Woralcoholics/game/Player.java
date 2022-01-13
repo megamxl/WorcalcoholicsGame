@@ -281,12 +281,12 @@ public class Player extends GameObject {
         if (handler.isUp() && !handler.isDown()) {
             velY = -5 * diagonalMultiplier;
             movingVertical = true;
-            playerMovementSound();
+            //playerMovementSound();
         }
         if (handler.isDown() && !handler.isUp()) {
             velY = 5 * diagonalMultiplier;
             movingVertical = true;
-            playerMovementSound();
+            //playerMovementSound();
         }
         if ((handler.isUp() && handler.isDown()) || !handler.isUp() && !handler.isDown()) {
             velY = 0;
@@ -296,12 +296,12 @@ public class Player extends GameObject {
         if (handler.isRight() && !handler.isLeft()) {
             velX = 5 * diagonalMultiplier;
             movingHorizontal = true;
-            playerMovementSound();
+            //playerMovementSound();
         }
         if (handler.isLeft() && !handler.isRight()) {
             velX = -5 * diagonalMultiplier;
             movingHorizontal = true;
-            playerMovementSound();
+            //playerMovementSound();
         }
         if ((handler.isLeft() && handler.isRight()) || (!handler.isLeft() && !handler.isRight())) {
             velX = 0;

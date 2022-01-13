@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
- *  @author Maxlimilian Nowak
+ * @author Maxlimilian Nowak
  * @author Christoph Oprawill
  */
 
@@ -23,7 +23,7 @@ public class GunnerEnemy extends Enemy {
     private double alpha;       //angle that is needed for calculating the bullet path
 
     private final int checkFreeDistance = 32 + 50;
-
+    public boolean inGame = false;
     public static float movementSpeed = 5;  //Movement-Speed of the Gunner
 
     private double px = 0, py = 0;    //Player Coordinates
@@ -100,11 +100,11 @@ public class GunnerEnemy extends Enemy {
      * Shoot a bullet
      */
     public void shoot() {
-        gx += 16-4;
-        gy += 16-4;
-        for(int i = 0; i < handler.bullets.size(); i++) {
+        gx += 16 - 4;
+        gy += 16 - 4;
+        for (int i = 0; i < handler.bullets.size(); i++) {
             Bullet temp = handler.bullets.get(i);
-            if(!temp.inGame) {
+            if (!temp.inGame) {
                 temp.setId(ID.EnemyBullet);
                 temp.setPos(gx, gy);
                 temp.direction(px, py, gx, gy, false, 0);
@@ -123,13 +123,10 @@ public class GunnerEnemy extends Enemy {
     public void checkIfGone() {
         if ((y > 1000 || y < 30) || (x > 2000 || x < 30)) {
             removeWithObject(this);
-            Game.SpawnGunnerEnemy();
+            Game.spawnGunnerEnemy(500,500);
             // System.out.println("GONE");
             //System.out.println("x:"+ x +" " + "y" + y);
         }
-    }
-
-    private void checkIfFree() {
     }
 
     private void playSoundGunnerEnemy() {
@@ -159,24 +156,26 @@ public class GunnerEnemy extends Enemy {
      * Update function of GunnerEnemy
      */
     public void update() {
-        gx = getX();
-        gy = getY();
-        calcDistanceToPlayer();
-        checkIfGone();
-        behaviour();
-        if(!Game.inTutorial){
-            move();
+        if (isInGame) {
+            gx = getX();
+            gy = getY();
+            calcDistanceToPlayer();
+            checkIfGone();
+            behaviour();
+            if (!Game.inTutorial) {
+                move();
+            }
+            collision();    //Check if it's colliding with a Bullet or Block (Enemy.collision())
+            bulletCollision();
+            //checkIfFree();
+            //Shoot after a delay
+            double now = System.currentTimeMillis();
+            if (now > wait) {
+                shoot();
+                wait = now + shootDel;
+            }
+            isDead();   //Check if he is dead (Enemy.isDead())
         }
-        collision();    //Check if it's colliding with a Bullet or Block (Enemy.collision())
-        bulletCollision();
-        //checkIfFree();
-        //Shoot after a delay
-        double now = System.currentTimeMillis();
-        if (now > wait) {
-            shoot();
-            wait = now + shootDel;
-        }
-        isDead();   //Check if he is dead (Enemy.isDead())
     }
 
     /***
@@ -189,9 +188,11 @@ public class GunnerEnemy extends Enemy {
         g.drawRect((int)gx+2, (int)gy, 64, 64);
         g.drawLine((int)gx+32, (int)gy+32, (int)px, (int)py);
         g.drawLine((int)gx+32, (int)gy+32, (int)(gx+Math.cos(alpha)*(distanceToPlayer-50)), (int)(gy+Math.sin(alpha)*(distanceToPlayer-50)));*/
-        g.drawImage(gunner_enemy_img, (int) x, (int) y, null);
-        if(hp != maxHp) {
-            renderHPBar(g);
+        if (isInGame) {
+            g.drawImage(gunner_enemy_img, (int) x, (int) y, null);
+            if (hp != maxHp) {
+                renderHPBar(g);
+            }
         }
     }
 
@@ -208,15 +209,27 @@ public class GunnerEnemy extends Enemy {
     /***
      * Some getter and setter functions
      */
-    public float getMinDistanceToPlayer() {return minDistanceToPlayer;}
+    public float getMinDistanceToPlayer() {
+        return minDistanceToPlayer;
+    }
 
-    public void setMinDistanceToPlayer(float d) {minDistanceToPlayer = d;}
+    public void setMinDistanceToPlayer(float d) {
+        minDistanceToPlayer = d;
+    }
 
-    public float getMaxDistanceToPlayer() {return maxDistanceToPlayer;}
+    public float getMaxDistanceToPlayer() {
+        return maxDistanceToPlayer;
+    }
 
-    public void setMaxDistanceToPlayer(float d) {maxDistanceToPlayer = d;}
+    public void setMaxDistanceToPlayer(float d) {
+        maxDistanceToPlayer = d;
+    }
 
-    public float getMovementSpeed() {return movementSpeed;}
+    public float getMovementSpeed() {
+        return movementSpeed;
+    }
 
-    public void setMovementSpeed(float m) {movementSpeed = m;}
+    public void setMovementSpeed(float m) {
+        movementSpeed = m;
+    }
 }
