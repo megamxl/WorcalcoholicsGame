@@ -1,5 +1,7 @@
 # Hello and welcome to Chad vs Alien!
 
+![Chad vs Aliens Picture](./Resource/Graphics/Titlescreen.png)
+
 ## Starting the game
 When you clone the project you should have The cofing UseThisConfigToRun next to the green hammer.
 
@@ -16,11 +18,16 @@ Otherwise please add a run configutation
 * Then save the config and  press the green Icon
 * This is just a garbage collector for helping out a bit with ram usage
 
-# Known Problems
+
+
+## Known Problems
+
 If you are getting errors like this while starting  
 
-*" Cannot invoke "Woralcoholics.game.GameManager.render(java.awt.Graphics)" because "Woralcoholics.game.Game.handler" is null" or something with cannot invoke just relaunch the game and it works *"
-# Instructions
+__" Cannot invoke "Woralcoholics.game.GameManager.render(java.awt.Graphics)" because "Woralcoholics.game.Game.handler" is null" or something with cannot invoke just relaunch the game and it works "__
+
+## Instructions
+
 Moving is binded to the key 
 
 W = up \
