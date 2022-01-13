@@ -21,6 +21,7 @@ public class Animations {
     private BufferedImage[] images;
     private BufferedImage currentImages;
     private GameManager manager;
+    private EnemyShadow enemyShadow;
 
     private boolean finished;
 
@@ -35,6 +36,19 @@ public class Animations {
 
         finished = false;
 
+    }
+
+    public Animations(int speed, EnemyShadow enemyShadow ,BufferedImage... args) {
+        this.speed = speed;
+        this.manager = manager;
+        images = new BufferedImage[args.length];
+        for (int i = 0; i < args.length; i++) {
+            images[i] = args[i];
+        }
+        frames = args.length;
+
+        finished = false;
+        this.enemyShadow = enemyShadow;
     }
 
     /**
@@ -61,7 +75,7 @@ public class Animations {
                 counter++;
             }
         }
-
+        enemyShadow = null;
     }
 
 

@@ -31,7 +31,6 @@ public class Game extends Canvas implements Runnable {
     // Variables
     final int SCREEN_WIDTH = 1024;
     final int SCREEN_HEIGHT = 576;
-    //public static Window window;
 
     public static GameState currentState;
     private GameState previousState, checkState;
@@ -81,6 +80,8 @@ public class Game extends Canvas implements Runnable {
     private String[][] tutorialTexts = new String[10][2];
 
     public static List<int[]> wallCords = new ArrayList();
+    public static List<Enemy> enemyPool = new ArrayList();
+    public static List<EnemyShadow> enemyShadowPool = new ArrayList();
 
     public int ammo = 50;
     public int hp = 100;
@@ -232,6 +233,9 @@ public class Game extends Canvas implements Runnable {
         loadEnenemySprites();
 
         FontLoader fontLoader = new FontLoader();
+
+        fillEnemypool();
+        fillEnemShadowypool();
     }
 
 
@@ -293,6 +297,8 @@ public class Game extends Canvas implements Runnable {
      * in every frame check where player is and update camera position
      */
     public void update() throws SQLException {
+        //ammo = 50;
+        //hp = 100;
         if (currentState != checkState) {     //if there was a state change...
             stateChange();
         }
@@ -319,11 +325,12 @@ public class Game extends Canvas implements Runnable {
         }
         calculateReloadingRectangle(handler.wait, (int) handler.del);
 
+        
+
         checkReloaded();
         checkGunStatus();
         checkSelectedGun();
         updateLockStatus();
-
     }
 
     /***
@@ -786,7 +793,8 @@ public class Game extends Canvas implements Runnable {
                     PlayerX = xx * 32;
                     PlayerY = yy * 32;
                 } else if (currColor.getRed() == 0 && currColor.getGreen() == 255 && currColor.getBlue() == 0) {
-                    handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, imageGetter, score));
+                    //handler.addObject(new Enemy(xx * 32, yy * 32, ID.Enemy, handler, imageGetter, score));
+                    spawnEnemy(xx * 32, yy * 32);
                 }
                 /*if (green == 255 && blue == 255) {
 
@@ -818,8 +826,12 @@ public class Game extends Canvas implements Runnable {
                         //currentState = GameState.UPGRADE_MENU;
                         Enemy.Spawner(Enemy.waves, false, r); //Spawn the next wave of enemies
                         //upgrades.addMunition(20);
+                        takesDamage =false;
                     }
-                    case 2 -> currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
+                    case 2 -> {
+                        currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
+                        takesDamage = false;
+                    }
                     case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, few sec wait time)
                     case 4 -> { //enter your name and choose whether to upload your score
                         playerName = JOptionPane.showInputDialog(null, "Please enter your name",
@@ -836,7 +848,7 @@ public class Game extends Canvas implements Runnable {
                         } else {
                             System.out.println("NO");
                         }
-
+                        takesDamage =false;
                         System.out.println("over Con");
                     }
                     case 5 -> {
@@ -931,6 +943,45 @@ public class Game extends Canvas implements Runnable {
     public static void SpawnEnemy(int x, int y) {
         handler.addObject(new Enemy(x, y, ID.Enemy, handler, imageGetter, score));
     }
+
+    private void fillEnemypool(){
+        for (int i = 0; i < 25 ; i++) {
+            enemyPool.add(new Enemy(0, 0, ID.Enemy, handler, imageGetter, score));
+        }
+    }
+
+    private void fillEnemShadowypool(){
+        for (int i = 0; i < 25 ; i++) {
+            enemyShadowPool.add(new EnemyShadow(0, 0, ID.EnemyShadow, imageGetter));
+        }
+    }
+
+    public static void spawnEnemy(int x, int y){
+        for (Enemy currEnemy: enemyPool) {
+            if (!currEnemy.isInGame){
+                currEnemy.x = x;
+                currEnemy.y = y;
+                currEnemy.hp = Enemy.maxHp;
+                currEnemy.isInGame = true;
+                Enemy.enemysAlive++;
+                handler.addObject(currEnemy);
+                return;
+            }
+        }
+    }
+
+    public static void spawnEnemyShadow(int x, int y){
+        for (EnemyShadow currShadow: enemyShadowPool) {
+            if (!currShadow.inGame){
+                currShadow.x = x;
+                currShadow.y = y;
+                currShadow.inGame = true;
+                handler.addObject(currShadow);
+                return;
+            }
+        }
+    }
+
 
     public static void SpawnGunnerEnemy() {
         handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, imageGetter, score));

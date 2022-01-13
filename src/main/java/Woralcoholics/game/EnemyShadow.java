@@ -14,6 +14,7 @@ public class EnemyShadow extends GameObject {
 
     private BufferedImage shadow_image = null;
     private Animations enemyDead;
+    public boolean isDone = false;
 
     public EnemyShadow(int x, int y, ID id, ImageGetter an) {
         super(x, y, id, an);
@@ -23,7 +24,6 @@ public class EnemyShadow extends GameObject {
     // create should do nothing in update is a static piece
     public void update() {
         enemyDead.runAnimationsOnce(7);
-
     }
 
     public void render(Graphics g) {

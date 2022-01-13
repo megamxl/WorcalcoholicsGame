@@ -29,6 +29,7 @@ public class Enemy extends GameObject {
     int high = 4;
     int booleanValue = 0;                                   //booleanvalue is for determining if enemy should charge player again or just running aimless around
     private boolean isAlive;
+    public boolean isInGame;
     private Animations enemyAnimation;
 
     public boolean hittedWall = false;                      //hittedWall is for changing the aiming target of player to nothing
@@ -47,7 +48,6 @@ public class Enemy extends GameObject {
         this.manager = manager;
         this.score = score;
         enemy_img = an.getImage(1, 4, 32, 32);
-        enemysAlive++;
         hp = maxHp;
         enemyAnimation = new Animations(6,Game.enemy[0],Game.enemy[1],Game.enemy[2],Game.enemy[3],Game.enemy[4],Game.enemy[5],Game.enemy[6],Game.enemy[7],Game.enemy[8],Game.enemy[9],Game.enemy[10],Game.enemy[11],Game.enemy[12]);
     }
@@ -57,27 +57,30 @@ public class Enemy extends GameObject {
     //region PUBLIC METHODS
 
     public void update() {
-        move();
+        if(isInGame) {
+            move();
 
-        enemyAnimation.runAnimations();
+            enemyAnimation.runAnimations();
 
-        choose = r.nextInt(10);
+            choose = r.nextInt(10);
 
-        checkIfGone();
+            checkIfGone();
 
-        collision();
+            collision();
 
-        bulletCollision();
+            bulletCollision();
 
-        isDead();
+            isDead();
+        }
     }
 
     public void render(Graphics g) {
-        enemyAnimation.renderAnimation(g,(int) x, (int)y);
-        if(hp != maxHp) {
-            renderHPBar(g);
+        if(isInGame) {
+            enemyAnimation.renderAnimation(g, (int) x, (int) y);
+            if (hp != maxHp) {
+                renderHPBar(g);
+            }
         }
-
         //g.drawImage(enemy_img, (int) x, (int) y, null);
     }
 
@@ -208,7 +211,7 @@ public class Enemy extends GameObject {
         if (solo) {                                         // if function gets passed false just spawn one enemy
             waveSize = 1;
         } else { // else increase the amount of the wave and calculate the amount of enemies
-            Game.SpawnGunnerEnemy();
+            //Game.SpawnGunnerEnemy();
             waveSize = (waveSize * 2) + 1;
         }
 
@@ -226,7 +229,7 @@ public class Enemy extends GameObject {
             x = r.nextInt(((55 * 32) - 1) - 1);
             y = r.nextInt(((55 * 32) - 1) - 1);
 
-            Game.SpawnEnemy(x, y);                          // spawns enemy
+            Game.spawnEnemy(x, y);                          // spawns enemy
         }
 
     }
@@ -256,6 +259,7 @@ public class Enemy extends GameObject {
         float curX = x;
         float curY = y;
         Game.AddEnemyShadow((int) curX, (int) curY);
+        isInGame = false;
 
         playSoundEnemy();
         enemysAlive--;
@@ -288,6 +292,7 @@ public class Enemy extends GameObject {
     public void removeWithObject(GameObject tempobject) {
         manager.removeObject(tempobject);
         tempobject = null;
+        isInGame = false;
         enemysAlive--;
     }
 

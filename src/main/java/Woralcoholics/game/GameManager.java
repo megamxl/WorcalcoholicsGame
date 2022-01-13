@@ -98,7 +98,7 @@ public class GameManager {
 
     public void removeObject(GameObject tempObject) {
         object.remove(tempObject);
-        tempObject = null;
+        //tempObject = null;
     }
 
     /***
