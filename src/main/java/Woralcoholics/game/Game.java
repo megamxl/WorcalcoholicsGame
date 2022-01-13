@@ -81,6 +81,7 @@ public class Game extends Canvas implements Runnable {
 
     public static List<int[]> wallCords = new ArrayList();
     public static List<Enemy> enemyPool = new ArrayList();
+    public static List<GunnerEnemy> enemyGunnerPool = new ArrayList();
     public static List<EnemyShadow> enemyShadowPool = new ArrayList();
 
     public int ammo = 50;
@@ -139,6 +140,7 @@ public class Game extends Canvas implements Runnable {
     /* ------------- Constructor for Game Class -------------- */
 
     public Game() throws IOException, SQLException {
+        System.out.println(ProcessHandle.current().pid());
         handler = new GameManager();
         currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
@@ -236,6 +238,7 @@ public class Game extends Canvas implements Runnable {
 
         fillEnemypool();
         fillEnemShadowypool();
+        fillGunnerEnemypool();
     }
 
 
@@ -800,7 +803,7 @@ public class Game extends Canvas implements Runnable {
                 }*/
             }
         }
-        //handler.addObject(new GunnerEnemy(500, 500, ID.GunnerEnemy, handler, imageGetter, score)); //Test Gunner
+        spawnGunnerEnemy(500,500);
         loaded = true;
         playBackgroundSound();
         //System.out.println("NEW GAME");
@@ -943,6 +946,13 @@ public class Game extends Canvas implements Runnable {
         handler.addObject(new Enemy(x, y, ID.Enemy, handler, imageGetter, score));
     }
 
+    private void fillGunnerEnemypool(){
+        for (int i = 0; i < 3 ; i++) {
+            enemyGunnerPool.add( new GunnerEnemy(0, 0, ID.GunnerEnemy, handler, imageGetter, score));
+        }
+
+    }
+
     private void fillEnemypool() {
         for (int i = 0; i < 25; i++) {
             enemyPool.add(new Enemy(0, 0, ID.Enemy, handler, imageGetter, score));
@@ -952,6 +962,20 @@ public class Game extends Canvas implements Runnable {
     private void fillEnemShadowypool() {
         for (int i = 0; i < 25; i++) {
             enemyShadowPool.add(new EnemyShadow(0, 0, ID.EnemyShadow, imageGetter));
+        }
+    }
+
+    public static void spawnGunnerEnemy(int x, int y){
+        for (GunnerEnemy currEnemy: enemyGunnerPool) {
+            if (!currEnemy.isInGame) {
+                currEnemy.x = x;
+                currEnemy.y = y;
+                currEnemy.hp = Enemy.maxHp;
+                Enemy.enemysAlive++;
+                currEnemy.isInGame = true;
+                handler.addObject(currEnemy);
+                break;
+            }
         }
     }
 
@@ -969,24 +993,6 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
-    public static void spawnEnemyShadow(int x, int y) {
-        for (EnemyShadow currShadow : enemyShadowPool) {
-            if (!currShadow.inGame) {
-                currShadow.x = x;
-                currShadow.y = y;
-                currShadow.inGame = true;
-                handler.addObject(currShadow);
-                return;
-            }
-        }
-    }
-
-
-
-
-    public static void SpawnGunnerEnemy() {
-        handler.addObject(new GunnerEnemy(500, 500, ID.Enemy, handler, imageGetter, score));
-    }
 
     public static void SpawnGunnerEnemyWithCords(int x, int y) {
         handler.addObject(new GunnerEnemy(x, y, ID.Enemy, handler, imageGetter, score));
