@@ -44,11 +44,9 @@ public class Bullet extends GameObject {
                 direction(mx, my, px, py, true); //normal bullet as usual for the gunnerenemy
             } else {
                 direction(mx, my, px, py, false); //normal bullet as usual for the player
-                handler.bulletHasBeenFired = true;
             }
         } else {
             direction(mx, my, px, py, anglediff); //bullets for the shotgun
-            handler.bulletHasBeenFired = true;
         }
     }
 

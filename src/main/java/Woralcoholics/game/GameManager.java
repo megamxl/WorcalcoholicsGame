@@ -42,7 +42,6 @@ public class GameManager {
     protected int gunindex = 0;
     protected Gun selectedgun;
     public float angle; // from bullet
-    public boolean bulletHasBeenFired= true; // prevents useless updating validating method in player
     public boolean playerIsInit = false; // prevents that the MouseEvents gets NullPointerException
 
 

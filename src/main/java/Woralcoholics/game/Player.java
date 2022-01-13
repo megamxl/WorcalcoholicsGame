@@ -56,7 +56,7 @@ public class Player extends GameObject {
         player_gun_img = an.getImage(5, 10, 64, 64);
         coordinatesadditive[0] = 42;
         coordinatesadditive[1] = 25;
-        handler.playerIsInit=true;
+        handler.playerIsInit = true;
 
     }
 
@@ -76,7 +76,7 @@ public class Player extends GameObject {
         keySounds();
         movement();
         checkGunRenderStatus();
-        validateCoordinates();
+        //validateCoordinates();
 
         if (Game.inTutorial) {
             tutorial();
@@ -85,29 +85,37 @@ public class Player extends GameObject {
     }
 
     private void validateCoordinates() {
-        if (handler.bulletHasBeenFired) {
-            //350° - 5°
-            if (handler.angle >= 350 && handler.angle <= 360 || handler.angle >= 0 && handler.angle <= 4) {
-                coordinatesadditive[0] =  42;
-                coordinatesadditive[1] =  25;
-                System.out.println("350-4°");
-            }
-            //5° - 20°
-            else if (handler.angle > 4 && handler.angle <= 9) {
-                coordinatesadditive[0] =  38;
-                coordinatesadditive[1] =  25;
-                System.out.println("4-9°");
-            }
-            else if (handler.angle > 9 && handler.angle <= 15) {
-                coordinatesadditive[0] =  33;
-                coordinatesadditive[1] =  25;
-                System.out.println("9-15°");
-            }
-            else {
-                System.out.println("angle not defined yet");
-            }
+        //350° - 5°
+        if (handler.angle >= 0 && handler.angle <= 5) {
+            int x = (int) (47.5 - handler.angle * 1.1); // trying whats the best
+            coordinatesadditive[0] = 42;
+            coordinatesadditive[1] = 25;
+            System.out.println("0-5°");
         }
-        handler.bulletHasBeenFired = false; // after sprite visualisation and bullet fire set it to false to prevent useless looping
+        //5° - 20°
+        else if (handler.angle > 5 && handler.angle <= 10) {
+            coordinatesadditive[0] = 38;
+            coordinatesadditive[1] = 25;
+            System.out.println("5-9°");
+        } else if (handler.angle > 10 && handler.angle <= 15) {
+            coordinatesadditive[0] = 33;
+            coordinatesadditive[1] = 25;
+            System.out.println("10-15°");
+        } else if (handler.angle > 15 && handler.angle <= 20) {
+            coordinatesadditive[0] = 28;
+            coordinatesadditive[1] = 25;
+            System.out.println("15-20°");
+
+
+        } else if (handler.angle > 340 && handler.angle <= 350) {
+            int y = (int) (-325 + handler.angle * 0.97); // trying whats the best
+            coordinatesadditive[0] = 38;
+            coordinatesadditive[1] = 15;
+            System.out.println("340-350°");
+        } else {
+            //System.out.println(handler.angle);
+            System.out.println("not implemented");
+        }
     }
 
 
@@ -123,7 +131,7 @@ public class Player extends GameObject {
         } else {
             playerIdle.renderAnimation(g, (int) x, (int) y, 64, 64);
         }
-        g.drawImage(player_gun_img, ((int) x) + coordinatesadditive[0],((int)y) + coordinatesadditive[1], null); // x and y adjustable for gun position
+        g.drawImage(player_gun_img, ((int) x) + coordinatesadditive[0], ((int) y) + coordinatesadditive[1], null); // x and y adjustable for gun position
 
         // draw other colliders
         /*g.setColor(Color.RED);
@@ -165,7 +173,23 @@ public class Player extends GameObject {
     private void checkGunRenderStatus() {
         int[] colrow = new int[2];
         colrow = game.getColRowFromIndex();
-        player_gun_img = an.getImage(colrow[0], colrow[1], 64, 64);
+        int width;
+        int height;
+        if (handler.selectedgun.getType() == GunType.Pistol) {
+            width = 19;
+            height = 19;
+            player_gun_img = an.getImage(colrow[0], colrow[1], width, height); // pistol
+            System.out.println("PISOL");
+        }
+        if (handler.selectedgun.getType() == GunType.Shotgun) {
+            width = 32;
+            height = 19;
+            player_gun_img = an.getImage(colrow[0], colrow[1], width, height); //shotgun
+        } else {
+            width = 32;
+            height = 19;
+            player_gun_img = an.getImage(colrow[0], colrow[1], width, height); //machine gun
+        }
 
         final double rads = Math.toRadians(handler.angle);
         final double sin = Math.abs(Math.sin(rads));

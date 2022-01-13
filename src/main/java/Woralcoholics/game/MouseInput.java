@@ -186,6 +186,7 @@ public class MouseInput extends MouseAdapter {
         double dy = my - py;
         double alpha = Math.atan2(dy, dx);
         handler.angle = (float) Math.toDegrees(alpha);
+        handler.angle = checkAngle(handler.angle); // no minus angles
     }
 
     public void mouseExited(MouseEvent e) {
@@ -416,11 +417,11 @@ public class MouseInput extends MouseAdapter {
                 }
             }
             playSoundGun(game.ammo);
-            if (game.ammo <= 3) {
+            /*if (game.ammo <= 3) {
                 game.ammo = 0;
             } else {
                 game.ammo = game.ammo - 3;    //Subtract 1 from ammo (bullet was shot)
-            }
+            }*/
             //System.out.println(game.ammo);
             handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
         } else if (handler.now > handler.wait && game.ammo <= 0) {
@@ -459,6 +460,12 @@ public class MouseInput extends MouseAdapter {
         } else {
             return false;
         }
+    }
+    private float checkAngle(float angle) {
+        if (angle < 0) {
+            angle += 360;
+        }
+        return angle;
     }
 
     private boolean checkPreviousGunLocked() {

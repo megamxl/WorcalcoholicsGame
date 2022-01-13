@@ -1070,7 +1070,7 @@ public class Game extends Canvas implements Runnable {
     }
 
     public int[] getColRowFromIndex() {
-        int[] colrow = new int[2];
+        int[] colrow = new int[3];
         int col;
         int row = 10;
         if (handler.gunindex == 0) {
