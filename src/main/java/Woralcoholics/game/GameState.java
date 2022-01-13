@@ -5,6 +5,7 @@ package Woralcoholics.game;
  *  @author Maxlimilian Nowak
  */
 public enum GameState {
+    // as the Name states these are the Ids for which Screen should be rendered
     STUDIO,
     TITLE,
     MAIN_MENU,

@@ -113,7 +113,6 @@ public class GunnerEnemy extends Enemy {
                 break;
             }
         }
-        //EnemyBullet temp = new EnemyBullet((int) gx - 4, (int) gy - 4, ID.EnemyBullet, handler, an);    //Create a new bullet, that can harm the player
         //temp.direction(px, py, gx, gy, false, 0);     //Set the direction
         //handler.addObject(temp);
 

@@ -64,35 +64,6 @@ public class DestroyableBoxes extends GameObject {
      * If a Object in our List collides with the Box
      */
     public void collision() {
-        /*for (int i = 0; i < manager.object.size(); i++) {
-
-            GameObject tmpObject = manager.object.get(i);
-
-
-            if (tmpObject.getId() == ID.Bullet) {
-                if (getBounds().intersects(tmpObject.getBounds())) {
-                    manager.removeObject(tmpObject);
-                    boxDestroyedSound();
-                    if (manager.selectedgun.getType() == GunType.Pistol)
-                        hp -= 40; //could be also random in a specific range
-                    else if (manager.selectedgun.getType() == GunType.Shotgun)
-                        hp -= 30;
-                    else //
-                        hp -= 20;
-                    crackedState();
-                    //System.out.println(hp);
-                }
-            }
-            if (tmpObject.getId() == ID.EnemyBullet) {
-                if (getBounds().intersects(tmpObject.getBounds())) {
-                    manager.removeObject(tmpObject);
-                    boxDestroyedSound();
-                    hp -= 20;
-                    crackedState();
-                    //System.out.println(hp);
-                }
-            }
-        }*/
         for(int i = 0; i < manager.bullets.size(); i++) {
             Bullet temp = manager.bullets.get(i);
             if (getBounds().intersects(temp.getBounds())) {

@@ -7,6 +7,7 @@ package Woralcoholics.game;
  */
 
 public enum GunType {
+    // Ids for the Guns used
     MachineGun,
     Pistol,
     Shotgun

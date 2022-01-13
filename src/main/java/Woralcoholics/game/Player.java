@@ -274,15 +274,11 @@ public class Player extends GameObject {
                         playSoundAmmoReload();
                     }
 
-                    case Enemy/*, EnemyBullet*/ -> {
+                    case Enemy -> {
                         playerSoundHurt();
                         // Implement Bloodscreen
                         if (game.hp > 0) {    //if player has health and is not invincible
                             switch (tempID) {
-                                /*case EnemyBullet -> {
-                                    handler.removeObject(tempobject);   //Remove Enemy Bullet if Player is hit
-                                    upgrades.damaged(20);
-                                }*/
                                 case Enemy -> {
                                     if (handler.enemy.contains(tempobject)) { //enemy is on player
                                         invincibleTime++;

@@ -23,25 +23,32 @@ public class Upgrades {
             game.ammo = ammo;
     }
 
+    /**
+     * @return current Ammunition
+     */
     public int getMunition() {
         return game.ammo;
     }
 
-    public void addMunition(int ammo) {
-        if (game.ammo + ammo > 50)
-            game.ammo = 50;
-        else
-            game.ammo += ammo;
-    }
-
+    /**
+     * Sets Player health back to standard
+     */
     public void maxHP() {
         game.hp = 100;
     } //max hp is 100
 
+    /**
+     * sets hap to desired value
+     * @param hp
+     */
     public void setHP(int hp) {
         game.hp = hp;
     }
 
+    /**
+     * sets shield to desired value
+     * @param shield
+     */
     public void setShield(int shield) {
         if (shield > 40)
             game.shield = 40;
@@ -80,6 +87,10 @@ public class Upgrades {
         GunnerEnemy.movementSpeed += speed;
     }
 
+    /**
+     * calculates the actual damage with the armor and shield in consideration
+     * @param damage
+     */
     public void damaged(int damage) {
         damage = (int) (damage * ((100. - (double) game.armor) / 100));
         for (int i = damage; i > 0; i--) {

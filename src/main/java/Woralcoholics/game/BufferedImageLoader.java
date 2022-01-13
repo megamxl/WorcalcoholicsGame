@@ -15,7 +15,7 @@ public class BufferedImageLoader {
      */
     public BufferedImage loadImage(String path) throws IOException {
         image = ImageIO.read(getClass().getResource(path)); // using the imageIO class from java
-        return image;
+        return image; // returns image from path as Image
     }
 
 }
