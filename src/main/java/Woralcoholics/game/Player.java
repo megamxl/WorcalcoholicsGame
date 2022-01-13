@@ -4,8 +4,10 @@ import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
 /**
  * Inspiration https://www.youtube.com/watch?v=vKomghrsniU
+ *
  * @author Maxlimilian Nowak
  * @author Christoph Oprawill
  */
@@ -20,6 +22,7 @@ public class Player extends GameObject {
     public static Boolean takesDamage;
 
     private final BufferedImage player_img;
+    private BufferedImage player_gun_img;
     private Animations playerWalkLeft;
     private Animations playerWalkRigth;
     private Animations playerIdle;
@@ -44,9 +47,10 @@ public class Player extends GameObject {
 
         playerWalkLeft = new Animations(3, Game.playerWalkingLeft[0], Game.playerWalkingLeft[1], Game.playerWalkingLeft[2], Game.playerWalkingLeft[3], Game.playerWalkingLeft[4], Game.playerWalkingLeft[5], Game.playerWalkingLeft[6], Game.playerWalkingLeft[7], Game.playerWalkingLeft[8], Game.playerWalkingLeft[9]);
         playerWalkRigth = new Animations(3, Game.playerWalkingRight[0], Game.playerWalkingRight[1], Game.playerWalkingRight[2], Game.playerWalkingRight[3], Game.playerWalkingRight[4], Game.playerWalkingRight[5], Game.playerWalkingRight[6], Game.playerWalkingRight[7], Game.playerWalkingRight[8], Game.playerWalkingRight[9]);
-        playerIdle = new Animations(3,Game.playerIdle[0],Game.playerIdle[1],Game.playerIdle[2],Game.playerIdle[3]);
+        playerIdle = new Animations(3, Game.playerIdle[0], Game.playerIdle[1], Game.playerIdle[2], Game.playerIdle[3]);
 
         player_img = an.getImage(1, 3, 64, 64);
+        player_gun_img = an.getImage(5, 10, 64, 64);
 
     }
 
@@ -65,24 +69,27 @@ public class Player extends GameObject {
         isDead();
         keySounds();
         movement();
+        checkGunRenderStatus();
 
-        if(Game.inTutorial){
+        if (Game.inTutorial) {
             tutorial();
         }
         //System.out.println(x + " " + y);
     }
 
+
     @Override
     public void render(Graphics g) {
+        g.drawImage(player_gun_img, (int) x + 40, (int) y + 25, null);
         /*Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
         g2d.draw(getBounds());*/
         if (velX < 0) {
             playerWalkLeft.renderAnimation(g, (int) x, (int) y, 64, 64);
-        } else if (velX > 0 || velY >0 || velY <0 ) {
+        } else if (velX > 0 || velY > 0 || velY < 0) {
             playerWalkRigth.renderAnimation(g, (int) x, (int) y, 64, 64);
         } else {
-            playerIdle.renderAnimation(g,(int)x,(int) y, 64,64);
+            playerIdle.renderAnimation(g, (int) x, (int) y, 64, 64);
         }
         // draw other colliders
         /*g.setColor(Color.RED);
@@ -121,6 +128,12 @@ public class Player extends GameObject {
         }
     }
 
+    private void checkGunRenderStatus() {
+        int[] colrow = new int[2];
+        colrow = game.getColRowFromIndex();
+        player_gun_img = an.getImage(colrow[0], colrow[1], 64, 64);
+    }
+
 
     /**
      * Collision Detection function for the Player
@@ -133,7 +146,7 @@ public class Player extends GameObject {
             if (getBoundsX().intersects((tempobject.getBounds()))) {
                 ID tempID = tempobject.getId();
                 switch (tempID) {
-                    case Block ,DestroyableBoxes -> {
+                    case Block, DestroyableBoxes -> {
                         //System.out.println("X");
                         x += velX * -1;
                     }
@@ -192,9 +205,9 @@ public class Player extends GameObject {
                                     }
                                 }
                             }
-                            if(!Game.takesDamage){
+                            if (!Game.takesDamage) {
                                 Game.takesDamage = true;
-                                Game.startTimer(1,5);
+                                Game.startTimer(1, 5);
                             }
                             cam.shake = true;
                             //wait = now + invincibleTime;
@@ -211,13 +224,13 @@ public class Player extends GameObject {
                 }
             }
         }
-        for(int i = 0; i < handler.bullets.size(); i++) {
+        for (int i = 0; i < handler.bullets.size(); i++) {
             Bullet temp = handler.bullets.get(i);
-            if(getBounds().intersects(temp.getBounds()) && temp.inGame && temp.getId() == ID.EnemyBullet) {
+            if (getBounds().intersects(temp.getBounds()) && temp.inGame && temp.getId() == ID.EnemyBullet) {
                 upgrades.damaged(20);
                 temp.setId(ID.Bullet);
                 temp.inGame = false;
-                temp.setPos(0,0);
+                temp.setPos(0, 0);
             }
         }
     }
@@ -296,29 +309,29 @@ public class Player extends GameObject {
         }
     }
 
-    private void tutorial(){
-        if(x > 450 && x < 548 && y > 615 && y < 798){
-            Game.inFirstTutorialZone =true;
+    private void tutorial() {
+        if (x > 450 && x < 548 && y > 615 && y < 798) {
+            Game.inFirstTutorialZone = true;
         }
-        if(Game.inFirstTutorialZone){
-            if(!doOnceForZoneOne){
-                Game.SpawnEnemy(647,208);
-                Game.SpawnEnemy(900,325);
-                doOnceForZoneOne =true;
+        if (Game.inFirstTutorialZone) {
+            if (!doOnceForZoneOne) {
+                Game.SpawnEnemy(647, 208);
+                Game.SpawnEnemy(900, 325);
+                doOnceForZoneOne = true;
             }
         }
-        if(x > 920 && x < 1105 && y > 50 && y < 105){
-            Game.inSecondTutorialZone =true;
+        if (x > 920 && x < 1105 && y > 50 && y < 105) {
+            Game.inSecondTutorialZone = true;
         }
-        if(Game.inSecondTutorialZone){
-            if(!doOnceForZoneTow){
+        if (Game.inSecondTutorialZone) {
+            if (!doOnceForZoneTow) {
                 System.out.println("in second");
-                Game.SpawnGunnerEnemyWithCords(1293,534);
-                Game.SpawnCreate(1809,329);
+                Game.SpawnGunnerEnemyWithCords(1293, 534);
+                Game.SpawnCreate(1809, 329);
                 doOnceForZoneTow = true;
             }
         }
-        if(x > 1624 && x < 1959 && y < 123){
+        if (x > 1624 && x < 1959 && y < 123) {
             Game.currentState = GameState.MAIN_MENU;
             Game.inTutorial = false;
         }

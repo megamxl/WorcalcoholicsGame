@@ -325,7 +325,6 @@ public class Game extends Canvas implements Runnable {
         }
         calculateReloadingRectangle(handler.wait, (int) handler.del);
 
-        
 
         checkReloaded();
         checkGunStatus();
@@ -826,7 +825,7 @@ public class Game extends Canvas implements Runnable {
                         //currentState = GameState.UPGRADE_MENU;
                         Enemy.Spawner(Enemy.waves, false, r); //Spawn the next wave of enemies
                         //upgrades.addMunition(20);
-                        takesDamage =false;
+                        takesDamage = false;
                     }
                     case 2 -> {
                         currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
@@ -848,7 +847,7 @@ public class Game extends Canvas implements Runnable {
                         } else {
                             System.out.println("NO");
                         }
-                        takesDamage =false;
+                        takesDamage = false;
                         System.out.println("over Con");
                     }
                     case 5 -> {
@@ -944,21 +943,21 @@ public class Game extends Canvas implements Runnable {
         handler.addObject(new Enemy(x, y, ID.Enemy, handler, imageGetter, score));
     }
 
-    private void fillEnemypool(){
-        for (int i = 0; i < 25 ; i++) {
+    private void fillEnemypool() {
+        for (int i = 0; i < 25; i++) {
             enemyPool.add(new Enemy(0, 0, ID.Enemy, handler, imageGetter, score));
         }
     }
 
-    private void fillEnemShadowypool(){
-        for (int i = 0; i < 25 ; i++) {
+    private void fillEnemShadowypool() {
+        for (int i = 0; i < 25; i++) {
             enemyShadowPool.add(new EnemyShadow(0, 0, ID.EnemyShadow, imageGetter));
         }
     }
 
-    public static void spawnEnemy(int x, int y){
-        for (Enemy currEnemy: enemyPool) {
-            if (!currEnemy.isInGame){
+    public static void spawnEnemy(int x, int y) {
+        for (Enemy currEnemy : enemyPool) {
+            if (!currEnemy.isInGame) {
                 currEnemy.x = x;
                 currEnemy.y = y;
                 currEnemy.hp = Enemy.maxHp;
@@ -970,9 +969,9 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
-    public static void spawnEnemyShadow(int x, int y){
-        for (EnemyShadow currShadow: enemyShadowPool) {
-            if (!currShadow.inGame){
+    public static void spawnEnemyShadow(int x, int y) {
+        for (EnemyShadow currShadow : enemyShadowPool) {
+            if (!currShadow.inGame) {
                 currShadow.x = x;
                 currShadow.y = y;
                 currShadow.inGame = true;
@@ -1054,11 +1053,27 @@ public class Game extends Canvas implements Runnable {
         // if crate is collected, set locked to false so it can be displayed and choosen in UI
 
     }
-
     private void setGunToPistolAgain() {
         handler.selectedgun = Gun.guns.get(0);
         handler.gunindex = 0;
     }
+
+    public int[] getColRowFromIndex() {
+        int[] colrow = new int[2];
+        int col;
+        int row = 10;
+        if (handler.gunindex == 0) {
+            col = 7;
+        } else if (handler.gunindex == 1) {
+            col = 5;
+        } else {
+            col = 6;
+        }
+        colrow[0] = col;
+        colrow[1] = row;
+        return colrow;
+    }
+
 
     private void checkSelectedGun() {
         handler.selectedgun = Gun.guns.get(handler.gunindex);
