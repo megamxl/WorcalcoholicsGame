@@ -44,9 +44,11 @@ public class Bullet extends GameObject {
                 direction(mx, my, px, py, true); //normal bullet as usual for the gunnerenemy
             } else {
                 direction(mx, my, px, py, false); //normal bullet as usual for the player
+                handler.bulletHasBeenFired = true;
             }
         } else {
             direction(mx, my, px, py, anglediff); //bullets for the shotgun
+            handler.bulletHasBeenFired = true;
         }
     }
 
@@ -109,7 +111,7 @@ public class Bullet extends GameObject {
         if (!gunnerenemy) {
             handler.angle = (float) Math.toDegrees(alpha); // for gun sprite that we know where to rotate the gun
             handler.angle = checkAngle(handler.angle);
-            //System.out.println(handler.angle);
+            System.out.println(handler.angle);
         }
         velX = (float) (Math.cos(alpha) * bulletSpeed);
         velY = (float) (Math.sin(alpha) * bulletSpeed);

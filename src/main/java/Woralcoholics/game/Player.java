@@ -38,6 +38,7 @@ public class Player extends GameObject {
     private Boolean doOnceForZoneTow = false;
     private Boolean doOnceForZoneThree = false;
     Thread backgroundThread;
+    int[] coordinatesadditive = new int[2]; // x and y Coordinates of Gun Sprite
     // better method would be to wait until the thread is finished and then start the new sound
 
     public Player(int x, int y, ID id, GameManager GameManager, Game game, Camera cam, ImageGetter an) {
@@ -53,6 +54,9 @@ public class Player extends GameObject {
 
         player_img = an.getImage(1, 3, 64, 64);
         player_gun_img = an.getImage(5, 10, 64, 64);
+        coordinatesadditive[0] = 42;
+        coordinatesadditive[1] = 25;
+        handler.playerIsInit=true;
 
     }
 
@@ -72,11 +76,38 @@ public class Player extends GameObject {
         keySounds();
         movement();
         checkGunRenderStatus();
+        validateCoordinates();
 
         if (Game.inTutorial) {
             tutorial();
         }
         //System.out.println(x + " " + y);
+    }
+
+    private void validateCoordinates() {
+        if (handler.bulletHasBeenFired) {
+            //350° - 5°
+            if (handler.angle >= 350 && handler.angle <= 360 || handler.angle >= 0 && handler.angle <= 4) {
+                coordinatesadditive[0] =  42;
+                coordinatesadditive[1] =  25;
+                System.out.println("350-4°");
+            }
+            //5° - 20°
+            else if (handler.angle > 4 && handler.angle <= 9) {
+                coordinatesadditive[0] =  38;
+                coordinatesadditive[1] =  25;
+                System.out.println("4-9°");
+            }
+            else if (handler.angle > 9 && handler.angle <= 15) {
+                coordinatesadditive[0] =  33;
+                coordinatesadditive[1] =  25;
+                System.out.println("9-15°");
+            }
+            else {
+                System.out.println("angle not defined yet");
+            }
+        }
+        handler.bulletHasBeenFired = false; // after sprite visualisation and bullet fire set it to false to prevent useless looping
     }
 
 
@@ -92,7 +123,7 @@ public class Player extends GameObject {
         } else {
             playerIdle.renderAnimation(g, (int) x, (int) y, 64, 64);
         }
-        g.drawImage(player_gun_img, (int) x + 42, (int) y + 25, null); // x and y adjustable for gun position
+        g.drawImage(player_gun_img, ((int) x) + coordinatesadditive[0],((int)y) + coordinatesadditive[1], null); // x and y adjustable for gun position
 
         // draw other colliders
         /*g.setColor(Color.RED);
@@ -144,13 +175,12 @@ public class Player extends GameObject {
         final BufferedImage rotatedImage = new BufferedImage(w, h, player_gun_img.getType());
         final AffineTransform at = new AffineTransform();
         at.translate(w / 2, h / 2);
-        at.rotate(rads,0, 0);
+        at.rotate(rads, 0, 0);
         at.translate(-player_gun_img.getWidth() / 2, -player_gun_img.getHeight() / 2);
         final AffineTransformOp rotateOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-        rotateOp.filter(player_gun_img,rotatedImage);
+        rotateOp.filter(player_gun_img, rotatedImage);
         player_gun_img = rotatedImage;
     }
-
 
 
     /**
@@ -289,6 +319,7 @@ public class Player extends GameObject {
     }
 
     private void movement() {
+        handler.playerIsInit = true;
         if (movingVertical && movingHorizontal) {
             diagonalMultiplier = 0.75f;
         } else {

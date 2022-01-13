@@ -206,6 +206,7 @@ public class Game extends Canvas implements Runnable {
         //Adding Mouse and Keyboard Input
         mouse = new MouseInput(handler, camera, this, imageGetter, gun);
         this.addMouseListener(mouse);
+        this.addMouseMotionListener(mouse);
         this.addMouseWheelListener(mouse);
         KeyInput keys = new KeyInput(handler, this);
         this.addKeyListener(keys);
@@ -334,6 +335,7 @@ public class Game extends Canvas implements Runnable {
         checkSelectedGun();
         updateLockStatus();
     }
+
 
     /***
      * The complete Render functions handles UI and the game rendering every frame

@@ -37,18 +37,22 @@ public class MouseInput extends MouseAdapter {
         this.gun = gun;
     }
 
-
-    //region MouseEvents
-    public void mousePressed(MouseEvent e) {
-        mouseDown = true;
-        //System.out.println("mouse pressed");
-        //Get the player object for its coordinates
+    private void getPlayer() {
         for (int i = 0; i < handler.object.size(); i++) {
             if (handler.object.get(i).getId() == ID.Player) {
                 player = handler.object.get(i);
                 break;
             }
         }
+    }
+
+
+    //region MouseEvents
+    public void mousePressed(MouseEvent e) {
+        mouseDown = true;
+        //System.out.println("mouse pressed");
+        //Get the player object for its coordinates
+        getPlayer();
         Point currentPos = e.getPoint();    //Grab current cursor position
         int button = e.getButton(); //Grab pressed button
         switch (Game.getState()) {  //depending on currentState, execute the following...
@@ -95,9 +99,9 @@ public class MouseInput extends MouseAdapter {
                             handler.now = System.currentTimeMillis();
                             //IF waiting time is over AND player has ammo -> shoot a bullet
                             if (handler.now > handler.wait && game.ammo >= 1) {
-                                for(int i = 0; i < handler.bullets.size(); i++) {
+                                for (int i = 0; i < handler.bullets.size(); i++) {
                                     Bullet temp = handler.bullets.get(i);
-                                    if(!temp.inGame) {
+                                    if (!temp.inGame) {
                                         //Add camera pos, as bullets don't aim correctly otherwise
                                         double mx = currentPos.x + camera.getX();
                                         double my = currentPos.y + camera.getY();
@@ -152,6 +156,36 @@ public class MouseInput extends MouseAdapter {
     public void mouseEntered(MouseEvent e) {
         //System.out.println("MOUSE ENTERED");
         //checkIfExited(e.getPoint());
+    }
+
+
+    public void mouseDragged(MouseEvent e) {
+        if (handler.playerIsInit)
+            getCoordinatesOfMouse(e); //machinegun
+    }
+
+
+    public void mouseMoved(MouseEvent e) {
+        if (handler.playerIsInit)
+            getCoordinatesOfMouse(e);
+    }
+
+    private void getCoordinatesOfMouse(MouseEvent e) {
+        getPlayer();
+        PointerInfo a = MouseInfo.getPointerInfo();
+        Point point = new Point(a.getLocation());
+        SwingUtilities.convertPointFromScreen(point, e.getComponent());
+        int x = (int) point.getX();
+        int y = (int) point.getY();
+        double mx = x + camera.getX();
+        double my = y + camera.getY();
+        double px = player.getX() + 32 - 4;
+        double py = player.getY() + 32 - 4;
+
+        double dx = mx - px;
+        double dy = my - py;
+        double alpha = Math.atan2(dy, dx);
+        handler.angle = (float) Math.toDegrees(alpha);
     }
 
     public void mouseExited(MouseEvent e) {
@@ -323,9 +357,9 @@ public class MouseInput extends MouseAdapter {
             SwingUtilities.convertPointFromScreen(point, e.getComponent());
             int x = (int) point.getX();
             int y = (int) point.getY();
-            for(int i = 0; i < handler.bullets.size(); i++) {
+            for (int i = 0; i < handler.bullets.size(); i++) {
                 Bullet temp = handler.bullets.get(i);
-                if(!temp.inGame) {
+                if (!temp.inGame) {
                     //Add camera pos, as bullets don't aim correctly otherwise
                     double mx = x + camera.getX();
                     double my = y + camera.getY();
@@ -360,9 +394,9 @@ public class MouseInput extends MouseAdapter {
             int x = (int) point.getX();
             int y = (int) point.getY();
             int shells = 0;
-            for(int i = 0; i < handler.bullets.size(); i++) {
+            for (int i = 0; i < handler.bullets.size(); i++) {
                 Bullet temp = handler.bullets.get(i);
-                if(!temp.inGame) {
+                if (!temp.inGame) {
                     //Add camera pos, as bullets don't aim correctly otherwise
                     double mx = x + camera.getX();
                     double my = y + camera.getY();
@@ -370,7 +404,7 @@ public class MouseInput extends MouseAdapter {
                     double px = player.getX() + 32 - 4;
                     double py = player.getY() + 32 - 4;
                     temp.setPos(px, py);
-                    switch(shells) {
+                    switch (shells) {
                         case 0 -> temp.direction(mx, my, px, py, true, 0, false);
                         case 1 -> temp.direction(mx, my, px, py, true, 10, false);
                         case 2 -> temp.direction(mx, my, px, py, true, -10, false);
@@ -378,7 +412,7 @@ public class MouseInput extends MouseAdapter {
                     temp.inGame = true;
                     game.ammo--;    //Subtract 1 from ammo (bullet was shot)
                     shells++;
-                    if(shells == 3) break;
+                    if (shells == 3) break;
                 }
             }
             playSoundGun(game.ammo);
