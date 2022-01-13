@@ -176,7 +176,7 @@ public class Enemy extends GameObject {
                 //System.out.println("hit");
                 hp -= 110;
                 hpPercent = hp/(float)maxHp;
-                if (hp > 50) playSoundEnemyHit();
+                if (hp > 10) playSoundEnemyHit();
                 //System.out.println("einem enemy leben abgezogen " + hp);
 
 
