@@ -309,6 +309,7 @@ public class Player extends GameObject {
                                         handler.enemy.add(tempobject);
                                         //System.out.println(handler.enemy.size() + String.valueOf(tempobject));
                                     }
+
                                 }
                             }
                             if (!Game.takesDamage) {
@@ -337,6 +338,11 @@ public class Player extends GameObject {
                 temp.setId(ID.Bullet);
                 temp.inGame = false;
                 temp.setPos(0, 0);
+                if (!Game.takesDamage) {
+                    Game.takesDamage = true;
+                    Game.startTimer(1, 5);
+                }
+                cam.shake = true;
             }
         }
     }
@@ -429,8 +435,8 @@ public class Player extends GameObject {
         }
         if (Game.inFirstTutorialZone) {
             if (!doOnceForZoneOne) {
-                Game.SpawnEnemy(647, 208);
-                Game.SpawnEnemy(900, 325);
+                Game.spawnEnemy(647, 208);
+                Game.spawnEnemy(900, 325);
                 doOnceForZoneOne = true;
             }
         }
@@ -440,7 +446,7 @@ public class Player extends GameObject {
         if (Game.inSecondTutorialZone) {
             if (!doOnceForZoneTow) {
                 System.out.println("in second");
-                Game.SpawnGunnerEnemyWithCords(1293, 534);
+                Game.spawnGunnerEnemy(1293, 534);
                 Game.SpawnCreate(1809, 329);
                 doOnceForZoneTow = true;
             }

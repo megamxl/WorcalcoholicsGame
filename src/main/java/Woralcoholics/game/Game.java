@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static Woralcoholics.game.FillTutorialArray.fill;
+import static Woralcoholics.game.FillTutorialArray.tutorialTexts;
+
 /**
  * First Inspiration for Game class
  * https://www.youtube.com/watch?v=e9jRfgjV4FQ&t=1s
@@ -77,7 +80,7 @@ public class Game extends Canvas implements Runnable {
     public static BufferedImage[] enemyDeadShadow = new BufferedImage[10];
     public static BufferedImage[] enemy = new BufferedImage[13];
 
-    private String[][] tutorialTexts = new String[10][2];
+
 
     public static List<int[]> wallCords = new ArrayList();
     public static List<Enemy> enemyPool = new ArrayList();
@@ -144,8 +147,6 @@ public class Game extends Canvas implements Runnable {
         handler = new GameManager();
         currentState = checkState = GameState.STUDIO;    //initialize the currentState to STUDIO
         // make the window threw out own window class
-        //new ScoerSaveWindow(SCREEN_WIDTH,SCREEN_HEIGHT,"");
-        //window =
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Chad vs. Aliens", this);
         start();
         gun = new Gun();
@@ -156,8 +157,6 @@ public class Game extends Canvas implements Runnable {
         addGuns();
         checkSelectedGun();
 
-        // when finished implement the Mouse and Key input
-        //InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_leveltest" + ".png");  //-> testing for destroyableboxes level
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_level0" + levelDecision + ".png");
         InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
         level = ImageIO.read(path);
@@ -240,6 +239,9 @@ public class Game extends Canvas implements Runnable {
         fillEnemypool();
         fillEnemShadowypool();
         fillGunnerEnemypool();
+
+        fill();
+
     }
 
 
@@ -386,42 +388,11 @@ public class Game extends Canvas implements Runnable {
     private void renderTutorialBorders(Graphics g) {
         g.drawImage(tutorialBoarder, 60, 235, 900, 300, null);
         g.setColor(Color.black);
-        g.setFont(new Font("SansSerif", Font.PLAIN, 30));
-        //tutorialTexts[0][0]= "dasdadsadadsadadadasdsadadaadasdsdas";
-        tutorialTexts[0][0] = "Willkommen zu Aliens vs. Chad";
-        tutorialTexts[0][1] = "Um mehr Text zu sehen drücke Space";
-
-        tutorialTexts[1][0] = "Bewegen kannst du dich durch ";
-        tutorialTexts[1][1] = "w = up, s = down, a = links, d = rechts";
-
-        tutorialTexts[2][0] = "Mit dem Mausrad kannst du zwischen den";
-        tutorialTexts[2][1] = "Waffen wechseln.  ";
-
-        tutorialTexts[3][0] = "Im level sind diese erst freizuschalten";
-        tutorialTexts[3][1] = "Schießen kannst du mit Linker Maus Taste";
-
-        tutorialTexts[4][0] = "Wenn du Gegner tötest geben sie dir ";
-        tutorialTexts[4][1] = "zufällig Munition zurück, vergiss nicht";
-
-        tutorialTexts[5][0] = "du hast nicht unendlich viel Munition ";
-        tutorialTexts[5][1] = "";
-
-        tutorialTexts[6][0] = "Wenn dir Boxen den Weg versperren ";
-        tutorialTexts[6][1] = "schau, ob du sie zerstören kannst";
-
-        tutorialTexts[7][0] = "Nun folge dem Weg, am Ende wartet ";
-        tutorialTexts[7][1] = "der Teleporter ins Menu auf dich";
-
-        tutorialTexts[8][0] = "Mit der rechten Maus Taste kommst  ";
-        tutorialTexts[8][1] = "du ins Pause Menu";
-
-        tutorialTexts[9][0] = "Viel Glück, denn die Gegner werden";
-        tutorialTexts[9][1] = "jede Runde stärker";
-
+        g.setFont(new Font("SansSerif", Font.PLAIN, 26));
 
         if (curentTutorialscore < tutorialTexts.length) {
-            g.drawString(tutorialTexts[curentTutorialscore][0], 262, 465);
-            g.drawString(tutorialTexts[curentTutorialscore][1], 262, 495);
+            g.drawString(tutorialTexts[curentTutorialscore][0], 230, 465);
+            g.drawString(tutorialTexts[curentTutorialscore][1], 230, 495);
         } else {
             curentTutorialscore = 0;
         }
@@ -523,12 +494,9 @@ public class Game extends Canvas implements Runnable {
                     g.drawString(DatabaseConnection.scoresArray[4], 300, 370);
                 }
             }
-            case OPTIONS -> {
-            }
-            case PAUSE_MENU -> {
-            }
-            case UPGRADE_MENU -> {
-            }
+            case OPTIONS -> {}
+            case PAUSE_MENU -> {}
+            case UPGRADE_MENU -> {}
             case CREDITS -> {
                 g.setColor(Color.black);
                 g.setFont(new Font("Arial Black", Font.PLAIN, 40));
@@ -805,7 +773,6 @@ public class Game extends Canvas implements Runnable {
                 }*/
             }
         }
-        spawnGunnerEnemy(500,500);
         loaded = true;
         playBackgroundSound();
         //System.out.println("NEW GAME");
@@ -838,10 +805,8 @@ public class Game extends Canvas implements Runnable {
                     }
                     case 3 -> currentState = GameState.TITLE;    //change state to TITLE (from STUDIO, few sec wait time)
                     case 4 -> { //enter your name and choose whether to upload your score
-                        playerName = JOptionPane.showInputDialog(null, "Please enter your name",
-                                null, JOptionPane.INFORMATION_MESSAGE);
-                        int reply = JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?",
-                                null, JOptionPane.YES_NO_OPTION);
+                        playerName = JOptionPane.showInputDialog(null, "Please enter your name", null, JOptionPane.INFORMATION_MESSAGE);
+                        int reply = JOptionPane.showConfirmDialog(null, "Do you want to upload your score to the cloud?", null, JOptionPane.YES_NO_OPTION);
                         if (reply == JOptionPane.YES_OPTION) {
                             try {
                                 databeseConection.insertScoreAndNameIntoDatabase();
@@ -939,14 +904,6 @@ public class Game extends Canvas implements Runnable {
         currentState = GameState.MAIN_MENU;             Unnötige Funktion? siehe weiter unten setState()
     }*/
 
-    /***
-     * A function inside the game calls to spawn the enemy's. it is static that i can be called in other classes
-     * @param x X value
-     * @param y Y value
-     */
-    public static void SpawnEnemy(int x, int y) {
-        handler.addObject(new Enemy(x, y, ID.Enemy, handler, imageGetter, score));
-    }
 
     private void fillGunnerEnemypool(){
         for (int i = 0; i < 3 ; i++) {
@@ -981,6 +938,11 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
+    /***
+     * A function inside the game calls to spawn the enemy's. it is static that i can be called in other classes
+     * @param x X value
+     * @param y Y value
+     */
     public static void spawnEnemy(int x, int y) {
         for (Enemy currEnemy : enemyPool) {
             if (!currEnemy.isInGame) {
