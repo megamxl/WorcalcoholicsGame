@@ -684,24 +684,24 @@ public class Game extends Canvas implements Runnable {
             }
             case UPGRADE_MENU -> {
                 int[] randomUpgrades = upgrades.getUpgrades();
-                handler.addObject(new UIButton(SCREEN_WIDTH / 4, (SCREEN_HEIGHT + 25) / 2, 320, 600,
+                handler.addObject(new UIButton(SCREEN_WIDTH / 4 + 50, (SCREEN_HEIGHT + 125) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[0]), GameState.LEVEL, ID.UIButton, this, 2,
                         randomUpgrades[0], getUpgradeButton, 1, 1, g, 1, 20));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 4 - 30, (SCREEN_HEIGHT + 125) / 2, 64, 64,
+                handler.addObject(new UIButton(SCREEN_WIDTH / 4 - 5, (SCREEN_HEIGHT + 0) / 2, 64, 64,
                         "", GameState.LEVEL, ID.UIButton, this, 2,
                         randomUpgrades[0], imageGetter, randomUpgrades[0], 8, g, 1, 20));
 
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2, (SCREEN_HEIGHT + 25) / 2, 320, 600,
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2 + 50, (SCREEN_HEIGHT + 125) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[1]), GameState.LEVEL, ID.UIButton, this, 2,
                         randomUpgrades[1], getUpgradeButton, 1, 1, g, 1, 20));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 30, (SCREEN_HEIGHT + 125) / 2, 64, 64,
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 5, (SCREEN_HEIGHT + 0) / 2, 64, 64,
                         "", GameState.LEVEL, ID.UIButton, this, 2,
                         randomUpgrades[0], imageGetter, randomUpgrades[1], 8, g, 1, 20));
 
-                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, (SCREEN_HEIGHT + 25) / 2, 320, 600,
+                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4 + 50, (SCREEN_HEIGHT + 125) / 2, 320, 600,
                         upgrades.drawUpgrades(randomUpgrades[2]), GameState.LEVEL, ID.UIButton, this, 2,
                         randomUpgrades[2], getUpgradeButton, 1, 1, g, 1, 20));
-                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4 - 30, (SCREEN_HEIGHT + 125) / 2, 64, 64, "", GameState.LEVEL, ID.UIButton, this, 2,
+                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4 - 5, (SCREEN_HEIGHT + 0) / 2, 64, 64, "", GameState.LEVEL, ID.UIButton, this, 2,
                         randomUpgrades[0], imageGetter, randomUpgrades[2], 8, g, 1, 20));
                 paused = true;      //Pause the game until Player chose an Upgrade
                 /*for(int i = 0; i < 3; i++) {
