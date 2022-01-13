@@ -8,8 +8,9 @@ import java.io.IOException;
 
 /**
  * inspiration
+ *
  * @author Christoph Oprawill
- * @author  Maximilian Nowak
+ * @author Maximilian Nowak
  */
 
 public class Bullet extends GameObject {
@@ -37,9 +38,13 @@ public class Bullet extends GameObject {
      * @param px
      * @param py
      */
-    public void direction(double mx, double my, double px, double py, boolean shotgun, float anglediff) {
+    public void direction(double mx, double my, double px, double py, boolean shotgun, float anglediff, boolean gunnerenemy) {
         if (!shotgun) {
-            direction(mx, my, px, py); //normal bullet as usual
+            if (gunnerenemy) {
+                direction(mx, my, px, py, true); //normal bullet as usual for the gunnerenemy
+            } else {
+                direction(mx, my, px, py, false); //normal bullet as usual for the player
+            }
         } else {
             direction(mx, my, px, py, anglediff); //bullets for the shotgun
         }
@@ -56,7 +61,7 @@ public class Bullet extends GameObject {
                 if (this.getBounds().intersects(tmpObject.getBounds())) {
                     this.setId(ID.Bullet);
                     this.inGame = false;
-                    this.setPos(0,0);
+                    this.setPos(0, 0);
                     //handler.removeObject(this);
                     //System.out.println("Collision");
                 }
@@ -97,10 +102,15 @@ public class Bullet extends GameObject {
         return angle;
     }
 
-    private void direction(double mx, double my, double px, double py) {
+    private void direction(double mx, double my, double px, double py, boolean gunnerenemy) {
         double dx = mx - px;
         double dy = my - py;
         double alpha = Math.atan2(dy, dx);
+        if (!gunnerenemy) {
+            handler.angle = (float) Math.toDegrees(alpha); // for gun sprite that we know where to rotate the gun
+            handler.angle = checkAngle(handler.angle);
+            //System.out.println(handler.angle);
+        }
         velX = (float) (Math.cos(alpha) * bulletSpeed);
         velY = (float) (Math.sin(alpha) * bulletSpeed);
     }
@@ -109,11 +119,11 @@ public class Bullet extends GameObject {
         double dx = mx - px;
         double dy = my - py;
         double alpha = Math.atan2(dy, dx);
-        float angle = (float) Math.toDegrees(alpha);
-        angle += anglediff; //change for wider range of the rights bullet
+        handler.angle = (float) Math.toDegrees(alpha);
+        handler.angle += anglediff; //change for wider range of the rights bullet
 
-        angle = checkAngle(angle); // get's overwritten if angle is not valid
-        alpha = Math.toRadians(angle); // overwrite angle
+        handler.angle = checkAngle(handler.angle); // get's overwritten if angle is not valid
+        alpha = Math.toRadians(handler.angle); // overwrite angle
 
         velX = (float) (Math.cos(alpha) * bulletSpeed);
         velY = (float) (Math.sin(alpha) * bulletSpeed);
@@ -122,11 +132,11 @@ public class Bullet extends GameObject {
 
     @Override
     public void update() {
-            x += velX;
-            y += velY;
+        x += velX;
+        y += velY;
 
-            collision();
-            ooB();
+        collision();
+        ooB();
     }
 
     @Override
@@ -139,8 +149,8 @@ public class Bullet extends GameObject {
     }
 
     public void setPos(double x, double y) {
-        this.x = (int)x;
-        this.y = (int)y;
+        this.x = (int) x;
+        this.y = (int) y;
     }
 
     @Override
@@ -152,6 +162,8 @@ public class Bullet extends GameObject {
         return bulletSpeed;
     }
 
-    public void setBulletSpeed(float bs) {bulletSpeed = bs;}
+    public void setBulletSpeed(float bs) {
+        bulletSpeed = bs;
+    }
 }
 

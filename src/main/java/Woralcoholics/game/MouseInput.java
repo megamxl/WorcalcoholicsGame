@@ -105,7 +105,7 @@ public class MouseInput extends MouseAdapter {
                                         double px = player.getX() + 32 - 4;
                                         double py = player.getY() + 32 - 4;
                                         temp.setPos(px, py);
-                                        temp.direction(mx, my, px, py, false, 0);
+                                        temp.direction(mx, my, px, py, false, 0, false);
                                         temp.inGame = true;
                                         //System.out.println(handler.bullets.get(i));
                                         break;
@@ -333,7 +333,7 @@ public class MouseInput extends MouseAdapter {
                     double px = player.getX() + 32 - 4;
                     double py = player.getY() + 32 - 4;
                     temp.setPos(px, py);
-                    temp.direction(mx, my, px, py, false, 0);
+                    temp.direction(mx, my, px, py, false, 0, false);
                     temp.inGame = true;
                     //System.out.println(handler.bullets.get(i));
                     playSoundGun(game.ammo);
@@ -371,9 +371,9 @@ public class MouseInput extends MouseAdapter {
                     double py = player.getY() + 32 - 4;
                     temp.setPos(px, py);
                     switch(shells) {
-                        case 0 -> temp.direction(mx, my, px, py, true, 0);
-                        case 1 -> temp.direction(mx, my, px, py, true, 10);
-                        case 2 -> temp.direction(mx, my, px, py, true, -10);
+                        case 0 -> temp.direction(mx, my, px, py, true, 0, false);
+                        case 1 -> temp.direction(mx, my, px, py, true, 10, false);
+                        case 2 -> temp.direction(mx, my, px, py, true, -10, false);
                     }
                     temp.inGame = true;
                     game.ammo--;    //Subtract 1 from ammo (bullet was shot)

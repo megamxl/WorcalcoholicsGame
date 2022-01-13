@@ -41,6 +41,7 @@ public class GameManager {
     protected boolean reloaded = true;
     protected int gunindex = 0;
     protected Gun selectedgun;
+    public float angle; // from bullet
 
 
     /**

@@ -107,7 +107,7 @@ public class GunnerEnemy extends Enemy {
             if (!temp.inGame) {
                 temp.setId(ID.EnemyBullet);
                 temp.setPos(gx, gy);
-                temp.direction(px, py, gx, gy, false, 0);
+                temp.direction(px, py, gx, gy, false, 0, true);
                 playSoundGunnerEnemy();
                 temp.inGame = true;
                 break;

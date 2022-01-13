@@ -2,6 +2,8 @@ package Woralcoholics.game;
 
 import javax.sound.sampled.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -133,7 +135,22 @@ public class Player extends GameObject {
         int[] colrow = new int[2];
         colrow = game.getColRowFromIndex();
         player_gun_img = an.getImage(colrow[0], colrow[1], 64, 64);
+
+        final double rads = Math.toRadians(handler.angle);
+        final double sin = Math.abs(Math.sin(rads));
+        final double cos = Math.abs(Math.cos(rads));
+        final int w = (int) Math.floor(player_gun_img.getWidth() * cos + player_gun_img.getHeight() * sin);
+        final int h = (int) Math.floor(player_gun_img.getHeight() * cos + player_gun_img.getWidth() * sin);
+        final BufferedImage rotatedImage = new BufferedImage(w, h, player_gun_img.getType());
+        final AffineTransform at = new AffineTransform();
+        at.translate(w / 2, h / 2);
+        at.rotate(rads,0, 0);
+        at.translate(-player_gun_img.getWidth() / 2, -player_gun_img.getHeight() / 2);
+        final AffineTransformOp rotateOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        rotateOp.filter(player_gun_img,rotatedImage);
+        player_gun_img = rotatedImage;
     }
+
 
 
     /**
