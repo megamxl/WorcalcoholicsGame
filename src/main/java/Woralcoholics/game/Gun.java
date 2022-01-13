@@ -69,6 +69,5 @@ public class Gun {
         this.locked = locked;
     }
 
-
     //endregion
 }

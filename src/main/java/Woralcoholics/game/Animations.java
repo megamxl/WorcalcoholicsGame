@@ -35,7 +35,6 @@ public class Animations {
         frames = args.length;
 
         finished = false;
-
     }
 
     public Animations(int speed, EnemyShadow enemyShadow ,BufferedImage... args) {
@@ -83,7 +82,6 @@ public class Animations {
         return true;  // animation is not done
     }
 
-
     /**
      * selects the next frame in the Buffered Image array
      */
@@ -117,6 +115,3 @@ public class Animations {
      */
     public void renderAnimation(Graphics g, int x, int y, int scaleX, int scaleY) {g.drawImage(currentImages, x, y, scaleX, scaleY, null);}
 }
-
-
-

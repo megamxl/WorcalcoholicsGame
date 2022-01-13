@@ -15,7 +15,6 @@ public class DatabaseConnection {
     public static String[] scoresArray = {"", "", "", "", ""};
     public static boolean finishedFillingArray = false;
 
-
     /**
      * connects and inserts ito Database
      *
@@ -44,7 +43,6 @@ public class DatabaseConnection {
             con.close();                                    // always close the connection when you're done working with Databases
         }
     }
-
 
     /**
      * Reads back form Database
@@ -83,6 +81,3 @@ public class DatabaseConnection {
         con.close();
     }
 }
-
-
-

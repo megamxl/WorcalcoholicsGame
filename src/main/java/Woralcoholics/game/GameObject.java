@@ -93,6 +93,5 @@ public abstract class GameObject {
     }
 
     public void action() {
-
     }
 }

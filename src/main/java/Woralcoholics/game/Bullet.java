@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class Bullet extends GameObject {
 
-    public static float bulletSpeed = 30;// 8;
+    public static float bulletSpeed = 30;
 
     private final BufferedImage bullet_img;
 
@@ -129,7 +129,6 @@ public class Bullet extends GameObject {
         velY = (float) (Math.sin(alpha) * bulletSpeed);
     }
 
-
     @Override
     public void update() {
         x += velX;
@@ -166,4 +165,3 @@ public class Bullet extends GameObject {
         bulletSpeed = bs;
     }
 }
-

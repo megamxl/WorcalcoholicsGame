@@ -52,7 +52,6 @@ public class Enemy extends GameObject {
         this.score = score;
         hp = maxHp;
         enemyAnimation = new Animations(9,Game.enemy[list.get(0)],Game.enemy[list.get(1)],Game.enemy[list.get(2)],Game.enemy[list.get(3)],Game.enemy[list.get(4)],Game.enemy[list.get(5)],Game.enemy[list.get(6)],Game.enemy[list.get(7)],Game.enemy[list.get(8)],Game.enemy[list.get(9)],Game.enemy[list.get(10)],Game.enemy[list.get(11)],Game.enemy[list.get(12)]);
-
     }
 
     //endregion
@@ -97,7 +96,6 @@ public class Enemy extends GameObject {
         g.setColor(Color.WHITE);
         g.drawString(String.format("%.2f", hpPercent * 100) + "%", (int) (x-2), (int) (y-16));
     }
-
 
     /***
      * x value of enemy gets changed by vel Values
@@ -188,7 +186,6 @@ public class Enemy extends GameObject {
             }
         }
     }
-
 
     public void isDead() {
         if (hp <= 0) {
@@ -374,5 +371,3 @@ public class Enemy extends GameObject {
 
     //endregion
 }
-
-

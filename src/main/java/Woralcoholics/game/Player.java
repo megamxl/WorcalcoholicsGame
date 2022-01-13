@@ -12,6 +12,7 @@ import java.io.IOException;
  *
  * @author Maxlimilian Nowak
  * @author Christoph Oprawill
+ * @author Gustavo Podzuweit
  */
 
 public class Player extends GameObject {
@@ -58,11 +59,11 @@ public class Player extends GameObject {
         coordinatesadditive[0] = 42;
         coordinatesadditive[1] = 25;
         handler.playerIsInit = true;
-
     }
 
     @Override
     public void update() {
+        // makes the player move by adding their velocity to their respective axis/direction
         x += velX;
         y += velY;
 
@@ -138,7 +139,6 @@ public class Player extends GameObject {
 
     }
 
-
     @Override
     public void render(Graphics g) {
         /*Graphics2D g2d = (Graphics2D) g;
@@ -166,6 +166,7 @@ public class Player extends GameObject {
         return new Rectangle((int) x + 13, (int) y, 38, 62);
     }
 
+    // collider for horizontal player movement
     public Rectangle getBoundsX() {
         Rectangle tempX = getBounds();
         tempX.width += 9.4;
@@ -173,6 +174,7 @@ public class Player extends GameObject {
         return tempX;
     }
 
+    // collider for vertical player movement
     public Rectangle getBoundsY() {
         Rectangle tempY = getBounds();
         tempY.height += 8;
@@ -240,7 +242,6 @@ public class Player extends GameObject {
         player_gun_img = player_gun_img_rotated;
     }
 
-
     /**
      * Collision Detection function for the Player
      */
@@ -249,6 +250,7 @@ public class Player extends GameObject {
             GameObject tempobject = handler.object.get(i);
 
             // --------------------------------------------------------------
+            // checks if the player collides with the wall horizontally
             if (getBoundsX().intersects((tempobject.getBounds()))) {
                 ID tempID = tempobject.getId();
                 switch (tempID) {
@@ -259,6 +261,7 @@ public class Player extends GameObject {
                 }
             }
             // --------------------------------------------------------------
+            // checks if the player collides with the wall vertically
             if (getBoundsY().intersects((tempobject.getBounds()))) {
                 ID tempID = tempobject.getId();
                 switch (tempID) {
@@ -273,8 +276,9 @@ public class Player extends GameObject {
                 ID tempID = tempobject.getId();     //...get ID of said object...
                 switch (tempID) {         //...and determine what should happen
                     case Block, DestroyableBoxes -> {
-                        // check for block coordinate to see where it is located in relation to the player
-                        // or make it dependent on key pressed?
+                        // stops movement if the player collides with a wall with their inner collider
+                        // the inner collider should however be covered by the horizontal and vertical collider
+                        // meaning it only functions as a safety measure if both of these should somehow fail
                         x += velX * -1;
                         y += velY * -1;
                     }
@@ -375,6 +379,10 @@ public class Player extends GameObject {
         }
     }
 
+    // checks if the movement keys are currently pressed and increases the respective directional velocity
+    // also, if the player moves diagonally, the players' movement speed gets reduced by a percentage
+    // since moving diagonally means, vertical and horizontal velocity are getting added together, which would
+    // make the player too fast
     private void movement() {
         handler.playerIsInit = true;
         if (movingVertical && movingHorizontal) {

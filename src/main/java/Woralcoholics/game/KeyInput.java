@@ -8,6 +8,7 @@ import java.nio.FloatBuffer;
  * in this class the input management will happen through KeyAdapter
  *
  * @author Christoph Oprawill
+ * @author Gustavo Podzuweit
  */
 
 public class KeyInput extends KeyAdapter {

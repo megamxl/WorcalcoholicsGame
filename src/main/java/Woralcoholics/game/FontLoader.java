@@ -28,6 +28,5 @@ public class FontLoader {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
     }
 }

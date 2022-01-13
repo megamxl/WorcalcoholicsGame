@@ -24,7 +24,6 @@ public class Block extends GameObject {
         super(x, y, id, an);
         // gets the image from the specified column and row from the spritesheet
         block_img = an.getImage(col, row,64,64);
-        // default
     }
 
     @Override
