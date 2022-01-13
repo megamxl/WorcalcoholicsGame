@@ -29,8 +29,8 @@ public class Game extends Canvas implements Runnable {
     private static final long serialVersionUID = 1L;
 
     // Variables
-    final int SCREEN_WIDTH = 1024;
-    final int SCREEN_HEIGHT = 576;
+    static final int SCREEN_WIDTH = 1024;
+    static final int SCREEN_HEIGHT = 576;
 
     public static GameState currentState;
     private GameState previousState, checkState;
@@ -547,12 +547,12 @@ public class Game extends Canvas implements Runnable {
                 g.drawString(String.valueOf(lastScore), SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 7 / 16);
             }
         }
-        //handler.render(g, ID.UIButton);
-        if (!loaded) {
+        handler.render(g, ID.UIButton);
+        /*if (!loaded) {
             handler.render(g);
         } else {
             handler.render(g, ID.UIButton);
-        }
+        }*/
     }
 
     /***
@@ -585,18 +585,22 @@ public class Game extends Canvas implements Runnable {
         g.drawString("RELOAD: " + (int) percent + "%", 210, 89);
         g.fillRect(5, 80, (int) percent * 2, 8);
 
-        if (handler.del == 0) {
-            g.setColor(Color.cyan);
-            //g.drawString("MACHINE GUN", 210, 95);
-            currGun = imageGetter.getImage(2, 10, 64, 64);
-        } else if (handler.del == 200) {
-            g.setColor(Color.cyan);
-            //g.drawString("PISTOL", 210, 95);
-            currGun = imageGetter.getImage(3, 10, 64, 64);
-        } else if (handler.del == 1000) {
-            g.setColor(Color.cyan);
-            //g.drawString("SHOTGUN", 210, 95);
-            currGun = imageGetter.getImage(1, 10, 64, 64);
+        switch(handler.del) {
+            case 0 -> {
+                g.setColor(Color.cyan);
+                //g.drawString("MACHINE GUN", 210, 95);
+                currGun = imageGetter.getImage(2, 10, 64, 64);
+            }
+            case 200 -> {
+                g.setColor(Color.cyan);
+                //g.drawString("PISTOL", 210, 95);
+                currGun = imageGetter.getImage(3, 10, 64, 64);
+            }
+            case 1000 -> {
+                g.setColor(Color.cyan);
+                //g.drawString("SHOTGUN", 210, 95);
+                currGun = imageGetter.getImage(1, 10, 64, 64);
+            }
         }
 
         if (hp >= 70)
@@ -805,7 +809,7 @@ public class Game extends Canvas implements Runnable {
                 }*/
             }
         }
-        spawnGunnerEnemy(500,500);
+        spawnGunnerEnemy(600,500);
         loaded = true;
         playBackgroundSound();
         //System.out.println("NEW GAME");
