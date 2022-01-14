@@ -123,7 +123,8 @@ public class MouseInput extends MouseAdapter {
                             }
                         }
                     }
-                    case 2 -> {}//System.out.println("BUTTON 2");
+                    case 2 -> {
+                    }//System.out.println("BUTTON 2");
                     case 3 -> Game.setState(GameState.PAUSE_MENU);
                 }
             }
@@ -398,6 +399,12 @@ public class MouseInput extends MouseAdapter {
                     temp.inGame = true;
                     game.ammo--;    //Subtract 1 from ammo (bullet was shot)
                     shells++;
+
+                    // 1 ammo (user perspective) -> shoot like a pistol
+                    //  2 ammo  (user perspective) -> shoots like a shotgun with angle 0° and 10°
+                    if (game.ammo == 0 && shells == 1 || game.ammo == 0 && shells == 2) {
+                        break;
+                    }
                     if (shells == 3) break;
                 }
             }
