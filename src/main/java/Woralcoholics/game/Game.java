@@ -797,6 +797,7 @@ public class Game extends Canvas implements Runnable {
                         Enemy.Spawner(Enemy.waves, false, r); //Spawn the next wave of enemies
                         //upgrades.addMunition(20);
                         takesDamage = false;
+                        Enemy.ammoMax += 2;
                     }
                     case 2 -> {
                         currentState = GameState.UPGRADE_MENU; //change state to UPGRADE_MENU (because of rendering)
