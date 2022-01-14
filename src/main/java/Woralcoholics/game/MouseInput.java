@@ -330,6 +330,10 @@ public class MouseInput extends MouseAdapter {
         }
     }
 
+    /***
+     * machinegun method that behaves specially for machine gun
+     * @param e
+     */
     private void machinegun(MouseEvent e) {
         //System.out.println("MACHINE");
         handler.now = System.currentTimeMillis();
@@ -371,6 +375,10 @@ public class MouseInput extends MouseAdapter {
         }
     }
 
+    /***
+     * shotgun method that behaves specially for shotgun
+     * @param e
+     */
     private void shotgun(MouseEvent e) {
         handler.now = System.currentTimeMillis();
         //IF waiting time is over AND player has ammo -> shoot a bullet
@@ -381,6 +389,7 @@ public class MouseInput extends MouseAdapter {
             int x = (int) point.getX();
             int y = (int) point.getY();
             int shells = 0;
+            playSoundGun(game.ammo);
             for (int i = 0; i < handler.bullets.size(); i++) {
                 Bullet temp = handler.bullets.get(i);
                 if (!temp.inGame) {
@@ -408,7 +417,6 @@ public class MouseInput extends MouseAdapter {
                     if (shells == 3) break;
                 }
             }
-            playSoundGun(game.ammo);
             /*if (game.ammo <= 3) {
                 game.ammo = 0;
             } else {
