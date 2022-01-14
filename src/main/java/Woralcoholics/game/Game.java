@@ -156,12 +156,13 @@ public class Game extends Canvas implements Runnable {
         addGuns();
         checkSelectedGun();
 
+        // from here on, there are mostly images getting loaded
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_level0" + levelDecision + ".png");
         InputStream pathToTutorial = this.getClass().getClassLoader().getResourceAsStream("Levels/tutorial.png");
+
         level = ImageIO.read(path);
         tutorialLevel = ImageIO.read(pathToTutorial);
 
-        // from here on, there are mostly images getting loaded
         BufferedImageLoader loader = new BufferedImageLoader();
         spritesheet = loader.loadImage("/Graphics/Spritesheet.png");
         imageGetter = new ImageGetter(spritesheet);
@@ -226,6 +227,7 @@ public class Game extends Canvas implements Runnable {
 
         loadBullets();
 
+        // loads all sprite Arrays
         loadPlayerSprites();
         loadEnemyDeadSprites();
         loadPlayerIdle();
@@ -233,10 +235,12 @@ public class Game extends Canvas implements Runnable {
 
         FontLoader fontLoader = new FontLoader();
 
+        // fills all enemy pools
         fillEnemypool();
         fillEnemShadowypool();
         fillGunnerEnemypool();
 
+        // fills the Tutorial Text Array
         fill();
 
     }
@@ -301,8 +305,6 @@ public class Game extends Canvas implements Runnable {
      * in every frame check where player is and update camera position
      */
     public void update() throws SQLException {
-        //ammo = 50;
-        //hp = 100;
         if (currentState != checkState) {     //if there was a state change...
             stateChange();
         }
@@ -315,6 +317,7 @@ public class Game extends Canvas implements Runnable {
             handler.update();   //update every GameObject (camera is NOT a GameObject)
         }
 
+        // Scene and music playing logic
         if (paused && !triggeredonce) {
             handler.backgroundsound.stop();
             wasstopped = true;
@@ -329,6 +332,7 @@ public class Game extends Canvas implements Runnable {
         }
         calculateReloadingRectangle((int) handler.del);
 
+        // check all reload related Features
         checkReloaded();
         checkGunStatus();
         checkSelectedGun();
@@ -382,15 +386,17 @@ public class Game extends Canvas implements Runnable {
     /* ---------- Private functions for game Class ----------- */
 
     private void renderTutorialBorders(Graphics g) {
+        // rendering the border and adding the color and the size of the Font
         g.drawImage(tutorialBoarder, 60, 235, 900, 300, null);
         g.setColor(Color.black);
         g.setFont(new Font("SansSerif", Font.PLAIN, 26));
 
         if (curentTutorialscore < tutorialTexts.length) {
+            //draws the tow strings form each sub array for the tutorial Text
             g.drawString(tutorialTexts[curentTutorialscore][0], 230, 465);
             g.drawString(tutorialTexts[curentTutorialscore][1], 230, 495);
         } else {
-            curentTutorialscore = 0;
+            curentTutorialscore = 0; // make the  loop infinite
         }
     }
 
