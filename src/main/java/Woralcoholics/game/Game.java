@@ -827,181 +827,7 @@ public class Game extends Canvas implements Runnable {
         }//System.out.println(TimerValue);
     }
 
-    /***
-     * Function to start the timer
-     * @param secs Seconds to wait before the action
-     * @param action which action to make after timer
-     */
-    public static void startTimer(int secs, int action) {
-        TimerValue = secs - 1;
-        shouldTime = true;
-        timerAction = action;
-    }
 
-    /***
-     * This function always renders the background
-     * @param g Graphics object
-     */
-    private void renderBackground(Graphics g) {
-        for (int i = 0; i < 30 * 72; i += 64) {
-            for (int j = 0; j < 30 * 72; j += 64) {
-                g.drawImage(floor, i, j, null);
-                // draws a random floor dirt texture on top of the current floor tile
-                switch (randomNumber(1, 4)) {
-                    case 1:
-                        g.drawImage(floorDirt1, i, j, null);
-                        break;
-                    case 2:
-                        g.drawImage(floorDirt2, i, j, null);
-                        break;
-                    case 3:
-                        g.drawImage(floorDirt3, i, j, null);
-                        break;
-                    default:
-                        // no action
-                        break;
-                }
-            }
-        }
-    }
-
-    /***
-     *     This function is responsible to make a new Thread and set the game to Running
-     */
-    private void start() {
-        isRunning = true;
-        thread = new Thread(this);
-        thread.start();
-    }
-
-    /***
-     * This function stops the current Instance of the game and stops Gameloop
-     */
-    private void stop() {
-        isRunning = false;
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /* ---------- Public functions for game Class ----------- */
-
-    /***
-     * Returns a random number between inclusive start and exclusive end.
-     * @param start Start value
-     * @param end End value
-     * @return The Random number
-     */
-    public static Integer randomNumber(int start, int end) {
-        return new Random().ints(start, end).findFirst().getAsInt();
-    }
-
-    /*public void changeStateToMenu(){
-        currentState = GameState.MAIN_MENU;             Unnötige Funktion? siehe weiter unten setState()
-    }*/
-
-
-    private void fillGunnerEnemypool() {
-        for (int i = 0; i < 3; i++) {
-            enemyGunnerPool.add(new GunnerEnemy(0, 0, ID.GunnerEnemy, handler, imageGetter, score));
-        }
-
-    }
-
-    private void fillEnemypool() {
-        for (int i = 0; i < 25; i++) {
-            enemyPool.add(new Enemy(0, 0, ID.Enemy, handler, imageGetter, score));
-        }
-    }
-
-    private void fillEnemShadowypool() {
-        for (int i = 0; i < 25; i++) {
-            enemyShadowPool.add(new EnemyShadow(0, 0, ID.EnemyShadow, imageGetter));
-        }
-    }
-
-    /***
-     * looping the backgroundsound based on boolean value
-     */
-    private void checkBackgroundSoundPlayer() {
-        if (handler.isBackgroundSoundNotPlaying) {
-            playBackgroundSound();
-        }
-    }
-
-    public static void spawnGunnerEnemy(int x, int y) {
-        for (GunnerEnemy currEnemy : enemyGunnerPool) {
-            if (!currEnemy.isInGame) {
-                currEnemy.x = x;
-                currEnemy.y = y;
-                currEnemy.hp = Enemy.maxHp;
-                Enemy.enemysAlive++;
-                currEnemy.isInGame = true;
-                handler.addObject(currEnemy);
-                break;
-            }
-        }
-    }
-
-    /***
-     * A function inside the game calls to spawn the enemy's. it is static that i can be called in other classes
-     * @param x X value
-     * @param y Y value
-     */
-    public static void spawnEnemy(int x, int y) {
-        for (Enemy currEnemy : enemyPool) {
-            if (!currEnemy.isInGame) {
-                currEnemy.x = x;
-                currEnemy.y = y;
-                currEnemy.hp = Enemy.maxHp;
-                currEnemy.isInGame = true;
-                Enemy.enemysAlive++;
-                handler.addObject(currEnemy);
-                return;
-            }
-        }
-    }
-
-
-    public static void SpawnGunnerEnemyWithCords(int x, int y) {
-        handler.addObject(new GunnerEnemy(x, y, ID.Enemy, handler, imageGetter, score));
-    }
-
-    public static void SpawnCreate(int x, int y) {
-        handler.addObject(new Crate(x, y, ID.Crate, imageGetter));
-    }
-
-    /***
-     * for rendering the enemyshadow if enemy dies
-     * @param x
-     * @param y
-     */
-    public static void UseEnemyShadow(int x, int y) {
-        handler.addObject(new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
-        //enemyShadowPool.add(0,new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
-    }
-
-    /***
-     * Function to get the current GameState
-     */
-    public static GameState getState() {
-        return currentState;
-    }
-
-    /***
-     * Function to set the current GameState
-     * @param state State to change to
-     */
-    public static void setState(GameState state) {
-        currentState = state;
-    }
-
-    /***
-     *calculate the ReloadingBar
-     * @param del
-     */
     private void calculateReloadingRectangle(int del) {
 
         if (handler.reloaded) {
@@ -1184,6 +1010,183 @@ public class Game extends Canvas implements Runnable {
             }
         });
         t1.start();
+    }
+
+
+    /***
+     * Function to start the timer
+     * @param secs Seconds to wait before the action
+     * @param action which action to make after timer
+     */
+    public static void startTimer(int secs, int action) {
+        TimerValue = secs - 1;
+        shouldTime = true;
+        timerAction = action;
+    }
+
+    /***
+     * This function always renders the background
+     * @param g Graphics object
+     */
+    private void renderBackground(Graphics g) {
+        for (int i = 0; i < 30 * 72; i += 64) {
+            for (int j = 0; j < 30 * 72; j += 64) {
+                g.drawImage(floor, i, j, null);
+                // draws a random floor dirt texture on top of the current floor tile
+                switch (randomNumber(1, 4)) {
+                    case 1:
+                        g.drawImage(floorDirt1, i, j, null);
+                        break;
+                    case 2:
+                        g.drawImage(floorDirt2, i, j, null);
+                        break;
+                    case 3:
+                        g.drawImage(floorDirt3, i, j, null);
+                        break;
+                    default:
+                        // no action
+                        break;
+                }
+            }
+        }
+    }
+
+    /***
+     *     This function is responsible to make a new Thread and set the game to Running
+     */
+    private void start() {
+        isRunning = true;
+        thread = new Thread(this);
+        thread.start();
+    }
+
+    /***
+     * This function stops the current Instance of the game and stops Gameloop
+     */
+    private void stop() {
+        isRunning = false;
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * fills the list of GunnerEnemies
+     */
+    private void fillGunnerEnemypool() {
+        for (int i = 0; i < 3; i++) {
+            enemyGunnerPool.add(new GunnerEnemy(0, 0, ID.GunnerEnemy, handler, imageGetter, score));
+        }
+
+    }
+
+    /**
+     * fills the list of enemies
+     */
+    private void fillEnemypool() {
+        for (int i = 0; i < 25; i++) {
+            enemyPool.add(new Enemy(0, 0, ID.Enemy, handler, imageGetter, score));
+        }
+    }
+
+    private void fillEnemShadowypool() {
+        for (int i = 0; i < 25; i++) {
+            enemyShadowPool.add(new EnemyShadow(0, 0, ID.EnemyShadow, imageGetter));
+        }
+    }
+
+    /***
+     * looping the backgroundsound based on boolean value
+     */
+    private void checkBackgroundSoundPlayer() {
+        if (handler.isBackgroundSoundNotPlaying) {
+            playBackgroundSound();
+        }
+    }
+
+
+    /* ---------- Public functions for game Class ----------- */
+
+    /***
+     * Returns a random number between inclusive start and exclusive end.
+     * @param start Start value
+     * @param end End value
+     * @return The Random number
+     */
+    public static Integer randomNumber(int start, int end) {
+        return new Random().ints(start, end).findFirst().getAsInt();
+    }
+
+
+    /**
+     * spawn a Gunnerenemy from the list
+     *
+     * @param x coordinate
+     * @param y coordinate
+     */
+    public static void spawnGunnerEnemy(int x, int y) {
+        for (GunnerEnemy currEnemy : enemyGunnerPool) {
+            if (!currEnemy.isInGame) {
+                currEnemy.x = x;
+                currEnemy.y = y;
+                currEnemy.hp = Enemy.maxHp;
+                Enemy.enemysAlive++;
+                currEnemy.isInGame = true;
+                handler.addObject(currEnemy);
+                break;
+            }
+        }
+    }
+
+    /***
+     * A function inside the game calls to spawn the enemy's. it is static that i can be called in other classes
+     * @param x X value
+     * @param y Y value
+     */
+    public static void spawnEnemy(int x, int y) {
+        for (Enemy currEnemy : enemyPool) {
+            if (!currEnemy.isInGame) {
+                currEnemy.x = x;
+                currEnemy.y = y;
+                currEnemy.hp = Enemy.maxHp;
+                currEnemy.isInGame = true;
+                Enemy.enemysAlive++;
+                handler.addObject(currEnemy);
+                return;
+            }
+        }
+    }
+
+
+    public static void SpawnCreate(int x, int y) {
+        handler.addObject(new Crate(x, y, ID.Crate, imageGetter));
+    }
+
+    /***
+     * for rendering the enemyshadow if enemy dies
+     * @param x
+     * @param y
+     */
+    public static void UseEnemyShadow(int x, int y) {
+        handler.addObject(new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
+        //enemyShadowPool.add(0,new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
+    }
+
+    /***
+     * Function to get the current GameState
+     */
+    public static GameState getState() {
+        return currentState;
+    }
+
+    /***
+     * Function to set the current GameState
+     * @param state State to change to
+     */
+    public static void setState(GameState state) {
+        currentState = state;
     }
 
     // the main function that runs everything
