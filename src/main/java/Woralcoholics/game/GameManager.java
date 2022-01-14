@@ -11,7 +11,8 @@ import java.util.LinkedList;
 /**
  * first Idea
  * https://www.youtube.com/watch?v=nXzTp61FKR4
- *  @author Maxlimilian Nowak
+ *
+ * @author Maxlimilian Nowak
  * @author Christoph Oprawill
  */
 
@@ -32,7 +33,7 @@ public class GameManager {
     Path absolutePath;
     FloatControl volume;
     public static int soundv = 1; //default value for -40f sound | MUTE (Without Sound Effects just background music) -> -80f | MAX -> 6.0206f
-    protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip = false;
+    protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip, isBackgroundSoundNotPlaying = false;
     protected double wait;
     //machine gun - del=0 | normal gun - del=200 | slowgun - del=1000
     protected int del = 1000; //how fast player can shoot, less -> faster
@@ -59,9 +60,9 @@ public class GameManager {
                 ex.printStackTrace();
             }
         }
-        for(int i = 0; i < bullets.size(); i++) {
+        for (int i = 0; i < bullets.size(); i++) {
             Bullet temp = bullets.get(i);
-            if(temp.inGame) {
+            if (temp.inGame) {
                 temp.update();
             }
         }
@@ -76,9 +77,9 @@ public class GameManager {
             GameObject tempObject = object.get(i);
             tempObject.render(g);
         }
-        for(int i = 0; i < bullets.size(); i++) {
+        for (int i = 0; i < bullets.size(); i++) {
             Bullet temp = bullets.get(i);
-            if(temp.inGame) {
+            if (temp.inGame) {
                 temp.render(g);
             }
         }
@@ -113,10 +114,10 @@ public class GameManager {
     }
 
     public void hideBullets() {
-        for(int i = 0; i < bullets.size(); i++) {
+        for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).setId(ID.Bullet);
             bullets.get(i).inGame = false;
-            bullets.get(i).setPos(0,0);
+            bullets.get(i).setPos(0, 0);
         }
     }
 
@@ -256,7 +257,7 @@ public class GameManager {
             //System.out.println("VOLUME UP + " +volume.toString());
         }
         sound.start();
-        if(fullycracked)
+        if (fullycracked)
             Thread.sleep(100000);
         else
             Thread.sleep(100);  //-> if the box gets damage and is not fully destroyed use this Value
@@ -297,6 +298,7 @@ public class GameManager {
      * @throws InterruptedException
      */
     public void playBackgroundSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        isBackgroundSoundNotPlaying = false;
         backgroundsound = AudioSystem.getClip();
         Path relativePath = Paths.get("Resource/Sound/backgroundsound.wav");
         Path absolutePath = relativePath.toAbsolutePath();
@@ -310,6 +312,9 @@ public class GameManager {
             volume.setValue(-33f);
         }
         backgroundsound.start();
+        Thread.sleep(114000);  // background sound in ms 1min 54sec
+        backgroundsound.stop();
+        isBackgroundSoundNotPlaying = true;
     }
 
     /**

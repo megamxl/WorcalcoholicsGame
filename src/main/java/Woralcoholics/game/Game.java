@@ -82,7 +82,6 @@ public class Game extends Canvas implements Runnable {
     public static BufferedImage[] enemy = new BufferedImage[13];
 
 
-
     public static List<int[]> wallCords = new ArrayList();
     public static List<Enemy> enemyPool = new ArrayList();
     public static List<GunnerEnemy> enemyGunnerPool = new ArrayList();
@@ -242,6 +241,7 @@ public class Game extends Canvas implements Runnable {
 
     }
 
+
     @Override
     /**
      * this is a well-known game loop also used in minecraft for making no difference how fast or slow you computer performance
@@ -333,6 +333,7 @@ public class Game extends Canvas implements Runnable {
         checkGunStatus();
         checkSelectedGun();
         updateLockStatus();
+        checkBackgroundSoundPlayer();
     }
 
     /***
@@ -488,9 +489,12 @@ public class Game extends Canvas implements Runnable {
                     g.drawString(DatabaseConnection.scoresArray[4], 300, 370);
                 }
             }
-            case OPTIONS -> {}
-            case PAUSE_MENU -> {}
-            case UPGRADE_MENU -> {}
+            case OPTIONS -> {
+            }
+            case PAUSE_MENU -> {
+            }
+            case UPGRADE_MENU -> {
+            }
             case CREDITS -> {
                 g.setColor(Color.black);
                 g.setFont(new Font("Arial Black", Font.PLAIN, 40));
@@ -893,9 +897,9 @@ public class Game extends Canvas implements Runnable {
     }*/
 
 
-    private void fillGunnerEnemypool(){
-        for (int i = 0; i < 3 ; i++) {
-            enemyGunnerPool.add( new GunnerEnemy(0, 0, ID.GunnerEnemy, handler, imageGetter, score));
+    private void fillGunnerEnemypool() {
+        for (int i = 0; i < 3; i++) {
+            enemyGunnerPool.add(new GunnerEnemy(0, 0, ID.GunnerEnemy, handler, imageGetter, score));
         }
 
     }
@@ -912,8 +916,17 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
-    public static void spawnGunnerEnemy(int x, int y){
-        for (GunnerEnemy currEnemy: enemyGunnerPool) {
+    /***
+     * looping the backgroundsound based on boolean value
+     */
+    private void checkBackgroundSoundPlayer() {
+        if (handler.isBackgroundSoundNotPlaying) {
+            playBackgroundSound();
+        }
+    }
+
+    public static void spawnGunnerEnemy(int x, int y) {
+        for (GunnerEnemy currEnemy : enemyGunnerPool) {
             if (!currEnemy.isInGame) {
                 currEnemy.x = x;
                 currEnemy.y = y;
@@ -1021,6 +1034,7 @@ public class Game extends Canvas implements Runnable {
         gun.addObject(new Gun(), GunType.MachineGun, true); //third machine gun  -> weakest to strongest
 
     }
+
     private void setGunToPistolAgain() {
         handler.selectedgun = Gun.guns.get(0);
         handler.gunindex = 0;
