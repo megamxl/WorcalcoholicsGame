@@ -436,6 +436,7 @@ public class Game extends Canvas implements Runnable {
                         setGunToPistolAgain();
                     }
                     case TUTORIAL -> {
+                        score.resetSore();
                         loadLevel(tutorialLevel);
                         inTutorial = true;
                         inFirstTutorialZone = false;
