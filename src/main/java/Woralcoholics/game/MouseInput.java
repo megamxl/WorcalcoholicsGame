@@ -13,6 +13,7 @@ import java.awt.Robot;
 /**
  * in this class the mouse input  happens
  *
+ * @author Lukas Schelepet
  * @author Christoph Oprawill
  * @author Gustavo Podzuweit
  */
@@ -66,9 +67,7 @@ public class MouseInput extends MouseAdapter {
                         }
                     }
                     if (Game.getState() == GameState.UPGRADE_MENU) {
-                        Game.TimerValue = 5;    //5 secs wait time
-                        Game.shouldTime = true; //activate Timer
-                        Game.timerAction = 1;   //execute timerAction 1 -> countdown till next wave
+                        Game.startTimer(5, 1);  //after 5 secs, spawn the next wave
                     }
                 }
             }
@@ -95,10 +94,10 @@ public class MouseInput extends MouseAdapter {
                                 exception.printStackTrace();
                             }
                         } else {
-                            //System.out.println("BUTTON 1");
                             handler.now = System.currentTimeMillis();
                             //IF waiting time is over AND player has ammo -> shoot a bullet
                             if (handler.now > handler.wait && game.ammo >= 1) {
+                                //grab a free bullet from the bullet pool
                                 for (int i = 0; i < handler.bullets.size(); i++) {
                                     Bullet temp = handler.bullets.get(i);
                                     if (!temp.inGame) {
@@ -115,21 +114,8 @@ public class MouseInput extends MouseAdapter {
                                         break;
                                     }
                                 }
-                                /*int c = 0;
-                                for(int i = 0; i < handler.bullets.size(); i++) {
-                                    if(handler.bullets.get(i).inGame) {
-
-                                        c++;
-                                    }
-                                }
-                                System.out.println(c);*/
-
-                                //Bullet temp = new Bullet((int) px - 4, (int) py - 4, ID.Bullet, handler, an);
-                                //temp.direction(mx, my, px, py, false, 0); //Calculate the direction of this bullet
-                                //handler.addObject(temp);    //Add the Bullet to the ObjectList
                                 playSoundGun(game.ammo);
                                 game.ammo--;    //Subtract 1 from ammo (bullet was shot)
-                                //System.out.println(game.ammo);
                                 handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
                             } else if (handler.now > handler.wait && game.ammo <= 0) {
                                 playSoundGun(game.ammo); //has no ammo
@@ -137,10 +123,9 @@ public class MouseInput extends MouseAdapter {
                             }
                         }
                     }
-                    case 2 -> System.out.println("BUTTON 2");
+                    case 2 -> {
+                    }//System.out.println("BUTTON 2");
                     case 3 -> Game.setState(GameState.PAUSE_MENU);
-                    default -> {
-                    }
                 }
             }
         }
@@ -345,6 +330,10 @@ public class MouseInput extends MouseAdapter {
         }
     }
 
+    /***
+     * machinegun method that behaves specially for machine gun
+     * @param e
+     */
     private void machinegun(MouseEvent e) {
         //System.out.println("MACHINE");
         handler.now = System.currentTimeMillis();
@@ -386,6 +375,10 @@ public class MouseInput extends MouseAdapter {
         }
     }
 
+    /***
+     * shotgun method that behaves specially for shotgun
+     * @param e
+     */
     private void shotgun(MouseEvent e) {
         handler.now = System.currentTimeMillis();
         //IF waiting time is over AND player has ammo -> shoot a bullet
@@ -396,6 +389,7 @@ public class MouseInput extends MouseAdapter {
             int x = (int) point.getX();
             int y = (int) point.getY();
             int shells = 0;
+            playSoundGun(game.ammo);
             for (int i = 0; i < handler.bullets.size(); i++) {
                 Bullet temp = handler.bullets.get(i);
                 if (!temp.inGame) {
@@ -414,10 +408,15 @@ public class MouseInput extends MouseAdapter {
                     temp.inGame = true;
                     game.ammo--;    //Subtract 1 from ammo (bullet was shot)
                     shells++;
+
+                    // 1 ammo (user perspective) -> shoot like a pistol
+                    //  2 ammo  (user perspective) -> shoots like a shotgun with angle 0° and 10°
+                    if (game.ammo == 0 && shells == 1 || game.ammo == 0 && shells == 2) {
+                        break;
+                    }
                     if (shells == 3) break;
                 }
             }
-            playSoundGun(game.ammo);
             /*if (game.ammo <= 3) {
                 game.ammo = 0;
             } else {

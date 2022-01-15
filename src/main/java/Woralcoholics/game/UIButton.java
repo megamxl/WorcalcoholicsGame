@@ -27,12 +27,20 @@ public class UIButton extends GameObject{
      *  Constructor for UI buttons
      * @param x centered X value of the button
      * @param y centered Y value of the button
-     * @param width
-     * @param height
-     * @param name
-     * @param id
-     * @param game
-     * @param an
+     * @param width width of the button
+     * @param height height of the button
+     * @param name name of the button
+     * @param nextState which state the button should switch to, if its action is 1
+     * @param id ID of the button (ID.UIButton)
+     * @param game the game
+     * @param action which action the button should execute
+     * @param upgradeNr which upgrade the button should grant, if its action is 2
+     * @param an ImageGetter of the button
+     * @param col column for sprite from an
+     * @param row row for sprite from an
+     * @param g Graphics (important for fontmetrics)
+     * @param fontNr which font the name should be written in
+     * @param fontsize what size the name-font should be
      */
     public UIButton(int x, int y, int width, int height, String name, GameState nextState, ID id, Game game,
                     int action, int upgradeNr, ImageGetter an, int col, int row, Graphics g, int fontNr, int fontsize) {
@@ -54,7 +62,7 @@ public class UIButton extends GameObject{
             case 2 -> font = new Font("DEBUG FREE TRIAL", Font.PLAIN, fontsize);
             case 3 -> font = new Font("Cyberpunk", Font.PLAIN, fontsize);
         }
-        //font = new Font("Masked Hero Demo", Font.PLAIN, fontsize);
+        //depending on the name length, split the name in 2 lines and center them
         if(fontsize < 30 && name.length() > 10 && name.contains(" ")) {
             String[] temp = name.split(" ");
             name1 = temp[0];
@@ -69,9 +77,10 @@ public class UIButton extends GameObject{
             this.stringY = y + g.getFontMetrics(font).getHeight() / 4.0;
         }
 
+        //translate to the centers
         this.x -= width / 2.0;
         this.y -= height / 2.0;
-        sprite = an.getImage(col, row, width, height);
+        sprite = an.getImage(col, row, width, height);  //get the Sprite from the ImageGetter
 
     }
 
@@ -94,6 +103,9 @@ public class UIButton extends GameObject{
         }
     }
 
+    /**
+     *  Depending on the int action, execute following action when the button is clicked
+     */
     public void action() {
         switch(action) {
             case 1 -> {

@@ -26,6 +26,8 @@ If you are getting errors like this while starting
 
 __" Cannot invoke "Woralcoholics.game.GameManager.render(java.awt.Graphics)" because "Woralcoholics.game.Game.handler" is null" or something with cannot invoke just relaunch the game and it works "__
 
+just press run again 
+
 ## Instructions
 
 Moving is binded to the key 

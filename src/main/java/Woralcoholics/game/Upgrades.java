@@ -2,6 +2,10 @@ package Woralcoholics.game;
 
 import java.util.Random;
 
+/**
+ * @author Moritz Lindner
+ */
+
 public class Upgrades {
 
     private Game game;
@@ -103,6 +107,11 @@ public class Upgrades {
 
     //1 - maxAmmo, 2 - maxHP, 3 - maxShield, 4 - 15% armor, 5 - bullets get faster, 6 enemies slowed down
 
+    /**
+     * responsible for creating an array with 3 different, random Upgrades that you can choose after every 3 rounds
+     * Is called everytime, when an upgrade has been bought
+     */
+
     public static void drawRandomUpgrades() {
         boolean duplicate = false;
         Random random = new Random();
@@ -128,6 +137,11 @@ public class Upgrades {
     public int[] getUpgrades() {
         return this.randomUpgrades;
     }
+
+    /**
+     * there are the 6 random upgrades and their corresponding methods for usage that we have implemented so far
+     * @param input
+     */
 
     public void getUpgrade(int input) {
         switch (input) {

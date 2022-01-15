@@ -1,6 +1,9 @@
 package Woralcoholics.game;
 
-// the class that makes the Playercamera
+/**
+ * @author Moritz Lindner
+ */
+
 public class Camera {
     float x, y;
     Game game;

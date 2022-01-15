@@ -277,7 +277,7 @@ public class Player extends GameObject {
                         y += velY * -1;
                     }
                     case Crate -> {
-                        upgrades.setMunition(upgrades.getMunition() + 10);
+                        upgrades.setMunition(upgrades.getMunition() + Enemy.ammoMax);
                         if (upgrades.getMunition() > 49) {
                             upgrades.setMunition(50);
                         }

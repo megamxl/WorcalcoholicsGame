@@ -8,16 +8,16 @@ import java.io.IOException;
 
 /**
  * inspiration
- *
+ * @author Lukas Schelepet
  * @author Christoph Oprawill
  * @author Maximilian Nowak
  */
 
 public class Bullet extends GameObject {
 
-    public static float bulletSpeed = 30;
+    public static float bulletSpeed = 30;   //Speed of the Bullet
 
-    private final BufferedImage bullet_img;
+    private final BufferedImage bullet_img; //Sprite of the Bullet
 
     GameManager handler;
 
@@ -51,7 +51,7 @@ public class Bullet extends GameObject {
     }
 
     /**
-     * if bullet colloids with block remove it
+     * if bullet collides with block remove it
      */
     public void collision() {   //Collision Detection (Enemys, Blocks)
         for (int i = 0; i < handler.object.size(); i++) {
@@ -80,17 +80,15 @@ public class Bullet extends GameObject {
     }
 
     /**
-     * if bullet gets out of bonce remove it
+     * if bullet gets out of bounds remove it
      */
     public void ooB() {
-        for (int i = 0; i < handler.object.size(); i++) {
-            GameObject tmp = handler.object.get(i);
-
-            if (tmp.getId() == ID.Bullet) {
-                if (x - 4 > 2500 || y - 4 > 1500 || x < 0 || y < 0) {   //Out of Bounds
-                    handler.removeObject(this);
-                    //System.out.println("OoB");
-                }
+        for (int i = 0; i < handler.bullets.size(); i++) {
+            Bullet tmp = handler.bullets.get(i);
+            if (tmp.x - 4 > 2500 || tmp.y - 4 > 1500 || tmp.x < 0 || tmp.y < 0) {   //Out of Bounds
+                tmp.setId(ID.Bullet);
+                tmp.inGame = false;
+                tmp.setPos(0, 0);
             }
         }
     }
@@ -108,6 +106,7 @@ public class Bullet extends GameObject {
     }
 
     private void direction(double mx, double my, double px, double py, boolean gunnerenemy) {
+        //calculate angle and x-y-speeds of the bullet
         double dx = mx - px;
         double dy = my - py;
         double alpha = Math.atan2(dy, dx);
@@ -155,13 +154,5 @@ public class Bullet extends GameObject {
     @Override
     public Rectangle getBounds() {
         return new Rectangle((int) x, (int) y, 12, 12);
-    }
-
-    public float getBulletSpeed() {
-        return bulletSpeed;
-    }
-
-    public void setBulletSpeed(float bs) {
-        bulletSpeed = bs;
     }
 }

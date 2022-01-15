@@ -21,6 +21,7 @@ public class Enemy extends GameObject {
     public static int enemysAlive = 0;
     public static int waves = 1;
     public static int maxHp = 100;
+    public static int ammoMax = 10;
 
     int choose = 0;
     int hp;
@@ -86,6 +87,10 @@ public class Enemy extends GameObject {
         //g.drawImage(enemy_img, (int) x, (int) y, null);
     }
 
+    /***
+     * Render function of the HP Bar
+     * @param g Graphics from render
+     */
     protected void renderHPBar(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect((int) x - 8, (int) y - 12, 48, 6);
@@ -346,9 +351,7 @@ public class Enemy extends GameObject {
 
 
     public static void spawnWaveAfterUpgrades() {
-        Game.TimerValue = 5;    //5 secs to spawn next wave
-        Game.shouldTime = true; //activate Timer
-        Game.timerAction = 1;   //execute timerAction 1 -> spawn next Wave
+        Game.startTimer(5, 1); //after 5 secs, spawn the next wave
     }
 
     /**
