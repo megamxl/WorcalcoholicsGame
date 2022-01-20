@@ -34,7 +34,7 @@ public class GameManager {
     Path absolutePath;
     FloatControl volume;
     public static int soundv = 1; //default value for -40f sound | MUTE (Without Sound Effects just background music) -> -80f | MAX -> 6.0206f
-    protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip, isBackgroundSoundNotPlaying = false;
+    protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip, isBackgroundSoundPlaying = false;
     protected double wait;
     //machine gun - del=0 | normal gun - del=200 | slowgun - del=1000
     protected int del = 1000; //how fast player can shoot, less -> faster
@@ -45,7 +45,6 @@ public class GameManager {
     protected Gun selectedgun;
     public float angle; // from bullet
     public boolean playerIsInit = false; // prevents that the MouseEvents gets NullPointerException
-
 
     /**
      * updates the all tempobjects in the Linked list
@@ -299,24 +298,26 @@ public class GameManager {
      * @throws InterruptedException
      */
     public void playBackgroundSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
-        //System.out.println("Sound played");
-        isBackgroundSoundNotPlaying = false;
-        backgroundsound = AudioSystem.getClip();
-        Path relativePath = Paths.get("Resource/Sound/backgroundsound.wav");
-        Path absolutePath = relativePath.toAbsolutePath();
-        backgroundsound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
-        FloatControl volume = (FloatControl) backgroundsound.getControl(FloatControl.Type.MASTER_GAIN);
-        if (soundv == 0) {
-            volume.setValue(-80f);
-        } else if (soundv == 1) {
-            volume.setValue(-22f);
-        } else if (soundv == 2) {
-            volume.setValue(0f);
+        // just get played once
+        if (!isBackgroundSoundPlaying) {
+            isBackgroundSoundPlaying = true;
+            backgroundsound = AudioSystem.getClip();
+            Path relativePath = Paths.get("Resource/Sound/backgroundsound.wav");
+            Path absolutePath = relativePath.toAbsolutePath();
+            backgroundsound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+            FloatControl volume = (FloatControl) backgroundsound.getControl(FloatControl.Type.MASTER_GAIN);
+            if (soundv == 0) {
+                volume.setValue(-80f);
+            } else if (soundv == 1) {
+                volume.setValue(-22f);
+            } else if (soundv == 2) {
+                volume.setValue(0f);
+            }
+            backgroundsound.start();
+            Thread.sleep(timeOfBackgroundSound);
+            backgroundsound.stop();
+            isBackgroundSoundPlaying = false; // looping the backgroundsound in game class
         }
-        backgroundsound.start();
-        Thread.sleep(timeOfBackgroundSound);
-        backgroundsound.stop();
-        isBackgroundSoundNotPlaying = true; // looping the backgroundsound in game class
     }
 
     /**
@@ -515,6 +516,7 @@ public class GameManager {
             try {
                 soundv = 2;
                 backgroundsound.close();
+                isBackgroundSoundPlaying=false; // set it to false that a new sound can play
                 playBackgroundSound();
             } catch (Exception ex) {
             }
@@ -523,6 +525,7 @@ public class GameManager {
             try {
                 soundv = 1;
                 backgroundsound.close();
+                isBackgroundSoundPlaying=false;
                 playBackgroundSound();
             } catch (Exception ex) {
             }
