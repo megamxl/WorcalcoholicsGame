@@ -63,7 +63,7 @@ public class UIButton extends GameObject{
             case 3 -> font = new Font("Cyberpunk", Font.PLAIN, fontsize);
         }
         //depending on the name length, split the name in 2 lines and center them
-        if(fontsize < 30 && name.length() > 10 && name.contains(" ")) {
+        if(name.length() > 10 || name.contains(" ")) {
             String[] temp = name.split(" ");
             name1 = temp[0];
             name2 = temp[1];

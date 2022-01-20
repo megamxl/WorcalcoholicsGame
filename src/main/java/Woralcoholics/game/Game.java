@@ -39,6 +39,9 @@ public class Game extends Canvas implements Runnable {
 
     public static GameState currentState;
     private GameState previousState, checkState;
+    private int timesMenuWasRendered = 0;
+    private boolean stopRendering = false;
+
     public static int lastScore = 0;
 
     private boolean isRunning;
@@ -90,6 +93,7 @@ public class Game extends Canvas implements Runnable {
 
     public int ammo = 50;
     public int hp = 100;
+    private int[] randomUpgrades = {1,1,1};
     static Score score = new Score(0);
 
     public static String playerName = null;
@@ -371,7 +375,7 @@ public class Game extends Canvas implements Runnable {
             renderUi(g);
 
         } else {
-            renderScreen(g);
+            if(!stopRendering) renderScreen(g);
             handler.enemy.removeAll(handler.enemy);
             //System.out.printlfn("SPAWN" + handler.enemy.size());
         }
@@ -456,6 +460,7 @@ public class Game extends Canvas implements Runnable {
             paused = false;  //level is running and not paused (when coming from e.g. PAUSE_MENU or UPGRADE_MENU, where a level is already loaded)
         } else {
             loadMenu();                     //load the menu of currentState
+            stopRendering = false;
         }
         //System.out.println(currentState + ": " + handler.object.size());
     }
@@ -465,26 +470,27 @@ public class Game extends Canvas implements Runnable {
      * @param g Graphics object
      */
     private void renderScreen(Graphics g) {
-        g.setColor(Color.lightGray);
-        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        switch (currentState) {
+        //for Fullscreen Stuff like Images
+        switch(currentState) {
             case STUDIO -> {
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            }
+            case TITLE -> g.drawImage(imgTitle, 0, 0, null);
+            case MAIN_MENU, PAUSE_MENU, HIGH_SCORES, CREDITS, OPTIONS, UPGRADE_MENU, GAME_OVER -> {
+                g.setColor(Color.lightGray);
+                g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            }
+        }
+        handler.render(g, ID.UIButton);     //render all UI Buttons
+        //for all other Elements
+        switch (currentState) {
+            case STUDIO -> {
                 g.drawImage(imgStudio, SCREEN_WIDTH / 2 - 280, SCREEN_HEIGHT / 3, null);
                 g.setColor(Color.YELLOW);
                 g.setFont(new Font("Cyberpunk", Font.PLAIN, 70));
                 int stringx = g.getFontMetrics(new Font("Cyberpunk", Font.PLAIN, 70)).stringWidth("presents");
                 g.drawString("presents", SCREEN_WIDTH / 2 - stringx / 2 - 60, SCREEN_HEIGHT * 2 / 3);
-            }
-            case TITLE -> {
-                /*g.setColor(Color.BLACK);
-                g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);*/
-                g.drawImage(imgTitle, 0, 0, null);
-            }
-            case MAIN_MENU -> {
-            }
-            case TUTORIAL -> {
             }
             case HIGH_SCORES -> {
                 g.setColor(Color.black);
@@ -501,17 +507,18 @@ public class Game extends Canvas implements Runnable {
                     g.drawString(DatabaseConnection.scoresArray[4], 300, 370);
                 }
             }
-            case OPTIONS -> {
-            }
-            case PAUSE_MENU -> {
-            }
-            case UPGRADE_MENU -> {
-            }
             case CREDITS -> {
                 g.setColor(Color.black);
                 g.setFont(new Font("Arial Black", Font.PLAIN, 40));
-                //System.out.println(g.getFontMetrics(new Font("Arial Black", Font.PLAIN, 40)).getHeight());
                 g.drawString("Credits go here brrr", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+            }
+            case UPGRADE_MENU -> {
+                g.drawImage(imageGetter.getImage(randomUpgrades[0], 8, 64, 64), SCREEN_WIDTH/4-32,
+                        SCREEN_HEIGHT/2, null);
+                g.drawImage(imageGetter.getImage(randomUpgrades[1], 8, 64, 64), SCREEN_WIDTH/2-32,
+                        SCREEN_HEIGHT/2, null);
+                g.drawImage(imageGetter.getImage(randomUpgrades[2], 8, 64, 64), SCREEN_WIDTH*3/4-32,
+                        SCREEN_HEIGHT/2, null);
             }
             case GAME_OVER -> {
                 g.drawImage(imgOver, 1, 1, null);
@@ -519,17 +526,15 @@ public class Game extends Canvas implements Runnable {
                 g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 75));
                 g.drawString("Waves", SCREEN_WIDTH / 4 - 80, SCREEN_HEIGHT / 4);
                 g.drawString("Score", SCREEN_WIDTH * 3 / 4 - 65, SCREEN_HEIGHT / 4);
-                //g.drawString("your Score is" + lastScore, 300, SCREEN_HEIGHT - 65);
                 g.setFont(new Font("DEBUG FREE TRIAL", Font.PLAIN, 175));
                 g.drawString(String.valueOf(Enemy.waves - 1), SCREEN_WIDTH / 4, SCREEN_HEIGHT * 7 / 16);
                 g.drawString(String.valueOf(lastScore), SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 7 / 16);
             }
         }
-        //handler.render(g, ID.UIButton);
-        if (!loaded) {
-            handler.render(g);
-        } else {
-            handler.render(g, ID.UIButton);
+        timesMenuWasRendered++;
+        if(timesMenuWasRendered > 50) {
+            stopRendering = true;
+            timesMenuWasRendered = 0;
         }
     }
 
@@ -682,8 +687,6 @@ public class Game extends Canvas implements Runnable {
                         3, 40));
             }
             case PAUSE_MENU -> {
-                handler.addObject(new UIButton(32, 32, 64, 64, "Return", GameState.LEVEL,
-                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 1, 0));
                 handler.addObject(new UIButton(SCREEN_WIDTH - 46, 34, 64, 64, "Options",
                         GameState.OPTIONS, ID.UIButton, this, 1, 0, imageGetter, 2, 6, g,
                         1, 0));
@@ -696,40 +699,20 @@ public class Game extends Canvas implements Runnable {
                 paused = true;//we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
-                int[] randomUpgrades = upgrades.getUpgrades();
-                handler.addObject(new UIButton(SCREEN_WIDTH / 4 + 50, (SCREEN_HEIGHT + 125) / 2, 320, 600,
-                        "", GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[0], getUpgradeButton, 1, 1, g, 1, 20));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 4 - 5, (SCREEN_HEIGHT) / 2, 64, 64,
-                        "", GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[0], imageGetter, randomUpgrades[0], 8, g, 1, 20));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 4 - 5, (SCREEN_HEIGHT) / 2 + 50, 1, 1,
+                randomUpgrades = upgrades.getUpgrades();
+                handler.addObject(new UIButton(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2 - 25, 207, 444,
                         upgrades.drawUpgrades(randomUpgrades[0]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[0], imageGetter, 1, 4, g, 1, 13));
+                        randomUpgrades[0], getUpgradeButton, 1, 1, g, 1, 20));
 
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2 + 50, (SCREEN_HEIGHT + 125) / 2, 320, 600,
-                        "", GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[1], getUpgradeButton, 1, 1, g, 1, 20));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 5, (SCREEN_HEIGHT) / 2, 64, 64,
-                        "", GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[1], imageGetter, randomUpgrades[1], 8, g, 1, 20));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2 - 5, (SCREEN_HEIGHT) / 2 + 50, 1, 1,
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 25, 207, 444,
                         upgrades.drawUpgrades(randomUpgrades[1]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[1], imageGetter, 1, 4, g, 1, 13));
+                        randomUpgrades[1], getUpgradeButton, 1, 1, g, 1, 20));
 
-                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4 + 50, (SCREEN_HEIGHT + 125) / 2, 320, 600,
-                        "", GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[2], getUpgradeButton, 1, 1, g, 1, 20));
-                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4 - 5, (SCREEN_HEIGHT) / 2, 64, 64, "", GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[2], imageGetter, randomUpgrades[2], 8, g, 1, 20));
-                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4 - 5, (SCREEN_HEIGHT) / 2 + 50, 1, 1,
+                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT / 2 - 25, 207, 444,
                         upgrades.drawUpgrades(randomUpgrades[2]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[2], imageGetter, 1, 4, g, 1, 13));
+                        randomUpgrades[2], getUpgradeButton, 1, 1, g, 1, 20));
 
                 paused = true;      //Pause the game until Player chose an Upgrade
-                /*for(int i = 0; i < 3; i++) {
-                    System.out.println(i + ": " + randomUpgrades[i] + " " + upgrades.drawUpgrades(randomUpgrades[i]));
-                }*/
                 Enemy.spawnWaveAfterUpgrades();
             }
             case GAME_OVER -> {
