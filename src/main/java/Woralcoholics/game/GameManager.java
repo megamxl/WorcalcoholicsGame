@@ -29,6 +29,7 @@ public class GameManager {
     private boolean ll = false, kk = false, mm = false;
     Clip sound, soundenemy, soundplayer;
     public Clip backgroundsound;
+    private final int timeOfBackgroundSound = 198000;  // 3:18 Min length of backgroundsound
     Path relativePath;
     Path absolutePath;
     FloatControl volume;
@@ -298,6 +299,7 @@ public class GameManager {
      * @throws InterruptedException
      */
     public void playBackgroundSound() throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        //System.out.println("Sound played");
         isBackgroundSoundNotPlaying = false;
         backgroundsound = AudioSystem.getClip();
         Path relativePath = Paths.get("Resource/Sound/backgroundsound.wav");
@@ -307,14 +309,14 @@ public class GameManager {
         if (soundv == 0) {
             volume.setValue(-80f);
         } else if (soundv == 1) {
-            volume.setValue(-22);
+            volume.setValue(-22f);
         } else if (soundv == 2) {
             volume.setValue(0f);
         }
         backgroundsound.start();
-        Thread.sleep(114000);  // background sound in ms 1min 54sec
+        Thread.sleep(timeOfBackgroundSound);
         backgroundsound.stop();
-        isBackgroundSoundNotPlaying = true;
+        isBackgroundSoundNotPlaying = true; // looping the backgroundsound in game class
     }
 
     /**
