@@ -44,6 +44,7 @@ public class Game extends Canvas implements Runnable {
     private boolean isRunning;
     protected static boolean paused, loaded;
     public static boolean inTutorial = false;
+    public static boolean readOnce = true;
     public static boolean inFirstTutorialZone = false;
     public static boolean inSecondTutorialZone = false;
     public static boolean inThirdTutorialZone = false;
@@ -386,17 +387,20 @@ public class Game extends Canvas implements Runnable {
     /* ---------- Private functions for game Class ----------- */
 
     private void renderTutorialBorders(Graphics g) {
-        // rendering the border and adding the color and the size of the Font
-        g.drawImage(tutorialBoarder, 60, 235, 900, 300, null);
-        g.setColor(Color.black);
-        g.setFont(new Font("SansSerif", Font.PLAIN, 26));
+        if(readOnce) {
+            // rendering the border and adding the color and the size of the Font
+            g.drawImage(tutorialBoarder, 60, 235, 900, 300, null);
+            g.setColor(Color.black);
+            g.setFont(new Font("SansSerif", Font.PLAIN, 26));
 
-        if (curentTutorialscore < tutorialTexts.length) {
-            //draws the tow strings form each sub array for the tutorial Text
-            g.drawString(tutorialTexts[curentTutorialscore][0], 230, 465);
-            g.drawString(tutorialTexts[curentTutorialscore][1], 230, 495);
-        } else {
-            curentTutorialscore = 0; // make the  loop infinite
+            if (curentTutorialscore < tutorialTexts.length) {
+                //draws the tow strings form each sub array for the tutorial Text
+                g.drawString(tutorialTexts[curentTutorialscore][0], 230, 465);
+                g.drawString(tutorialTexts[curentTutorialscore][1], 230, 495);
+            } else {
+                curentTutorialscore = 0; // make the  loop infinite
+                readOnce = false;
+            }
         }
     }
 
@@ -438,6 +442,7 @@ public class Game extends Canvas implements Runnable {
                     case TUTORIAL -> {
                         score.resetSore();
                         loadLevel(tutorialLevel);
+                        readOnce = true;
                         inTutorial = true;
                         inFirstTutorialZone = false;
                         inSecondTutorialZone = false;

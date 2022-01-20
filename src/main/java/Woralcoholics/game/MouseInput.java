@@ -197,6 +197,7 @@ public class MouseInput extends MouseAdapter {
     (think of the directions like East, South-East, South, ...)
     Further info can be found in the comments in the function
      */
+
     public void checkIfExited(Point mousePos) {
         // Robot class can apparently throw some errors, so a try and catch is necessary
         try {
