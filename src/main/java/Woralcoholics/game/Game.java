@@ -387,7 +387,7 @@ public class Game extends Canvas implements Runnable {
     /* ---------- Private functions for game Class ----------- */
 
     private void renderTutorialBorders(Graphics g) {
-        if(readOnce) {
+        if (readOnce) {
             // rendering the border and adding the color and the size of the Font
             g.drawImage(tutorialBoarder, 60, 235, 900, 300, null);
             g.setColor(Color.black);
@@ -1112,7 +1112,6 @@ public class Game extends Canvas implements Runnable {
             playBackgroundSound();
         }
     }
-
 
     /* ---------- Public functions for game Class ----------- */
 

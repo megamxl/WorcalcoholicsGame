@@ -9,10 +9,10 @@ import java.awt.image.BufferedImage;
 public class Window {
 
     /**
-     *  @author Maxlimilian Nowak
+     * @author Maxlimilian Nowak
      */
 
-    public static JFrame frame =null;
+    public static JFrame frame = null;
 
     private BufferedImage icon = null;
 
@@ -39,12 +39,12 @@ public class Window {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
+        
         try {
             BufferedImageLoader loader = new BufferedImageLoader();
-            icon= loader.loadImage("/Graphics/Icon (1).png");
+            icon = loader.loadImage("/Graphics/Icon (1).png");
             frame.setIconImage((icon));
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Icon was not cloned");
         }
     }

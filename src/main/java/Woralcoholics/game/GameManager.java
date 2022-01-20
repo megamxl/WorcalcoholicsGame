@@ -507,6 +507,36 @@ public class GameManager {
         return volume;
     }
 
+    /***
+     * the keys for the sound
+     */
+    public void keySounds() {
+        if (isL()) {
+            try {
+                soundv = 2;
+                backgroundsound.close();
+                playBackgroundSound();
+            } catch (Exception ex) {
+            }
+        }
+        if (isK()) {
+            try {
+                soundv = 1;
+                backgroundsound.close();
+                playBackgroundSound();
+            } catch (Exception ex) {
+            }
+        }
+        if (isM()) {
+            try {
+                soundv = 0;
+                //handler.backgroundsound.close(); -> just Sound Effects get muted
+                //playBackgroundSound();
+            } catch (Exception ex) {
+            }
+        }
+    }
+
     public void playSoundAmmoReload() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         if (GunType.Pistol.equals(selectedgun.getType())) {
             relativePath = Paths.get("Resource/Sound/pistolreload.wav");

@@ -353,29 +353,17 @@ public class Player extends GameObject {
      * the keys for the sound
      */
     private void keySounds() {
-        if (handler.isL()) {
-            try {
-                handler.soundv = 2;
-                handler.backgroundsound.close();
-                playBackgroundSound();
-            } catch (Exception ex) {
-            }
-        }
-        if (handler.isK()) {
-            try {
-                handler.soundv = 1;
-                handler.backgroundsound.close();
-                playBackgroundSound();
-            } catch (Exception ex) {
-            }
-        }
-        if (handler.isM()) {
-            try {
-                handler.soundv = 0;
-                //handler.backgroundsound.close(); -> just Sound Effects get muted
-                //playBackgroundSound();
-            } catch (Exception ex) {
-            }
+        //threading because otherwise program would be stuck
+        try {
+            new Thread(() -> {
+                try {
+                    handler.keySounds();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
