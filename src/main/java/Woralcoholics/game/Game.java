@@ -687,9 +687,12 @@ public class Game extends Canvas implements Runnable {
                 handler.addObject(new UIButton(SCREEN_WIDTH - 46, 34, 64, 64, "Options",
                         GameState.OPTIONS, ID.UIButton, this, 1, 0, imageGetter, 2, 6, g,
                         1, 0));
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 352, 102,
+                handler.addObject(new UIButton(SCREEN_WIDTH / 4, SCREEN_HEIGHT * 4 / 5, 352, 102,
+                        "Continue", GameState.LEVEL, ID.UIButton, this, 1, 0,
+                        getUIButton/*getGameOverUIButton*/, 1, 1, g, 1, 20/*27*/));
+                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 4 / 5, 352, 102,
                         "Stop Playing", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
-                        getUIButton, 1, 1, g, 1, 20));
+                        getUIButton/*getGameOverUIButton*/, 1, 1, g, 1, 20/*27*/));
                 paused = true;//we are in PAUSE_MENU, so set paused true
             }
             case UPGRADE_MENU -> {
@@ -1108,7 +1111,7 @@ public class Game extends Canvas implements Runnable {
      * looping the backgroundsound based on boolean value
      */
     private void checkBackgroundSoundPlayer() {
-        if (handler.isBackgroundSoundNotPlaying) {
+        if (!handler.isBackgroundSoundPlaying && currentState == GameState.LEVEL) {
             playBackgroundSound();
         }
     }
