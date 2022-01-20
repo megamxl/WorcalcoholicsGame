@@ -307,9 +307,9 @@ public class GameManager {
         if (soundv == 0) {
             volume.setValue(-80f);
         } else if (soundv == 1) {
-            volume.setValue(-55f);
+            volume.setValue(-22);
         } else if (soundv == 2) {
-            volume.setValue(-33f);
+            volume.setValue(0f);
         }
         backgroundsound.start();
         Thread.sleep(114000);  // background sound in ms 1min 54sec
