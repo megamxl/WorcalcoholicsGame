@@ -176,9 +176,9 @@ public class Upgrades {
             case 3:
                 return "MAX SHIELD";
             case 4:
-                return "BULLETS GO BRR";
+                return "FASTER BULLETS";
             case 5:
-                return "Enemies slowed down";
+                return "SLOWER ENEMIES";
             case 6:
                 return "+15% ARMOR";
             default:
