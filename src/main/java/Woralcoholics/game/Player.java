@@ -435,6 +435,7 @@ public class Player extends GameObject {
         }
         if (x > 1624 && x < 1959 && y < 123) {
             handler.backgroundsound.close();
+            handler.isBackgroundSoundPlaying = false; // looping the backgroundsound in game
             Game.currentState = GameState.MAIN_MENU;
             Game.inTutorial = false;
         }
@@ -536,28 +537,6 @@ public class Player extends GameObject {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /***
-     * Function to run backgroundsound
-     */
-    private void playBackgroundSound() {
-        backgroundThread = new Thread(() -> {
-            try {
-                handler.playBackgroundSound();
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-            } catch (UnsupportedAudioFileException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (IllegalArgumentException e) {
-                //e.printStackTrace();
-            }
-        });
-        backgroundThread.start();
     }
     //endregion
 }
