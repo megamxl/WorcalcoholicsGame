@@ -39,6 +39,8 @@ public class GameManager {
     //machine gun - del=0 | normal gun - del=200 | slowgun - del=1000
     protected int del = 1000; //how fast player can shoot, less -> faster
     protected double now;
+    protected double nowForKeys;
+    private double previousms = 0;
     protected boolean ammo = true;
     protected boolean reloaded = true;
     protected int gunindex = 0;
@@ -508,31 +510,34 @@ public class GameManager {
         return volume;
     }
 
+
     /***
      * the keys for the sound
      */
     public void keySounds() {
-        if (isL()) {
+        nowForKeys = System.currentTimeMillis(); // set to 5 seconds to change the sound volumes prevents program crashing
+        if (isL() && soundv != 2 && nowForKeys - previousms >= 5000) {
             try {
                 soundv = 2;
                 backgroundsound.close();
-                isBackgroundSoundPlaying=false; // set it to false that a new sound can play
+                isBackgroundSoundPlaying = false; // set it to false that a new sound can play
+                previousms = nowForKeys;
                 playBackgroundSound();
             } catch (Exception ex) {
             }
-        }
-        if (isK()) {
+        } else if (isK() && soundv != 1 && nowForKeys - previousms >= 5000) {
             try {
                 soundv = 1;
                 backgroundsound.close();
-                isBackgroundSoundPlaying=false;
+                isBackgroundSoundPlaying = false;
+                previousms = nowForKeys;
                 playBackgroundSound();
             } catch (Exception ex) {
             }
-        }
-        if (isM()) {
+        } else if (isM() && soundv != 0 && nowForKeys - previousms >= 5000) {
             try {
                 soundv = 0;
+                previousms = nowForKeys;
                 //handler.backgroundsound.close(); -> just Sound Effects get muted
                 //playBackgroundSound();
             } catch (Exception ex) {
