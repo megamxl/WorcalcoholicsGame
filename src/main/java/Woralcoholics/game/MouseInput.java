@@ -263,18 +263,14 @@ public class MouseInput extends MouseAdapter {
     //endregion
     //region MouseWheelEvents
     public void mouseWheelMoved(MouseWheelEvent e) {
-        if (e.getWheelRotation() < 0) {
-            gunequiperror = MouseWheelUp();
-            if (game.getState() == GameState.GAME_OVER || game.getState() == GameState.PAUSE_MENU) {
-            } else {
-                playSoundEquip(gunequiperror);
+        if(Game.getState() == GameState.LEVEL || Game.getState() == GameState.TUTORIAL) {
+            if (e.getWheelRotation() < 0) {
+                gunequiperror = MouseWheelUp();
             }
-        } else {
-            gunequiperror = MouseWheelDown();
-            if (game.getState() == GameState.GAME_OVER || game.getState() == GameState.PAUSE_MENU) {
-            } else {
-                playSoundEquip(gunequiperror);
+            else {
+                gunequiperror = MouseWheelDown();
             }
+            playSoundEquip(gunequiperror);
         }
     }
     //endregion
@@ -342,7 +338,7 @@ public class MouseInput extends MouseAdapter {
         if (game.ammo <= 0) {
             playSoundGun(game.ammo); //has no ammo
         }
-        while (mouseDown && game.ammo >= 1 && game.getState() != GameState.GAME_OVER) {
+        while (mouseDown && game.ammo >= 1 && Game.getState() != GameState.GAME_OVER) {
 
             PointerInfo a = MouseInfo.getPointerInfo();
             Point point = new Point(a.getLocation());
@@ -383,7 +379,7 @@ public class MouseInput extends MouseAdapter {
     private void shotgun(MouseEvent e) {
         handler.now = System.currentTimeMillis();
         //IF waiting time is over AND player has ammo -> shoot a bullet
-        if (handler.now > handler.wait && game.ammo >= 1 && game.getState() != GameState.GAME_OVER) {
+        if (handler.now > handler.wait && game.ammo >= 1 && Game.getState() != GameState.GAME_OVER) {
             PointerInfo a = MouseInfo.getPointerInfo();
             Point point = new Point(a.getLocation());
             SwingUtilities.convertPointFromScreen(point, e.getComponent());
