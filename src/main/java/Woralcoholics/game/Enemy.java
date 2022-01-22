@@ -2,7 +2,6 @@ package Woralcoholics.game;
 
 import javax.sound.sampled.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -34,7 +33,7 @@ public class Enemy extends GameObject {
     private Animations enemyAnimation;
 
     public boolean hittedWall = false;
-    Integer[] solution = new Integer[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    Integer[] solution = new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     //hittedWall is for changing the aiming target of player to nothing
 
     private GameManager manager;
@@ -52,7 +51,7 @@ public class Enemy extends GameObject {
         this.manager = manager;
         this.score = score;
         hp = maxHp;
-        enemyAnimation = new Animations(9,Game.enemy[list.get(0)],Game.enemy[list.get(1)],Game.enemy[list.get(2)],Game.enemy[list.get(3)],Game.enemy[list.get(4)],Game.enemy[list.get(5)],Game.enemy[list.get(6)],Game.enemy[list.get(7)],Game.enemy[list.get(8)],Game.enemy[list.get(9)],Game.enemy[list.get(10)],Game.enemy[list.get(11)],Game.enemy[list.get(12)]);
+        enemyAnimation = new Animations(9, Game.enemy[list.get(0)], Game.enemy[list.get(1)], Game.enemy[list.get(2)], Game.enemy[list.get(3)], Game.enemy[list.get(4)], Game.enemy[list.get(5)], Game.enemy[list.get(6)], Game.enemy[list.get(7)], Game.enemy[list.get(8)], Game.enemy[list.get(9)], Game.enemy[list.get(10)], Game.enemy[list.get(11)], Game.enemy[list.get(12)]);
     }
 
     //endregion
@@ -60,7 +59,7 @@ public class Enemy extends GameObject {
     //region PUBLIC METHODS
 
     public void update() {
-        if(isInGame) {
+        if (isInGame) {
             move();
 
             enemyAnimation.runAnimations();
@@ -78,14 +77,59 @@ public class Enemy extends GameObject {
     }
 
     public void render(Graphics g) {
-        if(isInGame) {
+        if (isInGame) {
             enemyAnimation.renderAnimation(g, (int) x, (int) y);
             if (hp != maxHp) {
                 renderHPBar(g);
             }
         }
-        //g.drawImage(enemy_img, (int) x, (int) y, null);
+//        Graphics2D g2d = (Graphics2D) g;
+//        g.setColor(Color.GREEN);
+//        g2d.draw(topColider());
+//        /*g2d.draw(leftColider());
+//        *//*g2d.draw(rigthColider());*//*
+//        g2d.draw(downColider());*/
+//        g2d.draw(getBoundsAround());
+//        //g.drawImage(enemy_img, (int) x, (int) y, null);
+   }
+
+    private Rectangle topColider() {
+        Rectangle top = getBounds();
+        top.width = 30;
+        top.height = 5;
+        top.y += 1;
+
+        return top;
     }
+
+    private Rectangle downColider() {
+        Rectangle top = getBounds();
+        top.width = 32;
+        top.height = 5;
+
+        top.y +=  30;
+
+        return top;
+    }
+
+    private Rectangle leftColider() {
+        Rectangle top = getBounds();
+        top.width = 5;
+        top.x +=1;
+        top.height = 30;
+        return top;
+    }
+
+    private Rectangle rigthColider() {
+        Rectangle top = getBounds();
+        top.width = 5;
+        top.height = 30;
+        top.x += 30;
+        top.x +=1;
+        return top;
+    }
+
+
 
     /***
      * Render function of the HP Bar
@@ -94,12 +138,16 @@ public class Enemy extends GameObject {
     protected void renderHPBar(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect((int) x - 8, (int) y - 12, 48, 6);
-        if(hpPercent > 0.5) {g.setColor(Color.green);}
-        else if(hpPercent > 0.25) {g.setColor(Color.YELLOW);}
-        else {g.setColor(Color.RED);}
-        g.fillRect((int) x - 6, (int) y - 10, (int)(44.0*hpPercent), 2);
+        if (hpPercent > 0.5) {
+            g.setColor(Color.green);
+        } else if (hpPercent > 0.25) {
+            g.setColor(Color.YELLOW);
+        } else {
+            g.setColor(Color.RED);
+        }
+        g.fillRect((int) x - 6, (int) y - 10, (int) (44.0 * hpPercent), 2);
         g.setColor(Color.WHITE);
-        g.drawString(String.format("%.2f", hpPercent * 100) + "%", (int) (x-2), (int) (y-16));
+        g.drawString(String.format("%.2f", hpPercent * 100) + "%", (int) (x - 2), (int) (y - 16));
     }
 
     /***
@@ -119,13 +167,26 @@ public class Enemy extends GameObject {
             GameObject tmpObject = manager.object.get(i);
 
             //if it's colliding with a block
-            if (tmpObject.getId() == ID.Block || tmpObject.getId() == ID.DestroyableBoxes ) {
+
+            if (tmpObject.getId() == ID.Block || tmpObject.getId() == ID.DestroyableBoxes) {
+                if(topColider().intersects(tmpObject.getBounds())){
+                    //System.out.println("top");
+                }
+                else if(leftColider().intersects(tmpObject.getBounds())){
+                    //System.out.println("left");
+                }else  if(rigthColider().intersects(tmpObject.getBounds())){
+                    //System.out.println("rigth");
+                }
+                else if(downColider().intersects((tmpObject.getBounds()))){
+                    //.out.println("down");
+                }
                 if (getBoundsAround().intersects(tmpObject.getBounds())) {
                     // if it is colliding with wall it goes in the opposite direction
                     x += (velX * 3) * -1;
                     y += (velY * 3) * -1;
                     velX *= -1;
                     velY *= -1;
+
                     //enemy cant aim player anymore -> prevents stucking at the wall
                     hittedWall = true;
 
@@ -136,10 +197,17 @@ public class Enemy extends GameObject {
             }
 
 
-
             // collision enemy with player
             if (tmpObject.getId() == ID.Player) {
-                if (hittedWall == false) {
+                if (!hittedWall) {
+                    // if hitted the wall enemy runs different like before
+                    booleanValue = r.nextInt(100 - 1) + 1; //maybe change
+
+                    if (booleanValue == 10) {
+                        // now enemy aims to player
+                        hittedWall = false;
+                    }
+                } else {
                     // enemy behaviour
                     if (tmpObject.getX() + 6 >= x && tmpObject.getX() - 6 <= x) {
                         velX = 0;
@@ -162,27 +230,19 @@ public class Enemy extends GameObject {
 
                     }
 
-                } else {
-                    // if hitted the wall enemy runs different like before
-                    booleanValue = r.nextInt(100 - 1) + 1; //maybe change
-
-                    if (booleanValue == 10) {
-                        // now enemy aims to player
-                        hittedWall = false;
-                    }
                 }
             }
         }
     }
 
     public void bulletCollision() {
-        for(int i = 0; i < manager.bullets.size(); i++) {
+        for (int i = 0; i < manager.bullets.size(); i++) {
             Bullet temp = manager.bullets.get(i);
             //if our bullet is colliding with the enemy hp get's -50
             if (getBounds().intersects(temp.getBounds()) && temp.inGame && temp.getId() == ID.Bullet) {
                 //System.out.println("hit");
                 hp -= 110;
-                hpPercent = hp/(float)maxHp;
+                hpPercent = hp / (float) maxHp;
                 if (hp > 10) playSoundEnemyHit();
                 //System.out.println("einem enemy leben abgezogen " + hp);
 
