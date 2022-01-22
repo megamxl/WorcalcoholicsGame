@@ -77,6 +77,8 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage imgStudio;
     private BufferedImage imgTitle;
     private BufferedImage currGun = null;
+    private BufferedImage imgHUD;
+
     private Upgrades upgrades;
 
     public static BufferedImage[] playerWalkingLeft = new BufferedImage[10];
@@ -95,6 +97,11 @@ public class Game extends Canvas implements Runnable {
     public int hp = 100;
     private int[] randomUpgrades = {1,1,1};
     static Score score = new Score(0);
+
+    private final Font font = new Font("Chiller", Font.PLAIN, 40);
+    // Armor - Shield - Ammo
+    private final Color[] colors = {new Color(41, 166, 41), new Color(16, 49, 194),
+                                    new Color(176, 172, 8)};
 
     public static String playerName = null;
     private String levelDecision;
@@ -127,6 +134,7 @@ public class Game extends Canvas implements Runnable {
     private static ImageGetter getBloodScreen;
     private static ImageGetter GameOverScreenImg;
     private static ImageGetter getTutorialDialogWindowBorder;
+    private static ImageGetter getHUDPicture;
 
     //private static ImageGetter TitleScreenImg;
     private static ImageGetter getUIButton;
@@ -171,6 +179,9 @@ public class Game extends Canvas implements Runnable {
         BufferedImageLoader loader = new BufferedImageLoader();
         spritesheet = loader.loadImage("/Graphics/Spritesheet.png");
         imageGetter = new ImageGetter(spritesheet);
+
+        imgHUD = loader.loadImage("/Graphics/HUDSheet.png");
+        getHUDPicture = new ImageGetter(imgHUD);
 
         upgradeButtonImg = loader.loadImage("/Graphics/UpgradeBorder.png");
         getUpgradeButton = new ImageGetter(upgradeButtonImg);
@@ -548,26 +559,44 @@ public class Game extends Canvas implements Runnable {
             g.drawImage(bloodScreen, 1, 1, null);
         }
 
-        g.setColor(Color.gray);
-        g.fillRect(5, 5, 200, 16); //hp
-        g.fillRect(5, 30, 200, 16); //ammo
-        g.fillRect(5, 80, 200, 8); //reload
-        if (shield > 0) {
-            g.fillRect(5, 55, 200, 16); //shield
+        g.setFont(font);
 
-            g.setColor(Color.blue);
-            g.drawString("SHIELD: " + shield + "/40", 210, 67);
-            g.fillRect(5, 55, shield * 5, 16);
+        //HP
+        g.drawImage(getHUDPicture.getImage48(2, 2, 48, 48), 5, 0, null);
+
+        if (hp >= 70)
+            g.setColor(Color.green);
+        else if (hp >= 40)
+            g.setColor(Color.orange);
+        else
+            g.setColor(Color.red);
+        g.drawString(Integer.toString(hp), 60, 40);
+
+        //AMMO
+        g.drawImage(getHUDPicture.getImage48(1, 2, 48, 48), 5, 50, null);
+        g.setColor(colors[2]);
+        g.drawString(Integer.toString(ammo), 60, 90);
+
+        //SHIELD
+        if (shield >= 0){
+            g.drawImage(getHUDPicture.getImage48(2, 1, 48, 48), 5, 100, null);
+            g.setColor(colors[1]);
+            g.drawString(Integer.toString(shield), 60, 140);
         }
 
-        g.setColor(Color.cyan);
-        g.drawString("AMMO: " + ammo + "/50", 210, 42);
-        g.fillRect(5, 30, ammo * 4, 16);
+        //ARMOR
+        if (armor >= 0){
+            g.drawImage(getHUDPicture.getImage48(1, 1, 48, 48), 5, 150, null);
+            g.setColor(colors[0]);
+            g.drawString(Integer.toString(armor) + "%", 60, 190);
+        }
 
-        g.setColor(Color.orange);
-        g.drawString("RELOAD: " + (int) percent + "%", 210, 89);
-        g.fillRect(5, 80, (int) percent * 2, 8);
+        //RELOAD
+       // g.setColor(Color.orange);
+       // g.drawString("RELOAD: " + (int) percent + "%", 210, 89);
+       // g.fillRect(5, 80, (int) percent * 2, 8);
 
+        //GUN
         if (handler.del == 0) {
             g.setColor(Color.cyan);
             //g.drawString("MACHINE GUN", 210, 95);
@@ -582,26 +611,12 @@ public class Game extends Canvas implements Runnable {
             currGun = imageGetter.getImage(1, 10, 64, 64);
         }
 
-        if (hp >= 70)
-            g.setColor(Color.green);
-        else if (hp >= 40)
-            g.setColor(Color.orange);
-        else
-            g.setColor(Color.red);
-        g.drawString("HP: " + hp + "/100", 210, 17);
-        g.fillRect(5, 5, hp * 2, 16);
-
-        g.setColor(Color.black);
-        g.drawRect(5, 5, 200, 16); //hp
-        g.drawRect(5, 30, 200, 16); //ammo
-        if (shield > 0)
-            g.drawRect(5, 55, 200, 16);
-
-        g.setColor(Color.MAGENTA);
+        //WAVES
+        g.setColor(Color.magenta);
         //g.drawString("Sound " + handler.soundv, 930, 17);
-        g.drawString("Waves " + Enemy.waves, 930, 40);
-        g.drawString("Enemies " + Enemy.enemysAlive, 915, 63);
-        g.drawString("Score " + score.showScore(), 915, 76);
+        g.drawString("Wave: " + Enemy.waves, 840, 40);
+        g.drawString("Enemies: " + Enemy.enemysAlive, 840, 70);
+        g.drawString("Score: " + score.showScore(), 840, 100);
 
         if (shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...
             g.setColor(Color.ORANGE);

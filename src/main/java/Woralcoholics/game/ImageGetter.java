@@ -34,5 +34,9 @@ public class ImageGetter {
     public BufferedImage getImage32(int col, int row, int width, int height) {
         return img.getSubimage((col * 32) - 32, (row * 32) - 32, width, height);
     }
+
+    public BufferedImage getImage48(int col, int row, int width, int height){
+        return img.getSubimage((col * 48) - 48, (row * 48) - 48, width, height);
+    }
     //endregion
 }
