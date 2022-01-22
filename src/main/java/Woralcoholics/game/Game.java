@@ -563,7 +563,6 @@ public class Game extends Canvas implements Runnable {
 
         //HP
         g.drawImage(getHUDPicture.getImage48(2, 2, 48, 48), 5, 0, null);
-
         if (hp >= 70)
             g.setColor(Color.green);
         else if (hp >= 40)
@@ -578,23 +577,19 @@ public class Game extends Canvas implements Runnable {
         g.drawString(Integer.toString(ammo), 60, 90);
 
         //SHIELD
-        if (shield >= 0){
             g.drawImage(getHUDPicture.getImage48(2, 1, 48, 48), 5, 100, null);
             g.setColor(colors[1]);
             g.drawString(Integer.toString(shield), 60, 140);
-        }
 
         //ARMOR
-        if (armor >= 0){
             g.drawImage(getHUDPicture.getImage48(1, 1, 48, 48), 5, 150, null);
             g.setColor(colors[0]);
             g.drawString(Integer.toString(armor) + "%", 60, 190);
-        }
 
-        //RELOAD
-       // g.setColor(Color.orange);
-       // g.drawString("RELOAD: " + (int) percent + "%", 210, 89);
-       // g.fillRect(5, 80, (int) percent * 2, 8);
+       //RELOAD
+        if(percent != 100)
+            g.drawImage(getHUDPicture.getImage48(3, 1, 48, 48), 5, 200, null);
+
 
         //GUN
         if (handler.del == 0) {
@@ -614,9 +609,9 @@ public class Game extends Canvas implements Runnable {
         //WAVES
         g.setColor(Color.magenta);
         //g.drawString("Sound " + handler.soundv, 930, 17);
-        g.drawString("Wave: " + Enemy.waves, 840, 40);
-        g.drawString("Enemies: " + Enemy.enemysAlive, 840, 70);
-        g.drawString("Score: " + score.showScore(), 840, 100);
+        g.drawString("Wave: " + Enemy.waves, 850, 40);
+        g.drawString("Enemies: " + Enemy.enemysAlive, 850, 70);
+        g.drawString("Score: " + score.showScore(), 850, 100);
 
         if (shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...
             g.setColor(Color.ORANGE);
