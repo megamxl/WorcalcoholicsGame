@@ -8,7 +8,7 @@ public class Crate extends GameObject{
 
     public Crate(int x, int y, ID id, ImageGetter an){
         super(x, y, id, an);
-        crate_image = an.getImage(4,10,64,64); // gets the sprite of the ammo create
+        crate_image = an.getImage(1,9,64,64); // gets the sprite of the ammo create
     }
 
     // create should do nothing in update is a static piece

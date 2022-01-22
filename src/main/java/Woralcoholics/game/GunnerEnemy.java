@@ -3,6 +3,7 @@ package Woralcoholics.game;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
@@ -205,6 +206,15 @@ public class GunnerEnemy extends Enemy {
                 if (getBoundsAround().intersects(tmpObject.getBounds())) {
                     gunnerState = state.NEAR_WALL;
                     break;
+                }
+            }
+            if(tmpObject.getId() == ID.SwordHitbox) {
+                Line2D line = new Line2D.Double(tmpObject.getX(), tmpObject.getY(),
+                        tmpObject.getBounds().getWidth(), tmpObject.getBounds().getHeight());
+                if(getBoundsAround().intersectsLine(line)) {
+                    hp -= 110;
+                    hpPercent = hp/(float)maxHp;
+                    if (hp > 10) playSoundEnemyHit();
                 }
             }
         }

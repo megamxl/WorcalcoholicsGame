@@ -3,6 +3,7 @@ package Woralcoholics.game;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -71,12 +72,11 @@ public class DestroyableBoxes extends GameObject {
                         temp.inGame = false;
                         temp.setPos(0,0);
                         boxDestroyedSound();
-                        if (manager.selectedgun.getType() == GunType.Pistol)
-                            hp -= 40; //could be also random in a specific range
-                        else if (manager.selectedgun.getType() == GunType.Shotgun)
-                            hp -= 30;
-                        else //
-                            hp -= 20;
+                        switch (manager.selectedWeapon.getType()) {
+                            case Pistol -> hp -= 40; //could be also random in a specific range
+                            case Shotgun -> hp -= 30;
+                            case MachineGun -> hp -= 20;
+                        }
                         crackedState();
                     }
                     case EnemyBullet -> {
@@ -88,6 +88,18 @@ public class DestroyableBoxes extends GameObject {
                         hp -= 20;
                         crackedState();
                     }
+                }
+            }
+        }
+        for(GameObject object : manager.object) {
+            if(object.getId() == ID.SwordHitbox) {
+                Line2D line = new Line2D.Double(object.getX(), object.getY(),
+                        object.getBounds().getWidth(), object.getBounds().getHeight());
+                if(getBounds().intersectsLine(line)) {
+                    boxDestroyedSound();
+                    hp -= 10;
+                    crackedState();
+                    manager.removeObject(object);
                 }
             }
         }

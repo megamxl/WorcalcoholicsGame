@@ -3,61 +3,61 @@ package Woralcoholics.game;
 import java.util.LinkedList;
 
 /**
- * The Gun Class
+ * The Weapon Class
  *
  * @author Christoph Oprawill
  */
 
-public class Gun {
+public class Weapon {
 
     //region INSTANCE VARIABLES
-    public static LinkedList<Gun> guns = new LinkedList<>();
-    private Enum type;
+    public static LinkedList<Weapon> weapons = new LinkedList<>();
+    private WeaponType type;
     private boolean locked;
 
     //endregion
     //region CONSTRUCTOR
-    public void Gun(Enum type, boolean locked) {
+    public void Weapon(WeaponType type, boolean locked) {
         this.type = type;
         this.locked = locked;
     }
 
     //endregion
     //region METHODS
-    public void addObject(Gun tempObject, Enum type, boolean locked) {
+    public void addObject(Weapon tempObject, WeaponType type, boolean locked) {
         tempObject.type = type;
         tempObject.locked = locked;
-        guns.add(tempObject);
+        weapons.add(tempObject);
     }
 
-    public void manipulteList(int index, Gun tempObject, Enum type, boolean locked) {
+    public void manipulteList(int index, Weapon tempObject, WeaponType type, boolean locked) {
         tempObject.type = type;
         tempObject.locked = locked;
-        guns.set(index, tempObject);
+        weapons.set(index, tempObject);
     }
 
-    public int getIndex(GunType gunType) {
-        int indexGun = 0;
+    public int getIndex(WeaponType weaponType) {
+        int indexWeapon = 0;
         int i = 0;
 
         //boolean breakOut=false;
-        for (Gun g : guns) {
-            if (g.getType() == gunType) {
-                indexGun = i;
+        for (Weapon w : weapons) {
+            if (w.getType() == weaponType) {
+                indexWeapon = i;
                 break;
             }
             i++;
         }
-        return indexGun;
+        return indexWeapon;
     }
 
     //endregion
     //region GETTER/SETTER
-    public Enum getType() {
+    public WeaponType getType() {
         return type;
     }
 
-    public void setType(Enum type) {
+    public void setType(WeaponType type) {
         this.type = type;
     }
 

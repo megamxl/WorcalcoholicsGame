@@ -4,7 +4,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Window;
 import java.awt.event.*;
 import java.io.IOException;
 import java.awt.event.MouseWheelEvent;
@@ -25,18 +24,18 @@ public class MouseInput extends MouseAdapter {
     private Camera camera;
     private Game game;
     private ImageGetter an;
-    private Gun gun;
+    private Weapon weapon;
     volatile private boolean mouseDown = false; //determine if mouse1 is pressed or not
-    private boolean gunequiperror = false;
+    private boolean weaponEquipError = false;
     Upgrades upgrades;
 
-    public MouseInput(GameManager handler, Camera camera, Game game, ImageGetter an, Gun gun) {
+    public MouseInput(GameManager handler, Camera camera, Game game, ImageGetter an, Weapon weapon) {
         this.handler = handler;
         this.camera = camera;
         this.game = game;
         this.an = an;
         this.upgrades = new Upgrades(game);
-        this.gun = gun;
+        this.weapon = weapon;
     }
 
     private void getPlayer() {
@@ -77,49 +76,42 @@ public class MouseInput extends MouseAdapter {
                  * 3 = RIGHT MOUSE BUTTON **/
                 switch (button) {
                     case 1 -> {
-                        if (handler.del == 0) {
-                            try {
-                                new Thread(() -> {
-                                    machinegun(e);
-                                }).start();
-                            } catch (Exception exception) {
-                                exception.printStackTrace();
-                            }
-                        } else if (handler.del == 1000) {
-                            try {
-                                new Thread(() -> {
-                                    shotgun(e);
-                                }).start();
-                            } catch (Exception exception) {
-                                exception.printStackTrace();
-                            }
-                        } else {
-                            handler.now = System.currentTimeMillis();
-                            //IF waiting time is over AND player has ammo -> shoot a bullet
-                            if (handler.now > handler.wait && game.ammo >= 1) {
-                                //grab a free bullet from the bullet pool
-                                for (int i = 0; i < handler.bullets.size(); i++) {
-                                    Bullet temp = handler.bullets.get(i);
-                                    if (!temp.inGame) {
-                                        //Add camera pos, as bullets don't aim correctly otherwise
-                                        double mx = currentPos.x + camera.getX();
-                                        double my = currentPos.y + camera.getY();
-                                        //Middle of player coordinates
-                                        double px = player.getX() + 32 - 4;
-                                        double py = player.getY() + 32 - 4;
-                                        temp.setPos(px, py);
-                                        temp.direction(mx, my, px, py, false, 0, false);
-                                        temp.inGame = true;
-                                        //System.out.println(handler.bullets.get(i));
-                                        break;
-                                    }
+                        switch (handler.del) {
+                            case 0 -> {
+                                try {
+                                    new Thread(() -> {
+                                        machinegun(e);
+                                    }).start();
+                                } catch (Exception exception) {
+                                    exception.printStackTrace();
                                 }
-                                playSoundGun(game.ammo);
-                                game.ammo--;    //Subtract 1 from ammo (bullet was shot)
-                                handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
-                            } else if (handler.now > handler.wait && game.ammo <= 0) {
-                                playSoundGun(game.ammo); //has no ammo
-                                handler.wait = handler.now + handler.del;
+                            }
+                            case 200 -> {
+                                try {
+                                    new Thread(() -> {
+                                        pistol(currentPos);
+                                    }).start();
+                                } catch (Exception exception) {
+                                    exception.printStackTrace();
+                                }
+                            }
+                            case 300 -> {
+                                try {
+                                    new Thread(() -> {
+                                        sword(currentPos);
+                                    }).start();
+                                } catch (Exception exception) {
+                                    exception.printStackTrace();
+                                }
+                            }
+                            case 1000 -> {
+                                try {
+                                    new Thread(() -> {
+                                        shotgun(e);
+                                    }).start();
+                                } catch (Exception exception) {
+                                    exception.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -265,12 +257,12 @@ public class MouseInput extends MouseAdapter {
     public void mouseWheelMoved(MouseWheelEvent e) {
         if(Game.getState() == GameState.LEVEL || Game.getState() == GameState.TUTORIAL) {
             if (e.getWheelRotation() < 0) {
-                gunequiperror = MouseWheelUp();
+                weaponEquipError = MouseWheelUp();
             }
             else {
-                gunequiperror = MouseWheelDown();
+                weaponEquipError = MouseWheelDown();
             }
-            playSoundEquip(gunequiperror);
+            playSoundEquip(weaponEquipError);
         }
     }
     //endregion
@@ -280,12 +272,12 @@ public class MouseInput extends MouseAdapter {
      * Runs the sound if player gets hurt
      * @param ammo
      */
-    private void playSoundGun(int ammo) {
+    private void playSoundWeapon(int ammo) {
         try {
             new Thread(() -> {
 
                 try {
-                    handler.playSoundGun(ammo);
+                    handler.playSoundWeapon(ammo);
                 } catch (LineUnavailableException ex) {
                     ex.printStackTrace();
                 } catch (UnsupportedAudioFileException ex) {
@@ -327,6 +319,36 @@ public class MouseInput extends MouseAdapter {
         }
     }
 
+    private void pistol(Point currentPos) {
+        handler.now = System.currentTimeMillis();
+        //IF waiting time is over AND player has ammo -> shoot a bullet
+        if (handler.now > handler.wait && game.ammo >= 1) {
+            //grab a free bullet from the bullet pool
+            for (int i = 0; i < handler.bullets.size(); i++) {
+                Bullet temp = handler.bullets.get(i);
+                if (!temp.inGame) {
+                    //Add camera pos, as bullets don't aim correctly otherwise
+                    double mx = currentPos.x + camera.getX();
+                    double my = currentPos.y + camera.getY();
+                    //Middle of player coordinates
+                    double px = player.getX() + 32 - 4;
+                    double py = player.getY() + 32 - 4;
+                    temp.setPos(px, py);
+                    temp.direction(mx, my, px, py, false, 0, false);
+                    temp.inGame = true;
+                    //System.out.println(handler.bullets.get(i));
+                    break;
+                }
+            }
+            playSoundWeapon(game.ammo);
+            game.ammo--;    //Subtract 1 from ammo (bullet was shot)
+            handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
+        } else if (handler.now > handler.wait && game.ammo <= 0) {
+            playSoundWeapon(game.ammo); //has no ammo
+            handler.wait = handler.now + handler.del;
+        }
+    }
+
     /***
      * machinegun method that behaves specially for machine gun
      * @param e
@@ -336,7 +358,7 @@ public class MouseInput extends MouseAdapter {
         handler.now = System.currentTimeMillis();
         //IF waiting time is over AND player has ammo -> shoot a bullet
         if (game.ammo <= 0) {
-            playSoundGun(game.ammo); //has no ammo
+            playSoundWeapon(game.ammo); //has no ammo
         }
         while (mouseDown && game.ammo >= 1 && Game.getState() != GameState.GAME_OVER) {
 
@@ -358,7 +380,7 @@ public class MouseInput extends MouseAdapter {
                     temp.direction(mx, my, px, py, false, 0, false);
                     temp.inGame = true;
                     //System.out.println(handler.bullets.get(i));
-                    playSoundGun(game.ammo);
+                    playSoundWeapon(game.ammo);
                     game.ammo--;    //Subtract 1 from ammo (bullet was shot)
                     break;
                 }
@@ -386,7 +408,7 @@ public class MouseInput extends MouseAdapter {
             int x = (int) point.getX();
             int y = (int) point.getY();
             int shells = 0;
-            playSoundGun(game.ammo);
+            playSoundWeapon(game.ammo);
             for (int i = 0; i < handler.bullets.size(); i++) {
                 Bullet temp = handler.bullets.get(i);
                 if (!temp.inGame) {
@@ -408,7 +430,7 @@ public class MouseInput extends MouseAdapter {
 
                     // 1 ammo (user perspective) -> shoot like a pistol
                     //  2 ammo  (user perspective) -> shoots like a shotgun with angle 0° and 10°
-                    if (game.ammo == 0 && shells == 1 || game.ammo == 0 && shells == 2) {
+                    if (game.ammo == 0 && (shells == 1 || shells == 2)) {
                         break;
                     }
                     if (shells == 3) break;
@@ -422,8 +444,43 @@ public class MouseInput extends MouseAdapter {
             //System.out.println(game.ammo);
             handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
         } else if (handler.now > handler.wait && game.ammo <= 0) {
-            playSoundGun(game.ammo); //has no ammo
+            playSoundWeapon(game.ammo); //has no ammo
             handler.wait = handler.now + handler.del;
+        }
+    }
+
+    private void sword(Point currentPos) {
+        System.out.println("SWING");
+        handler.now = System.currentTimeMillis();
+        //IF waiting time is over -> swing the sword
+        if (handler.now > handler.wait) {
+            handler.clearObjects(ID.SwordHitbox);
+            double mx = currentPos.x + camera.getX();
+            double my = currentPos.y + camera.getY();
+            //Middle of player coordinates
+            float px = player.getX() + 32;
+            float py = player.getY() + 32;
+            SwordHitbox temp = new SwordHitbox(px, py, ID.SwordHitbox, handler, an);
+            temp.startingDirection(mx, my);
+            handler.object.add(temp);
+            /*for (int i = 0; i < handler.object.size(); i++) {
+
+                if (!temp.inGame) {
+                    //Add camera pos, as bullets don't aim correctly otherwise
+                    double mx = currentPos.x + camera.getX();
+                    double my = currentPos.y + camera.getY();
+                    //Middle of player coordinates
+                    float px = player.getX() + 32 - 4;
+                    float py = player.getY() + 32 - 4;
+                    temp.setPos(px, py);
+                    temp.direction(mx, my, px, py, false, 0, false);
+                    temp.inGame = true;
+                    //System.out.println(handler.bullets.get(i));
+                    break;
+                }
+            }*/
+            playSoundWeapon(game.ammo);
+            handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
         }
     }
 
@@ -432,14 +489,14 @@ public class MouseInput extends MouseAdapter {
      * @return
      */
     private boolean MouseWheelUp() {
-        if (handler.gunindex == gun.guns.size() - 1 || checkNextGunLocked()) {
-            return gunequiperror = true;
+        if (handler.weaponIndex == weapon.weapons.size() - 1 || checkNextWeaponLocked()) {
+            return weaponEquipError = true;
 
         } else {
-            handler.gunindex++;
+            handler.weaponIndex++;
         }
-        handler.selectedgun = gun.guns.get(handler.gunindex);
-        return gunequiperror = false;
+        handler.selectedWeapon = weapon.weapons.get(handler.weaponIndex);
+        return weaponEquipError = false;
     }
 
     /***
@@ -447,24 +504,24 @@ public class MouseInput extends MouseAdapter {
      * @return
      */
     private boolean MouseWheelDown() {
-        if (handler.gunindex == 0 || checkPreviousGunLocked()) {
-            return gunequiperror = true;
+        if (handler.weaponIndex == 0 || checkPreviousWeaponLocked()) {
+            return weaponEquipError = true;
 
         } else {
-            handler.gunindex--;
+            handler.weaponIndex--;
         }
-        handler.selectedgun = gun.guns.get(handler.gunindex);
-        return gunequiperror = false;
+        handler.selectedWeapon = weapon.weapons.get(handler.weaponIndex);
+        return weaponEquipError = false;
     }
 
     /***
-     * check if the next gun is available through locked var
+     * check if the next weapon is available through locked var
      * @return
      */
-    private boolean checkNextGunLocked() {
-        int index = handler.gunindex + 1;
-        Gun nextGun = gun.guns.get(index);
-        if (nextGun.isLocked()) {
+    private boolean checkNextWeaponLocked() {
+        int index = handler.weaponIndex + 1;
+        Weapon nextWeapon = weapon.weapons.get(index);
+        if (nextWeapon.isLocked()) {
             return true;
         } else {
             return false;
@@ -484,13 +541,13 @@ public class MouseInput extends MouseAdapter {
     }
 
     /***
-     * check if the previous gun is available through locked var
+     * check if the previous weapon is available through locked var
      * @return
      */
-    private boolean checkPreviousGunLocked() {
-        int index = handler.gunindex - 1;
-        Gun previousGun = gun.guns.get(index);
-        if (previousGun.isLocked()) {
+    private boolean checkPreviousWeaponLocked() {
+        int index = handler.weaponIndex - 1;
+        Weapon previousWeapon = weapon.weapons.get(index);
+        if (previousWeapon.isLocked()) {
             return true;
         } else {
             return false;

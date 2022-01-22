@@ -25,7 +25,7 @@ public class Player extends GameObject {
     public static Boolean takesDamage;
 
     private final BufferedImage player_img;
-    private BufferedImage player_gun_img;
+    private BufferedImage player_weapon_img;
     private Animations playerWalkLeft;
     private Animations playerWalkRigth;
     private Animations playerIdle;
@@ -54,7 +54,7 @@ public class Player extends GameObject {
         playerIdle = new Animations(3, Game.playerIdle[0], Game.playerIdle[1], Game.playerIdle[2], Game.playerIdle[3]);
 
         player_img = an.getImage(1, 3, 64, 64);
-        player_gun_img = an.getImage(5, 10, 64, 64);
+        player_weapon_img = an.getImage(5, 10, 64, 64);
         // default values
         coordinatesadditive[0] = 42;
         coordinatesadditive[1] = 25;
@@ -77,7 +77,7 @@ public class Player extends GameObject {
         isDead();
         keySounds();
         movement();
-        checkGunRenderStatus();
+        checkWeaponRenderStatus();
         validateCoordinates();
 
         if (Game.inTutorial) {
@@ -146,7 +146,7 @@ public class Player extends GameObject {
         } else {
             playerIdle.renderAnimation(g, (int) x, (int) y, 64, 64);
         }
-        g.drawImage(player_gun_img, ((int) x) + coordinatesadditive[0], ((int) y) + coordinatesadditive[1], null); // x and y adjustable for gun position
+        g.drawImage(player_weapon_img, ((int) x) + coordinatesadditive[0], ((int) y) + coordinatesadditive[1], null); // x and y adjustable for gun position
 
         // draw other colliders
         /*g.setColor(Color.RED);
@@ -188,28 +188,37 @@ public class Player extends GameObject {
     }
 
     /***
-     * check which image should be loaded in to gun sprite (if you change weapon it changes too with different img, height, width)
+     * check which image should be loaded in to weapon sprite (if you change weapon it changes too with different img, height, width)
      */
-    private void checkGunRenderStatus() {
+    private void checkWeaponRenderStatus() {
         int[] colrow = new int[2];
         colrow = game.getColRowFromIndex();
-        int width;
-        int height;
-        if (handler.selectedgun.getType() == GunType.Pistol) {
-            width = 19;
-            height = 19;
-            player_gun_img = an.getImage(colrow[0], colrow[1], width, height); // pistol
+        int width = 0;
+        int height = 0;
+        boolean weaponIsGun = false;
+        switch (handler.selectedWeapon.getType()) {
+            case Pistol -> {
+                width = 19;
+                height = 19;
+                weaponIsGun = true;
+                //player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); // pistol
+            }
+            case Shotgun, MachineGun -> {
+                width = 32;
+                height = 19;
+                weaponIsGun = true;
+                //player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); //shotgun
+            }
+            case Sword -> {
+                width = 32;
+                height = 11;
+                weaponIsGun = false;
+            }
         }
-        if (handler.selectedgun.getType() == GunType.Shotgun) {
-            width = 32;
-            height = 19;
-            player_gun_img = an.getImage(colrow[0], colrow[1], width, height); //shotgun
-        } else {
-            width = 32;
-            height = 19;
-            player_gun_img = an.getImage(colrow[0], colrow[1], width, height); //machine gun
+        player_weapon_img = an.getImage(colrow[0], colrow[1], width, height);
+        if (weaponIsGun) {
+            rotate();
         }
-        rotate();
     }
 
     /***
@@ -221,19 +230,19 @@ public class Player extends GameObject {
         //get variable you need for mathematic calculations
         final double sin = Math.abs(Math.sin(rads));
         final double cos = Math.abs(Math.cos(rads));
-        final int width = (int) Math.floor(player_gun_img.getWidth() * cos + player_gun_img.getHeight() * sin);
-        final int height = (int) Math.floor(player_gun_img.getHeight() * cos + player_gun_img.getWidth() * sin);
+        final int width = (int) Math.floor(player_weapon_img.getWidth() * cos + player_weapon_img.getHeight() * sin);
+        final int height = (int) Math.floor(player_weapon_img.getHeight() * cos + player_weapon_img.getWidth() * sin);
 
         // rotated image
-        final BufferedImage player_gun_img_rotated = new BufferedImage(width, height, player_gun_img.getType());
+        final BufferedImage player_gun_img_rotated = new BufferedImage(width, height, player_weapon_img.getType());
         final AffineTransform at = new AffineTransform();
-        at.translate(width / 2, height / 2);
+        at.translate(width / 2.0, height / 2.0);
         at.rotate(rads, 0, 0);
-        at.translate(-player_gun_img.getWidth() / 2, -player_gun_img.getHeight() / 2);
+        at.translate(-player_weapon_img.getWidth() / 2.0, -player_weapon_img.getHeight() / 2.0);
         final AffineTransformOp rotateOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-        rotateOp.filter(player_gun_img, player_gun_img_rotated);
+        rotateOp.filter(player_weapon_img, player_gun_img_rotated);
         //set our rotated image to our actual gun png
-        player_gun_img = player_gun_img_rotated;
+        player_weapon_img = player_gun_img_rotated;
     }
 
     /**

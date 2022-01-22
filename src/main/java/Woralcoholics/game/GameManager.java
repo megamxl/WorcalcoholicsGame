@@ -43,8 +43,8 @@ public class GameManager {
     private double previousms = 0;
     protected boolean ammo = true;
     protected boolean reloaded = true;
-    protected int gunindex = 0;
-    protected Gun selectedgun;
+    protected int weaponIndex = 0;
+    protected Weapon selectedWeapon;
     public float angle; // from bullet
     public boolean playerIsInit = false; // prevents that the MouseEvents gets NullPointerException
 
@@ -431,7 +431,7 @@ public class GameManager {
     }
 
     /**
-     * plays the sound for the gun of the player
+     * plays the sound for the weapon of the player
      *
      * @param ammo
      * @throws LineUnavailableException
@@ -440,60 +440,63 @@ public class GameManager {
      * @throws InterruptedException
      * @throws IllegalArgumentException
      */
-    public void playSoundGun(int ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException, IllegalArgumentException {
-        if (GunType.Pistol.equals(selectedgun.getType())) {
-            if (ammo <= 0) {
+    public void playSoundWeapon(int ammo) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException, IllegalArgumentException {
+        WeaponType selected = selectedWeapon.getType();
+        switch (selected) {
+            case Pistol -> {
+                if (ammo <= 0) {
+                    relativePath = Paths.get("Resource/Sound/pistolempty.wav");
+                } else {
+                    relativePath = Paths.get("Resource/Sound/pistolfire3.wav");
+                }
+            }
+            case Shotgun -> {
+                if (ammo <= 0) {
+                    relativePath = Paths.get("Resource/Sound/shotgunempty.wav");
+                } else {
+                    relativePath = Paths.get("Resource/Sound/shotgunfire.wav");
+                }
+            }
+            case MachineGun -> {
+                if (ammo <= 0) {
+                    relativePath = Paths.get("Resource/Sound/machinegunempty.wav");
+                } else {
+                    relativePath = Paths.get("Resource/Sound/machinegunfire.wav");
+                }
+            }
+            case Sword -> {
                 relativePath = Paths.get("Resource/Sound/pistolempty.wav");
-            } else {
-                relativePath = Paths.get("Resource/Sound/pistolfire3.wav");
-            }
-        } else if (GunType.Shotgun.equals(selectedgun.getType())) {
-            if (ammo <= 0) {
-                relativePath = Paths.get("Resource/Sound/shotgunempty.wav");
-            } else {
-                relativePath = Paths.get("Resource/Sound/shotgunfire.wav");
-            }
-        } else if (GunType.MachineGun.equals(selectedgun.getType())) {
-            if (ammo <= 0) {
-                relativePath = Paths.get("Resource/Sound/machinegunempty.wav");
-            } else {
-                relativePath = Paths.get("Resource/Sound/machinegunfire.wav");
             }
         }
-
         volume = getClip();
-        if (soundv == 0) {
-            volume.setValue(-80f);
-        } else if (soundv == 1) {
-            if (ammo <= 0) {
-                if (GunType.Pistol.equals(selectedgun.getType())) {
-                    volume.setValue(-30f);
-                } else if (GunType.Shotgun.equals(selectedgun.getType())) {
-                    volume.setValue(-25f);
-                } else if (GunType.MachineGun.equals(selectedgun.getType())) {
-                    volume.setValue(-22f);
-                }
-            } else {
-                if (GunType.Shotgun.equals(selectedgun.getType()) || GunType.MachineGun.equals(selectedgun.getType())) {
-                    volume.setValue(-40f);
+        switch (soundv) {
+            case 0 -> volume.setValue(-80f);
+            case 1 -> {
+                if (ammo <= 0) {
+                    switch (selected) {
+                        case Pistol -> volume.setValue(-30f);
+                        case Shotgun -> volume.setValue(-25f);
+                        case MachineGun -> volume.setValue(-22f);
+                    }
                 } else {
-                    volume.setValue(-45f);
+                    switch (selected) {
+                        case Pistol -> volume.setValue(-45f);
+                        case Shotgun, MachineGun -> volume.setValue(-40f);
+                    }
                 }
             }
-        } else if (soundv == 2) {
-            if (ammo <= 0) {
-                if (GunType.Pistol.equals(selectedgun.getType())) {
-                    volume.setValue(-8f);
-                } else if (GunType.Shotgun.equals(selectedgun.getType())) {
-                    volume.setValue(-3f);
-                } else if (GunType.MachineGun.equals(selectedgun.getType())) {
-                    volume.setValue(0f);
-                }
-            } else {
-                if (GunType.Shotgun.equals(selectedgun.getType()) || GunType.MachineGun.equals(selectedgun.getType())) {
-                    volume.setValue(-18f);
+            case 2 -> {
+                if (ammo <= 0) {
+                    switch (selected) {
+                        case Pistol -> volume.setValue(-8f);
+                        case Shotgun -> volume.setValue(-3f);
+                        case MachineGun -> volume.setValue(0f);
+                    }
                 } else {
-                    volume.setValue(-23f);
+                    switch (selected) {
+                        case Pistol -> volume.setValue(-23f);
+                        case Shotgun, MachineGun -> volume.setValue(-18f);
+                    }
                 }
             }
         }
@@ -546,27 +549,28 @@ public class GameManager {
     }
 
     public void playSoundAmmoReload() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        if (GunType.Pistol.equals(selectedgun.getType())) {
-            relativePath = Paths.get("Resource/Sound/pistolreload.wav");
-        } else if (GunType.Shotgun.equals(selectedgun.getType())) {
-            relativePath = Paths.get("Resource/Sound/shotgunreload.wav");
-        } else if (GunType.MachineGun.equals(selectedgun.getType())) {
-            relativePath = Paths.get("Resource/Sound/machinegunreload.wav");
+        WeaponType selected = selectedWeapon.getType();
+        switch (selected) {
+            case Pistol -> relativePath = Paths.get("Resource/Sound/pistolreload.wav");
+            case Shotgun -> relativePath = Paths.get("Resource/Sound/shotgunreload.wav");
+            case MachineGun -> relativePath = Paths.get("Resource/Sound/machinegunreload.wav");
         }
         volume = getClip();
-        if (soundv == 0) {
-            volume.setValue(-80f);
-        } else if (soundv == 1) {
-            if (GunType.Pistol.equals(selectedgun.getType()) || GunType.Shotgun.equals(selectedgun.getType())) {
-                volume.setValue(-30f);
-            } else {
-                volume.setValue(-28f);
+        switch (soundv) {
+            case 0 -> {
+                volume.setValue(-80f);
             }
-        } else if (soundv == 2) {
-            if (GunType.Pistol.equals(selectedgun.getType()) || GunType.Shotgun.equals(selectedgun.getType())) {
-                volume.setValue(-8);
-            } else {
-                volume.setValue(-6f);
+            case 1 -> {
+                switch (selected) {
+                    case Pistol, Shotgun -> volume.setValue(-30f);
+                    case MachineGun -> volume.setValue(-28f);
+                }
+            }
+            case 2 -> {
+                switch (selected) {
+                    case Pistol, Shotgun -> volume.setValue(-8);
+                    case MachineGun -> volume.setValue(-6f);
+                }
             }
         }
         sound.start();

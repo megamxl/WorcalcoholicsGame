@@ -76,7 +76,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage imgOver;
     private BufferedImage imgStudio;
     private BufferedImage imgTitle;
-    private BufferedImage currGun = null;
+    private BufferedImage currWeapon = null;
     private BufferedImage imgHUD;
 
     private Upgrades upgrades;
@@ -139,7 +139,7 @@ public class Game extends Canvas implements Runnable {
     //private static ImageGetter TitleScreenImg;
     private static ImageGetter getUIButton;
     private static ImageGetter getGameOverUIButton;
-    private static Gun gun;
+    private static Weapon weapon;
 
     private DatabaseConnection databeseConection = new DatabaseConnection();
 
@@ -161,13 +161,13 @@ public class Game extends Canvas implements Runnable {
         // make the window threw out own window class
         new Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Chad vs. Aliens", this);
         start();
-        gun = new Gun();
+        weapon = new Weapon();
 
         levelDecision = String.valueOf(randomNumber(1, 6));
         camera = new Camera(0, 0, this);
 
-        addGuns();
-        checkSelectedGun();
+        addWeapons();
+        checkSelectedWeapon();
 
         // from here on, there are mostly images getting loaded
         InputStream path = this.getClass().getClassLoader().getResourceAsStream("Levels/xdb_level0" + levelDecision + ".png");
@@ -219,7 +219,7 @@ public class Game extends Canvas implements Runnable {
         imgTitle = loader.loadImage("/Graphics/Titlescreen.png");
 
         //Adding Mouse and Keyboard Input
-        mouse = new MouseInput(handler, camera, this, imageGetter, gun);
+        mouse = new MouseInput(handler, camera, this, imageGetter, weapon);
         this.addMouseListener(mouse);
         this.addMouseMotionListener(mouse);
         this.addMouseWheelListener(mouse);
@@ -350,8 +350,8 @@ public class Game extends Canvas implements Runnable {
 
         // check all reload related Features
         checkReloaded();
-        checkGunStatus();
-        checkSelectedGun();
+        checkWeaponStatus();
+        checkSelectedWeapon();
         updateLockStatus();
         checkBackgroundSoundPlayer();
     }
@@ -447,12 +447,12 @@ public class Game extends Canvas implements Runnable {
                     case LEVEL -> {
                         inTutorial = false;
                         loadLevel(level); //load the level
-                        for (Gun gun : Gun.guns) {
-                            if (gun.getType() != GunType.Pistol) {
-                                gun.setLocked(true);
+                        for (Weapon weapon : Weapon.weapons) {
+                            if (weapon.getType() != WeaponType.Pistol) {
+                                weapon.setLocked(true);
                             }
                         }
-                        setGunToPistolAgain();
+                        setWeaponToPistolAgain();
                     }
                     case TUTORIAL -> {
                         score.resetSore();
@@ -592,18 +592,27 @@ public class Game extends Canvas implements Runnable {
 
 
         //GUN
-        if (handler.del == 0) {
-            g.setColor(Color.cyan);
-            //g.drawString("MACHINE GUN", 210, 95);
-            currGun = imageGetter.getImage(2, 10, 64, 64);
-        } else if (handler.del == 200) {
-            g.setColor(Color.cyan);
-            //g.drawString("PISTOL", 210, 95);
-            currGun = imageGetter.getImage(3, 10, 64, 64);
-        } else if (handler.del == 1000) {
-            g.setColor(Color.cyan);
-            //g.drawString("SHOTGUN", 210, 95);
-            currGun = imageGetter.getImage(1, 10, 64, 64);
+        switch (handler.del) {
+            case 0 -> {
+                g.setColor(Color.cyan);
+                //g.drawString("MACHINE GUN", 210, 95);
+                currWeapon = imageGetter.getImage(2, 10, 64, 64);
+            }
+            case 200 -> {
+                g.setColor(Color.cyan);
+                //g.drawString("PISTOL", 210, 95);
+                currWeapon = imageGetter.getImage(3, 10, 64, 64);
+            }
+            case 300 -> {
+                g.setColor(Color.cyan);
+                //g.drawString("SWORD", 210, 95);
+                currWeapon = imageGetter.getImage(4, 10, 64, 64);
+            }
+            case 1000 -> {
+                g.setColor(Color.cyan);
+                //g.drawString("SHOTGUN", 210, 95);
+                currWeapon = imageGetter.getImage(1, 10, 64, 64);
+            }
         }
 
         //WAVES
@@ -620,7 +629,7 @@ public class Game extends Canvas implements Runnable {
             g.drawString("Next Wave spawns in " + (TimerValue + 1), 50, 250);
 
         }
-        g.drawImage(currGun, 10, 470, null);
+        g.drawImage(currWeapon, 10, 470, null);
 
         if (currentState == GameState.TUTORIAL) {
             renderTutorialBorders(g);
@@ -872,34 +881,34 @@ public class Game extends Canvas implements Runnable {
     }
 
     /***
-     * add guns to list
+     * add weapons to list
      */
-    private void addGuns() {
-        gun.addObject(new Gun(), GunType.Pistol, false); // start with pistol
-        gun.addObject(new Gun(), GunType.Shotgun, true); // second shotgun
-        gun.addObject(new Gun(), GunType.MachineGun, true); //third machine gun  -> weakest to strongest
+    private void addWeapons() {
+        weapon.addObject(new Weapon(), WeaponType.Pistol, false); // start with pistol
+        weapon.addObject(new Weapon(), WeaponType.Shotgun, true); // second shotgun
+        weapon.addObject(new Weapon(), WeaponType.MachineGun, true); //third machine gun  -> weakest to strongest
+        weapon.addObject(new Weapon(), WeaponType.Sword, false);    //Sword
 
     }
 
-    private void setGunToPistolAgain() {
-        handler.selectedgun = Gun.guns.get(0);
-        handler.gunindex = 0;
+    private void setWeaponToPistolAgain() {
+        handler.selectedWeapon = Weapon.weapons.get(0);
+        handler.weaponIndex = 0;
     }
 
     /***
-     * get the coloumn and row of the spritesheet for the specific gun
+     * get the coloumn and row of the spritesheet for the specific weapon
      * @return
      */
     public int[] getColRowFromIndex() {
         int[] colrow = new int[3];
-        int col;
-        int row = 10;
-        if (handler.gunindex == 0) {
-            col = 7;
-        } else if (handler.gunindex == 1) {
-            col = 5;
-        } else {
-            col = 6;
+        int col = 0;
+        int row = 11;
+        switch (handler.weaponIndex) {
+            case 0 -> col = 3;  //Pistol
+            case 1 -> col = 1;  //Shotgun
+            case 2 -> col = 2;  //Machinegun
+            case 3 -> col = 4;  //Sword
         }
         colrow[0] = col;
         colrow[1] = row;
@@ -907,19 +916,19 @@ public class Game extends Canvas implements Runnable {
     }
 
     /***
-     * change the selected gun  (when you rotate your mousewheel)
+     * change the selected weapon  (when you rotate your mousewheel)
      */
-    private void checkSelectedGun() {
-        handler.selectedgun = Gun.guns.get(handler.gunindex);
+    private void checkSelectedWeapon() {
+        handler.selectedWeapon = Weapon.weapons.get(handler.weaponIndex);
     }
 
-    private void checkGunStatus() {
-        if (handler.selectedgun.getType() == GunType.Pistol)
-            handler.del = 200;
-        else if (handler.selectedgun.getType() == GunType.Shotgun)
-            handler.del = 1000;
-        else //Machine Gun
-            handler.del = 0;
+    private void checkWeaponStatus() {
+        switch (handler.selectedWeapon.getType()) {
+            case Pistol -> handler.del = 200;
+            case Sword -> handler.del = 300;
+            case Shotgun -> handler.del = 1000;
+            case MachineGun -> handler.del = 0;
+        }
     }
 
     /***
@@ -928,17 +937,20 @@ public class Game extends Canvas implements Runnable {
      */
     private void updateLockStatus() {
         if (getState() == GameState.TUTORIAL) {
-            index = gun.getIndex(GunType.Shotgun);
-            gun.manipulteList(index, new Gun(), GunType.Shotgun, false);
-            index = gun.getIndex(GunType.MachineGun);
-            gun.manipulteList(index, new Gun(), GunType.MachineGun, false);
+            index = weapon.getIndex(WeaponType.Shotgun);
+            weapon.manipulteList(index, new Weapon(), WeaponType.Shotgun, false);
+            index = weapon.getIndex(WeaponType.MachineGun);
+            weapon.manipulteList(index, new Weapon(), WeaponType.MachineGun, false);
         } else {
-            if (Enemy.waves == 2) { //for test purposes on wave 2
-                index = gun.getIndex(GunType.Shotgun);
-                gun.manipulteList(index, new Gun(), GunType.Shotgun, false);
-            } else if (Enemy.waves == 3) { //for test purposes on wave 3
-                index = gun.getIndex(GunType.MachineGun);
-                gun.manipulteList(index, new Gun(), GunType.MachineGun, false);
+            switch (Enemy.waves) {
+                case 2 -> {
+                    index = weapon.getIndex(WeaponType.Shotgun);
+                    weapon.manipulteList(index, new Weapon(), WeaponType.Shotgun, false);
+                }
+                case 3 -> {
+                    index = weapon.getIndex(WeaponType.MachineGun);
+                    weapon.manipulteList(index, new Weapon(), WeaponType.MachineGun, false);
+                }
             }
         }
     }
@@ -1048,18 +1060,12 @@ public class Game extends Canvas implements Runnable {
                 g.drawImage(floor, i, j, null);
                 // draws a random floor dirt texture on top of the current floor tile
                 switch (randomNumber(1, 4)) {
-                    case 1:
-                        g.drawImage(floorDirt1, i, j, null);
-                        break;
-                    case 2:
-                        g.drawImage(floorDirt2, i, j, null);
-                        break;
-                    case 3:
-                        g.drawImage(floorDirt3, i, j, null);
-                        break;
-                    default:
-                        // no action
-                        break;
+                    case 1 -> g.drawImage(floorDirt1, i, j, null);
+                    case 2 -> g.drawImage(floorDirt2, i, j, null);
+                    case 3 -> g.drawImage(floorDirt3, i, j, null);
+                    default -> {
+                    }
+                    // no action
                 }
             }
         }

@@ -15,5 +15,6 @@ public enum ID {
     GunnerEnemy(),
     Bullet(),
     EnemyBullet(),
+    SwordHitbox(),
     UIButton()
 }

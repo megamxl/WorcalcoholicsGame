@@ -2,6 +2,8 @@ package Woralcoholics.game;
 
 import javax.sound.sampled.*;
 import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -24,7 +26,7 @@ public class Enemy extends GameObject {
 
     int choose = 0;
     int hp;
-    private float hpPercent = 1.0f;
+    protected float hpPercent = 1.0f;
     int low = -4;                                           //low and high values for different variations of enemy behaviour
     int high = 4;
     int booleanValue = 0;                                   //booleanvalue is for determining if enemy should charge player again or just running aimless around
@@ -232,6 +234,16 @@ public class Enemy extends GameObject {
 
                 }
             }
+
+            if(tmpObject.getId() == ID.SwordHitbox) {
+                Line2D line = new Line2D.Double(tmpObject.getX(), tmpObject.getY(),
+                        tmpObject.getBounds().getWidth(), tmpObject.getBounds().getHeight());
+                if(getBoundsAround().intersectsLine(line)) {
+                    hp -= 110;
+                    hpPercent = hp/(float)maxHp;
+                    if (hp > 10) playSoundEnemyHit();
+                }
+            }
         }
     }
 
@@ -361,7 +373,7 @@ public class Enemy extends GameObject {
         enemysAlive--;
     }
 
-    private void playSoundEnemy() {
+    protected void playSoundEnemy() {
         try {
             new Thread(() -> {
 
@@ -385,7 +397,7 @@ public class Enemy extends GameObject {
         }
     }
 
-    private void playSoundEnemyHit() {
+    protected void playSoundEnemyHit() {
         try {
             new Thread(() -> {
 
