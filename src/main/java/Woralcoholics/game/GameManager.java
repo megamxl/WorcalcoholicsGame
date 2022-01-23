@@ -518,8 +518,8 @@ public class GameManager {
      * the keys for the sound
      */
     public void keySounds() {
-        nowForKeys = System.currentTimeMillis(); // set to 5 seconds to change the sound volumes prevents program crashing
-        if (isL() && soundv != 2 && nowForKeys - previousms >= 5000) {
+        nowForKeys = System.currentTimeMillis(); // set to 2 seconds to change the sound volumes prevents program crashing
+        if (isL() && soundv != 2 && nowForKeys - previousms >= 2000) {
             try {
                 soundv = 2;
                 backgroundsound.close();
@@ -528,7 +528,7 @@ public class GameManager {
                 playBackgroundSound();
             } catch (Exception ex) {
             }
-        } else if (isK() && soundv != 1 && nowForKeys - previousms >= 5000) {
+        } else if (isK() && soundv != 1 && nowForKeys - previousms >= 2000) {
             try {
                 soundv = 1;
                 backgroundsound.close();
@@ -537,12 +537,13 @@ public class GameManager {
                 playBackgroundSound();
             } catch (Exception ex) {
             }
-        } else if (isM() && soundv != 0 && nowForKeys - previousms >= 5000) {
+        } else if (isM() && soundv != 0 && nowForKeys - previousms >= 2000) {
             try {
                 soundv = 0;
+                backgroundsound.close();
+                isBackgroundSoundPlaying = false;
                 previousms = nowForKeys;
-                //handler.backgroundsound.close(); -> just Sound Effects get muted
-                //playBackgroundSound();
+                playBackgroundSound();
             } catch (Exception ex) {
             }
         }
