@@ -383,6 +383,7 @@ public class GameManager {
     }
 
     public void playSoundEquip(boolean error) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        WeaponType selected = selectedWeapon.getType();
         if (isSoundPlayingEquip == false) {
             isSoundPlayingEquip = true;
             Clip sound = AudioSystem.getClip();
@@ -390,7 +391,11 @@ public class GameManager {
             if (error == true) {
                 relativePath = Paths.get("Resource/Sound/gunequiperror.wav");
             } else {
-                relativePath = Paths.get("Resource/Sound/gunequip.wav");
+                if (selected == WeaponType.Sword) {
+                    relativePath = Paths.get("Resource/Sound/swordequip.wav");
+                } else {
+                    relativePath = Paths.get("Resource/Sound/gunequip.wav");
+                }
             }
             Path absolutePath = relativePath.toAbsolutePath();
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
@@ -398,13 +403,21 @@ public class GameManager {
             if (soundv == 0) {
                 volume.setValue(-80f);
             } else if (soundv == 1 && !error) {
-                volume.setValue(-40f);
+                if (selected == WeaponType.Sword) {
+                    volume.setValue(-30f); // sword equip on K
+                } else {
+                    volume.setValue(-40f); // gun equip on K
+                }
             } else if (soundv == 1 && error) {
-                volume.setValue(-23f);
+                volume.setValue(-23f); // errorsound on K
             } else if (soundv == 2 && !error) {
-                volume.setValue(-18f);
+                if (selected == WeaponType.Sword) {
+                    volume.setValue(-8f); // sword equip on L
+                } else {
+                    volume.setValue(-18f); //gun equip on L
+                }
             } else if (soundv == 2 && error) {
-                volume.setValue(-1f);
+                volume.setValue(-1f); // errorsound on L
             }
             sound.start();
             Thread.sleep(100);
