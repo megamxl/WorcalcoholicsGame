@@ -465,7 +465,7 @@ public class GameManager {
                 }
             }
             case Sword -> {
-                relativePath = Paths.get("Resource/Sound/pistolempty.wav");
+                relativePath = Paths.get("Resource/Sound/sword4.wav"); //sword3 auch gut
             }
         }
         volume = getClip();
@@ -477,11 +477,12 @@ public class GameManager {
                         case Pistol -> volume.setValue(-30f);
                         case Shotgun -> volume.setValue(-25f);
                         case MachineGun -> volume.setValue(-22f);
+                        case Sword -> volume.setValue(-40f);
                     }
                 } else {
                     switch (selected) {
                         case Pistol -> volume.setValue(-45f);
-                        case Shotgun, MachineGun -> volume.setValue(-40f);
+                        case Shotgun, MachineGun, Sword -> volume.setValue(-40f);
                     }
                 }
             }
@@ -555,6 +556,7 @@ public class GameManager {
             case Pistol -> relativePath = Paths.get("Resource/Sound/pistolreload.wav");
             case Shotgun -> relativePath = Paths.get("Resource/Sound/shotgunreload.wav");
             case MachineGun -> relativePath = Paths.get("Resource/Sound/machinegunreload.wav");
+            case Sword -> relativePath = Paths.get("Resource/Sound/swordreload.wav");
         }
         volume = getClip();
         switch (soundv) {
@@ -565,12 +567,14 @@ public class GameManager {
                 switch (selected) {
                     case Pistol, Shotgun -> volume.setValue(-30f);
                     case MachineGun -> volume.setValue(-28f);
+                    case Sword -> volume.setValue(-15f);
                 }
             }
             case 2 -> {
                 switch (selected) {
                     case Pistol, Shotgun -> volume.setValue(-8);
                     case MachineGun -> volume.setValue(-6f);
+                    case Sword -> volume.setValue(7f);
                 }
             }
         }
