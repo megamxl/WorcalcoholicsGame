@@ -84,27 +84,12 @@ public class Animations {
     }
 
     /**
-     * runs the animation once with the given length
-     *
-     * @param length
-     */
-    public boolean runAnimationsFast(int length) {
-        while (counter <= length) {
-            nextFrame();
-            counter++;
-            enemyShadow = null;
-        }
-        return false;  // animation is not done
-    }
-
-    /**
      * selects the next frame in the Buffered Image array
      */
     public void nextFrame() {
         for (int i = 0; i < frames; i++) {
             if (count == i) {
                 currentImages = images[i];
-                System.out.println("fast");
             }
         }
         count++;

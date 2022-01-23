@@ -21,10 +21,7 @@ public class EnemyShadow extends GameObject {
 
     // create should do nothing in update is a static piece
     public void update() {
-        if (isDone) {
-            isDone = enemyDead.runAnimationsOnce(7); // if animation is finished it doesn't get into
-            //System.out.println("updated");
-        }
+        EnemyShadow();
     }
 
     public void render(Graphics g) {
@@ -32,6 +29,13 @@ public class EnemyShadow extends GameObject {
             enemyDead.renderAnimation(g, (int) x, (int) y, 64, 64);  //if animation is finished it doesn't get rendered
             // GameObject tempObject = Game.enemyShadowPool.get(1);
             //tempObject.render(g);
+        }
+    }
+
+    private void EnemyShadow() {
+        if (isDone) {
+            isDone = enemyDead.runAnimationsOnce(7); // if animation is finished it doesn't get into
+            //System.out.println("updated");
         }
     }
 

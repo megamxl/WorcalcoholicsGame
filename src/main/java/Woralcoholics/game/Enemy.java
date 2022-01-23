@@ -240,9 +240,7 @@ public class Enemy extends GameObject {
                     hp -= 110;
                     hpPercent = hp / (float) maxHp;
                     if (hp > 10) {
-                        float curX = x;
-                        float curY = y;
-                        Game.UseEnemyHitmarker((int) curX, (int) curY);
+                        Game.UseEnemyHitmarker((int) x, (int) y);
                         playSoundEnemyHit();
                     }
                 }
@@ -259,9 +257,7 @@ public class Enemy extends GameObject {
                 hp -= 110;
                 hpPercent = hp / (float) maxHp;
                 if (hp > 10) {
-                    float curX = x;
-                    float curY = y;
-                    Game.UseEnemyHitmarker((int) curX, (int) curY);
+                    Game.UseEnemyHitmarker((int) x, (int) y);
                     playSoundEnemyHit();
                 }
                 //System.out.println("einem enemy leben abgezogen " + hp);

@@ -19,11 +19,9 @@ public class EnemyHitmarker extends GameObject {
         enemyHitmarker = new Animations(0, Game.enemyHitmarker[0], Game.enemyHitmarker[1], Game.enemyHitmarker[2], Game.enemyHitmarker[3]);
     }
 
-    // create should do nothing in update is a static piece
+    // update the enemyanimation
     public void update() {
-        if (isDone) {
-            isDone = enemyHitmarker.runAnimationsOnce(4);
-        }
+        HitmarkerAnimation();
     }
 
     public void render(Graphics g) {
@@ -31,6 +29,20 @@ public class EnemyHitmarker extends GameObject {
             enemyHitmarker.renderAnimation(g, (int) x, (int) y, 64, 64);  //if animation is finished it doesn't get rendered
             // GameObject tempObject = Game.enemyShadowPool.get(1);
             //tempObject.render(g);
+        }
+    }
+
+    //method for the animation
+    private void HitmarkerAnimation() {
+        if (isDone) {
+            // for performance with thread
+            new Thread(() -> {
+                try {
+                    isDone = enemyHitmarker.runAnimationsOnce(4);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
         }
     }
 
