@@ -12,6 +12,7 @@ public enum ID {
     DestroyableBoxes(),
     Enemy(),
     EnemyShadow(),
+    EnemyHitmarker(),
     GunnerEnemy(),
     Bullet(),
     EnemyBullet(),

@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * inspiration
+ *
  * @author Maxlimilian Nowak
  * @author Christoph Oprawill
  */
@@ -16,7 +17,7 @@ public class Animations {
 
     private int index = 0;
     private int count = 0;
-    private int counter =0;
+    private int counter = 0;
 
     private BufferedImage[] images;
     private BufferedImage currentImages;
@@ -37,7 +38,7 @@ public class Animations {
         finished = false;
     }
 
-    public Animations(int speed, EnemyShadow enemyShadow ,BufferedImage... args) {
+    public Animations(int speed, EnemyShadow enemyShadow, BufferedImage... args) {
         this.speed = speed;
         this.manager = manager;
         images = new BufferedImage[args.length];
@@ -63,23 +64,37 @@ public class Animations {
 
     /**
      * runs the animation once with the given length
+     *
      * @param length
      */
     public boolean runAnimationsOnce(int length) {
         index++;
         if (index > speed) {
             index = 0;
-            if(counter<=length) {
+            if (counter <= length) {
                 nextFrame();
                 counter++;
                 return true;  // animation is not done
-            }
-            else{
+            } else {
                 return false;//done
             }
         }
         enemyShadow = null;
         return true;  // animation is not done
+    }
+
+    /**
+     * runs the animation once with the given length
+     *
+     * @param length
+     */
+    public boolean runAnimationsFast(int length) {
+        while (counter <= length) {
+            nextFrame();
+            counter++;
+            enemyShadow = null;
+        }
+        return false;  // animation is not done
     }
 
     /**
@@ -89,6 +104,7 @@ public class Animations {
         for (int i = 0; i < frames; i++) {
             if (count == i) {
                 currentImages = images[i];
+                System.out.println("fast");
             }
         }
         count++;
@@ -99,19 +115,25 @@ public class Animations {
 
     /**
      * renders Animation with x and y coordinates
+     *
      * @param g Graphics object
      * @param x
      * @param y
      */
-    public void renderAnimation(Graphics g, int x, int y) {g.drawImage(currentImages, x, y, null);}
+    public void renderAnimation(Graphics g, int x, int y) {
+        g.drawImage(currentImages, x, y, null);
+    }
 
     /**
      * renders Animation with x and y coordinates and scales the Image
+     *
      * @param g
      * @param x
      * @param y
      * @param scaleX
      * @param scaleY
      */
-    public void renderAnimation(Graphics g, int x, int y, int scaleX, int scaleY) {g.drawImage(currentImages, x, y, scaleX, scaleY, null);}
+    public void renderAnimation(Graphics g, int x, int y, int scaleX, int scaleY) {
+        g.drawImage(currentImages, x, y, scaleX, scaleY, null);
+    }
 }

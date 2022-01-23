@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 
 public class EnemyShadow extends GameObject {
 
-    private BufferedImage shadow_image = null;
     private Animations enemyDead;
     public boolean isDone = true;
 
@@ -31,7 +30,7 @@ public class EnemyShadow extends GameObject {
     public void render(Graphics g) {
         if (isDone) {
             enemyDead.renderAnimation(g, (int) x, (int) y, 64, 64);  //if animation is finished it doesn't get rendered
-           // GameObject tempObject = Game.enemyShadowPool.get(1);
+            // GameObject tempObject = Game.enemyShadowPool.get(1);
             //tempObject.render(g);
         }
     }

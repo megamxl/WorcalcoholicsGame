@@ -54,6 +54,7 @@ public class Enemy extends GameObject {
         this.score = score;
         hp = maxHp;
         enemyAnimation = new Animations(9, Game.enemy[list.get(0)], Game.enemy[list.get(1)], Game.enemy[list.get(2)], Game.enemy[list.get(3)], Game.enemy[list.get(4)], Game.enemy[list.get(5)], Game.enemy[list.get(6)], Game.enemy[list.get(7)], Game.enemy[list.get(8)], Game.enemy[list.get(9)], Game.enemy[list.get(10)], Game.enemy[list.get(11)], Game.enemy[list.get(12)]);
+
     }
 
     //endregion
@@ -93,7 +94,7 @@ public class Enemy extends GameObject {
 //        g2d.draw(downColider());*/
 //        g2d.draw(getBoundsAround());
 //        //g.drawImage(enemy_img, (int) x, (int) y, null);
-   }
+    }
 
     private Rectangle topColider() {
         Rectangle top = getBounds();
@@ -109,7 +110,7 @@ public class Enemy extends GameObject {
         top.width = 32;
         top.height = 5;
 
-        top.y +=  30;
+        top.y += 30;
 
         return top;
     }
@@ -117,7 +118,7 @@ public class Enemy extends GameObject {
     private Rectangle leftColider() {
         Rectangle top = getBounds();
         top.width = 5;
-        top.x +=1;
+        top.x += 1;
         top.height = 30;
         return top;
     }
@@ -127,10 +128,9 @@ public class Enemy extends GameObject {
         top.width = 5;
         top.height = 30;
         top.x += 30;
-        top.x +=1;
+        top.x += 1;
         return top;
     }
-
 
 
     /***
@@ -171,15 +171,13 @@ public class Enemy extends GameObject {
             //if it's colliding with a block
 
             if (tmpObject.getId() == ID.Block || tmpObject.getId() == ID.DestroyableBoxes) {
-                if(topColider().intersects(tmpObject.getBounds())){
+                if (topColider().intersects(tmpObject.getBounds())) {
                     //System.out.println("top");
-                }
-                else if(leftColider().intersects(tmpObject.getBounds())){
+                } else if (leftColider().intersects(tmpObject.getBounds())) {
                     //System.out.println("left");
-                }else  if(rigthColider().intersects(tmpObject.getBounds())){
+                } else if (rigthColider().intersects(tmpObject.getBounds())) {
                     //System.out.println("rigth");
-                }
-                else if(downColider().intersects((tmpObject.getBounds()))){
+                } else if (downColider().intersects((tmpObject.getBounds()))) {
                     //.out.println("down");
                 }
                 if (getBoundsAround().intersects(tmpObject.getBounds())) {
@@ -235,13 +233,18 @@ public class Enemy extends GameObject {
                 }
             }
 
-            if(tmpObject.getId() == ID.SwordHitbox) {
+            if (tmpObject.getId() == ID.SwordHitbox) {
                 Line2D line = new Line2D.Double(tmpObject.getX(), tmpObject.getY(),
                         tmpObject.getBounds().getWidth(), tmpObject.getBounds().getHeight());
-                if(getBoundsAround().intersectsLine(line)) {
+                if (getBoundsAround().intersectsLine(line)) {
                     hp -= 110;
-                    hpPercent = hp/(float)maxHp;
-                    if (hp > 10) playSoundEnemyHit();
+                    hpPercent = hp / (float) maxHp;
+                    if (hp > 10) {
+                        float curX = x;
+                        float curY = y;
+                        Game.UseEnemyHitmarker((int) curX, (int) curY);
+                        playSoundEnemyHit();
+                    }
                 }
             }
         }
@@ -255,7 +258,12 @@ public class Enemy extends GameObject {
                 //System.out.println("hit");
                 hp -= 110;
                 hpPercent = hp / (float) maxHp;
-                if (hp > 10) playSoundEnemyHit();
+                if (hp > 10) {
+                    float curX = x;
+                    float curY = y;
+                    Game.UseEnemyHitmarker((int) curX, (int) curY);
+                    playSoundEnemyHit();
+                }
                 //System.out.println("einem enemy leben abgezogen " + hp);
 
 

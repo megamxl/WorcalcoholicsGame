@@ -63,6 +63,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage playerIdleCycleImg;
     private BufferedImage enemyCycleImg;
     private BufferedImage enemyBloodImg;
+    private BufferedImage enemyHitmarkerImg;
     private BufferedImage upgradeButtonImg;
     private BufferedImage tutorialBoarder;
     private BufferedImage bloodScreen;
@@ -85,6 +86,7 @@ public class Game extends Canvas implements Runnable {
     public static BufferedImage[] playerWalkingRight = new BufferedImage[10];
     public static BufferedImage[] playerIdle = new BufferedImage[4];
     public static BufferedImage[] enemyDeadShadow = new BufferedImage[10];
+    public static BufferedImage[] enemyHitmarker = new BufferedImage[4];
     public static BufferedImage[] enemy = new BufferedImage[13];
 
 
@@ -95,13 +97,13 @@ public class Game extends Canvas implements Runnable {
 
     public int ammo = 50;
     public int hp = 100;
-    private int[] randomUpgrades = {1,1,1};
+    private int[] randomUpgrades = {1, 1, 1};
     static Score score = new Score(0);
 
     private final Font font = new Font("Chiller", Font.PLAIN, 40);
     // Armor - Shield - Ammo
     private final Color[] colors = {new Color(41, 166, 41), new Color(16, 49, 194),
-                                    new Color(176, 172, 8)};
+            new Color(176, 172, 8)};
 
     public static String playerName = null;
     private String levelDecision;
@@ -130,6 +132,7 @@ public class Game extends Canvas implements Runnable {
     private static ImageGetter getPlayerWalkCycle;
     private static ImageGetter getPlayerIdleCycle;
     private static ImageGetter getEnemyBlood;
+    private static ImageGetter getEnemyHitmarker;
     private static ImageGetter getEnemySprite;
     private static ImageGetter getBloodScreen;
     private static ImageGetter GameOverScreenImg;
@@ -207,6 +210,9 @@ public class Game extends Canvas implements Runnable {
         enemyBloodImg = loader.loadImage("/Graphics/Animations/Bloodparticle.png");
         getEnemyBlood = new ImageGetter(enemyBloodImg);
 
+        enemyHitmarkerImg = loader.loadImage("/Graphics/Animations/Hitmarker Spritesheet.png");
+        getEnemyHitmarker = new ImageGetter(enemyHitmarkerImg);
+
         BufferedImage GameOverScreen = loader.loadImage("/Graphics/gameOverPictureV3.png");
         GameOverScreenImg = new ImageGetter(GameOverScreen);
         imgOver = GameOverScreen.getSubimage(1, 1, 860/*720*/, 410/*480*/);
@@ -248,6 +254,7 @@ public class Game extends Canvas implements Runnable {
         loadEnemyDeadSprites();
         loadPlayerIdle();
         loadEnenemySprites();
+        loadEnemyHitmarkerSprites();
 
         FontLoader fontLoader = new FontLoader();
 
@@ -386,7 +393,7 @@ public class Game extends Canvas implements Runnable {
             renderUi(g);
 
         } else {
-            if(!stopRendering) renderScreen(g);
+            if (!stopRendering) renderScreen(g);
             handler.enemy.removeAll(handler.enemy);
             //System.out.printlfn("SPAWN" + handler.enemy.size());
         }
@@ -482,7 +489,7 @@ public class Game extends Canvas implements Runnable {
      */
     private void renderScreen(Graphics g) {
         //for Fullscreen Stuff like Images
-        switch(currentState) {
+        switch (currentState) {
             case STUDIO -> {
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -524,12 +531,12 @@ public class Game extends Canvas implements Runnable {
                 g.drawString("Credits go here brrr", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
             }
             case UPGRADE_MENU -> {
-                g.drawImage(imageGetter.getImage(randomUpgrades[0], 8, 64, 64), SCREEN_WIDTH/4-32,
-                        SCREEN_HEIGHT/2, null);
-                g.drawImage(imageGetter.getImage(randomUpgrades[1], 8, 64, 64), SCREEN_WIDTH/2-32,
-                        SCREEN_HEIGHT/2, null);
-                g.drawImage(imageGetter.getImage(randomUpgrades[2], 8, 64, 64), SCREEN_WIDTH*3/4-32,
-                        SCREEN_HEIGHT/2, null);
+                g.drawImage(imageGetter.getImage(randomUpgrades[0], 8, 64, 64), SCREEN_WIDTH / 4 - 32,
+                        SCREEN_HEIGHT / 2, null);
+                g.drawImage(imageGetter.getImage(randomUpgrades[1], 8, 64, 64), SCREEN_WIDTH / 2 - 32,
+                        SCREEN_HEIGHT / 2, null);
+                g.drawImage(imageGetter.getImage(randomUpgrades[2], 8, 64, 64), SCREEN_WIDTH * 3 / 4 - 32,
+                        SCREEN_HEIGHT / 2, null);
             }
             case GAME_OVER -> {
                 g.drawImage(imgOver, 1, 1, null);
@@ -543,7 +550,7 @@ public class Game extends Canvas implements Runnable {
             }
         }
         timesMenuWasRendered++;
-        if(timesMenuWasRendered > 50) {
+        if (timesMenuWasRendered > 50) {
             stopRendering = true;
             timesMenuWasRendered = 0;
         }
@@ -577,17 +584,17 @@ public class Game extends Canvas implements Runnable {
         g.drawString(Integer.toString(ammo), 60, 90);
 
         //SHIELD
-            g.drawImage(getHUDPicture.getImage48(2, 1, 48, 48), 5, 100, null);
-            g.setColor(colors[1]);
-            g.drawString(Integer.toString(shield), 60, 140);
+        g.drawImage(getHUDPicture.getImage48(2, 1, 48, 48), 5, 100, null);
+        g.setColor(colors[1]);
+        g.drawString(Integer.toString(shield), 60, 140);
 
         //ARMOR
-            g.drawImage(getHUDPicture.getImage48(1, 1, 48, 48), 5, 150, null);
-            g.setColor(colors[0]);
-            g.drawString(Integer.toString(armor) + "%", 60, 190);
+        g.drawImage(getHUDPicture.getImage48(1, 1, 48, 48), 5, 150, null);
+        g.setColor(colors[0]);
+        g.drawString(Integer.toString(armor) + "%", 60, 190);
 
-       //RELOAD
-        if(percent != 100)
+        //RELOAD
+        if (percent != 100)
             g.drawImage(getHUDPicture.getImage48(3, 1, 48, 48), 5, 200, null);
 
 
@@ -738,7 +745,7 @@ public class Game extends Canvas implements Runnable {
                 lastScore = score.showScore();
                 score.resetSore();
                 handler.backgroundsound.close();
-                handler.isBackgroundSoundPlaying=false; // looping the backgroundsound in game
+                handler.isBackgroundSoundPlaying = false; // looping the backgroundsound in game
                 takesDamage = false;
                 //ScoerSaveWindow.frame.setVisible(true);
                 //Window.frame.setVisible(false);
@@ -993,6 +1000,14 @@ public class Game extends Canvas implements Runnable {
         enemyDeadShadow[6] = getEnemyBlood.getImage32(7, 1, 32, 32);
     }
 
+    private void loadEnemyHitmarkerSprites() {
+        enemyHitmarker[0] = getEnemyHitmarker.getImage32(1, 1, 32, 32);
+        enemyHitmarker[1] = getEnemyHitmarker.getImage32(2, 1, 32, 32);
+        enemyHitmarker[2] = getEnemyHitmarker.getImage32(3, 1, 32, 32);
+        enemyHitmarker[3] = getEnemyHitmarker.getImage32(4, 1, 32, 32);
+
+    }
+
     private void loadPlayerIdle() {
         playerIdle[0] = getPlayerIdleCycle.getImage32(1, 1, 32, 32);
         playerIdle[1] = getPlayerIdleCycle.getImage32(2, 1, 32, 32);
@@ -1191,6 +1206,10 @@ public class Game extends Canvas implements Runnable {
     public static void UseEnemyShadow(int x, int y) {
         handler.addObject(new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
         //enemyShadowPool.add(0,new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
+    }
+
+    public static void UseEnemyHitmarker(int x, int y) {
+        handler.addObject(new EnemyHitmarker(x, y, ID.EnemyHitmarker, imageGetter));
     }
 
     /***
