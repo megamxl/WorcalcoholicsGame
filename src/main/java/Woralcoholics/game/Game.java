@@ -598,7 +598,7 @@ public class Game extends Canvas implements Runnable {
         else if (ammo < 10 && ammo > 0)
             g.drawString(Integer.toString(ammo), 506, 480);
         else
-            g.drawString("OUT OF AMMO", 420 ,520);
+            g.drawString("OUT OF AMMO", 420, 520);
 
         ammo_width = (ammo - 1) / 10 * 16 + 15;
         if (ammo != 0) {
@@ -736,6 +736,8 @@ public class Game extends Canvas implements Runnable {
                         "Stop Playing", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
                         getUIButton/*getGameOverUIButton*/, 1, 1, g, 1, 20/*27*/));
                 paused = true;//we are in PAUSE_MENU, so set paused true
+                resetEnenemyPool();
+                score.resetSore();
             }
             case UPGRADE_MENU -> {
                 randomUpgrades = upgrades.getUpgrades();
@@ -770,6 +772,7 @@ public class Game extends Canvas implements Runnable {
                         "Stop Playing", GameState.MAIN_MENU, ID.UIButton, this, 1, 0,
                         getUIButton/*getGameOverUIButton*/, 1, 1, g, 1, 20/*27*/));
                 startTimer(0, 4);   //after 1 sec, execute timerAction 4 -> enter name and upload score dialogs
+                resetEnenemyPool();
             }
         }
     }
@@ -1167,85 +1170,102 @@ public class Game extends Canvas implements Runnable {
     }
 
 
+
+    public static void resetEnenemyPool() {
+        for (GunnerEnemy currEnemy : enemyGunnerPool) {
+            if (currEnemy.isInGame) {
+                currEnemy.isInGame = false;
+            }
+        }
+        for (Enemy currEnemy : enemyPool) {
+            if (currEnemy.isInGame) {
+                currEnemy.isInGame = false;
+            }
+        }
+    }
+
+
     /**
      * spawn a Gunnerenemy from the list
      *
      * @param x coordinate
      * @param y coordinate
      */
-    public static void spawnGunnerEnemy(int x, int y) {
-        for (GunnerEnemy currEnemy : enemyGunnerPool) {
-            if (!currEnemy.isInGame) {
-                currEnemy.x = x;
-                currEnemy.y = y;
-                currEnemy.hp = Enemy.maxHp;
-                Enemy.enemysAlive++;
-                currEnemy.isInGame = true;
-                handler.addObject(currEnemy);
-                break;
+    public static void spawnGunnerEnemy ( int x, int y){
+            for (GunnerEnemy currEnemy : enemyGunnerPool) {
+                if (!currEnemy.isInGame) {
+                    currEnemy.x = x;
+                    currEnemy.y = y;
+                    currEnemy.hp = Enemy.maxHp;
+                    Enemy.enemysAlive++;
+                    currEnemy.isInGame = true;
+                    handler.addObject(currEnemy);
+                    break;
+                }
+            }
+        }
+
+        /***
+         * A function inside the game calls to spawn the enemy's. it is static that i can be called in other classes
+         * @param x X value
+         * @param y Y value
+         */
+        public static void spawnEnemy ( int x, int y){
+            for (Enemy currEnemy : enemyPool) {
+                if (!currEnemy.isInGame) {
+                    currEnemy.x = x;
+                    currEnemy.y = y;
+                    currEnemy.hp = Enemy.maxHp;
+                    currEnemy.isInGame = true;
+                    Enemy.enemysAlive++;
+                    handler.addObject(currEnemy);
+                    return;
+                }
+            }
+        }
+
+
+        public static void SpawnCreate ( int x, int y){
+            handler.addObject(new Crate(x, y, ID.Crate, imageGetter));
+        }
+
+        /***
+         * for rendering the enemyshadow if enemy dies
+         * @param x
+         * @param y
+         */
+        public static void UseEnemyShadow ( int x, int y){
+            handler.addObject(new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
+            //enemyShadowPool.add(0,new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
+        }
+
+        public static void UseEnemyHitmarker ( int x, int y)
+        {
+            handler.addObject(new EnemyHitmarker(x, y, ID.EnemyHitmarker, imageGetter));
+        }
+
+        /***
+         * Function to get the current GameState
+         */
+        public static GameState getState () {
+            return currentState;
+        }
+
+        /***
+         * Function to set the current GameState
+         * @param state State to change to
+         */
+        public static void setState (GameState state){
+            currentState = state;
+        }
+
+        // the main function that runs everything
+        public static void main (String[]args) throws
+        IOException {
+            try {
+                new Game();
+            } catch (IOException | SQLException e) {
+                e.printStackTrace();
             }
         }
     }
-
-    /***
-     * A function inside the game calls to spawn the enemy's. it is static that i can be called in other classes
-     * @param x X value
-     * @param y Y value
-     */
-    public static void spawnEnemy(int x, int y) {
-        for (Enemy currEnemy : enemyPool) {
-            if (!currEnemy.isInGame) {
-                currEnemy.x = x;
-                currEnemy.y = y;
-                currEnemy.hp = Enemy.maxHp;
-                currEnemy.isInGame = true;
-                Enemy.enemysAlive++;
-                handler.addObject(currEnemy);
-                return;
-            }
-        }
-    }
-
-
-    public static void SpawnCreate(int x, int y) {
-        handler.addObject(new Crate(x, y, ID.Crate, imageGetter));
-    }
-
-    /***
-     * for rendering the enemyshadow if enemy dies
-     * @param x
-     * @param y
-     */
-    public static void UseEnemyShadow(int x, int y) {
-        handler.addObject(new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
-        //enemyShadowPool.add(0,new EnemyShadow(x, y, ID.EnemyShadow, imageGetter));
-    }
-
-    public static void UseEnemyHitmarker(int x, int y) {
-        handler.addObject(new EnemyHitmarker(x, y, ID.EnemyHitmarker, imageGetter));
-    }
-
-    /***
-     * Function to get the current GameState
-     */
-    public static GameState getState() {
-        return currentState;
-    }
-
-    /***
-     * Function to set the current GameState
-     * @param state State to change to
-     */
-    public static void setState(GameState state) {
-        currentState = state;
-    }
-
-    // the main function that runs everything
-    public static void main(String[] args) throws IOException {
-        try {
-            new Game();
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
-}
