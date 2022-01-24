@@ -571,20 +571,23 @@ public class Game extends Canvas implements Runnable {
 
         g.setFont(font);
 
-        //HP
-        g.drawImage(getHUDPicture.getImage48(1, 2, 48, 48), 5, 0, null);
-        if (hp >= 70)
-            g.setColor(Color.green);
-        else if (hp >= 40)
-            g.setColor(Color.orange);
-        else
-            g.setColor(Color.red);
-        g.drawString(Integer.toString(hp), 60, 40);
+        //HP 12
+        g.drawImage(getHUDPicture.getImage48(1, 3, 168, 48), 5, 0, null);
+        g.drawImage(getHUDPicture.getImage48(2,4, 8 + hp + 12 * ((hp - 1) / 50),48), 53, 0, null);
+
+      //if (hp >= 70)
+      //    g.setColor(Color.green);
+      //else if (hp >= 40)
+      //    g.setColor(Color.orange);
+      //else
+      //    g.setColor(Color.red);
+      //g.drawString(Integer.toString(hp), 250, 40);
 
         //SHIELD
-        g.drawImage(getHUDPicture.getImage48(2, 1, 48, 48), 5, 50, null);
-        g.setColor(colors[1]);
-        g.drawString(Integer.toString(shield), 60, 90);
+        g.drawImage(getHUDPicture.getImage48(1, 5, 168, 48), 5, 50, null);
+        g.drawImage(getHUDPicture.getImage48(2,6, 8 + (int) (shield * 2.5) + 12 * ((shield - 1) / 20),48), 53, 50, null);
+       //g.setColor(colors[1]);
+       //g.drawString(Integer.toString(shield), 60, 90);
 
         //ARMOR
         g.drawImage(getHUDPicture.getImage48(1, 1, 48, 48), 5, 100, null);
@@ -602,13 +605,13 @@ public class Game extends Canvas implements Runnable {
 
         ammo_width = (ammo - 1) / 10 * 16 + 15;
         if (ammo != 0) {
-            g.drawImage(getHUDPicture.getImage48(2, 2, ammo_width, 48), 512, 490, null);
-            g.drawImage(getHUDPicture.getImage48(2, 2, ammo_width, 48), 512 + (-ammo_width / 15 * 16), 490, null);
+            g.drawImage(getHUDPicture.getImage48(1, 2, ammo_width, 48), 512, 490, null);
+            g.drawImage(getHUDPicture.getImage48(1, 2, ammo_width, 48), 512 + (-ammo_width / 15 * 16), 490, null);
         }
 
         //RELOAD
         if (percent != 100 && ammo != 0)
-            g.drawImage(getHUDPicture.getImage48(3, 1, 48, 48), 80, 480, null);
+            g.drawImage(getHUDPicture.getImage48(2, 1, 48, 48), 80, 480, null);
 
 
         //GUN
