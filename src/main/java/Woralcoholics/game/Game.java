@@ -95,6 +95,7 @@ public class Game extends Canvas implements Runnable {
     public static List<GunnerEnemy> enemyGunnerPool = new ArrayList();
     public static List<EnemyShadow> enemyShadowPool = new ArrayList();
 
+    private int ammo_width;
     public int ammo = 50;
     public int hp = 100;
     private int[] randomUpgrades = {1, 1, 1};
@@ -526,9 +527,11 @@ public class Game extends Canvas implements Runnable {
                 }
             }
             case CREDITS -> {
-                g.setColor(Color.black);
-                g.setFont(new Font("Arial Black", Font.PLAIN, 40));
-                g.drawString("Credits go here brrr", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+                //g.drawImage(getHUDPicture.getImage48(1, 1, 96, 96), 0, 0, null);
+
+                //g.setColor(Color.black);
+                //g.setFont(new Font("Arial Black", Font.PLAIN, 40));
+                //g.drawString("Credits go here brrr", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
             }
             case UPGRADE_MENU -> {
                 g.drawImage(imageGetter.getImage(randomUpgrades[0], 8, 64, 64), SCREEN_WIDTH / 4 - 32,
@@ -569,7 +572,7 @@ public class Game extends Canvas implements Runnable {
         g.setFont(font);
 
         //HP
-        g.drawImage(getHUDPicture.getImage48(2, 2, 48, 48), 5, 0, null);
+        g.drawImage(getHUDPicture.getImage48(1, 2, 48, 48), 5, 0, null);
         if (hp >= 70)
             g.setColor(Color.green);
         else if (hp >= 40)
@@ -578,24 +581,34 @@ public class Game extends Canvas implements Runnable {
             g.setColor(Color.red);
         g.drawString(Integer.toString(hp), 60, 40);
 
-        //AMMO
-        g.drawImage(getHUDPicture.getImage48(1, 2, 48, 48), 5, 50, null);
-        g.setColor(colors[2]);
-        g.drawString(Integer.toString(ammo), 60, 90);
-
         //SHIELD
-        g.drawImage(getHUDPicture.getImage48(2, 1, 48, 48), 5, 100, null);
+        g.drawImage(getHUDPicture.getImage48(2, 1, 48, 48), 5, 50, null);
         g.setColor(colors[1]);
-        g.drawString(Integer.toString(shield), 60, 140);
+        g.drawString(Integer.toString(shield), 60, 90);
 
         //ARMOR
-        g.drawImage(getHUDPicture.getImage48(1, 1, 48, 48), 5, 150, null);
+        g.drawImage(getHUDPicture.getImage48(1, 1, 48, 48), 5, 100, null);
         g.setColor(colors[0]);
-        g.drawString(Integer.toString(armor) + "%", 60, 190);
+        g.drawString(Integer.toString(armor) + "%", 60, 140);
+
+        //AMMO
+        g.setColor(colors[2]);
+        if (ammo >= 10)
+            g.drawString(Integer.toString(ammo), 500, 480);
+        else if (ammo < 10 && ammo > 0)
+            g.drawString(Integer.toString(ammo), 506, 480);
+        else
+            g.drawString("OUT OF AMMO", 420 ,520);
+
+        ammo_width = (ammo - 1) / 10 * 16 + 15;
+        if (ammo != 0) {
+            g.drawImage(getHUDPicture.getImage48(2, 2, ammo_width, 48), 512, 490, null);
+            g.drawImage(getHUDPicture.getImage48(2, 2, ammo_width, 48), 512 + (-ammo_width / 15 * 16), 490, null);
+        }
 
         //RELOAD
-        if (percent != 100)
-            g.drawImage(getHUDPicture.getImage48(3, 1, 48, 48), 5, 200, null);
+        if (percent != 100 && ammo != 0)
+            g.drawImage(getHUDPicture.getImage48(3, 1, 48, 48), 80, 480, null);
 
 
         //GUN
