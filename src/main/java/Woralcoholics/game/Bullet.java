@@ -123,7 +123,6 @@ public class Bullet extends GameObject {
 
         handler.angle = checkAngle(handler.angle); // get's overwritten if angle is not valid
         alpha = Math.toRadians(handler.angle); // overwrite angle
-
         velX = (float) (Math.cos(alpha) * bulletSpeed);
         velY = (float) (Math.sin(alpha) * bulletSpeed);
     }

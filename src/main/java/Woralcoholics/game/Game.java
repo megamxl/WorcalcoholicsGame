@@ -85,7 +85,8 @@ public class Game extends Canvas implements Runnable {
 
     public static BufferedImage[] playerWalkingLeft = new BufferedImage[10];
     public static BufferedImage[] playerWalkingRight = new BufferedImage[10];
-    public static BufferedImage[] playerIdle = new BufferedImage[4];
+    public static BufferedImage[] playerIdleLeft = new BufferedImage[4];
+    public static BufferedImage[] playerIdleRight = new BufferedImage[4];
     public static BufferedImage[] enemyDeadShadow = new BufferedImage[10];
     public static BufferedImage[] enemyHitmarker = new BufferedImage[4];
     public static BufferedImage[] enemy = new BufferedImage[13];
@@ -1024,14 +1025,20 @@ public class Game extends Canvas implements Runnable {
         enemyHitmarker[1] = getEnemyHitmarker.getImage32(2, 1, 32, 32);
         enemyHitmarker[2] = getEnemyHitmarker.getImage32(3, 1, 32, 32);
         enemyHitmarker[3] = getEnemyHitmarker.getImage32(4, 1, 32, 32);
-
     }
 
     private void loadPlayerIdle() {
-        playerIdle[0] = getPlayerIdleCycle.getImage32(1, 1, 32, 32);
-        playerIdle[1] = getPlayerIdleCycle.getImage32(2, 1, 32, 32);
-        playerIdle[2] = getPlayerIdleCycle.getImage32(3, 1, 32, 32);
-        playerIdle[3] = getPlayerIdleCycle.getImage32(4, 1, 32, 32);
+        playerIdleLeft[0] = getPlayerIdleCycle.getImage32(1, 1, 32, 32);
+        playerIdleLeft[1] = getPlayerIdleCycle.getImage32(2, 1, 32, 32);
+        playerIdleLeft[2] = getPlayerIdleCycle.getImage32(3, 1, 32, 32);
+        playerIdleLeft[3] = getPlayerIdleCycle.getImage32(4, 1, 32, 32);
+
+        for (int i = 0; i < playerIdleLeft.length; i++) {
+            AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+            tx.translate(-playerIdleLeft[i].getWidth(null), 0);
+            AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            playerIdleRight[i] = op.filter(playerIdleLeft[i], null);
+        }
     }
 
     private void loadEnenemySprites() {

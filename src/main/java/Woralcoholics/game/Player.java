@@ -28,7 +28,8 @@ public class Player extends GameObject {
     private BufferedImage player_weapon_img;
     private Animations playerWalkLeft;
     private Animations playerWalkRigth;
-    private Animations playerIdle;
+    private Animations playerIdleLeft;
+    private Animations playerIdleRight;
 
     private double invincibleTime = 1000;
 
@@ -51,7 +52,8 @@ public class Player extends GameObject {
 
         playerWalkLeft = new Animations(3, Game.playerWalkingLeft[0], Game.playerWalkingLeft[1], Game.playerWalkingLeft[2], Game.playerWalkingLeft[3], Game.playerWalkingLeft[4], Game.playerWalkingLeft[5], Game.playerWalkingLeft[6], Game.playerWalkingLeft[7], Game.playerWalkingLeft[8], Game.playerWalkingLeft[9]);
         playerWalkRigth = new Animations(3, Game.playerWalkingRight[0], Game.playerWalkingRight[1], Game.playerWalkingRight[2], Game.playerWalkingRight[3], Game.playerWalkingRight[4], Game.playerWalkingRight[5], Game.playerWalkingRight[6], Game.playerWalkingRight[7], Game.playerWalkingRight[8], Game.playerWalkingRight[9]);
-        playerIdle = new Animations(3, Game.playerIdle[0], Game.playerIdle[1], Game.playerIdle[2], Game.playerIdle[3]);
+        playerIdleLeft = new Animations(5, Game.playerIdleLeft[0], Game.playerIdleLeft[1], Game.playerIdleLeft[2], Game.playerIdleLeft[3]);
+        playerIdleRight = new Animations(5, Game.playerIdleRight[0], Game.playerIdleRight[1], Game.playerIdleRight[2], Game.playerIdleRight[3]);
 
         player_img = an.getImage(1, 3, 64, 64);
         player_weapon_img = an.getImage(5, 10, 64, 64);
@@ -69,7 +71,8 @@ public class Player extends GameObject {
 
         playerWalkLeft.runAnimations();
         playerWalkRigth.runAnimations();
-        playerIdle.runAnimations();
+        playerIdleLeft.runAnimations();
+        playerIdleRight.runAnimations();
 
         checkIfGone();
 
@@ -131,7 +134,6 @@ public class Player extends GameObject {
             coordinatesadditive[1] = y; // 17 -> start value at angle 330° -> target ~25 to close the cycle
             //System.out.println("330-360°");
         }
-
     }
 
     @Override
@@ -139,12 +141,21 @@ public class Player extends GameObject {
         /*Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.GREEN);
         g2d.draw(getBounds());*/
-        if (velX < 0) {
+        //System.out.println(handler.angle);
+
+        // Depending on the position of the mouse cursor in relation to the player character,
+        // the current player animation gets flipped vertically
+        // this gets determined by checking the angle of the mouse cursor on the unit circle
+        // angle < 90 or angle > 270 means right side of the unit circle, angle > 90 and angle < 270 means
+        // left side of the unit circle
+        if (velX < 0 || ((velY > 0 || velY < 0) && (handler.angle > 90 && handler.angle < 270))) {
             playerWalkLeft.renderAnimation(g, (int) x, (int) y, 64, 64);
-        } else if (velX > 0 || velY > 0 || velY < 0) {
+        } else if (velX > 0 || ((velY > 0 || velY < 0) && (handler.angle < 90 || handler.angle > 270))) { //velY > 0 || velY < 0
             playerWalkRigth.renderAnimation(g, (int) x, (int) y, 64, 64);
-        } else {
-            playerIdle.renderAnimation(g, (int) x, (int) y, 64, 64);
+        } else if (velX == 0 && velY == 0 && (handler.angle > 90 && handler.angle < 270)){
+            playerIdleLeft.renderAnimation(g, (int) x, (int) y, 64, 64);
+        } else if (velX == 0 && velY == 0 && (handler.angle < 90 || handler.angle > 270)){
+            playerIdleRight.renderAnimation(g, (int) x, (int) y, 64, 64);
         }
         g.drawImage(player_weapon_img, ((int) x) + coordinatesadditive[0], ((int) y) + coordinatesadditive[1], null); // x and y adjustable for gun position
 
