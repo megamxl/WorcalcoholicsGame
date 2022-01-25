@@ -79,6 +79,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage imgTitle;
     private BufferedImage currWeapon = null;
     private BufferedImage imgHUD;
+    private BufferedImage imgCredits;
 
     private Upgrades upgrades;
 
@@ -225,6 +226,7 @@ public class Game extends Canvas implements Runnable {
 
         imgStudio = loader.loadImage("/Graphics/StudioImg.png");
         imgTitle = loader.loadImage("/Graphics/Titlescreen.png");
+        imgCredits = loader.loadImage("/Graphics/creditScreenFinal.png");
 
         //Adding Mouse and Keyboard Input
         mouse = new MouseInput(handler, camera, this, imageGetter, weapon);
@@ -528,11 +530,7 @@ public class Game extends Canvas implements Runnable {
                 }
             }
             case CREDITS -> {
-                //g.drawImage(getHUDPicture.getImage48(1, 1, 96, 96), 0, 0, null);
-
-                //g.setColor(Color.black);
-                //g.setFont(new Font("Arial Black", Font.PLAIN, 40));
-                //g.drawString("Credits go here brrr", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+                g.drawImage(imgCredits, 0, 0, null);
             }
             case UPGRADE_MENU -> {
                 g.drawImage(imageGetter.getImage(randomUpgrades[0], 8, 64, 64), SCREEN_WIDTH / 4 - 32,
@@ -572,7 +570,7 @@ public class Game extends Canvas implements Runnable {
 
         g.setFont(font);
 
-        //HP 12
+        //HP
         g.drawImage(getHUDPicture.getImage48(1, 3, 168, 48), 5, 0, null);
         g.drawImage(getHUDPicture.getImage48(2, 4, 8 + hp + 12 * ((hp - 1) / 50), 48), 53, 0, null);
 
