@@ -95,7 +95,7 @@ public class DestroyableBoxes extends GameObject {
                         object.getBounds().getWidth(), object.getBounds().getHeight());
                 if(getBounds().intersectsLine(line)) {
                     boxDestroyedSound();
-                    hp -= 10;
+                    hp -= 20;
                     crackedState();
                     manager.removeObject(object);
                 }
