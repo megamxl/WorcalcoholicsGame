@@ -198,7 +198,10 @@ public class Player extends GameObject {
         }
     }
 
-  /*
+    /***
+     * check which image should be loaded in to weapon sprite (if you change weapon it changes too with different img, height, width)
+     */
+
     private void checkWeaponRenderStatus() {
         int[] colrow = new int[2];
         colrow = game.getColRowFromIndex();
@@ -225,35 +228,6 @@ public class Player extends GameObject {
             }
         }
         player_weapon_img = an.getImage(colrow[0], colrow[1], width, height);
-        if (weaponIsGun) {
-            rotate();
-        } else {
-            rotate();
-        }
-    }*/
-
-    /***
-     * check which image should be loaded in to weapon sprite (if you change weapon it changes too with different img, height, width)
-     */
-    private void checkWeaponRenderStatus() {
-        int[] colrow = new int[2];
-        colrow = game.getColRowFromIndex();
-        int width;
-        int height;
-        if (handler.selectedWeapon.getType() == WeaponType.Pistol) {
-            width = 44;
-            height = 19;
-            player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); // pistol
-        }
-        if (handler.selectedWeapon.getType() == WeaponType.Shotgun) {
-            width = 44;
-            height = 19;
-            player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); //shotgun
-        } else {
-            width = 44;
-            height = 19;
-            player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); //machine gun
-        }
         rotate();
     }
 
