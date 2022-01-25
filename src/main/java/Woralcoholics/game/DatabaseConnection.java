@@ -28,7 +28,7 @@ public class DatabaseConnection {
             // Method to try to connect. Database is completely unsafe at the moment but is just a free mysql Database at the moment without any privileges to create different users
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");  // get the mySqlJavaDriver
-                con = DriverManager.getConnection("jdbc:mysql://sql11.freesqldatabase.com/sql11465142", "sql11465142", "3EUdzq6kPX"); // login Credentials for Database
+                con = DriverManager.getConnection("jdbc:mysql://sql11.freesqldatabase.com/sql11467974", "sql11467974", "TdgVHwda4y"); // login Credentials for Database
             } catch (Exception e) {                         // catches connection Errors
                 System.out.println("Can't connect to Database");
                 System.out.println(e);
@@ -54,7 +54,7 @@ public class DatabaseConnection {
         try {
             // Method to try to connect. Database is completely unsafe at the moment but is just a free mysql Database at the moment without any privileges to create different users
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://sql11.freesqldatabase.com/sql11465142", "sql11465142", "3EUdzq6kPX");
+            con = DriverManager.getConnection("jdbc:mysql://sql11.freesqldatabase.com/sql11467974", "sql11467974", "TdgVHwda4y");
         } catch (Exception e) {
             System.out.println("Can't connect to Database");
             System.out.println(e);
