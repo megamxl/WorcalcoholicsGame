@@ -204,14 +204,14 @@ public class Player extends GameObject {
                 //player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); // pistol
             }
             case Shotgun, MachineGun -> {
-                width = 33;
+                width = 44;
                 height = 19;
                 weaponIsGun = true;
                 //player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); //shotgun
             }
             case Sword -> {
-                width = 32;
-                height = 11;
+                width = 65;
+                height = 20;
                 weaponIsGun = false;
             }
         }
