@@ -450,7 +450,6 @@ public class MouseInput extends MouseAdapter {
     }
 
     private void sword(Point currentPos) {
-        System.out.println("SWING");
         handler.now = System.currentTimeMillis();
         //IF waiting time is over -> swing the sword
         if (handler.now > handler.wait) {
