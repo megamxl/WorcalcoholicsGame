@@ -152,9 +152,9 @@ public class Player extends GameObject {
             playerWalkLeft.renderAnimation(g, (int) x, (int) y, 64, 64);
         } else if (velX > 0 || ((velY > 0 || velY < 0) && (handler.angle < 90 || handler.angle > 270))) { //velY > 0 || velY < 0
             playerWalkRigth.renderAnimation(g, (int) x, (int) y, 64, 64);
-        } else if (velX == 0 && velY == 0 && (handler.angle > 90 && handler.angle < 270)){
+        } else if (velX == 0 && velY == 0 && (handler.angle > 90 && handler.angle < 270)) {
             playerIdleLeft.renderAnimation(g, (int) x, (int) y, 64, 64);
-        } else if (velX == 0 && velY == 0 && (handler.angle < 90 || handler.angle > 270)){
+        } else if (velX == 0 && velY == 0 && (handler.angle < 90 || handler.angle > 270)) {
             playerIdleRight.renderAnimation(g, (int) x, (int) y, 64, 64);
         }
         g.drawImage(player_weapon_img, ((int) x) + coordinatesadditive[0], ((int) y) + coordinatesadditive[1], null); // x and y adjustable for gun position
@@ -198,9 +198,7 @@ public class Player extends GameObject {
         }
     }
 
-    /***
-     * check which image should be loaded in to weapon sprite (if you change weapon it changes too with different img, height, width)
-     */
+  /*
     private void checkWeaponRenderStatus() {
         int[] colrow = new int[2];
         colrow = game.getColRowFromIndex();
@@ -209,7 +207,7 @@ public class Player extends GameObject {
         boolean weaponIsGun = false;
         switch (handler.selectedWeapon.getType()) {
             case Pistol -> {
-                width = 21;
+                width = 25;
                 height = 19;
                 weaponIsGun = true;
                 //player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); // pistol
@@ -221,16 +219,44 @@ public class Player extends GameObject {
                 //player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); //shotgun
             }
             case Sword -> {
-                width = 65;
-                height = 20;
+                width = 44;
+                height = 19;
                 weaponIsGun = false;
             }
         }
         player_weapon_img = an.getImage(colrow[0], colrow[1], width, height);
         if (weaponIsGun) {
             rotate();
+        } else {
+            rotate();
         }
+    }*/
+
+    /***
+     * check which image should be loaded in to weapon sprite (if you change weapon it changes too with different img, height, width)
+     */
+    private void checkWeaponRenderStatus() {
+        int[] colrow = new int[2];
+        colrow = game.getColRowFromIndex();
+        int width;
+        int height;
+        if (handler.selectedWeapon.getType() == WeaponType.Pistol) {
+            width = 44;
+            height = 19;
+            player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); // pistol
+        }
+        if (handler.selectedWeapon.getType() == WeaponType.Shotgun) {
+            width = 44;
+            height = 19;
+            player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); //shotgun
+        } else {
+            width = 44;
+            height = 19;
+            player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); //machine gun
+        }
+        rotate();
     }
+
 
     /***
      * for rotating the gun png
@@ -245,15 +271,15 @@ public class Player extends GameObject {
         final int height = (int) Math.floor(player_weapon_img.getHeight() * cos + player_weapon_img.getWidth() * sin);
 
         // rotated image
-        final BufferedImage player_gun_img_rotated = new BufferedImage(width, height, player_weapon_img.getType());
+        final BufferedImage player_weapon_img_rotated = new BufferedImage(width, height, player_weapon_img.getType());
         final AffineTransform at = new AffineTransform();
         at.translate(width / 2.0, height / 2.0);
         at.rotate(rads, 0, 0);
         at.translate(-player_weapon_img.getWidth() / 2.0, -player_weapon_img.getHeight() / 2.0);
         final AffineTransformOp rotateOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-        rotateOp.filter(player_weapon_img, player_gun_img_rotated);
+        rotateOp.filter(player_weapon_img, player_weapon_img_rotated);
         //set our rotated image to our actual gun png
-        player_weapon_img = player_gun_img_rotated;
+        player_weapon_img = player_weapon_img_rotated;
     }
 
     /**
