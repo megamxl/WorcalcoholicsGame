@@ -331,8 +331,8 @@ public class MouseInput extends MouseAdapter {
                     double mx = currentPos.x + camera.getX();
                     double my = currentPos.y + camera.getY();
                     //Middle of player coordinates
-                    double px = player.getX() + 32 - 4;
-                    double py = player.getY() + 32 - 4;
+                    double px = player.getX() + 32;
+                    double py = player.getY() + 32;
                     temp.setPos(px, py);
                     temp.direction(mx, my, px, py, false, 0, false);
                     temp.inGame = true;
@@ -374,8 +374,8 @@ public class MouseInput extends MouseAdapter {
                     double mx = x + camera.getX();
                     double my = y + camera.getY();
                     //Middle of player coordinates
-                    double px = player.getX() + 32 - 4;
-                    double py = player.getY() + 32 - 4;
+                    double px = player.getX() + 32;
+                    double py = player.getY() + 32;
                     temp.setPos(px, py);
                     temp.direction(mx, my, px, py, false, 0, false);
                     temp.inGame = true;
@@ -416,8 +416,8 @@ public class MouseInput extends MouseAdapter {
                     double mx = x + camera.getX();
                     double my = y + camera.getY();
                     //Middle of player coordinates
-                    double px = player.getX() + 32 - 4;
-                    double py = player.getY() + 32 - 4;
+                    double px = player.getX() + 32;
+                    double py = player.getY() + 32;
                     temp.setPos(px, py);
                     switch (shells) {
                         case 0 -> temp.direction(mx, my, px, py, true, 0, false);

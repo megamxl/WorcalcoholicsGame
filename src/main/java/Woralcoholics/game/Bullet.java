@@ -48,6 +48,7 @@ public class Bullet extends GameObject {
         } else {
             direction(mx, my, px, py, anglediff); //bullets for the shotgun
         }
+
     }
 
     /**
@@ -112,6 +113,11 @@ public class Bullet extends GameObject {
         double alpha = Math.atan2(dy, dx);
         velX = (float) (Math.cos(alpha) * bulletSpeed);
         velY = (float) (Math.sin(alpha) * bulletSpeed);
+
+        switch(handler.selectedWeapon.getType()) {
+            case Pistol -> setPos(px+Math.cos(alpha)*30-16, py+Math.sin(alpha)*30-16);
+            case MachineGun -> setPos(px+Math.cos(alpha)*50-16, py+Math.sin(alpha)*50-16);
+        }
     }
 
     private void direction(double mx, double my, double px, double py, float anglediff) {
@@ -125,6 +131,8 @@ public class Bullet extends GameObject {
         alpha = Math.toRadians(handler.angle); // overwrite angle
         velX = (float) (Math.cos(alpha) * bulletSpeed);
         velY = (float) (Math.sin(alpha) * bulletSpeed);
+
+        setPos(px+Math.cos(alpha)*50-16, py+Math.sin(alpha)*50-16);
     }
 
     @Override
