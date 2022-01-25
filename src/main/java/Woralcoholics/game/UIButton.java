@@ -124,6 +124,24 @@ public class UIButton extends GameObject{
                     case "L" -> GameManager.soundv = 2;
                 }
             }
+            case 4 -> {
+                if(Game.money.getMoney() >= 70) {
+                    game.medKit++;
+                    Game.money.purchase(70);
+                }
+            }
+            case 5 -> {
+                if(Game.money.getMoney() >= 50) {
+                    game.ammoBox++;
+                    Game.money.purchase(50);
+                }
+            }
+            case 6 -> {
+                if(Game.money.getMoney() >= 30) {
+                    game.shieldShot++;
+                    Game.money.purchase(30);
+                }
+            }
         }
     }
 

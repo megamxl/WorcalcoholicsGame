@@ -26,7 +26,7 @@ public class GameManager {
 
     //In this script we define the 4 ways somebody can walk and set and get them
     private boolean up = false, down = false, right = false, left = false;
-    private boolean ll = false, kk = false, mm = false;
+    private boolean ll = false, kk = false, mm = false, bb = false;
     Clip sound, soundenemy, soundplayer;
     public Clip backgroundsound;
     private final int timeOfBackgroundSound = 198000;  // 3:18 Min length of backgroundsound
@@ -191,6 +191,14 @@ public class GameManager {
 
     public void setM(boolean m) {
         this.mm = m;
+    }
+
+    public void setB(boolean b) {
+        this.bb = b;
+    }
+
+    public boolean isB(){
+        return bb;
     }
 
 

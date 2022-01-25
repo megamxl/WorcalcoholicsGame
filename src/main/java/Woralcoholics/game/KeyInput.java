@@ -48,6 +48,7 @@ public class KeyInput extends KeyAdapter {
                     case KeyEvent.VK_K -> gameManager.setK(true);
                     case KeyEvent.VK_SPACE -> Game.curentTutorialscore++;
                     case KeyEvent.VK_NUMPAD9 -> game.hp = 0;     //DEV FUNCTION TO KILL PLAYER
+                    case KeyEvent.VK_B -> gameManager.setB(true);
                 }
             }
         }
@@ -67,13 +68,14 @@ public class KeyInput extends KeyAdapter {
             case KeyEvent.VK_L -> gameManager.setL(false);
             case KeyEvent.VK_K -> gameManager.setK(false);
             case KeyEvent.VK_M -> gameManager.setM(false);
+            case KeyEvent.VK_B -> gameManager.setM(false);
         }
     }
 
     /*private void DEVELOPER_SCREEN_CHANGER(int key) {
         switch(key) {
             case KeyEvent.VK_NUMPAD0 -> {
-                Game.setState(GameState.STUDIO);
+                Game.setState(GameState.SHOP);
                 System.out.println("SWITCHED TO " + Game.getState());
                 gameManager.clearHandler();
                 Game.loaded = false;

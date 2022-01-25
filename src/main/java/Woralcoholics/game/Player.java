@@ -376,9 +376,19 @@ public class Player extends GameObject {
 
     private void isDead() {
         if (game.hp <= 0) {
-            playSoundGameOver();
-            Game.setState(GameState.GAME_OVER);         //if the player has no HP left, its GAME OVER
-            Game.loaded = false;
+            if(game.medKit > 0){    //activate medKit
+                game.hp += 50;
+                game.medKit--;
+            }
+            else {
+                playSoundGameOver();
+                Game.setState(GameState.GAME_OVER);         //if the player has no HP left, its GAME OVER
+                Game.loaded = false;
+            }
+        }
+        if (game.shield <= 0 && game.shieldShot > 0){    //activate shieldShot
+            game.shield += 20;
+            game.shieldShot--;
         }
     }
 
@@ -499,6 +509,10 @@ public class Player extends GameObject {
             }).start();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if(game.shield <= 20 && game.shieldShot > 0){
+            game.shield += 20;
+            game.shieldShot--;
         }
     }
 

@@ -22,4 +22,8 @@ public class Money {
     public void purchase(int amount){
         this.money -= amount;
     }
+
+    public void resetMoney(){
+        this.money = 0;
+    }
 }

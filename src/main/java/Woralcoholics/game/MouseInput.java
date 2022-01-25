@@ -56,7 +56,7 @@ public class MouseInput extends MouseAdapter {
         Point currentPos = e.getPoint();    //Grab current cursor position
         int button = e.getButton(); //Grab pressed button
         switch (Game.getState()) {  //depending on currentState, execute the following...
-            case TITLE, MAIN_MENU, HIGH_SCORES, OPTIONS, PAUSE_MENU, UPGRADE_MENU, CREDITS, GAME_OVER -> {
+            case TITLE, MAIN_MENU, HIGH_SCORES, OPTIONS, PAUSE_MENU, UPGRADE_MENU, CREDITS, GAME_OVER, SHOP -> {
                 if (button == 1) {
                     for (int i = 0; i < handler.object.size(); i++) {
                         GameObject temp = handler.object.get(i);
@@ -65,7 +65,7 @@ public class MouseInput extends MouseAdapter {
                             break;
                         }
                     }
-                    if (Game.getState() == GameState.UPGRADE_MENU) {
+                    if (Game.getState() == GameState.UPGRADE_MENU || Game.getState() == GameState.SHOP) {
                         Game.startTimer(5, 1);  //after 5 secs, spawn the next wave
                     }
                 }
@@ -343,6 +343,10 @@ public class MouseInput extends MouseAdapter {
             playSoundWeapon(game.ammo);
             game.ammo--;    //Subtract 1 from ammo (bullet was shot)
             handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
+            if(game.ammo == 0 && game.ammoBox > 0){     //activate ammoBox
+                game.ammo += 30;
+                game.ammoBox--;
+            }
         } else if (handler.now > handler.wait && game.ammo <= 0) {
             playSoundWeapon(game.ammo); //has no ammo
             handler.wait = handler.now + handler.del;

@@ -16,5 +16,6 @@ public enum GameState {
     PAUSE_MENU,
     UPGRADE_MENU,
     GAME_OVER,
-    CREDITS
+    CREDITS,
+    SHOP
 }

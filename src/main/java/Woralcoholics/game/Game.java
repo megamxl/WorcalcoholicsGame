@@ -80,6 +80,8 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage currWeapon = null;
     private BufferedImage imgHUD;
     private BufferedImage imgCredits;
+    private BufferedImage imgShop;
+    private BufferedImage shopBorder;
 
     private Upgrades upgrades;
 
@@ -100,6 +102,7 @@ public class Game extends Canvas implements Runnable {
     private int ammo_width;
     public int ammo = 50;
     public int hp = 100;
+    static Money money = new Money();
     private int[] randomUpgrades = {1, 1, 1};
     static Score score = new Score(0);
 
@@ -113,6 +116,9 @@ public class Game extends Canvas implements Runnable {
 
     public int shield = 0;
     public int armor = 0; //armor is referred to in %, so 10 would make a shield absorbing 10% of damage
+    public int medKit = 0;
+    public int ammoBox = 0;
+    public int shieldShot = 0;
 
     public static int PlayerX = 0;
     public static int PlayerY = 0;
@@ -141,6 +147,7 @@ public class Game extends Canvas implements Runnable {
     private static ImageGetter GameOverScreenImg;
     private static ImageGetter getTutorialDialogWindowBorder;
     private static ImageGetter getHUDPicture;
+    private static ImageGetter getShopBorder;
 
     //private static ImageGetter TitleScreenImg;
     private static ImageGetter getUIButton;
@@ -192,6 +199,9 @@ public class Game extends Canvas implements Runnable {
         upgradeButtonImg = loader.loadImage("/Graphics/UpgradeBorder.png");
         getUpgradeButton = new ImageGetter(upgradeButtonImg);
 
+        shopBorder = loader.loadImage("/Graphics/shopBorder.png");
+        getShopBorder = new ImageGetter(shopBorder);
+
         UIButtonImg = loader.loadImage("/Graphics/UIButton_352x102.png");
         getUIButton = new ImageGetter(UIButtonImg);
 
@@ -227,6 +237,7 @@ public class Game extends Canvas implements Runnable {
         imgStudio = loader.loadImage("/Graphics/StudioImg.png");
         imgTitle = loader.loadImage("/Graphics/Titlescreen.png");
         imgCredits = loader.loadImage("/Graphics/creditScreenFinal.png");
+        imgShop = loader.loadImage("/Graphics/shop.png");
 
         //Adding Mouse and Keyboard Input
         mouse = new MouseInput(handler, camera, this, imageGetter, weapon);
@@ -453,6 +464,10 @@ public class Game extends Canvas implements Runnable {
                 ammo = 50;                  // max hp = 100, max ammo = 50, max shield = 40, max armor = ...
                 shield = 0;
                 armor = 0;
+                shieldShot = 0;
+                ammoBox = 0;
+                medKit = 0;
+                money.setMoney(0);
                 camera.shake = false;   //camera should not shake
                 switch (currentState) {
                     case LEVEL -> {
@@ -499,7 +514,7 @@ public class Game extends Canvas implements Runnable {
                 g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
             }
             case TITLE -> g.drawImage(imgTitle, 0, 0, null);
-            case MAIN_MENU, PAUSE_MENU, HIGH_SCORES, CREDITS, OPTIONS, UPGRADE_MENU, GAME_OVER -> {
+            case MAIN_MENU, PAUSE_MENU, HIGH_SCORES, CREDITS, OPTIONS, UPGRADE_MENU, GAME_OVER, SHOP -> {
                 g.setColor(Color.lightGray);
                 g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
             }
@@ -539,6 +554,13 @@ public class Game extends Canvas implements Runnable {
                         SCREEN_HEIGHT / 2, null);
                 g.drawImage(imageGetter.getImage(randomUpgrades[2], 8, 64, 64), SCREEN_WIDTH * 3 / 4 - 32,
                         SCREEN_HEIGHT / 2, null);
+            }
+            case SHOP -> {
+                g.drawImage(imgShop, 100, 30, null);
+                g.setFont(font);
+                g.setColor(Color.white);
+                g.drawString(Integer.toString(money.getMoney()), 470, 450);
+                g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 520, 410, null);
             }
             case GAME_OVER -> {
                 g.drawImage(imgOver, 1, 1, null);
@@ -644,13 +666,33 @@ public class Game extends Canvas implements Runnable {
         g.drawString("Enemies: " + Enemy.enemysAlive, 850, 70);
         g.drawString("Score: " + score.showScore(), 850, 100);
 
-        if (shouldTime && timerAction == 1) {    //if the timer is active AND the timerAction corresponds to wave-countdown...
+        if (shouldTime && timerAction == 1) {//if the timer is active AND the timerAction corresponds to wave-countdown...
             g.setColor(Color.ORANGE);
             //g.setFont(new Font("/Fonts/Future Blood",Font.PLAIN,80));
             g.setFont(new Font("Masked Hero Demo", Font.PLAIN, 45));
             g.drawString("Next Wave spawns in " + (TimerValue + 1), 50, 250);
+            g.setFont(font);
+            g.drawString("Press 'B' to open Shop", 400, 420);
+            if(handler.isB()){
+                currentState = GameState.SHOP;
+                handler.setB(false);
+            }
+
 
         }
+        //MONEY
+        g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 950, 100, null);
+        g.setColor(Color.white);
+        g.drawString(Integer.toString(money.getMoney()), 850, 135);
+
+        //SHOP ITEMS
+        g.drawImage(getHUDPicture.getImage48(1, 7, 48, 48), 950, 380, null);
+        g.drawString(Integer.toString(ammoBox), 915, 420);
+        g.drawImage(getHUDPicture.getImage48(2, 7, 48, 48), 950, 430, null);
+        g.drawString(Integer.toString(medKit), 915, 470);
+        g.drawImage(getHUDPicture.getImage48(3, 7, 48, 48), 950, 480, null);
+        g.drawString(Integer.toString(shieldShot), 915, 520);
+
         g.drawImage(currWeapon, 10, 470, null);
 
         if (currentState == GameState.TUTORIAL) {
@@ -700,6 +742,19 @@ public class Game extends Canvas implements Runnable {
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
                         ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 1, 0));
             }
+
+            case SHOP -> {
+                handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
+                        ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 1, 0));
+                handler.addObject(new UIButton(292, 270, 227, 258, "Buy", GameState.SHOP,
+                        ID.UIButton, this, 4, 0, getShopBorder, 1, 1, g, 1, 0));
+                handler.addObject(new UIButton(522, 270, 227, 258, "Buy", GameState.SHOP,
+                        ID.UIButton, this, 5, 0, getShopBorder, 1, 1, g, 1, 0));
+                handler.addObject(new UIButton(752, 270, 227, 258, "Buy", GameState.SHOP,
+                        ID.UIButton, this, 6, 0, getShopBorder, 1, 1, g, 1, 0));
+                paused = true;
+            }
+
             case TUTORIAL -> {
                 //handler.addObject(new UIButton(10, 10, 64, 64, "Return", RETURN, ID.UIButton, this, an, 0, 0, 40));
                 //System.out.println(currentState.toString());
@@ -763,6 +818,7 @@ public class Game extends Canvas implements Runnable {
             case GAME_OVER -> {
                 lastScore = score.showScore();
                 score.resetSore();
+                money.resetMoney();
                 handler.backgroundsound.close();
                 handler.isBackgroundSoundPlaying = false; // looping the backgroundsound in game
                 takesDamage = false;
@@ -841,7 +897,6 @@ public class Game extends Canvas implements Runnable {
             if (shouldTime) {    //...execute the previously set timerAction
                 switch (timerAction) {
                     case 1 -> {
-                        //currentState = GameState.UPGRADE_MENU; //for testing purposes
                         Enemy.Spawner(Enemy.waves, false, r); //Spawn the next wave of enemies
                         //upgrades.addMunition(20);
                         takesDamage = false;
