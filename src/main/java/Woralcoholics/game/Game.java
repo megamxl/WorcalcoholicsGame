@@ -459,7 +459,7 @@ public class Game extends Canvas implements Runnable {
                         inTutorial = false;
                         loadLevel(level); //load the level
                         for (Weapon weapon : Weapon.weapons) {
-                            if (weapon.getType() != WeaponType.Pistol) {
+                            if (weapon.getType() == WeaponType.MachineGun || weapon.getType() == WeaponType.Shotgun) {
                                 weapon.setLocked(true);
                             }
                         }
@@ -911,16 +911,16 @@ public class Game extends Canvas implements Runnable {
      * add weapons to list
      */
     private void addWeapons() {
+        weapon.addObject(new Weapon(), WeaponType.Sword, false);    //Sword
         weapon.addObject(new Weapon(), WeaponType.Pistol, false); // start with pistol
         weapon.addObject(new Weapon(), WeaponType.Shotgun, true); // second shotgun
         weapon.addObject(new Weapon(), WeaponType.MachineGun, true); //third machine gun  -> weakest to strongest
-        weapon.addObject(new Weapon(), WeaponType.Sword, false);    //Sword
 
     }
 
     private void setWeaponToPistolAgain() {
-        handler.selectedWeapon = Weapon.weapons.get(0);
-        handler.weaponIndex = 0;
+        handler.selectedWeapon = Weapon.weapons.get(1);
+        handler.weaponIndex = 1;
     }
 
     /***
@@ -932,10 +932,10 @@ public class Game extends Canvas implements Runnable {
         int col = 0;
         int row = 11;
         switch (handler.weaponIndex) {
-            case 0 -> col = 3;  //Pistol
-            case 1 -> col = 1;  //Shotgun
-            case 2 -> col = 2;  //Machinegun
-            case 3 -> col = 4;  //Sword
+            case 0 -> col = 4;  //Sword
+            case 1 -> col = 3;  //Pistol
+            case 2 -> col = 1;  //Shotgun
+            case 3 -> col = 2;  //Machinegun
         }
         colrow[0] = col;
         colrow[1] = row;

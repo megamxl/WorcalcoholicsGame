@@ -39,6 +39,7 @@ public class Player extends GameObject {
     private Boolean doOnceForZoneOne = false;
     private Boolean doOnceForZoneTow = false;
     private Boolean doOnceForZoneThree = false;
+    private boolean gunImgIsFlipped = false;
     Thread backgroundThread;
     int[] coordinatesadditive = new int[2]; // x and y Coordinates of Gun Sprite
     // better method would be to wait until the thread is finished and then start the new sound
@@ -157,7 +158,19 @@ public class Player extends GameObject {
         } else if (velX == 0 && velY == 0 && (handler.angle < 90 || handler.angle > 270)) {
             playerIdleRight.renderAnimation(g, (int) x, (int) y, 64, 64);
         }
-        g.drawImage(player_weapon_img, ((int) x) + coordinatesadditive[0], ((int) y) + coordinatesadditive[1], null); // x and y adjustable for gun position
+        //g.drawImage(player_weapon_img, ((int) x) + coordinatesadditive[0], ((int) y) + coordinatesadditive[1], null); // x and y adjustable for gun position
+
+        if(!handler.swordIsSwung) {
+            //Better looking Weapon rotation + flipping
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.rotate(Math.toRadians(handler.angle), x+32, y+32);  //rotate the weapon around the player
+            if(handler.angle >= 90 && handler.angle < 270) {    //if the weapon is left to the player, flip the image
+                g2d.drawImage(player_weapon_img, (int) x+32 + 10, (int) y+32-8+player_weapon_img.getHeight(), player_weapon_img.getWidth(), -player_weapon_img.getHeight(), null);
+            }
+            else {
+                g2d.drawImage(player_weapon_img, (int) x+32 + 10, (int) y+32-8, null);
+            }
+        }
 
         // draw other colliders
         /*g.setColor(Color.RED);
@@ -198,7 +211,10 @@ public class Player extends GameObject {
         }
     }
 
-  /*
+    /***
+     * check which image should be loaded in to weapon sprite (if you change weapon it changes too with different img, height, width)
+     */
+
     private void checkWeaponRenderStatus() {
         int[] colrow = new int[2];
         colrow = game.getColRowFromIndex();
@@ -225,36 +241,7 @@ public class Player extends GameObject {
             }
         }
         player_weapon_img = an.getImage(colrow[0], colrow[1], width, height);
-        if (weaponIsGun) {
-            rotate();
-        } else {
-            rotate();
-        }
-    }*/
-
-    /***
-     * check which image should be loaded in to weapon sprite (if you change weapon it changes too with different img, height, width)
-     */
-    private void checkWeaponRenderStatus() {
-        int[] colrow = new int[2];
-        colrow = game.getColRowFromIndex();
-        int width;
-        int height;
-        if (handler.selectedWeapon.getType() == WeaponType.Pistol) {
-            width = 44;
-            height = 19;
-            player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); // pistol
-        }
-        if (handler.selectedWeapon.getType() == WeaponType.Shotgun) {
-            width = 44;
-            height = 19;
-            player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); //shotgun
-        } else {
-            width = 44;
-            height = 19;
-            player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); //machine gun
-        }
-        rotate();
+        //rotate();
     }
 
 

@@ -34,7 +34,7 @@ public class GameManager {
     Path absolutePath;
     FloatControl volume;
     public static int soundv = 1; //default value for -40f sound | MUTE (Without Sound Effects just background music) -> -80f | MAX -> 6.0206f
-    protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip, isBackgroundSoundPlaying = false;
+    protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip, isBackgroundSoundPlaying, swordIsSwung = false;
     protected double wait;
     //machine gun - del=0 | normal gun - del=200 | slowgun - del=1000
     protected int del = 1000; //how fast player can shoot, less -> faster

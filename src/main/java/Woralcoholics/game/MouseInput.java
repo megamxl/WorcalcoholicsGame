@@ -331,8 +331,8 @@ public class MouseInput extends MouseAdapter {
                     double mx = currentPos.x + camera.getX();
                     double my = currentPos.y + camera.getY();
                     //Middle of player coordinates
-                    double px = player.getX() + 32 - 4;
-                    double py = player.getY() + 32 - 4;
+                    double px = player.getX() + 32;
+                    double py = player.getY() + 32;
                     temp.setPos(px, py);
                     temp.direction(mx, my, px, py, false, 0, false);
                     temp.inGame = true;
@@ -374,8 +374,8 @@ public class MouseInput extends MouseAdapter {
                     double mx = x + camera.getX();
                     double my = y + camera.getY();
                     //Middle of player coordinates
-                    double px = player.getX() + 32 - 4;
-                    double py = player.getY() + 32 - 4;
+                    double px = player.getX() + 32;
+                    double py = player.getY() + 32;
                     temp.setPos(px, py);
                     temp.direction(mx, my, px, py, false, 0, false);
                     temp.inGame = true;
@@ -416,8 +416,8 @@ public class MouseInput extends MouseAdapter {
                     double mx = x + camera.getX();
                     double my = y + camera.getY();
                     //Middle of player coordinates
-                    double px = player.getX() + 32 - 4;
-                    double py = player.getY() + 32 - 4;
+                    double px = player.getX() + 32;
+                    double py = player.getY() + 32;
                     temp.setPos(px, py);
                     switch (shells) {
                         case 0 -> temp.direction(mx, my, px, py, true, 0, false);
@@ -450,11 +450,11 @@ public class MouseInput extends MouseAdapter {
     }
 
     private void sword(Point currentPos) {
-        System.out.println("SWING");
         handler.now = System.currentTimeMillis();
         //IF waiting time is over -> swing the sword
         if (handler.now > handler.wait) {
             handler.clearObjects(ID.SwordHitbox);
+            handler.swordIsSwung = true;
             double mx = currentPos.x + camera.getX();
             double my = currentPos.y + camera.getY();
             //Middle of player coordinates
@@ -463,22 +463,6 @@ public class MouseInput extends MouseAdapter {
             SwordHitbox temp = new SwordHitbox(px, py, ID.SwordHitbox, handler, an);
             temp.startingDirection(mx, my);
             handler.object.add(temp);
-            /*for (int i = 0; i < handler.object.size(); i++) {
-
-                if (!temp.inGame) {
-                    //Add camera pos, as bullets don't aim correctly otherwise
-                    double mx = currentPos.x + camera.getX();
-                    double my = currentPos.y + camera.getY();
-                    //Middle of player coordinates
-                    float px = player.getX() + 32 - 4;
-                    float py = player.getY() + 32 - 4;
-                    temp.setPos(px, py);
-                    temp.direction(mx, my, px, py, false, 0, false);
-                    temp.inGame = true;
-                    //System.out.println(handler.bullets.get(i));
-                    break;
-                }
-            }*/
             playSoundWeapon(game.ammo);
             handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
         }
