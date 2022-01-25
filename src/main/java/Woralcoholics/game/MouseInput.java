@@ -537,6 +537,7 @@ public class MouseInput extends MouseAdapter {
         if (angle < 0) {
             angle += 360;
         }
+        //System.out.println(angle);
         return angle;
     }
 
