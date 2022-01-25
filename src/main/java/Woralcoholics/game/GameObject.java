@@ -14,7 +14,7 @@ public abstract class GameObject {
     // location of object
     protected /*int*/float x,y;
     // speed of object
-    protected float velX =3, velY = 1;
+    protected float velX =0.5f, velY = 0.5f;
     protected GameState nextState;
     protected ID id;
     protected ImageGetter an;

@@ -14,7 +14,6 @@ import java.io.IOException;
 public class DestroyableBoxes extends GameObject {
 
     private BufferedImage destroyable_boxes;
-    private int maxHp = 100;
     private int hp = 100;
     private GameManager manager;
     private boolean fullycracked = false;
@@ -34,7 +33,6 @@ public class DestroyableBoxes extends GameObject {
         this.manager = manager;
         // gets the image from the specified column and row from the spritesheet
         destroyable_boxes = an.getImage(col, row, 64, 64);
-        hp = maxHp;
     }
 
     public void update() {
@@ -97,7 +95,7 @@ public class DestroyableBoxes extends GameObject {
                         object.getBounds().getWidth(), object.getBounds().getHeight());
                 if(getBounds().intersectsLine(line)) {
                     boxDestroyedSound();
-                    hp -= 10;
+                    hp -= 20;
                     crackedState();
                     manager.removeObject(object);
                 }

@@ -171,15 +171,7 @@ public class Enemy extends GameObject {
             //if it's colliding with a block
 
             if (tmpObject.getId() == ID.Block || tmpObject.getId() == ID.DestroyableBoxes) {
-                if (topColider().intersects(tmpObject.getBounds())) {
-                    //System.out.println("top");
-                } else if (leftColider().intersects(tmpObject.getBounds())) {
-                    //System.out.println("left");
-                } else if (rigthColider().intersects(tmpObject.getBounds())) {
-                    //System.out.println("rigth");
-                } else if (downColider().intersects((tmpObject.getBounds()))) {
-                    //.out.println("down");
-                }
+
                 if (getBoundsAround().intersects(tmpObject.getBounds())) {
                     // if it is colliding with wall it goes in the opposite direction
                     x += (velX * 3) * -1;
@@ -437,6 +429,10 @@ public class Enemy extends GameObject {
      */
     public Rectangle getBounds() {
         return new Rectangle((int) x, (int) y, 32, 32);
+    }
+
+    public Rectangle getBoundsBig() {
+        return new Rectangle((int) x -16, (int) y -16, 64, 64);
     }
 
     /**
