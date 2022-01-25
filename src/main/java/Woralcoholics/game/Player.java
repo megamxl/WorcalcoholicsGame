@@ -56,7 +56,7 @@ public class Player extends GameObject {
         playerIdleRight = new Animations(5, Game.playerIdleRight[0], Game.playerIdleRight[1], Game.playerIdleRight[2], Game.playerIdleRight[3]);
 
         player_img = an.getImage(1, 3, 64, 64);
-        player_weapon_img = an.getImage(5, 10, 64, 64);
+        //player_weapon_img = an.getImage(5, 10, 64, 64);
         // default values
         coordinatesadditive[0] = 42;
         coordinatesadditive[1] = 25;
