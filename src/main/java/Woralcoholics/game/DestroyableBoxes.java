@@ -98,6 +98,7 @@ public class DestroyableBoxes extends GameObject {
                     hp -= 20;
                     crackedState();
                     manager.removeObject(object);
+                    manager.swordIsSwung = false;
                 }
             }
         }

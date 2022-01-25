@@ -932,10 +932,10 @@ public class Game extends Canvas implements Runnable {
         int col = 0;
         int row = 11;
         switch (handler.weaponIndex) {
-            case 0 -> col = 4;  //Pistol
-            case 1 -> col = 3;  //Shotgun
-            case 2 -> col = 1;  //Machinegun
-            case 3 -> col = 2;  //Sword
+            case 0 -> col = 4;  //Sword
+            case 1 -> col = 3;  //Pistol
+            case 2 -> col = 1;  //Shotgun
+            case 3 -> col = 2;  //Machinegun
         }
         colrow[0] = col;
         colrow[1] = row;
