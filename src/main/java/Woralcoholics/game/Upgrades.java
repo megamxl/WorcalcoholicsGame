@@ -27,6 +27,11 @@ public class Upgrades {
             game.ammo = ammo;
     }
 
+    public void ammoBox() {
+        game.ammo += 30;
+        game.ammoBox--;
+    }
+
     /**
      * @return current Ammunition
      */
@@ -43,14 +48,24 @@ public class Upgrades {
 
     /**
      * sets hap to desired value
+     *
      * @param hp
      */
     public void setHP(int hp) {
-        game.hp = hp;
+        if (hp > 100)
+            game.hp = 100;
+        else
+            game.hp = hp;
+    }
+
+    public void medKit() {
+        game.hp += 50;
+        game.medKit--;
     }
 
     /**
      * sets shield to desired value
+     *
      * @param shield
      */
     public void setShield(int shield) {
@@ -68,13 +83,18 @@ public class Upgrades {
         game.shield = 40;
     } //max shield should be 40 I guess
 
+    public void shieldShot() {
+        game.shield += 20;
+        game.shieldShot--;
+    }
+
     public void setArmor(int armor) { //no max shield yet, don't know how op this will be, probably 40-50%
         game.armor = armor;
     }
 
     public void addArmor(int armor) {
-        if (game.armor + armor > 40)
-            game.armor = 40;
+        if (game.armor + armor > 45)
+            game.armor = 45;
         else
             game.armor += armor;
     }
@@ -93,6 +113,7 @@ public class Upgrades {
 
     /**
      * calculates the actual damage with the armor and shield in consideration
+     *
      * @param damage
      */
     public void damaged(int damage) {
@@ -140,6 +161,7 @@ public class Upgrades {
 
     /**
      * there are the 6 random upgrades and their corresponding methods for usage that we have implemented so far
+     *
      * @param input
      */
 
