@@ -470,7 +470,7 @@ public class Game extends Canvas implements Runnable {
                 shieldShot = 0;
                 ammoBox = 0;
                 medKit = 0;
-                money.setMoney(300);
+                money.setMoney(0);
                 camera.shake = false;   //camera should not shake
                 switch (currentState) {
                     case LEVEL -> {
@@ -560,10 +560,6 @@ public class Game extends Canvas implements Runnable {
             }
             case SHOP -> {
                 g.drawImage(imgShop, 100, 30, null);
-                // g.setFont(font);
-                // g.setColor(Color.white);
-                // g.drawString(Integer.toString(money.getMoney()), 470, 450);
-                // g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 520, 410, null);
             }
             case GAME_OVER -> {
                 g.drawImage(imgOver, 1, 1, null);
@@ -589,6 +585,7 @@ public class Game extends Canvas implements Runnable {
         g.setFont(font);
         g.setColor(Color.white);
         g.drawString(Integer.toString(money.getMoney()), 470, 450);
+        g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 520, 420, null);
     }
     /***
      * just the instructions on how to render the UI

@@ -128,21 +128,18 @@ public class UIButton extends GameObject{
                 if(Game.money.getMoney() >= 70) {
                     game.medKit++;
                     Game.money.purchase(70);
-                    game.render();
                 }
             }
             case 5 -> {
                 if(Game.money.getMoney() >= 50) {
                     game.ammoBox++;
                     Game.money.purchase(50);
-                    game.render();
                 }
             }
             case 6 -> {
                 if(Game.money.getMoney() >= 30) {
                     game.shieldShot++;
                     Game.money.purchase(30);
-                    game.render();
                 }
             }
         }
