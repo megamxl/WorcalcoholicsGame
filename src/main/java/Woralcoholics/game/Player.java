@@ -509,10 +509,6 @@ public class Player extends GameObject {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(game.shield <= 20 && game.shieldShot > 0){
-            game.shield += 20;
-            game.shieldShot--;
-        }
     }
 
     /***

@@ -408,7 +408,10 @@ public class Game extends Canvas implements Runnable {
             renderUi(g);
 
         } else {
-            if (!stopRendering) renderScreen(g);
+            if (!stopRendering)
+                renderScreen(g);
+            if (currentState == GameState.SHOP)
+                renderMoneyInShop(g);
             handler.enemy.removeAll(handler.enemy);
             //System.out.printlfn("SPAWN" + handler.enemy.size());
         }
@@ -467,7 +470,7 @@ public class Game extends Canvas implements Runnable {
                 shieldShot = 0;
                 ammoBox = 0;
                 medKit = 0;
-                money.setMoney(0);
+                money.setMoney(300);
                 camera.shake = false;   //camera should not shake
                 switch (currentState) {
                     case LEVEL -> {
@@ -557,10 +560,10 @@ public class Game extends Canvas implements Runnable {
             }
             case SHOP -> {
                 g.drawImage(imgShop, 100, 30, null);
-                g.setFont(font);
-                g.setColor(Color.white);
-                g.drawString(Integer.toString(money.getMoney()), 470, 450);
-                g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 520, 410, null);
+                // g.setFont(font);
+                // g.setColor(Color.white);
+                // g.drawString(Integer.toString(money.getMoney()), 470, 450);
+                // g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 520, 410, null);
             }
             case GAME_OVER -> {
                 g.drawImage(imgOver, 1, 1, null);
@@ -580,6 +583,13 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
+    private void renderMoneyInShop(Graphics g) {    //renders money in SHOP without re-rendering the shop image
+        g.setColor(Color.lightGray);
+        g.fillRect(420, 400, 150, 150);
+        g.setFont(font);
+        g.setColor(Color.white);
+        g.drawString(Integer.toString(money.getMoney()), 470, 450);
+    }
     /***
      * just the instructions on how to render the UI
      * @param g Graphics Object
@@ -673,7 +683,7 @@ public class Game extends Canvas implements Runnable {
             g.drawString("Next Wave spawns in " + (TimerValue + 1), 50, 250);
             g.setFont(font);
             g.drawString("Press 'B' to open Shop", 400, 420);
-            if(handler.isB()){
+            if (handler.isB()) {
                 currentState = GameState.SHOP;
                 handler.setB(false);
             }
