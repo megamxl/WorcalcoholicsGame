@@ -222,19 +222,19 @@ public class Player extends GameObject {
         boolean weaponIsGun = false;
         switch (handler.selectedWeapon.getType()) {
             case Pistol -> {
-                width = 25;
+                width = 64;
                 height = 19;
                 weaponIsGun = true;
                 //player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); // pistol
             }
             case Shotgun, MachineGun -> {
-                width = 44;
+                width = 64;
                 height = 19;
                 weaponIsGun = true;
                 //player_weapon_img = an.getImage(colrow[0], colrow[1], width, height); //shotgun
             }
             case Sword -> {
-                width = 44;
+                width = 64;
                 height = 19;
                 weaponIsGun = false;
             }

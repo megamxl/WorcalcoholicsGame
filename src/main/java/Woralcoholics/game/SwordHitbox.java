@@ -24,7 +24,7 @@ public class SwordHitbox extends GameObject {
         int randomDirection = new Random().nextInt(2);
         if(randomDirection == 0) randomDirection = -1;
         swingDirection = randomDirection;
-        sprite = an.getImage(4, 11, 44, 19);
+        sprite = an.getImage(4, 11, 64, 19);
     }
 
     @Override
