@@ -581,11 +581,18 @@ public class Game extends Canvas implements Runnable {
 
     private void renderMoneyInShop(Graphics g) {    //renders money in SHOP without re-rendering the shop image
         g.setColor(Color.lightGray);
-        g.fillRect(420, 400, 150, 150);
+        g.fillRect(420, 400, 400, 150);
         g.setFont(font);
         g.setColor(Color.white);
-        g.drawString(Integer.toString(money.getMoney()), 470, 450);
-        g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 520, 420, null);
+        int placeholder = 0;
+        if(money.getMoney() > 9 && money.getMoney() < 100)
+            placeholder = 20;
+        else if(money.getMoney() > 99 && money.getMoney() < 1000)
+            placeholder = 40;
+        else if(money.getMoney() > 999 && money.getMoney() < 10000)
+            placeholder = 60;
+        g.drawString(Integer.toString(money.getMoney()), 480, 450);
+        g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 500 + placeholder, 420, null);
     }
 
     /***
@@ -689,7 +696,15 @@ public class Game extends Canvas implements Runnable {
 
         }
         //MONEY
-        g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 950, 120, null);
+        int placeholder = 0;
+        if(money.getMoney() > 9 && money.getMoney() < 100)
+            placeholder = 20;
+        else if(money.getMoney() > 99 && money.getMoney() < 1000)
+            placeholder = 40;
+        else if(money.getMoney() > 999 && money.getMoney() < 10000)
+            placeholder = 60;
+        g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 880 + placeholder,
+                120, null);
         g.setColor(Color.white);
         g.drawString(Integer.toString(money.getMoney()), 850, 155);
 
