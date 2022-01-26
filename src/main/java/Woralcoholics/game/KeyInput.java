@@ -68,7 +68,7 @@ public class KeyInput extends KeyAdapter {
             case KeyEvent.VK_L -> gameManager.setL(false);
             case KeyEvent.VK_K -> gameManager.setK(false);
             case KeyEvent.VK_M -> gameManager.setM(false);
-            case KeyEvent.VK_B -> gameManager.setM(false);
+            case KeyEvent.VK_B -> gameManager.setB(false);
         }
     }
 
