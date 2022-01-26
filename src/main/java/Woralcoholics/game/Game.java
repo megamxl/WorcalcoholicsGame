@@ -482,6 +482,7 @@ public class Game extends Canvas implements Runnable {
                             }
                         }
                         setWeaponToPistolAgain();
+                        money.resetMoney();
                     }
                     case TUTORIAL -> {
                         score.resetSore();

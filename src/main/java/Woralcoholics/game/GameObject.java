@@ -12,7 +12,7 @@ import java.awt.*;
 public abstract class GameObject {
 
     // location of object
-    protected /*int*/float x,y;
+    protected float x,y;
     // speed of object
     protected float velX =0.5f, velY = 0.5f;
     protected GameState nextState;
