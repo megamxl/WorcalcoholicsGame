@@ -559,7 +559,7 @@ public class Game extends Canvas implements Runnable {
                         SCREEN_HEIGHT / 2, null);
             }
             case SHOP -> {
-                g.drawImage(imgShop, 100, 30, null);
+                g.drawImage(imgShop, 80, 30, null);
             }
             case GAME_OVER -> {
                 g.drawImage(imgOver, 1, 1, null);
@@ -587,6 +587,7 @@ public class Game extends Canvas implements Runnable {
         g.drawString(Integer.toString(money.getMoney()), 470, 450);
         g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 520, 420, null);
     }
+
     /***
      * just the instructions on how to render the UI
      * @param g Graphics Object
@@ -688,16 +689,16 @@ public class Game extends Canvas implements Runnable {
 
         }
         //MONEY
-        g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 950, 100, null);
+        g.drawImage(getHUDPicture.getImage48(1, 6, 48, 48), 950, 120, null);
         g.setColor(Color.white);
-        g.drawString(Integer.toString(money.getMoney()), 850, 135);
+        g.drawString(Integer.toString(money.getMoney()), 850, 155);
 
         //SHOP ITEMS
         g.drawImage(getHUDPicture.getImage48(1, 7, 48, 48), 950, 380, null);
         g.drawString(Integer.toString(ammoBox), 915, 420);
         g.drawImage(getHUDPicture.getImage48(2, 7, 48, 48), 950, 430, null);
         g.drawString(Integer.toString(medKit), 915, 470);
-        g.drawImage(getHUDPicture.getImage48(3, 7, 48, 48), 950, 480, null);
+        g.drawImage(getHUDPicture.getImage48(3, 7, 48, 48), 955, 480, null);
         g.drawString(Integer.toString(shieldShot), 915, 520);
 
         g.drawImage(currWeapon, 10, 470, null);
@@ -753,13 +754,31 @@ public class Game extends Canvas implements Runnable {
             case SHOP -> {
                 handler.addObject(new UIButton(32, 32, 64, 64, "Return", RETURN,
                         ID.UIButton, this, 1, 0, imageGetter, 1, 6, g, 1, 0));
-                handler.addObject(new UIButton(292, 270, 227, 258, "Buy", GameState.SHOP,
+                handler.addObject(new UIButton(272, 270, 227, 258, "Buy", GameState.SHOP,
                         ID.UIButton, this, 4, 0, getShopBorder, 1, 1, g, 1, 0));
-                handler.addObject(new UIButton(522, 270, 227, 258, "Buy", GameState.SHOP,
+                handler.addObject(new UIButton(502, 270, 227, 258, "Buy", GameState.SHOP,
                         ID.UIButton, this, 5, 0, getShopBorder, 1, 1, g, 1, 0));
-                handler.addObject(new UIButton(752, 270, 227, 258, "Buy", GameState.SHOP,
+                handler.addObject(new UIButton(732, 270, 227, 258, "Buy", GameState.SHOP,
                         ID.UIButton, this, 6, 0, getShopBorder, 1, 1, g, 1, 0));
                 paused = true;
+            }
+
+            case UPGRADE_MENU -> {
+                randomUpgrades = upgrades.getUpgrades();
+                handler.addObject(new UIButton(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2 - 25, 207, 444,
+                        upgrades.drawUpgrades(randomUpgrades[0]), GameState.LEVEL, ID.UIButton, this, 2,
+                        randomUpgrades[0], getUpgradeButton, 1, 1, g, 1, 20));
+
+                handler.addObject(new UIButton(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 25, 207, 444,
+                        upgrades.drawUpgrades(randomUpgrades[1]), GameState.LEVEL, ID.UIButton, this, 2,
+                        randomUpgrades[1], getUpgradeButton, 1, 1, g, 1, 20));
+
+                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT / 2 - 25, 207, 444,
+                        upgrades.drawUpgrades(randomUpgrades[2]), GameState.LEVEL, ID.UIButton, this, 2,
+                        randomUpgrades[2], getUpgradeButton, 1, 1, g, 1, 20));
+
+                paused = true;      //Pause the game until Player chose an Upgrade
+                Enemy.spawnWaveAfterUpgrades();
             }
 
             case TUTORIAL -> {
@@ -804,23 +823,6 @@ public class Game extends Canvas implements Runnable {
                     resetEnenemyPool();
                     score.resetSore();
                 }
-            }
-            case UPGRADE_MENU -> {
-                randomUpgrades = upgrades.getUpgrades();
-                handler.addObject(new UIButton(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2 - 25, 207, 444,
-                        upgrades.drawUpgrades(randomUpgrades[0]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[0], getUpgradeButton, 1, 1, g, 1, 20));
-
-                handler.addObject(new UIButton(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 25, 207, 444,
-                        upgrades.drawUpgrades(randomUpgrades[1]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[1], getUpgradeButton, 1, 1, g, 1, 20));
-
-                handler.addObject(new UIButton(SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT / 2 - 25, 207, 444,
-                        upgrades.drawUpgrades(randomUpgrades[2]), GameState.LEVEL, ID.UIButton, this, 2,
-                        randomUpgrades[2], getUpgradeButton, 1, 1, g, 1, 20));
-
-                paused = true;      //Pause the game until Player chose an Upgrade
-                Enemy.spawnWaveAfterUpgrades();
             }
             case GAME_OVER -> {
                 lastScore = score.showScore();
