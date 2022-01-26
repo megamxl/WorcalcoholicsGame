@@ -34,7 +34,7 @@ public class GameManager {
     Path absolutePath;
     FloatControl volume;
     public static int soundv = 1; //default value for -40f sound | MUTE (Without Sound Effects just background music) -> -80f | MAX -> 6.0206f
-    protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip, isBackgroundSoundPlaying, swordIsSwung = false;
+    protected boolean IsSoundPlayingMove, IsSoundPlayingPlayerHurt, isSoundPlayingEquip, isSoundPlayingEquipSword, isBackgroundSoundPlaying, swordIsSwung = false;
     protected double wait;
     //machine gun - del=0 | normal gun - del=200 | slowgun - del=1000
     protected int del = 1000; //how fast player can shoot, less -> faster
@@ -197,7 +197,7 @@ public class GameManager {
         this.bb = b;
     }
 
-    public boolean isB(){
+    public boolean isB() {
         return bb;
     }
 
@@ -399,11 +399,7 @@ public class GameManager {
             if (error == true) {
                 relativePath = Paths.get("Resource/Sound/gunequiperror.wav");
             } else {
-                if (selected == WeaponType.Sword) {
-                    relativePath = Paths.get("Resource/Sound/swordequip.wav");
-                } else {
-                    relativePath = Paths.get("Resource/Sound/gunequip.wav");
-                }
+                relativePath = Paths.get("Resource/Sound/gunequip.wav");
             }
             Path absolutePath = relativePath.toAbsolutePath();
             sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
@@ -411,19 +407,11 @@ public class GameManager {
             if (soundv == 0) {
                 volume.setValue(-80f);
             } else if (soundv == 1 && !error) {
-                if (selected == WeaponType.Sword) {
-                    volume.setValue(-30f); // sword equip on K
-                } else {
-                    volume.setValue(-40f); // gun equip on K
-                }
+                volume.setValue(-40f); // gun equip on K
             } else if (soundv == 1 && error) {
                 volume.setValue(-23f); // errorsound on K
             } else if (soundv == 2 && !error) {
-                if (selected == WeaponType.Sword) {
-                    volume.setValue(-8f); // sword equip on L
-                } else {
-                    volume.setValue(-18f); //gun equip on L
-                }
+                volume.setValue(-18f); //gun equip on L
             } else if (soundv == 2 && error) {
                 volume.setValue(-1f); // errorsound on L
             }
@@ -433,6 +421,39 @@ public class GameManager {
             Thread.sleep(220);
             sound.stop();
         }
+    }
+
+    public void playSoundEquipSword(boolean error) throws LineUnavailableException, UnsupportedAudioFileException, IOException, InterruptedException {
+        if (!isSoundPlayingEquipSword) {
+            isSoundPlayingEquipSword = true;
+            Clip sound = AudioSystem.getClip();
+            Path relativePath;
+            if (error) {
+                relativePath = Paths.get("Resource/Sound/gunequiperror.wav");
+            } else {
+                relativePath = Paths.get("Resource/Sound/swordequip.wav");
+            }
+            Path absolutePath = relativePath.toAbsolutePath();
+            sound.open(AudioSystem.getAudioInputStream(new File(absolutePath.toString())));
+            FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+            if (soundv == 0) {
+                volume.setValue(-80f); // Mute
+            } else if (soundv == 1 && !error) {
+                volume.setValue(-30f); //sword equip on K
+            } else if (soundv == 1 && error) {
+                volume.setValue(-23f); // errorsound on K
+            } else if (soundv == 2 && !error) {
+                volume.setValue(-8f); // sword equip on L
+            } else if (soundv == 2 && error) {
+                volume.setValue(-1f); // errorsound on L
+            }
+            sound.start();
+            Thread.sleep(100);
+            isSoundPlayingEquipSword = false;
+            Thread.sleep(220);
+            sound.stop();
+        }
+
     }
 
     public void playSoundGameOver() throws UnsupportedAudioFileException, IOException, LineUnavailableException {

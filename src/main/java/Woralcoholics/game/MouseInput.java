@@ -255,11 +255,10 @@ public class MouseInput extends MouseAdapter {
     //endregion
     //region MouseWheelEvents
     public void mouseWheelMoved(MouseWheelEvent e) {
-        if(Game.getState() == GameState.LEVEL || Game.getState() == GameState.TUTORIAL) {
+        if (Game.getState() == GameState.LEVEL || Game.getState() == GameState.TUTORIAL) {
             if (e.getWheelRotation() < 0) {
                 weaponEquipError = MouseWheelUp();
-            }
-            else {
+            } else {
                 weaponEquipError = MouseWheelDown();
             }
             playSoundEquip(weaponEquipError);
@@ -301,7 +300,11 @@ public class MouseInput extends MouseAdapter {
             new Thread(() -> {
 
                 try {
-                    handler.playSoundEquip(error);
+                    if (handler.selectedWeapon.getType() == WeaponType.Sword) {
+                        handler.playSoundEquipSword(error);
+                    } else {
+                        handler.playSoundEquip(error);
+                    }
                 } catch (LineUnavailableException ex) {
                     ex.printStackTrace();
                 } catch (UnsupportedAudioFileException ex) {
@@ -343,7 +346,7 @@ public class MouseInput extends MouseAdapter {
             playSoundWeapon(game.ammo);
             game.ammo--;    //Subtract 1 from ammo (bullet was shot)
             handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
-            if(game.ammo == 0 && game.ammoBox > 0){     //activate ammoBox
+            if (game.ammo == 0 && game.ammoBox > 0) {     //activate ammoBox
                 game.ammo += 30;
                 game.ammoBox--;
             }
