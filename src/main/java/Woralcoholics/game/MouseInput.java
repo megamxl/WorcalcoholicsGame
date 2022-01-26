@@ -193,14 +193,11 @@ public class MouseInput extends MouseAdapter {
         // before checking if the mouse exited the window, the game checks if its window is even in focus,
         // so that if a user accidentally opens a different application or tabs out, the game gets paused and
         // thus the mouse unlocked
-        if(!game.isFocusOwner())
-        {
+        if (!game.isFocusOwner()) {
             if (Game.getState() == GameState.LEVEL) {
                 Game.setState(GameState.PAUSE_MENU);
             }
-        }
-        else
-        {
+        } else {
             // Robot class can apparently throw some errors, so a try and catch is necessary
             try {
                 // declares and initializes new robot
@@ -375,9 +372,8 @@ public class MouseInput extends MouseAdapter {
         //System.out.println("MACHINE");
         handler.now = System.currentTimeMillis();
         //IF waiting time is over AND player has ammo -> shoot a bullet
-        if (game.ammo <= 0) {
-            playSoundWeapon(game.ammo); //has no ammo
-        }
+        playSoundWeapon(game.ammo); //has no ammo
+
         while (mouseDown && game.ammo >= 1 && Game.getState() != GameState.GAME_OVER) {
 
             PointerInfo a = MouseInfo.getPointerInfo();
@@ -400,6 +396,10 @@ public class MouseInput extends MouseAdapter {
                     //System.out.println(handler.bullets.get(i));
                     playSoundWeapon(game.ammo);
                     game.ammo--;    //Subtract 1 from ammo (bullet was shot)
+                    if (game.ammo <= 0 && game.ammoBox > 0) {   //activate ammoBox
+                            game.ammo += 30;
+                            game.ammoBox--;
+                        } else
                     break;
                 }
             }
@@ -444,6 +444,10 @@ public class MouseInput extends MouseAdapter {
                     }
                     temp.inGame = true;
                     game.ammo--;    //Subtract 1 from ammo (bullet was shot)
+                    if (game.ammo == 0 && game.ammoBox > 0) {     //activate ammoBox
+                        game.ammo += 30;
+                        game.ammoBox--;
+                    }
                     shells++;
 
                     // 1 ammo (user perspective) -> shoot like a pistol
