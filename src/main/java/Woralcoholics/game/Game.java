@@ -573,7 +573,7 @@ public class Game extends Canvas implements Runnable {
             }
         }
         timesMenuWasRendered++;
-        if (timesMenuWasRendered > 50) {
+        if (timesMenuWasRendered > 100) {
             stopRendering = true;
             timesMenuWasRendered = 0;
         }
