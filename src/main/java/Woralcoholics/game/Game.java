@@ -470,7 +470,7 @@ public class Game extends Canvas implements Runnable {
                 shieldShot = 0;
                 ammoBox = 0;
                 medKit = 0;
-                money.setMoney(9995);
+                money.setMoney(0);
                 camera.shake = false;   //camera should not shake
                 switch (currentState) {
                     case LEVEL -> {
