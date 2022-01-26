@@ -82,7 +82,6 @@ public class Player extends GameObject {
         keySounds();
         movement();
         checkWeaponRenderStatus();
-        validateCoordinates();
 
         if (Game.inTutorial) {
             tutorial();
@@ -94,7 +93,7 @@ public class Player extends GameObject {
      * In rotation of the picture the png with the weapon on it gets out of the player hand
      * therefore the new validation of the coordinates of the gun sprite
      */
-    private void validateCoordinates() {
+    /*private void validateCoordinates() {
         if (handler.angle > 0 && handler.angle <= 90) {
             int y = (int) (25 + (handler.angle * 0.1)); // adding manually angle to y value
             coordinatesadditive[0] = 42;
@@ -135,7 +134,7 @@ public class Player extends GameObject {
             coordinatesadditive[1] = y; // 17 -> start value at angle 330° -> target ~25 to close the cycle
             //System.out.println("330-360°");
         }
-    }
+    }*/
 
     @Override
     public void render(Graphics g) {
