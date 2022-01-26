@@ -354,10 +354,8 @@ public class MouseInput extends MouseAdapter {
             playSoundWeapon(game.ammo);
             game.ammo--;    //Subtract 1 from ammo (bullet was shot)
             handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
-            if (game.ammo == 0 && game.ammoBox > 0) {     //activate ammoBox
-                game.ammo += 30;
-                game.ammoBox--;
-            }
+            if (game.ammo == 0 && game.ammoBox > 0)     //activate ammoBox
+                upgrades.ammoBox();
         } else if (handler.now > handler.wait && game.ammo <= 0) {
             playSoundWeapon(game.ammo); //has no ammo
             handler.wait = handler.now + handler.del;
@@ -396,11 +394,10 @@ public class MouseInput extends MouseAdapter {
                     //System.out.println(handler.bullets.get(i));
                     playSoundWeapon(game.ammo);
                     game.ammo--;    //Subtract 1 from ammo (bullet was shot)
-                    if (game.ammo <= 0 && game.ammoBox > 0) {   //activate ammoBox
-                            game.ammo += 30;
-                            game.ammoBox--;
-                        } else
-                    break;
+                    if (game.ammo <= 0 && game.ammoBox > 0)  //activate ammoBox
+                        upgrades.ammoBox();
+                    else
+                        break;
                 }
             }
             handler.wait = handler.now + handler.del;   //Waiting time for next viable Input
@@ -444,10 +441,8 @@ public class MouseInput extends MouseAdapter {
                     }
                     temp.inGame = true;
                     game.ammo--;    //Subtract 1 from ammo (bullet was shot)
-                    if (game.ammo == 0 && game.ammoBox > 0) {     //activate ammoBox
-                        game.ammo += 30;
-                        game.ammoBox--;
-                    }
+                    if (game.ammo == 0 && game.ammoBox > 0)    //activate ammoBox
+                        upgrades.ammoBox();
                     shells++;
 
                     // 1 ammo (user perspective) -> shoot like a pistol
