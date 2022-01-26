@@ -264,10 +264,10 @@ public class Enemy extends GameObject {
         if (hp <= 0) {
             if (this.getId() == ID.Enemy) {
                 score.addScore(3);
-                Game.money.addMoney(1);
+                Game.money.addMoney(2);
             } else if (this.getId() == ID.GunnerEnemy) {
                 score.addScore(10);
-                Game.money.addMoney(2);
+                Game.money.addMoney(4);
             }
             //System.out.println(score.showScore());
 
