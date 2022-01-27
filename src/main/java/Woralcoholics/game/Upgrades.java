@@ -121,7 +121,7 @@ public class Upgrades {
         for (int i = damage; i > 0; i--) {
             if (game.shield == 0) {
                 if (game.shieldShot > 0)
-                    shieldShot();
+                    shieldShot();   //only substract hp when there is no shield and no shieldShot left
                 else
                     game.hp--;
             } else
