@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
+ *  @author Lukas Schelepet
  *  @author Maxlimilian Nowak
  */
 

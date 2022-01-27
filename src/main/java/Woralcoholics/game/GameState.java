@@ -2,6 +2,7 @@ package Woralcoholics.game;
 
 /**
  * Game state enums
+ *  @author Lukas Schelepet
  *  @author Maxlimilian Nowak
  */
 public enum GameState {
