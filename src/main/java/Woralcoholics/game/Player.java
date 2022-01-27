@@ -135,7 +135,6 @@ public class Player extends GameObject {
             //System.out.println("330-360°");
         }
     }*/
-
     @Override
     public void render(Graphics g) {
         /*Graphics2D g2d = (Graphics2D) g;
@@ -159,15 +158,14 @@ public class Player extends GameObject {
         }
         //g.drawImage(player_weapon_img, ((int) x) + coordinatesadditive[0], ((int) y) + coordinatesadditive[1], null); // x and y adjustable for gun position
 
-        if(!handler.swordIsSwung) {
+        if (!handler.swordIsSwung) {
             //Better looking Weapon rotation + flipping
             Graphics2D g2d = (Graphics2D) g.create();
-            g2d.rotate(Math.toRadians(handler.angle), x+32, y+32);  //rotate the weapon around the player
-            if(handler.angle >= 90 && handler.angle < 270) {    //if the weapon is left to the player, flip the image
-                g2d.drawImage(player_weapon_img, (int) x+32 + 10, (int) y+32-8+player_weapon_img.getHeight(), player_weapon_img.getWidth(), -player_weapon_img.getHeight(), null);
-            }
-            else {
-                g2d.drawImage(player_weapon_img, (int) x+32 + 10, (int) y+32-8, null);
+            g2d.rotate(Math.toRadians(handler.angle), x + 32, y + 32);  //rotate the weapon around the player
+            if (handler.angle >= 90 && handler.angle < 270) {    //if the weapon is left to the player, flip the image
+                g2d.drawImage(player_weapon_img, (int) x + 32 + 10, (int) y + 32 - 8 + player_weapon_img.getHeight(), player_weapon_img.getWidth(), -player_weapon_img.getHeight(), null);
+            } else {
+                g2d.drawImage(player_weapon_img, (int) x + 32 + 10, (int) y + 32 - 8, null);
             }
         }
 
@@ -375,7 +373,7 @@ public class Player extends GameObject {
 
     private void isDead() {
         if (game.hp <= 0) {
-            if(game.medKit > 0)   //activate medKit
+            if (game.medKit > 0)   //activate medKit
                 upgrades.medKit();
 
             else {

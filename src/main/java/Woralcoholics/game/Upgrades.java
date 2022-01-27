@@ -119,9 +119,12 @@ public class Upgrades {
     public void damaged(int damage) {
         damage = (int) (damage * ((100. - (double) game.armor) / 100));
         for (int i = damage; i > 0; i--) {
-            if (game.shield == 0)
-                game.hp--;
-            else
+            if (game.shield == 0) {
+                if (game.shieldShot > 0)
+                    shieldShot();
+                else
+                    game.hp--;
+            } else
                 game.shield--;
         }
     }
